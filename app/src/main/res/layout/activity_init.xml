@@ -71,4 +71,6 @@
         android:text="Terminos del servicio"
         android:gravity="center"/>
 
+
+
 </LinearLayout>

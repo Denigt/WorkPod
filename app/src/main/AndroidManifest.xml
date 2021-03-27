@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkPod">
-        <activity android:name=".InitActivity">
+        <activity
+            android:name=".InitActivity"
+            android:label="@string/title_activity_navigation_view" />
+        <activity android:name=".Workpod">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
