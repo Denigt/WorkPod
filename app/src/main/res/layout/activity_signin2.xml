@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="10dp"
-        android:text="Repite la Contraseña"
+        android:text="@string/signin_txtRContrasena"
         android:textColor="@color/blue"
         android:textSize="18dp"
         android:textStyle="bold" />
