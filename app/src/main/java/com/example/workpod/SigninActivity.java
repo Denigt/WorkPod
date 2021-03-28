@@ -1,15 +1,24 @@
 package com.example.workpod;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SigninActivity extends AppCompatActivity implements View.OnClickListener {
+
+    // TRANSICIONES
+    Slide tEnter;
+    Explode tExit;
 
     // VARIABLES DE SIGNIN
     int pantalla;
@@ -30,13 +39,16 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
+        // OBTENER DATOS DE LA ACTIVIDAD ANTERIOR
         pantalla = getIntent().getIntExtra("screen", 0);
         nombre  = getIntent().getStringExtra("name");
         apellido  = getIntent().getStringExtra("surname");
         email  = getIntent().getStringExtra("email");
         contrasena  = getIntent().getStringExtra("pass");
 
+        // ESTABLECER LAYOUT DE LA ACTIVIDAD
         if (pantalla == 0)
             setContentView(R.layout.activity_signin);
         else
@@ -63,6 +75,19 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             txtRContrasena.setOnFocusChangeListener(this);
         }*/
         btnSiguiente.setOnClickListener(this);
+
+        // CREAR TRANSICIONES
+        tEnter = new Slide();
+        tEnter.setSlideEdge(Gravity.RIGHT);
+        tEnter.setDuration(1000);
+
+        tExit = new Explode();
+        tExit.setDuration(500);
+
+
+        getWindow().setReturnTransition(tExit);
+        getWindow().setEnterTransition(tEnter);
+        getWindow().setExitTransition(tExit);
     }
 
     @Override
@@ -76,7 +101,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             activity.putExtra("surname", apellido);
             activity.putExtra("email", txtEmail.getText().toString());
             activity.putExtra("pass", txtContrasena.getText().toString());
-            startActivity(activity);
+            startActivity(activity,
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
         }
@@ -107,7 +133,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 activity.putExtra("surname", txtApellido.getText().toString());
                 activity.putExtra("email", email);
                 activity.putExtra("pass", contrasena);
-                startActivity(activity);
+                startActivity(activity,
+                        ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                     overridePendingTransition(R.anim.left_in, R.anim.left_out);
                 finish();

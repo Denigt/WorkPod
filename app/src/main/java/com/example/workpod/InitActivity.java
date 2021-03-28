@@ -2,6 +2,7 @@ package com.example.workpod;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,7 +68,8 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
             Intent activity = new Intent(getApplicationContext(), SigninActivity.class);
             // Indicar la pantalla de registro
             activity.putExtra("screen", 0);
-            startActivity(activity);
+            startActivity(activity,
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         }
     }
 }
