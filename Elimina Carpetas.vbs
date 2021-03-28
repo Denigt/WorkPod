@@ -19,13 +19,13 @@ Set fs = CreateObject("Scripting.FileSystemObject")
 
 ' BORRAR CARPETAS
 for i=0 to 2
+    err.Clear()
     fs.DeleteFolder(carpetas(i))
     if (err.Description = "") then
         borradas = borradas & "   " + carpetas(i)  & vbCrLf
     else
         noEncontradas = noEncontradas & "   " & carpetas(i) & vbCrLf
     end if
-    err.Clear()
 next
 
 if (UBound(split(borradas, vbCrLf)) > 2) then

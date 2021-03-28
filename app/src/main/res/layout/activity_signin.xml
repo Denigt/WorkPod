@@ -71,7 +71,11 @@
         <ImageButton
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_btnsiguiente"
+            android:background="@color/transparente"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"/>
 
     </LinearLayout>
 </LinearLayout>

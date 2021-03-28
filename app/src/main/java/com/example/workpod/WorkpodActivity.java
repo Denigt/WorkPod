@@ -3,7 +3,6 @@ package com.example.workpod;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class Workpod extends AppCompatActivity {
+public class WorkpodActivity extends AppCompatActivity {
 
     private BottomNavigationView bNV;
     private LinearLayout LLFragment;
@@ -30,7 +29,7 @@ public class Workpod extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
                 if(menuitem.getItemId()==R.id.mnv_menu_user){
-                    FragmentManager fragmentManager=Workpod.this.getSupportFragmentManager();
+                    FragmentManager fragmentManager= WorkpodActivity.this.getSupportFragmentManager();
                     //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
                     fTransaction=fragmentManager.beginTransaction();
                     //CREAMOS UN OBJETO DEL FRAGMENTO

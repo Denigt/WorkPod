@@ -12,7 +12,11 @@
         <activity
             android:name=".InitActivity"
             android:label="@string/title_activity_navigation_view" />
-        <activity android:name=".Workpod">
+        <activity
+            android:name=".WorkpodActivity"
+            android:label="@string/title_activity_navigation_view" />
+
+        <activity android:name=".SigninActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
