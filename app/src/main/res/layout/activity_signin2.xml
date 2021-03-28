@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:text="¿Cuál es tu nombre?"
+        android:text="¿Cuál es tu email?"
         android:textColor="@color/blue"
         android:textSize="24dp"
         android:textStyle="bold" />
@@ -32,13 +32,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="10dp"
-        android:text="Nombre"
+        android:text="Email"
         android:textColor="@color/blue"
         android:textSize="18dp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/txtNombre"
+        android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
@@ -49,14 +49,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:text="Elige una contraseña"
+        android:textColor="@color/blue"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="10dp"
-        android:text="Apellido"
+        android:text="Contraseña"
         android:textColor="@color/blue"
         android:textSize="18dp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/txtApellido"
+        android:id="@+id/txtContrasena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="50dp"
+    android:text="10 caracteres y un símbolo"
+    android:textColor="@color/darkblue"
+    android:textSize="16dp"
+    android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="10dp"
+        android:text="Repite la Contraseña"
+        android:textColor="@color/blue"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtRContrasena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"

@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkPod">
         <activity
-            android:name=".InitActivity"
+            android:name=".SigninActivity"
             android:label="@string/title_activity_navigation_view" />
         <activity
             android:name=".WorkpodActivity"
             android:label="@string/title_activity_navigation_view" />
 
-        <activity android:name=".SigninActivity">
+        <activity android:name=".InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

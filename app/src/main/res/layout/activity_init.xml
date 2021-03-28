@@ -40,6 +40,7 @@
         android:layout_marginHorizontal="30dp"
         android:orientation="horizontal">
         <Button
+            android:id="@+id/btnAcceder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -47,6 +48,7 @@
             android:layout_marginRight="15dp"/>
 
         <Button
+            android:id="@+id/btnConectar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -55,6 +57,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnRegistrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
