@@ -38,12 +38,11 @@
         android:textStyle="bold" />
 
     <EditText
+        style="@style/Theme.EditText"
         android:id="@+id/txtNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:textSize="24dp"
-        android:textStyle="bold" />
+        android:layout_marginHorizontal="30dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -56,12 +55,12 @@
         android:textStyle="bold" />
 
     <EditText
+        style="@style/Theme.EditText"
         android:id="@+id/txtApellido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:textSize="24dp"
-        android:textStyle="bold" />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,6 +77,7 @@
             android:src="@drawable/ic_btnsiguiente"
             android:background="@color/transparente"
             android:foreground="?selectableItemBackgroundBorderless"
+            android:focusable="true"
             android:scaleType="fitCenter"/>
 
     </LinearLayout>
