@@ -69,6 +69,7 @@
         android:id="@+id/txtContrasena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:inputType="textPassword"/>
 
     <TextView
@@ -122,8 +123,7 @@
             android:layout_height="70dp"
             android:layout_gravity="bottom"
             android:src="@drawable/ic_btnsiguiente"
-            android:background="@color/transparente"
-            android:foreground="?selectableItemBackgroundBorderless"
+            android:background="?selectableItemBackgroundBorderless"
             android:focusable="true"
             android:scaleType="fitCenter"/>
 
