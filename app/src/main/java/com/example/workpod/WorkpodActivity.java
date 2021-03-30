@@ -38,11 +38,6 @@ public class WorkpodActivity extends AppCompatActivity {
                     //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
                     fTransaction.add(R.id.LLFragment,menuUsuario);
                     fTransaction.commit();
-                    fragment=new Fragment_Menu_Usuario();
-                    fTransaction = getSupportFragmentManager().beginTransaction();
-                    fTransaction.replace(R.id.LLFragment, fragment);
-                    fTransaction.addToBackStack(null);
-                    fTransaction.commit();//COMMIT ES PARA CONFIRMAR UN CONJUNTO DE CAMBIOS DE MANERA PERMANENTE
                 }
                 return true;
             }

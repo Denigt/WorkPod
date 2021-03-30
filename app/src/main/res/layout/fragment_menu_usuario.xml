@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Fragment_Menu_Usuario"
     android:background="@color/Texto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragments.Fragment_Menu_Usuario">
 
     <ListView
         android:id="@+id/LsV_Menu_Usuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp" />
 
 </FrameLayout>

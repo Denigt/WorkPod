@@ -14,7 +14,7 @@
             android:label="@string/title_activity_navigation_view" />
         <activity
             android:name=".WorkpodActivity"
-            android:label="@string/title_activity_navigation_view" />
+            android:label="@string/title_activity_navigation_view"/>
 
         <activity android:name=".InitActivity">
             <intent-filter>
