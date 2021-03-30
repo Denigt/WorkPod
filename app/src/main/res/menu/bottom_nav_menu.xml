@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/mnv_location"
+        android:id="@+id/inv_location"
         android:icon="@drawable/ic_location"
         android:title="" />
 
     <item
-        android:id="@+id/mnv_support"
+        android:id="@+id/inv_support"
         android:icon="@drawable/ic_support_navigation_view"
         android:iconTint="@color/Fondos"
         android:title="" />
 
     <item
-        android:id="@+id/mnv_folder"
+        android:id="@+id/inv_folder"
         android:icon="@drawable/ic_folder"
         android:title="" />
     <item
-        android:id="@+id/mnv_menu_user"
+        android:id="@+id/inv_menu_user"
         android:icon="@drawable/ic_user_menu"
         android:title="" />
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.example.workpod.fragments.Fragment_Menu_Usuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class WorkpodActivity extends AppCompatActivity {
 
-    private BottomNavigationView bNV;
+    private BottomNavigationView btnNV;
     private LinearLayout LLFragment;
     private Fragment fragment;
     private FragmentTransaction fTransaction;
@@ -24,11 +25,11 @@ public class WorkpodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workpod);
         LLFragment=(LinearLayout)findViewById(R.id.LLFragment);
-        bNV = (BottomNavigationView) findViewById(R.id.nav_view);
-        bNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        btnNV = (BottomNavigationView) findViewById(R.id.btnNV);
+        btnNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuitem) {
-                if(menuitem.getItemId()==R.id.mnv_menu_user){
+                if(menuitem.getItemId()==R.id.inv_menu_user){
                     FragmentManager fragmentManager= WorkpodActivity.this.getSupportFragmentManager();
                     //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
                     fTransaction=fragmentManager.beginTransaction();

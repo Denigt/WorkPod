@@ -1,4 +1,4 @@
-package com.example.workpod;
+package com.example.workpod.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.workpod.otherclass.LsV_Menu_Usuario;
+import com.example.workpod.R;
 
 import java.util.ArrayList;
 

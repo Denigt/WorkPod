@@ -1,4 +1,4 @@
-package com.example.workpod;
+package com.example.workpod.fragments;
 
 import android.os.Bundle;
 
@@ -11,6 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
+import com.example.workpod.otherclass.LsV_Menu_Usuario;
+import com.example.workpod.R;
+
 import java.util.ArrayList;
 
 /**
@@ -20,7 +24,7 @@ import java.util.ArrayList;
  */
 public class Fragment_Menu_Usuario extends Fragment {
 
-    private ListView lSV_Menu_Usuario;
+    private ListView lsV_Menu_Usuario;
     ArrayList<LsV_Menu_Usuario>aLstMU=new ArrayList<>();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,7 +72,7 @@ public class Fragment_Menu_Usuario extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_menu_usuario,container,false);
         //ARMAMOS EL LSV
-        lSV_Menu_Usuario=(ListView)view.findViewById(R.id.LsV_Menu_Usuario);
+        lsV_Menu_Usuario=(ListView)view.findViewById(R.id.LsV_Menu_Usuario);
         aLstMU.add(new LsV_Menu_Usuario(0,R.drawable.ic_payment_profile,"Perfil de pago"));
         aLstMU.add(new LsV_Menu_Usuario(1,R.drawable.ic_perfil,"Perfil"));
         aLstMU.add(new LsV_Menu_Usuario(2,R.drawable.ic_transaction_history,"Histórico de transacciones"));
@@ -76,8 +80,8 @@ public class Fragment_Menu_Usuario extends Fragment {
         aLstMU.add(new LsV_Menu_Usuario(4,R.drawable.ic_support,"Soporte"));
         aLstMU.add(new LsV_Menu_Usuario(5,R.drawable.ic_invited_friend,"Invita a un amigo"));
         final Adaptador_LsV_Menu_Usuario aMU=new Adaptador_LsV_Menu_Usuario(view.getContext(),aLstMU);
-        lSV_Menu_Usuario.setAdapter(aMU);
-        lSV_Menu_Usuario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lsV_Menu_Usuario.setAdapter(aMU);
+        lsV_Menu_Usuario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 LsV_Menu_Usuario lsV_menu_usuario=(LsV_Menu_Usuario)aMU.getItem(i);

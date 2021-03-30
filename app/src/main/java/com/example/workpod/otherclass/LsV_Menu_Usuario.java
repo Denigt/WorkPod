@@ -1,4 +1,4 @@
-package com.example.workpod;
+package com.example.workpod.otherclass;
 
 public class LsV_Menu_Usuario {
     private int codigo;
