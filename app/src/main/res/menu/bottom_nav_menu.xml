@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/inv_support"
-        android:icon="@drawable/ic_support_navigation_view"
+        android:icon="@drawable/ic_support"
         android:iconTint="@color/Fondos"
         android:title="" />
 
@@ -20,5 +20,6 @@
         android:id="@+id/inv_menu_user"
         android:icon="@drawable/ic_user_menu"
         android:title="" />
+
 
 </menu>

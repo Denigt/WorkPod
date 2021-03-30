@@ -77,7 +77,7 @@ public class Fragment_Menu_Usuario extends Fragment {
         aLstMU.add(new LsV_Menu_Usuario(1,R.drawable.ic_perfil,"Perfil"));
         aLstMU.add(new LsV_Menu_Usuario(2,R.drawable.ic_transaction_history,"Histórico de transacciones"));
         aLstMU.add(new LsV_Menu_Usuario(3,R.drawable.ic_configuration,"Configuración"));
-        aLstMU.add(new LsV_Menu_Usuario(4,R.drawable.ic_support,"Soporte"));
+        aLstMU.add(new LsV_Menu_Usuario(4,R.drawable.ic_support_user_menu,"Soporte"));
         aLstMU.add(new LsV_Menu_Usuario(5,R.drawable.ic_invited_friend,"Invita a un amigo"));
         final Adaptador_LsV_Menu_Usuario aMU=new Adaptador_LsV_Menu_Usuario(view.getContext(),aLstMU);
         lsV_Menu_Usuario.setAdapter(aMU);
