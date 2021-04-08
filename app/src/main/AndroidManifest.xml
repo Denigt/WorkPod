@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkPod">
-        <activity android:name=".ValoracionWorkpod"></activity>
+        <activity android:name=".Valoracion_Workpod_Final"></activity>
+        <activity android:name=".testUsuario.Informacion_Usuario3" />
+        <activity android:name=".testUsuario.Informacion_Usuario2" />
+        <activity android:name=".testUsuario.Informacion_Usuario" />
+        <activity android:name=".ValoracionWorkpod" />
         <activity
             android:name=".SigninActivity"
             android:label="@string/title_activity_navigation_view" />

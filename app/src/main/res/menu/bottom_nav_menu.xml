@@ -14,11 +14,11 @@
 
     <item
         android:id="@+id/inv_folder"
-        android:icon="@drawable/ic_folder"
+        android:icon="@drawable/ic_cartera"
         android:title="" />
     <item
         android:id="@+id/inv_menu_user"
-        android:icon="@drawable/ic_user_menu"
+        android:icon="@drawable/ic_user"
         android:title="" />
 
 

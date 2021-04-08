@@ -109,6 +109,8 @@ public class WorkpodActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             volverAlFragmentInicial();
+            //CAMBIAMOS LA SELECCIÓN DEL NV AL ICONO DE LOCATION
+            btnNV.setSelectedItemId(R.id.inv_location);
         }
     }
 }

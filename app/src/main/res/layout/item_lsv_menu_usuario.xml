@@ -10,7 +10,7 @@
         android:id="@+id/iIV"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_call" />
+        android:src="@drawable/ic_support" />
 
     <TextView
         android:id="@+id/iTV"
