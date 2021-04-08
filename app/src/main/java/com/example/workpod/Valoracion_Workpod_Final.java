@@ -63,8 +63,8 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
      * de la BD del servidor.
      * ResultadoTest es una matriz estática de la clase Informacion_Usuario
      */
+    //HACEMOS ECO DEL RESULTADO PARA VERIFICAR QUE FUNCIONA, POSTERIORMENTE EL RESULTADO MIGRARÁ AL SERVIDOR
     private void resultadoTestUsuario() {
-        //HACEMOS ECO DEL RESULTADO PARA VERIFICAR QUE FUNCIONA, POSTERIORMENTE EL RESULTADO MIGRARÁ AL SERVIDOR
         for (int i = 0; i < Informacion_Usuario.resultadoTest.length; i++)
             Toast.makeText(getApplicationContext(), Informacion_Usuario.resultadoTest[i] + "\n", Toast.LENGTH_SHORT).show();
     }
