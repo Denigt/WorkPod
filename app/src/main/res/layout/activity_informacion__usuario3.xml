@@ -21,23 +21,37 @@
                 android:id="@+id/LLOpinionUsuario"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10"
                 android:layout_marginLeft="27dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginRight="20dp"
+                android:layout_weight="10"
                 android:background="@color/white"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="25dp"
-                    android:text="Queremos saber\nmás de ti"
-                    android:textColor="@color/ResaltarTexto"
-                    android:textSize="40dp"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:text="Queremos saber\nmás de ti"
+                        android:textColor="@color/ResaltarTexto"
+                        android:textSize="40dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="180dp"
+                        android:layout_marginTop="70dp"
+                        android:src="@drawable/emoji_mujer_saludando" />
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -54,7 +68,7 @@
                     android:layout_width="78dp"
                     android:layout_height="71dp"
                     android:layout_marginTop="60dp"
-                    android:layout_marginBottom="60dp"
+                    android:layout_marginBottom="70dp"
                     android:src="@drawable/icono_pensativo" />
 
                 <LinearLayout
@@ -62,11 +76,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/degradado_azul"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/BtnTrabajarSolo"
-                        android:layout_width="320dp"
+                        android:layout_width="150dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
@@ -75,6 +90,11 @@
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="17dp" />
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/emoji_bailando" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -82,11 +102,12 @@
                     android:layout_height="55dp"
                     android:layout_marginBottom="30dp"
                     android:background="@drawable/degradado_azul"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/BtnTrabajarEquipo"
-                        android:layout_width="320dp"
+                        android:layout_width="140dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@color/transparente"
@@ -94,6 +115,11 @@
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="17dp" />
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/emoji_conejitas" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

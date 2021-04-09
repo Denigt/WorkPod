@@ -3,6 +3,7 @@ package com.example.workpod;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -48,8 +49,8 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
     //MÉTODOS SOBREESCRITOS
     @Override
     public void onBackPressed() {
-        volverAlActivityInicial();
-        super.onBackPressed();
+        //MÉTODO QUE CIERRA COMPLETAMENTE LA APP
+        finishAffinity();
     }
 
     @Override
@@ -149,16 +150,4 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
             iVStar5.setColorFilter(Color.parseColor("#FFEB3B"));
         }
     }
-
-    /**
-     * Método que permite volver al activity inicial
-     * cuando el usuario le da al botón de volver atrás del móvil
-     */
-    private void volverAlActivityInicial() {
-        Intent activity = new Intent(getApplicationContext(), InitActivity.class);
-        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(activity);
-    }
-
-
 }
