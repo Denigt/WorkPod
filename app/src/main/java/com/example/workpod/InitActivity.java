@@ -37,7 +37,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<ImageButton> btnSwither = new ArrayList<ImageButton>();
 
     // RECURSOS DEL LOS SWITCHER
-    private final int[] images = {R.drawable.ic_support_user_menu, R.drawable.ic_transaction_history, R.drawable.ic_invited_friend};
+    private final int[] images = {R.drawable.ic_user, R.drawable.ic_historial, R.drawable.ic_friends};
     private final String[] texts = {"Telefono", "Historial", "Amigos"};
     private int lastPos = 0;
 
