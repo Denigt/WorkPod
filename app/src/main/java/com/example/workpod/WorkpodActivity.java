@@ -8,15 +8,17 @@ import android.widget.Toast;
 
 import com.example.workpod.fragments.Fragment_Menu_Usuario;
 import com.example.workpod.fragments.Fragment_sesion_finalizada;
+import com.example.workpod.fragments.fragment_support;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class WorkpodActivity extends AppCompatActivity {
+public class WorkpodActivity extends FragmentActivity {
 
     // CONTROLES DEL XML
     private BottomNavigationView btnNV;
@@ -85,6 +87,15 @@ public class WorkpodActivity extends AppCompatActivity {
             fTransaction.replace(R.id.LLFragment, sesion_finalizada);
             fTransaction.commit();
             boolLoc = true;
+        }else if (menuitem.getItemId() == R.id.inv_support) {
+            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+            fTransaction = fragmentManager.beginTransaction();
+            fragment_support soporte = new fragment_support();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, soporte);
+            fTransaction.commit();
+            boolLoc = false;
         }
     }
 

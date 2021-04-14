@@ -46,7 +46,7 @@
                 android:id="@+id/btnSwitcher0"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_empty_circle"
+                android:src="@drawable/empty_icon_circle"
                 android:tint="@color/blue"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:paddingHorizontal="10dp"/>
@@ -54,7 +54,7 @@
                 android:id="@+id/btnSwitcher1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_fill_circle"
+                android:src="@drawable/fill_icon_circle"
                 android:tint="@color/blue"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:paddingHorizontal="10dp"/>
@@ -62,7 +62,7 @@
                 android:id="@+id/btnSwitcher2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_fill_circle"
+                android:src="@drawable/fill_icon_circle"
                 android:tint="@color/blue"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:paddingHorizontal="10dp"/>

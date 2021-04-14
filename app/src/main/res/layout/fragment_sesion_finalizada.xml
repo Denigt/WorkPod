@@ -44,7 +44,7 @@
                         android:id="@+id/IVWifi"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/wifi" />
+                        android:src="@drawable/fill_icon_wifi" />
 
                     <TextView
                         android:id="@+id/TVWifi"
@@ -193,7 +193,7 @@
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/support_imgvround" />
+                        android:src="@drawable/fill_icon_contact_us_cicle" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"

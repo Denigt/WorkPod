@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="7"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/fill_icon_star"
                         app:tint="#D8D9DA" />
 
                     <ImageView
@@ -82,7 +82,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/fill_icon_star"
                         app:tint="#D8D9DA" />
 
                     <ImageView
@@ -90,7 +90,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/fill_icon_star"
                         app:tint="#D8D9DA" />
 
                     <ImageView
@@ -98,7 +98,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/fill_icon_star"
                         app:tint="#D8D9DA" />
 
                     <ImageView
@@ -106,7 +106,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="7"
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/fill_icon_star"
                         app:tint="#D8D9DA" />
 
                 </LinearLayout>

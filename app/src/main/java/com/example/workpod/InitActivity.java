@@ -4,27 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 public class InitActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,7 +29,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<ImageButton> btnSwither = new ArrayList<ImageButton>();
 
     // RECURSOS DEL LOS SWITCHER
-    private final int[] images = {R.drawable.ic_user, R.drawable.ic_historial, R.drawable.ic_friends};
+    private final int[] images = {R.drawable.empty_icon_user, R.drawable.fill_icon_historial, R.drawable.fill_icon_friends};
     private final String[] texts = {"Telefono", "Historial", "Amigos"};
     private int lastPos = 0;
 
@@ -161,7 +153,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
             // Se busca la ID del boton si se encuentra se marca ese boton y se desmarcan los demas
             if (btnSwither.get(i).getId() == v.getId() && containsId == -1) {
                 containsId = i;
-                btnSwither.get(i).setImageResource(R.drawable.ic_empty_circle);
+                btnSwither.get(i).setImageResource(R.drawable.empty_icon_circle);
             }
         }
         if (containsId != -1) {
@@ -178,9 +170,9 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         if (btnToChange < btnSwither.size()){
             for (int i = 0; i < btnSwither.size(); i++){
                 if (i != btnToChange)
-                    btnSwither.get(i).setImageResource(R.drawable.ic_fill_circle);
+                    btnSwither.get(i).setImageResource(R.drawable.fill_icon_circle);
                 else
-                    btnSwither.get(i).setImageResource(R.drawable.ic_empty_circle);
+                    btnSwither.get(i).setImageResource(R.drawable.empty_icon_circle);
             }
         }
     }

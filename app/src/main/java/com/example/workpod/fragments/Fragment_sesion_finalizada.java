@@ -1,6 +1,7 @@
 package com.example.workpod.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,10 +21,11 @@ import com.example.workpod.WorkpodActivity;
  * Use the {@link Fragment_sesion_finalizada#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_sesion_finalizada extends Fragment  {
+public class Fragment_sesion_finalizada extends Fragment {
 
     //XML
     private Button btnCerrarWorPod;
+    private Button btnContactarSoporte;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -67,9 +69,13 @@ public class Fragment_sesion_finalizada extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_sesion_finalizada,container,false);
         btnCerrarWorPod=(Button)view.findViewById(R.id.BtnCerrarWorPod);
+        btnContactarSoporte=(Button)view.findViewById(R.id.BtnContactarSoporte);
+        btnCerrarWorPod.setBackgroundColor(Color.parseColor("#DA4B4B"));
+        btnContactarSoporte.setBackgroundColor(Color.parseColor("#C3A240"));
         btnCerrarWorPod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
