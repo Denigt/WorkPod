@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Texto"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".fragments.Fragment_Menu_Usuario">
 
     <ListView
         android:id="@+id/LsV_Menu_Usuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_margin="20dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp" />
 
-</FrameLayout>
+</LinearLayout>

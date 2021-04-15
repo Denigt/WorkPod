@@ -21,12 +21,12 @@ import androidx.fragment.app.FragmentTransaction;
 public class WorkpodActivity extends FragmentActivity {
 
     // CONTROLES DEL XML
-    private BottomNavigationView btnNV;
+    public static BottomNavigationView btnNV;
     private LinearLayout LLFragment;
     private FragmentTransaction fTransaction;
 
     //BOOLEANO PARA CONTROLAR LA NAVEGACIÓN POR LOS FRAGMENTS
-    private Boolean boolLoc = false;
+    public static Boolean boolLoc = false;
 
     //INSTANCIA DEL FRAGMENT INICIAL
     Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();

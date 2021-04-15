@@ -3,6 +3,8 @@ package com.example.workpod.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
 import com.example.workpod.otherclass.LsV_Menu_Usuario;
 import com.example.workpod.R;
@@ -25,7 +28,8 @@ import java.util.ArrayList;
 public class Fragment_Menu_Usuario extends Fragment {
 
     private ListView lsV_Menu_Usuario;
-    ArrayList<LsV_Menu_Usuario>aLstMU=new ArrayList<>();
+    private FragmentTransaction fTransaction;
+    ArrayList<LsV_Menu_Usuario> aLstMU = new ArrayList<>();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,23 +74,29 @@ public class Fragment_Menu_Usuario extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_menu_usuario,container,false);
+        View view = inflater.inflate(R.layout.fragment_menu_usuario, container, false);
         //ARMAMOS EL LSV
-        lsV_Menu_Usuario=(ListView)view.findViewById(R.id.LsV_Menu_Usuario);
-        aLstMU.add(new LsV_Menu_Usuario(0,R.drawable.fill_icon_tarjeta,"Perfil de pago"));
-        aLstMU.add(new LsV_Menu_Usuario(1,R.drawable.fill_icon_user,"Perfil"));
-        aLstMU.add(new LsV_Menu_Usuario(2,R.drawable.fill_icon_historial,"Histórico de transacciones"));
-        aLstMU.add(new LsV_Menu_Usuario(3,R.drawable.fill_icon_settings,"Configuración"));
-        aLstMU.add(new LsV_Menu_Usuario(4,R.drawable.fill_icon_phone,"Soporte"));
-        aLstMU.add(new LsV_Menu_Usuario(5,R.drawable.fill_icon_friends,"Invita a un amigo"));
-        final Adaptador_LsV_Menu_Usuario aMU=new Adaptador_LsV_Menu_Usuario(view.getContext(),aLstMU);
+        lsV_Menu_Usuario = (ListView) view.findViewById(R.id.LsV_Menu_Usuario);
+        aLstMU.add(new LsV_Menu_Usuario(0, R.drawable.fill_icon_tarjeta, "Perfil de pago"));
+        aLstMU.add(new LsV_Menu_Usuario(1, R.drawable.fill_icon_user, "Perfil"));
+        aLstMU.add(new LsV_Menu_Usuario(2, R.drawable.fill_icon_historial, "Histórico de transacciones"));
+        aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_settings, "Configuración"));
+        aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_phone, "Soporte"));
+        aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Invita a un amigo"));
+        final Adaptador_LsV_Menu_Usuario aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
         lsV_Menu_Usuario.setAdapter(aMU);
         lsV_Menu_Usuario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                LsV_Menu_Usuario lsV_menu_usuario=(LsV_Menu_Usuario)aMU.getItem(i);
-                if(lsV_menu_usuario.getCodigo()==1){
+                LsV_Menu_Usuario lsV_menu_usuario = (LsV_Menu_Usuario) aMU.getItem(i);
+                if (lsV_menu_usuario.getCodigo() == 1) {
                     Toast.makeText(view.getContext(), "Hola Mundo", Toast.LENGTH_SHORT).show();
+                } else if (lsV_menu_usuario.getCodigo() == 4) {
+                    fragment_support fragmentSupport = new fragment_support();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).
+                            addToBackStack(null).commit();
+                    //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
+                    WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
                 }
             }
         });

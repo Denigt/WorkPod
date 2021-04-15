@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.text.Html;
 import android.text.TextUtils;
@@ -151,4 +152,7 @@ public class fragment_support extends Fragment {
             }
         });
     }
+
+
+
 }

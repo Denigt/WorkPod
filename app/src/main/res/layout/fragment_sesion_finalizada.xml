@@ -26,7 +26,7 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/linearlayoutbordeseedondeados"
+                android:background="@drawable/bordes_redondeados_sesion_finalizada"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -101,7 +101,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
 
-                android:background="@drawable/linearlayoutbordeseedondeados"
+                android:background="@drawable/bordes_redondeados_sesion_finalizada"
                 android:orientation="vertical"
                 tools:ignore="MissingConstraints">
 
@@ -169,7 +169,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="25dp"
-                android:background="@drawable/linearlayoutbordeseedondeados"
+                android:background="@drawable/bordes_redondeados_sesion_finalizada"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -229,6 +229,7 @@
                     android:layout_width="304dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:backgroundTint="#C3A240"
                     android:text="Contacta con soporte"
