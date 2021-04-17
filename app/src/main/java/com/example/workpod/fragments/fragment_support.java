@@ -91,24 +91,10 @@ public class fragment_support extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_support, container, false);
-        //  tVEmail = (TextView) view.findViewById(R.id.TVEmail);
         tVTlfn = (TextView) view.findViewById(R.id.iTVSupport);
         lsV_Support = (ListView) view.findViewById(R.id.LsV_Support);
-//        tVEmail.setText(Html.fromHtml("<a href=\"mailto:workpodtfg@gmail.com\">workpodtfg@gmail.com </a>"));
-        //CAMBIAR EL COLOR DEL LINK
-        // tVEmail.setLinkTextColor(Color.WHITE);
-        //   tVEmail.setMovementMethod(LinkMovementMethod.getInstance());
-
-      /*tVTlfn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llamar(v);
-            }
-        });*/
         construyendo_LsV(view);
         return view;
-
-
     }
 
     /**
@@ -135,6 +121,11 @@ public class fragment_support extends Fragment {
         }
     }
 
+    /**
+     * Método para construir el ListView donde se encontrará el email, el tlfn y la dirección de la compañía
+     *
+     * @param view instancia de la clase View
+     */
     public void construyendo_LsV(View view) {
 
         aLstSupport.add(new LsV_Support(0, R.drawable.fill_icon_gmail, "workpodtfg@gmail.com"));
@@ -152,7 +143,4 @@ public class fragment_support extends Fragment {
             }
         });
     }
-
-
-
 }

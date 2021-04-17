@@ -21,7 +21,7 @@ import com.example.workpod.WorkpodActivity;
  * Use the {@link Fragment_sesion_finalizada#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_sesion_finalizada extends Fragment {
+public class Fragment_sesion_finalizada extends Fragment implements View.OnClickListener {
 
     //XML
     private Button btnCerrarWorPod;
@@ -71,20 +71,30 @@ public class Fragment_sesion_finalizada extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_sesion_finalizada,container,false);
-        btnCerrarWorPod=(Button)view.findViewById(R.id.BtnCerrarWorPod);
-        btnContactarSoporte=(Button)view.findViewById(R.id.BtnContactarSoporte);
+        View view = inflater.inflate(R.layout.fragment_sesion_finalizada, container, false);
+        btnCerrarWorPod = (Button) view.findViewById(R.id.BtnCerrarWorPod);
+        btnContactarSoporte = (Button) view.findViewById(R.id.BtnContactarSoporte);
         btnCerrarWorPod.setBackgroundColor(Color.parseColor("#DA4B4B"));
         btnContactarSoporte.setBackgroundColor(Color.parseColor("#C3A240"));
-        btnCerrarWorPod.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
-                startActivity(activity);
-            }
-        });
+
+        btnCerrarWorPod.setOnClickListener(this);
+        btnContactarSoporte.setOnClickListener(this);
         return view;
     }
 
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.BtnCerrarWorPod) {
+            Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
+        } else if (v.getId() == R.id.BtnContactarSoporte) {
+            fragment_support fragmentSupport = new fragment_support();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
+            //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
+            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
+            WorkpodActivity.boolLoc = false;
+        }
+    }
 }

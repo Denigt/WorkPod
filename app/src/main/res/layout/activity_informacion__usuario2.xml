@@ -92,6 +92,7 @@
                         android:textSize="17dp" />
 
                     <ImageView
+                        android:id="@+id/IVPantalla"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/emoji_pantalla" />
@@ -117,6 +118,7 @@
                         android:textSize="17dp" />
 
                     <ImageView
+                        android:id="@+id/IVPortatil"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/emoji_portatil" />

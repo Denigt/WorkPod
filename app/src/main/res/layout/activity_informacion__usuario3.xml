@@ -92,6 +92,7 @@
                         android:textSize="17dp" />
 
                     <ImageView
+                        android:id="@+id/IVTrabajarSolo"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/emoji_bailando" />
@@ -117,6 +118,7 @@
                         android:textSize="17dp" />
 
                     <ImageView
+                        android:id="@+id/IVTrabajarEquipo"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/emoji_conejitas" />

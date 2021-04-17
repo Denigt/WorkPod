@@ -91,12 +91,18 @@ public class Fragment_Menu_Usuario extends Fragment {
                 LsV_Menu_Usuario lsV_menu_usuario = (LsV_Menu_Usuario) aMU.getItem(i);
                 if (lsV_menu_usuario.getCodigo() == 1) {
                     Toast.makeText(view.getContext(), "Hola Mundo", Toast.LENGTH_SHORT).show();
+                }else if(lsV_menu_usuario.getCodigo()==2){
+                    Fragment_Transaction_History fragmentTransaction = new Fragment_Transaction_History();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
+                    //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
+                    WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_folder);
+                    WorkpodActivity.boolLoc=false;
                 } else if (lsV_menu_usuario.getCodigo() == 4) {
                     fragment_support fragmentSupport = new fragment_support();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).
-                            addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
                     //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
                     WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
+                    WorkpodActivity.boolLoc=false;
                 }
             }
         });

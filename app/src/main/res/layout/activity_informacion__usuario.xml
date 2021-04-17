@@ -89,6 +89,7 @@
                         android:textSize="17dp" />
 
                     <ImageView
+                        android:id="@+id/IVChistera"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/emoji_chistera" />
@@ -113,6 +114,7 @@
                         android:textSize="17dp" />
 
                     <ImageView
+                        android:id="@+id/IVMaletin"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/emoji_maletin" />

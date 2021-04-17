@@ -6,13 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.workpod.R;
 import com.example.workpod.Valoracion_Workpod_Final;
 
 public class Informacion_Usuario extends AppCompatActivity implements View.OnClickListener {
     private Button btnTrabajarCuentaAjena, btnFreelance;
-    public static String []resultadoTest=new String[3];
+    private ImageView iVChistera, iVMaletin;
+    public static String[] resultadoTest = new String[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +22,13 @@ public class Informacion_Usuario extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_informacion__usuario);
         btnTrabajarCuentaAjena = (Button) findViewById(R.id.BtnTrabajarCuentaAjena);
         btnFreelance = (Button) findViewById(R.id.BtnFreelance);
+        iVChistera=(ImageView)findViewById(R.id.IVChistera);
+        iVMaletin=(ImageView)findViewById(R.id.IVMaletin);
 
         btnTrabajarCuentaAjena.setOnClickListener(this);
         btnFreelance.setOnClickListener(this);
+        iVMaletin.setOnClickListener(this);
+        iVChistera.setOnClickListener(this);
     }
 
     //LISTENERS
@@ -48,7 +54,7 @@ public class Informacion_Usuario extends AppCompatActivity implements View.OnCli
             startActivity(activity);
 
             //GUARDAMOS EN LA MATRIZ LA RESPUESTA DEL USUARIO
-            resultadoTest[0]="Cuenta ajena";
+            resultadoTest[0] = "Cuenta ajena";
 
 
         } else if (v.getId() == R.id.BtnFreelance) {
@@ -58,8 +64,24 @@ public class Informacion_Usuario extends AppCompatActivity implements View.OnCli
             startActivity(activity);
 
             //GUARDAMOS EN LA MATRIZ LA RESPUESTA DEL USUARIO
-            resultadoTest[0]="Freelance";
+            resultadoTest[0] = "Freelance";
 
+        } else if (v.getId() == R.id.IVChistera) {
+            Intent activity = new Intent(getApplicationContext(), Informacion_Usuario2.class);
+            //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
+
+            //GUARDAMOS EN LA MATRIZ LA RESPUESTA DEL USUARIO
+            resultadoTest[0] = "Cuenta ajena";
+        } else if (v.getId() == R.id.IVMaletin) {
+            Intent activity = new Intent(getApplicationContext(), Informacion_Usuario2.class);
+            //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
+
+            //GUARDAMOS EN LA MATRIZ LA RESPUESTA DEL USUARIO
+            resultadoTest[0] = "Freelance";
         }
     }
 }

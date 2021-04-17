@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.workpod.fragments.Fragment_Menu_Usuario;
+import com.example.workpod.fragments.Fragment_Transaction_History;
 import com.example.workpod.fragments.Fragment_sesion_finalizada;
 import com.example.workpod.fragments.fragment_support;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -62,23 +63,8 @@ public class WorkpodActivity extends FragmentActivity {
      */
     private void btnNVonNavigationItemSelected(MenuItem menuitem) {
 
-        if (menuitem.getItemId() == R.id.inv_menu_user) {
-            // LLFragment.removeAllViews();
-            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
-            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
-            fTransaction = fragmentManager.beginTransaction();
-            //CREAMOS UN OBJETO DEL FRAGMENTO
-            Fragment_Menu_Usuario menuUsuario = new Fragment_Menu_Usuario();
-            // fTransaction.replace(R.id.LLFragment,sesion_finalizada);
-            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
-            fTransaction.replace(R.id.LLFragment, menuUsuario);
-            //fTransaction.addToBackStack(String.valueOf(fTransaction.replace(R.id.LLFragment,sesion_finalizada)));
-            fTransaction.commit();
-            boolLoc = false;
-
-        } else if (menuitem.getItemId() == R.id.inv_location) {
+        if (menuitem.getItemId() == R.id.inv_location) {
             //HAY QUE BORRAR TODOS LOS ELEMENTOS DEL LAYOUT SI QUEREMOS QUE APAREZCA EL FRAGMENT SELECCIONADO
-            // LLFragment.removeAllViews();
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
             fTransaction = fragmentManager.beginTransaction();
@@ -87,13 +73,32 @@ public class WorkpodActivity extends FragmentActivity {
             fTransaction.replace(R.id.LLFragment, sesion_finalizada);
             fTransaction.commit();
             boolLoc = true;
-        }else if (menuitem.getItemId() == R.id.inv_support) {
+        } else if (menuitem.getItemId() == R.id.inv_support) {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
             fTransaction = fragmentManager.beginTransaction();
             fragment_support soporte = new fragment_support();
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, soporte);
+            fTransaction.commit();
+            boolLoc = false;
+        } else if (menuitem.getItemId() == R.id.inv_folder) {
+            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+            fTransaction = fragmentManager.beginTransaction();
+            Fragment_Transaction_History transaction_history = new Fragment_Transaction_History();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, transaction_history);
+            fTransaction.commit();
+            boolLoc = false;
+        } else if (menuitem.getItemId() == R.id.inv_menu_user) {
+            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+            fTransaction = fragmentManager.beginTransaction();
+            //CREAMOS UN OBJETO DEL FRAGMENTO
+            Fragment_Menu_Usuario menuUsuario = new Fragment_Menu_Usuario();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, menuUsuario);
             fTransaction.commit();
             boolLoc = false;
         }
