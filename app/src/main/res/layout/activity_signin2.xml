@@ -132,7 +132,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
-            android:src="@drawable/fill_icon_btnsiguiente"
+            android:src="@drawable/button_btnsiguiente"
             android:background="?selectableItemBackgroundBorderless"
             android:focusable="true"
             android:scaleType="fitCenter"/>
