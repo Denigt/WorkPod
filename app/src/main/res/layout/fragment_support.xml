@@ -35,7 +35,7 @@
                 android:layout_width="80dp"
                 android:layout_height="100dp"
                 android:background="@color/Texto"
-                android:src="@drawable/fill_icon_contact_us_cicle"/>
+                android:src="@drawable/fill_icon_contact_us_cicle_21"/>
         </LinearLayout>
 
         <LinearLayout

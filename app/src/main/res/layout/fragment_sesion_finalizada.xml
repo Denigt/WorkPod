@@ -193,7 +193,7 @@
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/fill_icon_contact_us_cicle" />
+                        android:src="@drawable/fill_icon_contact_us_cicle_21" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
