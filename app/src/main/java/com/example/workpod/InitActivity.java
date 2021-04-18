@@ -29,7 +29,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<ImageButton> btnSwither = new ArrayList<ImageButton>();
 
     // RECURSOS DEL LOS SWITCHER
-    private final int[] images = {R.drawable.empty_icon_user, R.drawable.fill_icon_historial, R.drawable.fill_icon_friends};
+    private final int[] images = {R.drawable.empty_icon_user_21, R.drawable.fill_icon_contact_us_cicle_21, R.drawable.fill_icon_friends};
     private final String[] texts = {"Telefono", "Historial", "Amigos"};
     private int lastPos = 0;
 
