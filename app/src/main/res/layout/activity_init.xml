@@ -98,6 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/logo_linkedin_small"
             android:text="Conectar"
             android:layout_marginLeft="15dp"/>
     </LinearLayout>
