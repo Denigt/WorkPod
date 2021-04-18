@@ -25,19 +25,29 @@ import java.util.ArrayList;
  * Use the {@link Fragment_Menu_Usuario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Menu_Usuario extends Fragment {
+public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnItemClickListener {
 
+    // PARAMETROS PARA LA GESTION DEL LISTVIEW
     private ListView lsV_Menu_Usuario;
-    private FragmentTransaction fTransaction;
     ArrayList<LsV_Menu_Usuario> aLstMU = new ArrayList<>();
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    // PARAMETROS PARA EL FRAGMENT, NO SE USA, SE PUEDE BORRAR
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    // VARIABLES DE USO PRIVADO SIN GETTERS NI SETTERS
+    private Adaptador_LsV_Menu_Usuario aMU;
+    private final int PAGO = 0;
+    private final int PERFIL = 1;
+    private final int TRANSACCIONES = 2;
+    private final int CONFIGURACION = 3;
+    private final int SOPORTE = 4;
+    private final int INVITA = 5;
+
 
     public Fragment_Menu_Usuario() {
         // Required empty public constructor
@@ -83,29 +93,63 @@ public class Fragment_Menu_Usuario extends Fragment {
         aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_settings, "Configuración"));
         aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_phone, "Soporte"));
         aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Invita a un amigo"));
-        final Adaptador_LsV_Menu_Usuario aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
+        aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
         lsV_Menu_Usuario.setAdapter(aMU);
-        lsV_Menu_Usuario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                LsV_Menu_Usuario lsV_menu_usuario = (LsV_Menu_Usuario) aMU.getItem(i);
-                if (lsV_menu_usuario.getCodigo() == 1) {
-                    Toast.makeText(view.getContext(), "Hola Mundo", Toast.LENGTH_SHORT).show();
-                }else if(lsV_menu_usuario.getCodigo()==2){
-                    Fragment_Transaction_History fragmentTransaction = new Fragment_Transaction_History();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
-                    //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
-                    WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_folder);
-                    WorkpodActivity.boolLoc=false;
-                } else if (lsV_menu_usuario.getCodigo() == 4) {
-                    fragment_support fragmentSupport = new fragment_support();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
-                    //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
-                    WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
-                    WorkpodActivity.boolLoc=false;
-                }
-            }
-        });
+        lsV_Menu_Usuario.setOnItemClickListener(this);
         return view;
+    }
+
+    // LISTENERS
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+        onClickPago(i);
+        onClickPerfil(i);
+        onClickTransacciones(i);
+        onClickConfiguracion(i);
+        onClickSoporte(i);
+        onClickInvita(i);
+    }
+
+    // EVENTOS ON CLICK PARA LOS ITEMS DEL LISTVIEW
+    private void onClickPago(int index){
+        if (index == PAGO) {
+        }
+    }
+
+    private void onClickPerfil(int index){
+        if (index == PERFIL) {
+            Fragment_Perfil fragmentTransaction = new Fragment_Perfil();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
+        }
+    }
+
+    private void onClickTransacciones(int index){
+        if (index == TRANSACCIONES) {
+            Fragment_Transaction_History fragmentTransaction = new Fragment_Transaction_History();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
+            //CAMBIAMOS LA SELECCIÓN AL ICONO DE TRANSACCIONES
+            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_folder);
+            WorkpodActivity.boolLoc=false;
+        }
+    }
+
+    private void onClickConfiguracion(int index){
+        if (index == CONFIGURACION) {
+        }
+    }
+
+    private void onClickSoporte(int index){
+        if (index == SOPORTE) {
+            fragment_support fragmentSupport = new fragment_support();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
+            //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
+            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
+            WorkpodActivity.boolLoc=false;
+        }
+    }
+
+    private void onClickInvita(int index){
+        if (index == INVITA) {
+        }
     }
 }
