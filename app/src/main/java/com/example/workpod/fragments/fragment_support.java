@@ -137,7 +137,7 @@ public class fragment_support extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 LsV_Support lsV_support = (LsV_Support) aSuport.getItem(i);
-                if (lsV_support.getCodigo() == 1) {
+                if (lsV_support.getCodigo() == 2) {
                     llamar(view);
                 }
             }
