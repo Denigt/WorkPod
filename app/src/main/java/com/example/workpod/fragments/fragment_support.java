@@ -128,9 +128,9 @@ public class fragment_support extends Fragment {
      */
     public void construyendo_LsV(View view) {
 
-        aLstSupport.add(new LsV_Support(0, R.drawable.fill_icon_gmail, "workpodtfg@gmail.com"));
-        aLstSupport.add(new LsV_Support(1, R.drawable.fill_icon_llamar, "618.950.208"));
-        aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_direccion, "Calle Falsa 1 2 3"));
+        aLstSupport.add(new LsV_Support(0, R.drawable.fill_icon_interrogacion, "Preguntas Frecuentes"));
+        aLstSupport.add(new LsV_Support(1, R.drawable.fill_icon_gmail, "workpodtfg@gmail.com"));
+        aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_llamar, "618.950.208"));
         final Adaptador_LsV_Support aSuport = new Adaptador_LsV_Support(view.getContext(), aLstSupport);
         lsV_Support.setAdapter(aSuport);
         lsV_Support.setOnItemClickListener(new AdapterView.OnItemClickListener() {

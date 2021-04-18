@@ -11,7 +11,7 @@
         android:id="@+id/iIVSupport"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="2dp"
         android:scaleType="fitXY"
         android:src="@drawable/empty_icon_support" />
 

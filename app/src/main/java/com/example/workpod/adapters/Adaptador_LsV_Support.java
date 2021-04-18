@@ -52,7 +52,7 @@ public class Adaptador_LsV_Support extends BaseAdapter {
         tVIcono=(TextView)view.findViewById(R.id.iTVSupport);
         iVIcono=(ImageView)view.findViewById(R.id.iIVSupport);
 
-        if(aLstSupport.get(i).getCodigo()==0){
+        if(aLstSupport.get(i).getCodigo()==1){
             Adaptador_LsV_Support.tVIcono.setText(Html.fromHtml("<a href=\"mailto:workpodtfg@gmail.com\">workpodtfg@gmail.com </a>"));
             tVIcono.setMovementMethod(LinkMovementMethod.getInstance());
         }else{
