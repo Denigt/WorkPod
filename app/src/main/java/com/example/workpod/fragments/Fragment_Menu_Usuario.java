@@ -41,12 +41,6 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     // VARIABLES DE USO PRIVADO SIN GETTERS NI SETTERS
     private Adaptador_LsV_Menu_Usuario aMU;
-    private final int PAGO = 0;
-    private final int PERFIL = 1;
-    private final int TRANSACCIONES = 2;
-    private final int CONFIGURACION = 3;
-    private final int SOPORTE = 4;
-    private final int INVITA = 5;
 
 
     public Fragment_Menu_Usuario() {
@@ -112,19 +106,30 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     // EVENTOS ON CLICK PARA LOS ITEMS DEL LISTVIEW
     private void onClickPago(int index){
-        if (index == PAGO) {
+        if (index == InfoFragment.PAGO) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.PAGO;
         }
     }
 
     private void onClickPerfil(int index){
-        if (index == PERFIL) {
+        if (index == InfoFragment.PERFIL) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.PERFIL;
+
             Fragment_Perfil fragmentTransaction = new Fragment_Perfil();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
         }
     }
 
     private void onClickTransacciones(int index){
-        if (index == TRANSACCIONES) {
+        if (index == InfoFragment.TRANSACCIONES) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.TRANSACCIONES;
+
             Fragment_Transaction_History fragmentTransaction = new Fragment_Transaction_History();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
             //CAMBIAMOS LA SELECCIÓN AL ICONO DE TRANSACCIONES
@@ -134,12 +139,19 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     }
 
     private void onClickConfiguracion(int index){
-        if (index == CONFIGURACION) {
+        if (index == InfoFragment.CONFIGURACION) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.CONFIGURACION;
         }
     }
 
     private void onClickSoporte(int index){
-        if (index == SOPORTE) {
+        if (index == InfoFragment.SOPORTE) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.SOPORTE;
+
             fragment_support fragmentSupport = new fragment_support();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
             //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
@@ -149,7 +161,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     }
 
     private void onClickInvita(int index){
-        if (index == INVITA) {
+        if (index == InfoFragment.INVITA) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.INVITA;
+
         }
     }
 }
