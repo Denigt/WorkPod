@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -86,6 +87,15 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         txtSwitcher.setText(texts[lastPos]);
         txtSwitcher.setInAnimation(getApplicationContext(), R.anim.left_in);
         txtSwitcher.setOutAnimation(getApplicationContext(), R.anim.left_out);
+
+        // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            FrameLayout lyt = findViewById(R.id.lytForeground1);
+            lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
+
+            lyt = findViewById(R.id.lytForeground2);
+            lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
+        }
     }
 
     @Override

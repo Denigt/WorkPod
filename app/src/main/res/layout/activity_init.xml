@@ -85,22 +85,41 @@
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="30dp"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/btnAcceder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Acceder"
-            android:layout_marginRight="15dp" />
 
-        <Button
-            android:id="@+id/btnConectar"
+        <FrameLayout
+            android:id="@+id/lytForeground1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/logo_linkedin_small"
-            android:text="Conectar"
-            android:layout_marginLeft="15dp"/>
+            android:layout_marginRight="5dp"
+            >
+            <Button
+                android:id="@+id/btnAcceder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Acceder"
+                android:lines="1"
+                android:background="?selectableItemBackground"
+                android:foreground="@drawable/rounded_border_button"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/lytForeground2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            >
+            <Button
+                android:id="@+id/btnConectar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/logo_linkedin_small"
+                android:lines="1"
+                android:text="Conectar"
+                android:background="?selectableItemBackground"
+                android:foreground="@drawable/rounded_border_button"/>
+        </FrameLayout>
     </LinearLayout>
 
     <Button

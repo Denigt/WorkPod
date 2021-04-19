@@ -1,5 +1,6 @@
 package com.example.workpod.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -77,7 +79,16 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         btnShowInfo = view.findViewById(R.id.btnShowInfo);
         txtEmail = view.findViewById(R.id.txtEmail);
         lytPrivate = view.findViewById(R.id.lytPrivate);
+        lytPrivate.setVisibility(View.GONE);
 
+        // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            FrameLayout lyt = view.findViewById(R.id.lytForeground1);
+            lyt.setForeground(getContext().getDrawable(R.drawable.rounded_border_button));
+
+            lyt = view.findViewById(R.id.lytForeground2);
+            lyt.setForeground(getContext().getDrawable(R.drawable.rounded_border_button));
+        }
         // ASIGNACION DE LOS LISTENERS A LOS CONTROLES
         btnShowInfo.setOnClickListener(this);
 

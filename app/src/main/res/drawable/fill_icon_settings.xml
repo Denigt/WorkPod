@@ -3,9 +3,9 @@
     android:height="72.145996dp"
     android:viewportWidth="68.070786"
     android:viewportHeight="72.145996"
-    android:tint="@color/white">
+    android:tint="#FFFFFFFF">
   <path
-      android:pathData="M34.3404,36.4146m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0"
+      android:pathData="M34.0294,36.1092m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0"
       android:strokeLineJoin="round"
       android:strokeWidth="4.36625"
       android:fillColor="#000000"
