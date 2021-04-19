@@ -4,20 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.fragment_support">
+    tools:context=".fragments.Fragment_Perfil">
 
-    <TextView
-        android:id="@+id/textView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:text="Mi Perfil"
-        android:textColor="@color/blue"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:text="Mi Perfil"
+            android:textColor="@color/blue"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginTop="25dp"
+            android:layout_marginHorizontal="15dp"
+            android:src="@drawable/fill_icon_pen"
+            android:tint="@color/blue"
+            android:background="?selectableItemBackgroundBorderless"
+            />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,45 +41,154 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/empty_icon_user_21"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/fill_icon_user"
+            android:tint="@color/blue"
+            android:scaleType="fitCenter"
+            android:padding="10dp"
+
+            android:background="@drawable/rounded_border_square"
             />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_vertical">
             <TextView
+                android:id="@+id/txtNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
+
                 android:text="Nombre y apellido"
                 android:textColor="@color/blue"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:gravity="right"/>
 
-            <ScrollView
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:scrollbars="horizontal">
+                android:scrollbars="horizontal"
+                >
                 <TextView
+                    android:id="@+id/txtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
                     android:text="correoelectronico@electronico.com"
-                    android:lines="1"
-                    android:textColor="@color/textgray"
                     android:textSize="16dp"
                     android:textStyle="bold"
                     android:gravity="right"/>
-            </ScrollView>
-
+            </HorizontalScrollView>
         </LinearLayout>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnShowInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Ver información personal"
+        android:background="@drawable/rounded_border_button"
+        android:foreground="?selectableItemBackground"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/lytPrivate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="DNI"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtDNI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+
+                android:text="00000000-A"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/textgray"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Teléfono"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+
+                android:text="666 666 666"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="@color/textgray"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Dirección de facturación"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+                android:scrollbars="horizontal"
+                >
+                <TextView
+                    android:id="@+id/txtFacturacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="Calle La Facturacion, Madrid, España, Europa, Tierra 28053"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textgray"/>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Modificar contraseña"
+        android:background="@drawable/rounded_border_button"
+        android:foreground="?selectableItemBackground"/>
+
 </LinearLayout>

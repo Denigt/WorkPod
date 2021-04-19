@@ -1,11 +1,16 @@
 package com.example.workpod.fragments;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -16,33 +21,32 @@ import com.example.workpod.otherclass.LsV_Transaction_History;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_Perfil#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Fragment_Perfil extends Fragment {
+public class Fragment_Perfil extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    // PARAMETROS PARA LA INSTANCIACION DEL FRAGMENT, NO SE USA
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    // CONTROLES DEL FRAGMENT
+    private ImageButton btnEdit;
+    private Button btnShowInfo;
+    private TextView txtEmail;
+    private LinearLayout lytPrivate;
+
+    // VARIABLES QUE MANEJAN EL ESTADO DEL FRAGMENT
+    private boolean showInfo = false;
+
     public Fragment_Perfil() {
-        // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Crea una instancia del Fragmento Perfil
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_Transaction_History.
+     * @param param1 Parametro 1
+     * @param param2 Parametro 2
+     * @return Un objeto Fragment_Perfil inicializado segun los parametros pasados
      */
     // TODO: Rename and change types and number of parameters
     public static Fragment_Perfil newInstance(String param1, String param2) {
@@ -67,6 +71,37 @@ public class Fragment_Perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
+        // BUSQUEDA E INICIALIZACION DE LOS CONTROLES DEL LAYOUT
+        btnEdit = view.findViewById(R.id.btnEdit);
+        btnShowInfo = view.findViewById(R.id.btnShowInfo);
+        txtEmail = view.findViewById(R.id.txtEmail);
+        lytPrivate = view.findViewById(R.id.lytPrivate);
+
+        // ASIGNACION DE LOS LISTENERS A LOS CONTROLES
+        btnShowInfo.setOnClickListener(this);
+
         return view;
+    }
+
+    // LISTENERS DEL FRAGMENT
+    @Override
+    public void onClick(View v) {
+        btnShowInfoOnClick(v);
+    }
+
+    // METODOS ONCLICK DE CADA CONTROL
+    private void btnShowInfoOnClick(View v) {
+        if (v.getId() == btnShowInfo.getId()){
+            showInfo = !showInfo;
+
+            if (showInfo) {
+                lytPrivate.setVisibility(View.VISIBLE);
+                btnShowInfo.setText("Ocultar información personal");
+            }else {
+                lytPrivate.setVisibility(View.GONE);
+                btnShowInfo.setText("Mostrar información personal");
+            }
+        }
     }
 }
