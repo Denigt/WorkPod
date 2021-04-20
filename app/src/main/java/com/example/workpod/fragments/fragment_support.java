@@ -39,7 +39,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class fragment_support extends Fragment {
-    private static final int PERMISO_LLAMADA = 50;
     private TextView tVEmail;
     private TextView tVTlfn;
     private ListView lsV_Support;
@@ -97,29 +96,7 @@ public class fragment_support extends Fragment {
         return view;
     }
 
-    /**
-     * Método que nos permitirá realizar una llamada al número especificado en el TextView
-     *
-     * @param v instancia de la clase View
-     */
-    public void llamar(View v) {
-        try {
-            //VERIFICAMOS SI TENEMOS LOS PERMISOS PARA LLAMAR
-            int permiso_Llamada = ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.CALL_PHONE);
-            if (permiso_Llamada != PackageManager.PERMISSION_GRANTED) {
-                //  Toast.makeText(v.getContext(), "No tienes permiso para llamar", Toast.LENGTH_LONG).show();
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, PERMISO_LLAMADA);
-            } else {
-                Log.i("Mensaje", "Se tiene permiso para llamar");
-                //COMPROBAMOS QUE EL Nº DE TLFN NO ESTÉ VACÍO.
-                String dial = "tel:618.950.208";//PONER OBLIGATORIAMENTE tel
-                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));//ESTO SERÁ LA LLAMADA
 
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     /**
      * Método para construir el ListView donde se encontrará el email, el tlfn y la dirección de la compañía
@@ -130,7 +107,7 @@ public class fragment_support extends Fragment {
 
         aLstSupport.add(new LsV_Support(0, R.drawable.fill_icon_interrogacion, "Preguntas Frecuentes"));
         aLstSupport.add(new LsV_Support(1, R.drawable.fill_icon_gmail, "workpodtfg@gmail.com"));
-        aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_llamar, "618.950.208"));
+        aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_llamar, "Contacta por Teléfono "));
         final Adaptador_LsV_Support aSuport = new Adaptador_LsV_Support(view.getContext(), aLstSupport);
         lsV_Support.setAdapter(aSuport);
         lsV_Support.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,7 +115,8 @@ public class fragment_support extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 LsV_Support lsV_support = (LsV_Support) aSuport.getItem(i);
                 if (lsV_support.getCodigo() == 2) {
-                    llamar(view);
+                    Fragment_Dialog_Call fragmentDialogCall=new Fragment_Dialog_Call();
+                    fragmentDialogCall.show(getActivity().getSupportFragmentManager(),"DialogToCall");
                 }
             }
         });
