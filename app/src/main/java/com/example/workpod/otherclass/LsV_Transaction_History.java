@@ -1,16 +1,28 @@
 package com.example.workpod.otherclass;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+
 public class LsV_Transaction_History {
     private int codigo;
     private String ubicacion;
-    private String fecha;
-    private String hora;
+    private ZonedDateTime fechaEntrada;
+    private ZonedDateTime fechaSalida;
+    private Double precio;
+    private String oferta;
+    private String tarjeta;
 
-    public LsV_Transaction_History(int codigo, String ubicacion, String fecha, String hora) {
+
+    public LsV_Transaction_History(int codigo, String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida,
+                                   Double precio, String oferta, String tarjeta) {
         this.codigo = codigo;
         this.ubicacion = ubicacion;
-        this.fecha = fecha;
-        this.hora = hora;
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
+        this.precio = precio;
+        this.oferta = oferta;
+        this.tarjeta = tarjeta;
     }
 
     public int getCodigo() {
@@ -29,19 +41,43 @@ public class LsV_Transaction_History {
         this.ubicacion = ubicacion;
     }
 
-    public String getFecha() {
-        return fecha;
+    public ZonedDateTime getFechaEntrada() {
+        return fechaEntrada;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public void setFechaEntrada(ZonedDateTime fechaEntrada) {
+        this.fechaEntrada = fechaEntrada;
     }
 
-    public String getHora() {
-        return hora;
+    public Double getPrecio() {
+        return precio;
     }
 
-    public void setHora(String hora) {
-        this.hora = hora;
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public String getOferta() {
+        return oferta;
+    }
+
+    public void setOferta(String oferta) {
+        this.oferta = oferta;
+    }
+
+    public String getTarjeta() {
+        return tarjeta;
+    }
+
+    public void setTarjeta(String tarjeta) {
+        this.tarjeta = tarjeta;
+    }
+
+    public ZonedDateTime getFechaSalida() {
+        return fechaSalida;
+    }
+
+    public void setFechaSalida(ZonedDateTime fechaSalida) {
+        this.fechaSalida = fechaSalida;
     }
 }

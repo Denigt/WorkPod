@@ -1,7 +1,8 @@
 package com.example.workpod.fragments;
 
 import android.Manifest;
-import android.app.AlertDialog;
+//IMPRESCINDIBLE PARA QUE FUNCIONE EN APIS INFERIORES A LA 23
+ import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.workpod.R;
 
@@ -28,6 +30,7 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
     //XML
     private ImageView iVSalir;
     private ImageView iVLlamar;
+
 
     //PERMISOS
     private static final int PERMISO_LLAMADA = 50;

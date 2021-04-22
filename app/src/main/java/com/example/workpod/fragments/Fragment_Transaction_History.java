@@ -1,6 +1,9 @@
 package com.example.workpod.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,27 +12,32 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_LsV_Transaction_History;
 import com.example.workpod.otherclass.LsV_Transaction_History;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 
 public class Fragment_Transaction_History extends Fragment implements View.OnClickListener {
 
     //ARRAYLIST CON TODAS LAS SESIONES DEL USUARIO
     private ArrayList<LsV_Transaction_History> aLstTransaction = new ArrayList<LsV_Transaction_History>();
-    //ARRAYLIST CON LAS ÚLTIMAS 5 SESIONES DEL USUARIO
-    private ArrayList<LsV_Transaction_History> aLstTransactionIniciales = new ArrayList<>();
-    //ARRAYLIST CON LA ÚLTIMA SESIÓN DEL USUARIO
-    private ArrayList<LsV_Transaction_History> aLstUltimaTransaction = new ArrayList<>();
+
+    private SimpleDateFormat fecha;
 
     //XML
     private ListView lsV_Transaction;
-    private ImageView iVTodasSesiones;
-    private ImageView iVUltimaSesion;
-    private ImageView iVLimpiarSesiones;
 
 
     public Fragment_Transaction_History() {
@@ -46,13 +54,6 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment__transaction__history, container, false);
         lsV_Transaction = (ListView) view.findViewById(R.id.LsV_Transaction_History);
-        iVLimpiarSesiones = (ImageView) view.findViewById(R.id.IVLimpiarSesiones);
-        iVTodasSesiones = (ImageView) view.findViewById(R.id.IVTodasSesiones);
-        iVUltimaSesion = (ImageView) view.findViewById(R.id.IVUltimaSesion);
-
-        iVUltimaSesion.setOnClickListener(this);
-        iVTodasSesiones.setOnClickListener(this);
-        iVLimpiarSesiones.setOnClickListener(this);
         construyendo_LsV(view);
         //PARA ACTIVAR EL MENU EMERGENTE
         setHasOptionsMenu(true);
@@ -62,20 +63,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
     //SOBREESCRITURAS
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.IVTodasSesiones) {
-            final Adaptador_LsV_Transaction_History aTransaction = new Adaptador_LsV_Transaction_History(v.getContext(), aLstTransaction);
-            lsV_Transaction.setAdapter(aTransaction);
-            lsV_Transaction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                    LsV_Transaction_History lsV_Transaction = (LsV_Transaction_History) aTransaction.getItem(i);
-                }
-            });
-        } else if (v.getId() == R.id.IVUltimaSesion) {
-            mostrarUltimaSesion(v);
-        } else if (v.getId() == R.id.IVLimpiarSesiones) {
-            limpiarSesiones(v);
-        }
+
     }
 
     //MÉTODOS
@@ -85,84 +73,61 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
      *
      * @param view instancia de la clase View
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void construyendo_LsV(View view) {
 
-        aLstTransaction.add(new LsV_Transaction_History(0, "C/Pablo Neruda,2", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(1, "C/Rafael Alberti,7", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(2, "C/Albert Einstein,27", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(3, "C/Arquímides,18", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(4, "C/Chaikoski,47", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(5, "C/Antonio Machado,98", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(6, "Avnd Sócrates,41", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(7, "C/Chopin,2", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(8, "C/Mozart,15", "01-01-2001", "5:20 Horas"));
-        aLstTransaction.add(new LsV_Transaction_History(9, "C/Stan Lee,23", "01-01-2001", "5:20 Horas"));
+        aLstTransaction.add(new LsV_Transaction_History(0, "C/Pablo Neruda,2", ZonedDateTime.of(2021, Month.JULY.getValue(), 01, 9, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.JULY.getValue(), 01, 14, 30, 22, 0, ZoneId.systemDefault()), Double.parseDouble("28"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(1, "C/Rafael Alberti,7", ZonedDateTime.of(2021, Month.JULY.getValue(), 29, 10, 05, 22, 0, ZoneId.systemDefault())
+                , ZonedDateTime.of(2021, Month.JULY.getValue(), 29, 12, 27, 33, 0, ZoneId.systemDefault()), Double.parseDouble("25"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(2, "C/Albert Einstein,27", ZonedDateTime.of(2021, Month.SEPTEMBER.getValue(), 13, 7, 05, 22, 0, ZoneId.systemDefault())
+                , ZonedDateTime.of(2021, Month.SEPTEMBER.getValue(), 13, 9, 15, 22, 0, ZoneId.systemDefault()), Double.parseDouble("14"), "40", "*** *** *** 525"));
+        aLstTransaction.add(new LsV_Transaction_History(3, "C/Arquímides,18", ZonedDateTime.of(2021, Month.AUGUST.getValue(), 9, 16, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.AUGUST.getValue(), 9, 19, 23, 22, 0, ZoneId.systemDefault()), Double.parseDouble("17"), "Sin ofertas", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(4, "C/Chaikoski,47", ZonedDateTime.of(2021, Month.OCTOBER.getValue(), 21, 20, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.OCTOBER.getValue(), 21, 22, 41, 22, 0, ZoneId.systemDefault()), Double.parseDouble("8"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(5, "C/Antonio Machado,98", ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 24, 11, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 24, 13, 59, 22, 0, ZoneId.systemDefault()), Double.parseDouble("2.95"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(6, "Avnd Sócrates,41", ZonedDateTime.of(2021, Month.DECEMBER.getValue(), 05, 12, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.DECEMBER.getValue(), 05, 19, 18, 22, 0, ZoneId.systemDefault()), Double.parseDouble("9.63"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(7, "C/Chopin,2", ZonedDateTime.of(2021, Month.OCTOBER.getValue(), 15, 14, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.OCTOBER.getValue(), 15, 19, 28, 22, 0, ZoneId.systemDefault()), Double.parseDouble("13"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(8, "C/Mozart,15", ZonedDateTime.of(2021, Month.SEPTEMBER.getValue(), 17, 18, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.SEPTEMBER.getValue(), 17, 19, 12, 22, 0, ZoneId.systemDefault()), Double.parseDouble("1.20"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(9, "C/Stan Lee,23", ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 30, 19, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 30, 19, 45, 22, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
+        aLstTransaction.add(new LsV_Transaction_History(10, "C/Alejandro Magno,33", ZonedDateTime.of(2021, Month.AUGUST.getValue(), 15, 23, 45, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.AUGUST.getValue(), 16, 03, 01, 22, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
 
-        //COPIAMOS EN ESTE ARRAYLIST LAS ÚLTIMAS 5 SESIONES REGISTRADAS
-        for (int i = aLstTransaction.size() - 1; i >= (aLstTransaction.size() - 5); i--) {
-            aLstTransactionIniciales.add(aLstTransaction.get(i));
-        }
+        aLstTransaction.add(new LsV_Transaction_History(11, "C/Platón,85", ZonedDateTime.of(2021, Month.DECEMBER.getValue(), 14, 19, 55, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.DECEMBER.getValue(), 14, 21, 45, 22, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
 
-        //COPIAMOS EN ESTE ARRAYLIST LA ÚLTIMA SESIÓN DEL USUARIO
-        for (int i = aLstTransaction.size() - 1; i >= (aLstTransaction.size() - 1); i--) {
-            aLstUltimaTransaction.add(aLstTransaction.get(i));
-        }
+        aLstTransaction.add(new LsV_Transaction_History(12, "C/Aristóteles ,66", ZonedDateTime.of(2021, Month.SEPTEMBER.getValue(), 07, 17, 05, 52, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.SEPTEMBER.getValue(), 07, 19, 45, 22, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
 
-        //MOSTRAREMOS AL INICIAR EL FRAGMENT EL ARRAY QUE CONTIENE LAS ÚLTIMAS 5 SESIONES
-        mostrar5UltimasSesiones(view);
-    }
+        aLstTransaction.add(new LsV_Transaction_History(13, "C/Anaxágoras ,84", ZonedDateTime.of(2021, Month.JULY.getValue(), 23, 15, 45, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.JULY.getValue(), 23, 19, 07, 02, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
 
-    /**
-     * Método para mostrar las últimas 5 sesiones de worpod realizadas por el usuario
-     *
-     * @param v instancia de la clase View
-     */
-    public void mostrar5UltimasSesiones(View v) {
-        final Adaptador_LsV_Transaction_History aTransaction = new Adaptador_LsV_Transaction_History(v.getContext(), aLstTransactionIniciales);
+        aLstTransaction.add(new LsV_Transaction_History(14, "C/Pitágoras,73", ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 18, 19, 25, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 19, 8, 15, 12, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
+
+        aLstTransaction.add(new LsV_Transaction_History(15, "C/Sófocles,48", ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 30, 19, 05, 22, 0, ZoneId.systemDefault()),
+                ZonedDateTime.of(2021, Month.NOVEMBER.getValue(), 30, 19, 45, 22, 0, ZoneId.systemDefault()), Double.parseDouble("22"), "40", "*** *** *** 521"));
+
+        final Adaptador_LsV_Transaction_History aTransaction = new Adaptador_LsV_Transaction_History(view.getContext(), aLstTransaction);
         lsV_Transaction.setAdapter(aTransaction);
         lsV_Transaction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 LsV_Transaction_History lsV_Transaction = (LsV_Transaction_History) aTransaction.getItem(i);
-            }
-        });
-    }
-
-    /**
-     * Método para mostrar sólamente la última sesión de workpod realizada por el usuario
-     *
-     * @param v instancia de la clase View.
-     */
-    public void mostrarUltimaSesion(View v) {
-        final Adaptador_LsV_Transaction_History aTransaction = new Adaptador_LsV_Transaction_History(v.getContext(), aLstUltimaTransaction);
-        lsV_Transaction.setAdapter(aTransaction);
-        lsV_Transaction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                LsV_Transaction_History lsV_Transaction = (LsV_Transaction_History) aTransaction.getItem(i);
-
-            }
-        });
-    }
-
-    /**
-     * Método para limpiar todas las sesiones de workpod realizadas por el usuario.
-     *
-     * @param v instancia de la clase View
-     */
-    public void limpiarSesiones(View v) {
-        //LIMPIAMOS TODOS LOS ARRAYLIST
-        aLstTransaction.clear();
-        aLstUltimaTransaction.clear();
-        aLstTransactionIniciales.clear();
-
-        //MOSTRAMOS EL ARRAYLIST QUE CONTENDRÍA TODAS LAS SESIONES (QUE ESTARÁ VACÍO)
-        final Adaptador_LsV_Transaction_History aTransaction = new Adaptador_LsV_Transaction_History(v.getContext(), aLstTransaction);
-        lsV_Transaction.setAdapter(aTransaction);
-        lsV_Transaction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                LsV_Transaction_History lsV_Transaction = (LsV_Transaction_History) aTransaction.getItem(i);
+                for (int j = 0; j < aLstTransaction.size(); j++) {
+                    if (lsV_Transaction.getCodigo() == j) {
+                        Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(lsV_Transaction.getUbicacion(), lsV_Transaction.getFechaEntrada(),
+                                lsV_Transaction.getFechaSalida(), lsV_Transaction.getOferta(), lsV_Transaction.getPrecio(), lsV_Transaction.getTarjeta());
+                        fragmentDialogTransactionSession.show(getActivity().getSupportFragmentManager(), "DialogToCall");
+                        break;
+                    }
+                }
             }
         });
     }

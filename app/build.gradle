@@ -5,7 +5,13 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-
+    //PERMITE QUE ELEMENTOS DE APIS POSTERIORES A LA 21 SEAN COMPATIBLES CON LA API 21 Y PUEDAN TRABAJAR DISPOSITIVOS QUE UTILIZAN ANDROID 5
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.example.workpod"
         minSdkVersion 21
@@ -42,4 +48,5 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 }
