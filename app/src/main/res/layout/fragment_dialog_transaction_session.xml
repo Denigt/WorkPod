@@ -42,11 +42,11 @@
                 android:id="@+id/TVDialogIDSesion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Sesión de Workpod id: "
+                android:layout_gravity="center_horizontal"
+                android:text="Sesión de Workpod "
                 android:textColor="@color/Texto"
-                android:textSize="28dp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -211,7 +211,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:text="**** **** **** 1547"
+                            android:text="1234 8521 3321 ****"
                             android:textColor="@color/Texto"
                             android:textSize="20dp"
                             android:textStyle="bold" />

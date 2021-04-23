@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:gravity="center">
 
-
     <LinearLayout
         android:id="@+id/LLFragment"
         android:layout_width="match_parent"
@@ -17,6 +16,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnNV"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp">
+
 
     </LinearLayout>
 

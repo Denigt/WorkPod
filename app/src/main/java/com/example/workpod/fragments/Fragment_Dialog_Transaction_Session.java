@@ -60,6 +60,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     private Date fecha2;
 
     //VARIABLES PARA CREAR EL ID DE LA SESIÓN
+    private String idSesionWorkpod;
     private int nAleatorio;
     private String letra;
     int letraAleatoria1;
@@ -85,6 +86,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         hour = 0;
         min = 0;
         seg = 0;
+        idSesionWorkpod="";
         nAleatorio = 0;
         letra = "a";
         letraAleatoria1 = 0;
@@ -215,7 +217,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         //SI HAY OFERTAS
         if (!ofertas.equals(SIN_OFERTAS)) {
             precioFinal = precio - (precio * (Double.parseDouble(ofertas)) / 100);
-            tVDialogOffers.setText(ofertas + "%");
+            tVDialogOffers.setText("Descuento del "+ofertas + "%");
             tVDialogPrice.setText(String.format("Precio Final:%.2f", precioFinal) + "€");
         } else {
             //SI NO HAY OFERTAS
@@ -263,10 +265,10 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         //GENERAMOS 2 Nº ALEATORIO ENTRE 10 Y 99
         nAleatorio = new Random().nextInt(90) + 10;
 
-
-        //AGREGAMOS EL ID A LA CABINA DE WORKPOD
-        tVDialogIDSession.setText("ID sesión:" + String.valueOf(nAleatorio) + matrizSignos[signoAleatorio1] + alfabeto[letraAleatoria1] +
-                matrizSignos[signoAleatorio2] + alfabeto[letraAleatoria2]
-        );
+        //GUARDAMOS EL ID EN UNA VARIABLE
+        idSesionWorkpod=String.valueOf(nAleatorio) + matrizSignos[signoAleatorio1] + alfabeto[letraAleatoria1] +
+                matrizSignos[signoAleatorio2] + alfabeto[letraAleatoria2];
+        //MOSTRAMOS EL RESULTADO PARA VER SI SE HA FORMADO UN ID ALEATORIO CORRECTO
+        Toast.makeText(getActivity(),idSesionWorkpod,Toast.LENGTH_LONG).show();
     }
 }

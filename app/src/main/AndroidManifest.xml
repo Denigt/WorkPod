@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.workpod">
-    <!--PERMISO PARA LLAMAR-->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <!--PERMISO INTERNET-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!--PERMISO READ EXTERNAL STORAGE-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--PERMISO WRITE EXTERNAL STORAGE-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- PERMISO PARA LLAMAR -->
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- PERMISO INTERNET -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- PERMISO READ EXTERNAL STORAGE -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- PERMISO WRITE EXTERNAL STORAGE -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkPod">
-
-        <!--ACTIVIDAD INICIAL-->
+        <!-- ACTIVIDAD INICIAL -->
         <activity
             android:name=".InitActivity"
             android:label="@string/app_name">
@@ -28,20 +23,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!--ACTIVIDAD DE REGISTRO-->
+        </activity> <!-- ACTIVIDAD DE REGISTRO -->
         <activity
             android:name=".SigninActivity"
-            android:label="Registro" />
-
-        <!--ACTIVIDAD DE PRINCIPAL (mapa y menus)-->
+            android:label="Registro" /> <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
         <activity
             android:name=".WorkpodActivity"
-            android:label="Mapa" />
-
-        <!--ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO-->
-        <activity android:name=".Valoracion_Workpod_Final"/>
+            android:label="Mapa" /> <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
+        <activity android:name=".Valoracion_Workpod_Final" />
         <activity android:name=".testUsuario.Informacion_Usuario3" />
         <activity android:name=".testUsuario.Informacion_Usuario2" />
         <activity android:name=".testUsuario.Informacion_Usuario" />
