@@ -72,7 +72,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         }
     }
 
-    @Overrideº
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Introducir el Layout del fragment
