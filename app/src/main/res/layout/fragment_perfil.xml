@@ -164,27 +164,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Dirección de facturación"
+                android:text="Direcciones de facturación"
                 android:textColor="@color/blue"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <HorizontalScrollView
+            <ExpandableListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:scrollbars="horizontal"
-                >
-                <TextView
-                    android:id="@+id/txtFacturacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:text="Calle La Facturacion, Madrid, España, Europa, Tierra 28053"
-                    android:textSize="16dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textgray"/>
-            </HorizontalScrollView>
+                android:layout_marginHorizontal="50dp"/>
         </LinearLayout>
     </ScrollView>
 

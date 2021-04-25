@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="10dp">
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3.5"
+        android:scrollbars="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="Calle de facturación"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/textgray"
+            android:layout_gravity="center"/>
+    </HorizontalScrollView>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+
+        android:text="28053"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/blue"/>
+</LinearLayout>
