@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.data.Workpod;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,6 +38,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.security.Permissions;
 import java.security.acl.Permission;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener {
 
@@ -53,8 +56,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // VARIABLES PARA LOS CONTROLES DEL FRAGMENT
     private ImageButton btnCentrar;
 
+    // ALMACENAMIENTO DE DATOS
+    private List<Workpod> lstWorkpods;
+
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
+        lstWorkpods = new ArrayList<>();
+
+        lstWorkpods.add(new Workpod(0, "Prueba", 40.41704890982951, -3.703483401820587, null, false));
     }
 
     //SOBREESCRITURAS
@@ -106,6 +115,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new UbicacionListener());
         }catch (SecurityException e) {  }
 
+        // Establecer workpods en el mapa
+        dibujaWorkpods();
         // Establecer zoom y posicion inicial del mapa (Posicion inicial puerta del Sol)
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.41704890982951, -3.703483401820587), defaultZoom));
     }
@@ -124,7 +135,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // LISTENERS
     @Override
     public void onClick(View v) {
-            btnCentrarOnClick(v);
+        btnCentrarOnClick(v);
     }
 
     // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION
@@ -230,6 +241,18 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
             else
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 19));
+        }
+    }
+
+    // METODOS
+    private void dibujaWorkpods(){
+        Marker markPosicion;
+
+        for(Workpod workpod : lstWorkpods){
+            LatLng posicion = new LatLng(workpod.getX(), workpod.getY());
+
+            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title(workpod.getUbicacion()));
+            markPosicion.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         }
     }
 
