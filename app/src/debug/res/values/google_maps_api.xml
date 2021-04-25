@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=36:02:CC:CF:7D:91:9E:E0:62:EF:2B:74:0B:5F:EB:6E:88:1E:83:97%3Bcom.example.workpod
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.example.workpod
+
+    SHA-1 certificate fingerprint:
+    36:02:CC:CF:7D:91:9E:E0:62:EF:2B:74:0B:5F:EB:6E:88:1E:83:97
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyBNM4mYks09XQFccHJgvWsJ0AamVaO4FpE</string>
+</resources>

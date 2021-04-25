@@ -6,9 +6,11 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.workpod.fragments.Fragment_Maps;
 import com.example.workpod.fragments.Fragment_Menu_Usuario;
 import com.example.workpod.fragments.Fragment_Transaction_History;
 import com.example.workpod.fragments.Fragment_sesion_finalizada;
+import com.example.workpod.fragments.InfoFragment;
 import com.example.workpod.fragments.fragment_support;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -68,11 +70,22 @@ public class WorkpodActivity extends FragmentActivity {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
             fTransaction = fragmentManager.beginTransaction();
-            Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();
+
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.MAPA;
+            // FRAGMENT DEL MAPA
+            Fragment_Maps maps = new Fragment_Maps();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, maps);
+            fTransaction.commit();
+            boolLoc = true;
+            // FRAGMENT DE SESION FINALIZADA
+            /*Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, sesion_finalizada);
             fTransaction.commit();
-            boolLoc = true;
+            boolLoc = true;*/
         } else if (menuitem.getItemId() == R.id.inv_support) {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
