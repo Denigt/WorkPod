@@ -1,5 +1,11 @@
 package com.example.workpod.data;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Workpod {
     private int id;
     private String ubicacion;
@@ -56,6 +62,26 @@ public class Workpod {
         this.mantenimiento = mantenimiento;
     }
 
+    public static List<Workpod> leerJSON(String textoJSON){
+        ArrayList<Workpod> lstWorkpods = new ArrayList<>();
+        try {
+            JSONObject json = new JSONObject(textoJSON);
+
+            JSONArray lstWorkpodsJSON = json.getJSONArray("workpods");
+            for (int i = 0; i < lstWorkpodsJSON.length(); i++){
+                JSONObject workpodJSON = lstWorkpodsJSON.getJSONObject(i);
+
+                lstWorkpods.add(new Workpod(Integer.parseInt(workpodJSON.get("id").toString()),
+                        Double.parseDouble(workpodJSON.get("x").toString()),
+                        Double.parseDouble(workpodJSON.get("y").toString())));
+            }
+        }catch(Exception e){
+
+        }
+
+        return lstWorkpods;
+    }
+
     public Workpod(int id, String ubicacion, double x, double y, Reserva reserva, boolean mantenimiento) {
         this.id = id;
         this.ubicacion = ubicacion;
@@ -65,7 +91,9 @@ public class Workpod {
         this.mantenimiento = mantenimiento;
     }
 
-    public Workpod(int id) {
+    public Workpod(int id, double x, double y) {
         this.id = id;
+        this.x = x;
+        this.y = y;
     }
 }

@@ -31,13 +31,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.security.Permissions;
-import java.security.acl.Permission;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +61,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
         lstWorkpods = new ArrayList<>();
-
-        lstWorkpods.add(new Workpod(0, "Prueba", 40.41704890982951, -3.703483401820587, null, false));
     }
 
     //SOBREESCRITURAS
@@ -98,6 +95,22 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // Establecer listeners de los controles
         btnCentrar.setOnClickListener(this);
 
+        // Leer workpods del JSON
+        BufferedReader JSONReader = new BufferedReader(new InputStreamReader(getActivity().getResources().openRawResource(R.raw.pruebas)));
+        try {
+            String JSONString = "";
+            String aux;
+            while((aux = JSONReader.readLine()) != null)
+                JSONString += aux;
+
+
+            lstWorkpods.addAll(Workpod.leerJSON(JSONString));
+
+            System.err.println(JSONString);
+        }catch(Exception e){
+            System.err.println("Error al abrir el fichero");
+            e.printStackTrace();
+        }
 
         return view;
     }

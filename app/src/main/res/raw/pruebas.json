@@ -1,0 +1,16 @@
+{
+  "workpods": [
+    {
+      "id": 0,
+      "x": 40.41704890982951,
+      "y": -3.703483401820587,
+      "ubicacion": "Puerta del Sol, Madrid, España"
+    },
+    {
+      "id": 1,
+      "x": 40.106078,
+      "y": -3.694980,
+      "ubicacion": "Calle Valdemoro, 7, Seseña, Toledo, España"
+    }
+  ]
+}
