@@ -1,5 +1,6 @@
 package com.example.workpod.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.workpod.ModPerfilActivity;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_LsV_Transaction_History;
 import com.example.workpod.otherclass.LsV_Transaction_History;
@@ -90,6 +92,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             lyt.setForeground(getContext().getDrawable(R.drawable.rounded_border_button));
         }
         // ASIGNACION DE LOS LISTENERS A LOS CONTROLES
+        btnEdit.setOnClickListener(this);
         btnShowInfo.setOnClickListener(this);
 
         return view;
@@ -98,10 +101,20 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     // LISTENERS DEL FRAGMENT
     @Override
     public void onClick(View v) {
+        btnEditOnClick(v);
         btnShowInfoOnClick(v);
     }
 
     // METODOS ONCLICK DE CADA CONTROL
+    private void btnEditOnClick(View v) {
+        if (v.getId() == btnEdit.getId()){
+            showInfo = !showInfo;
+
+            Intent activity = new Intent(getContext(), ModPerfilActivity.class);
+            startActivity(activity);
+        }
+    }
+
     private void btnShowInfoOnClick(View v) {
         if (v.getId() == btnShowInfo.getId()){
             showInfo = !showInfo;

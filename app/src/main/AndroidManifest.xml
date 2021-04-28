@@ -36,13 +36,20 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- ACTIVIDAD DE REGISTRO -->
+        </activity>
+        <!-- ACTIVIDAD DE REGISTRO -->
         <activity
             android:name=".SigninActivity"
-            android:label="Registro" /> <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
+            android:label="Registro" />
+        <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
         <activity
             android:name=".WorkpodActivity"
-            android:label="Mapa" /> <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
+            android:label="Barra de navegacion" />
+        <!-- ACTIVIDAD PARA MODIFICAR PERFIL -->
+        <activity
+            android:name=".ModPerfilActivity"
+            android:label="Modificar perfil" />
+        <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
         <activity android:name=".Valoracion_Workpod_Final" />
         <activity android:name=".testUsuario.Informacion_Usuario3" />
         <activity android:name=".testUsuario.Informacion_Usuario2" />

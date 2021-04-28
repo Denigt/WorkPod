@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Apellido"
+                android:text="Apellidos"
                 android:textColor="@color/blue"
                 android:textSize="18dp"
                 android:textStyle="bold" />
