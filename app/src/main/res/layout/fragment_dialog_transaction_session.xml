@@ -35,7 +35,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:src="@drawable/fill_icon_salir_dialog" />
+                    android:src="@drawable/fill_icon_salir" />
             </LinearLayout>
 
             <TextView
