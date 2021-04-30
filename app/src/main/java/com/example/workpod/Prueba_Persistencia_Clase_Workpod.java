@@ -135,8 +135,16 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         }
 
     }
+
     //MÉTODOS
 
+    /**
+     * EN ESTE MÉTODO NOS ABRIREMOS UNA CONEXIÓN, INTRODUCIREMOS LA URL QUE NOS LLEVARÁ AL PHP QUE NOS INTERESA
+     * DEL SERVIDOR (YA SEA EL DE BORRADO, INSERCIÓN...) Y NOS CONECTAMOS A ESE PHP (ESPECIFICAMOS QUE NOS
+     * VAMOS A CONECTAR A UN ARCHIVO TIPO JSON)
+     *
+     * @param cadena
+     */
     public void conexionServidor(String cadena) {
 
         try {
@@ -160,6 +168,14 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         }
     }
 
+    /**
+     * EN ESTE MÉTODO VALIDAMOS LO QUE NOS DEVUELVE EL PHP, PRIMERO SE HA HECHO LA CONEXIÓN CON EL MÉTODO
+     * conexionServidor, LUEGO HEMOS CREADO UN OBJETO JSON CON LOS PARÁMETROS QUE SE NECESITA (URL Y ATRIBUTOS DE LA TABLA)
+     * Y EN ESTE MÉTODO VALIDAMOS QUE CONEXIÓN ES CORRECTA (LÍNEA 191) QUE LA SENTENCIA DML ES CORRECTA (LINEA 206)
+     *
+     * @param jsonParam ES UN OBJETO DE LA CLASE JSONOBJECT QUE HEMOS USADO PARA CREAR EL JSON QUE VA A REALIZAR
+     *                  LA SENTENCIA DML
+     */
     public void validacion(JSONObject jsonParam) {
         try {
             OutputStream os = urlConn.getOutputStream();
@@ -205,7 +221,10 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         }
     }
 
-    //HACEMOS QUE LAS TAREAS PESADAS (INSERT, UPDATE, DELETE, GET SE EJECUTEN EN UN HILO EN SEGUNDO PLANO)
+    /**
+     * HACEMOS QUE LAS TAREAS PESADAS (INSERT, UPDATE, DELETE, GET SE EJECUTEN EN UN HILO EN SEGUNDO PLANO)
+     * EL HILO SE ENCUENTRA DENTRO DE ASYNCTASK ES UN HILO PARA TRABAJAR CON TAREAS ASÍNCRONAS
+     */
     public class conectionDataBase extends AsyncTask<String, Void, String> {
         //ASYNCTASK ESTÁ OBSOLETA PARA API 30 PERO COMO TRABAJAMOS CON LA 21 LA TENEMOS QUE UTILIZAR
 
@@ -289,6 +308,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                 }
                 return devuelve;
 
+                //ACTUALIZAR
             } else if (parametros[1].equals("3")) {
                 try {
                     //CONECTAMOS CON EL SERVIDOR
@@ -307,7 +327,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                     e.printStackTrace();
                 }
 
-                //DELETE
+                //BORRAR
             } else if (parametros[1] == "4") {
                 try {
                     //CONECTAMOS CON EL SERVIDOR
