@@ -1,5 +1,6 @@
 package com.example.workpod.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.workpod.Prueba_Persistencia_Clase_Workpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
 import com.example.workpod.otherclass.LsV_Menu_Usuario;
@@ -110,6 +112,9 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
             // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
             InfoFragment.anterior = InfoFragment.actual;
             InfoFragment.actual = InfoFragment.PAGO;
+            Intent activity = new Intent(getActivity(), Prueba_Persistencia_Clase_Workpod.class);
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
         }
     }
 

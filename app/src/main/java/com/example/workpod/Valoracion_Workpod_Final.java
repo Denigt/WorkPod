@@ -2,6 +2,7 @@ package com.example.workpod;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Application;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.workpod.fragments.Fragment_Dialog_Call;
+import com.example.workpod.fragments.Fragment_sesion_finalizada;
 import com.example.workpod.testUsuario.Informacion_Usuario;
 import com.example.workpod.testUsuario.Informacion_Usuario2;
 
@@ -20,7 +22,10 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
     //XML
     private ImageView iVStar1, iVStar2, iVStar3, iVStar4, iVStar5;
     private Button btnLikedin;
+    private FragmentTransaction fTransaction;
 
+    //INSTANCIA DEL FRAGMENT INICIAL
+    Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,8 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
     @Override
     public void onBackPressed() {
         //MÉTODO QUE CIERRA COMPLETAMENTE LA APP
-        finishAffinity();
+        //finishAffinity();
+        volverAlFragmentInicial();
     }
 
     @Override
@@ -150,5 +156,18 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
             iVStar4.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar5.setColorFilter(Color.parseColor("#FFEB3B"));
         }
+    }
+    /**
+     * Método que permite volver al fragment inicial (el de localización)
+     * cuando el usuario le da al botón de volver atrás del móvil
+     */
+    private void volverAlFragmentInicial() {
+        //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
+        FragmentManager fragmentManager = Valoracion_Workpod_Final.this.getSupportFragmentManager();
+        //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+        fTransaction = fragmentManager.beginTransaction();
+        //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+        fTransaction.replace(R.id.LLFragment, sesion_finalizada).commit();
+        //boolLoc = true;
     }
 }
