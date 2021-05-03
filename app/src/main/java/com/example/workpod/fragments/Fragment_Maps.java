@@ -24,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.basic.Database;
+import com.example.workpod.data.DataDb;
 import com.example.workpod.data.Workpod;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,9 +37,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener {
@@ -96,7 +101,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         btnCentrar.setOnClickListener(this);
 
         // Leer workpods del JSON
-        BufferedReader JSONReader = new BufferedReader(new InputStreamReader(getActivity().getResources().openRawResource(R.raw.pruebas)));
+        /*BufferedReader JSONReader = new BufferedReader(new InputStreamReader(getActivity().getResources().openRawResource(R.raw.pruebas)));
         try {
             String JSONString = "";
             String aux;
@@ -104,13 +109,16 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 JSONString += aux;
 
 
-            lstWorkpods.addAll(Workpod.leerJSON(JSONString));
+            lstWorkpods.addAll(new Workpod().JSONaList(new JSONObject(JSONString)));
 
             System.err.println(JSONString);
         }catch(Exception e){
             System.err.println("Error al abrir el fichero");
             e.printStackTrace();
-        }
+        }*/
+        Database<Workpod> dbWorkpod = new Database<>(Database.SELECTALL, new Workpod());
+        new Thread(dbWorkpod).start();
+        lstWorkpods.addAll(dbWorkpod.getLstSelect());
 
         return view;
     }

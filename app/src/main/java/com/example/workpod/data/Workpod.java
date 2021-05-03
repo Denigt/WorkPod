@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Workpod {
+public class Workpod implements DataDb{
     private int id;
     private String ubicacion;
     private double x;
@@ -62,18 +62,19 @@ public class Workpod {
         this.mantenimiento = mantenimiento;
     }
 
-    public static List<Workpod> leerJSON(String textoJSON){
+    public List<Workpod> JSONaList(JSONObject json){
         ArrayList<Workpod> lstWorkpods = new ArrayList<>();
         try {
-            JSONObject json = new JSONObject(textoJSON);
-
-            JSONArray lstWorkpodsJSON = json.getJSONArray("workpods");
+            JSONArray lstWorkpodsJSON = json.getJSONArray("workpod");
             for (int i = 0; i < lstWorkpodsJSON.length(); i++){
+                Workpod workpod = new Workpod();
                 JSONObject workpodJSON = lstWorkpodsJSON.getJSONObject(i);
 
-                lstWorkpods.add(new Workpod(Integer.parseInt(workpodJSON.get("id").toString()),
-                        Double.parseDouble(workpodJSON.get("x").toString()),
-                        Double.parseDouble(workpodJSON.get("y").toString())));
+                workpod.setId(workpodJSON.getInt("id"));
+                workpod.setX(workpodJSON.getDouble("x"));
+                workpod.setY(workpodJSON.getDouble("y"));
+
+                lstWorkpods.add(workpod);
             }
         }catch(Exception e){
 
@@ -95,5 +96,18 @@ public class Workpod {
         this.id = id;
         this.x = x;
         this.y = y;
+    }
+
+    public Workpod() {
+    }
+
+    @Override
+    public DataDb JSONaData(JSONObject JSON) {
+        return null;
+    }
+
+    @Override
+    public String getTabla() {
+        return "workpod";
     }
 }

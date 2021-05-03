@@ -1,11 +1,29 @@
 package com.example.workpod.data;
 
-import java.sql.Date;
+import org.json.JSONObject;
 
-public class Tarjeta {
+import java.sql.Date;
+import java.util.List;
+
+public class Tarjeta implements DataDb{
     private int numero;
     private Date caducidad;
     private int clave;
     private String titular;
     private Usuario usuario;
+
+    @Override
+    public DataDb JSONaData(JSONObject JSON) {
+        return null;
+    }
+
+    @Override
+    public List<Tarjeta> JSONaList(JSONObject JSON) {
+        return null;
+    }
+
+    @Override
+    public String getTabla() {
+        return "tarjeta";
+    }
 }
