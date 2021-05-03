@@ -14,9 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.basic.Database;
-import com.example.workpod.data.DataDb;
 import com.example.workpod.data.Workpod;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,12 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener {
@@ -270,9 +262,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         Marker markPosicion;
 
         for(Workpod workpod : lstWorkpods){
-            LatLng posicion = new LatLng(workpod.getX(), workpod.getY());
+            LatLng posicion = new LatLng(workpod.getLat(), workpod.getLon());
 
-            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title(workpod.getUbicacion()));
+            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title(workpod.getDescripcion()));
             markPosicion.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         }
     }

@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Workpod implements DataDb{
     private int id;
-    private String ubicacion;
-    private double x;
-    private double y;
+    private String descripcion;
+    private double lat;
+    private double lon;
     private Reserva reserva;
     private boolean mantenimiento;
 
@@ -22,28 +22,28 @@ public class Workpod implements DataDb{
         this.id = id;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public double getX() {
-        return x;
+    public double getLat() {
+        return lat;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setLat(double x) {
+        this.lat = x;
     }
 
-    public double getY() {
-        return y;
+    public double getLon() {
+        return lon;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setLon(double y) {
+        this.lon = y;
     }
 
     public Reserva getReserva() {
@@ -71,8 +71,8 @@ public class Workpod implements DataDb{
                 JSONObject workpodJSON = lstWorkpodsJSON.getJSONObject(i);
 
                 workpod.setId(workpodJSON.getInt("id"));
-                workpod.setX(workpodJSON.getDouble("x"));
-                workpod.setY(workpodJSON.getDouble("y"));
+                workpod.setLat(workpodJSON.getDouble("lat"));
+                workpod.setLon(workpodJSON.getDouble("lon"));
 
                 lstWorkpods.add(workpod);
             }
@@ -93,19 +93,19 @@ public class Workpod implements DataDb{
         return "workpod";
     }
 
-    public Workpod(int id, String ubicacion, double x, double y, Reserva reserva, boolean mantenimiento) {
+    public Workpod(int id, String descripcion, double x, double y, Reserva reserva, boolean mantenimiento) {
         this.id = id;
-        this.ubicacion = ubicacion;
-        this.x = x;
-        this.y = y;
+        this.descripcion = descripcion;
+        this.lat = x;
+        this.lon = y;
         this.reserva = reserva;
         this.mantenimiento = mantenimiento;
     }
 
     public Workpod(int id, double x, double y) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.lat = x;
+        this.lon = y;
     }
 
     public Workpod() {
