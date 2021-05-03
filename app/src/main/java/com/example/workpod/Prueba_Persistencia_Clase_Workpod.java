@@ -41,10 +41,11 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
     public static final String DELETE = "DELETE";
     public static final String SELECT = "SELECT";
     public static final String URL_SERVIDOR = "https://dev.workpod.app";
-    public static final String URL_INSERT = URL_SERVIDOR + "/Workpod_Insert.php";
-    public static final String URL_UPDATE = URL_SERVIDOR + "/workpod_update.php";
-    public static final String URL_DELETE = URL_SERVIDOR + "/workpod_delete.php";
-    public static final String URL_SELECT = URL_SERVIDOR + "/obtener_workpods.php";
+    public static final String URL_INSERT = URL_SERVIDOR + "/php/workpod/insert.php";
+    public static final String URL_UPDATE = URL_SERVIDOR + "/php/workpod/update.php";
+    public static final String URL_DELETE = URL_SERVIDOR + "/php/workpod/delete.php";
+    public static final String URL_SELECT = URL_SERVIDOR + "/php/workpod/selectAll.php";
+    public static final String URL_SELECT_ID = URL_SERVIDOR + "/php/workpod/selectID.php";
 
     public String sentencia;
 
@@ -61,7 +62,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
     //IP DEL SERVIDOR
     String IP = "https://dev.workpod.app";
     //RUTAS DE LOS WEB SERVICES
-    String listar = IP + "/obtener_workpods.php";
+    String listar = IP + "/php/workpod/select.php";
     String insertar = IP + "/Workpod_Insert.php";
     String actualizar = IP + "/workpod_update.php";
     String borrar = IP + "/workpod_delete.php";
@@ -116,35 +117,35 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.BtnListar) {
-            //COMPROBAMOS SI ESTAMOS CONECTADOS A INTERNET
-            conectadoInternet(getApplicationContext());
-            //REALIZAMOS LA CONEXIÓN CON LA BD
-            conexion = new conectionDataBase();
-            //LE PASAMOS LA IP Q LLEVA AL PHP Q LISTA Y EL 1 ES X Q ERA LA OPCIÓN DEL PHP PARA MOSTRAR INFO
-            conexion.execute(listar, "1");
-            //tVListarWorkpod.setText(listar);
+            if(etID.getText().toString().equals("")){
+                //COMPROBAMOS SI ESTAMOS CONECTADOS A INTERNET
+                conectadoInternet(getApplicationContext());
+                //REALIZAMOS LA CONEXIÓN CON LA BD
+                conexion = new conectionDataBase();
+                //LE PASAMOS LA IP Q LLEVA AL PHP Q LISTA Y EL 1 ES X Q ERA LA OPCIÓN DEL PHP PARA MOSTRAR INFO
+                conexion.execute(URL_SELECT, "1");
+                //tVListarWorkpod.setText(listar);
+            }else{
+                conexion = new conectionDataBase();
+                String cadenallamada = URL_SELECT_ID + "?id=" + etID.getText().toString().trim();
+
+                conexion.execute(cadenallamada,"5");
+            }
+
         } else if (v.getId() == R.id.BtnInsert) {
             conexion = new conectionDataBase();
-            conexion.execute(insertar, "2", eTLatitud.getText().toString(), eTLongitud.getText().toString(), eTUbicacion.getText().toString());   // Parámetros que recibe doInBackground
+            conexion.execute(URL_INSERT, "2", eTLatitud.getText().toString(), eTLongitud.getText().toString(), eTUbicacion.getText().toString());   // Parámetros que recibe doInBackground
         } else if (v.getId() == R.id.BtnUpdate) {
             conexion = new conectionDataBase();
-            conexion.execute(actualizar, "3", etID.getText().toString(), eTLatitud.getText().toString(), eTLongitud.getText().toString(), eTUbicacion.getText().toString());
+            conexion.execute(URL_UPDATE, "3", etID.getText().toString(), eTLatitud.getText().toString(), eTLongitud.getText().toString(), eTUbicacion.getText().toString());
         } else if (v.getId() == R.id.BtnDelete) {
             conexion = new conectionDataBase();
-            conexion.execute(borrar, "4", etID.getText().toString());
+            conexion.execute(URL_DELETE, "4", etID.getText().toString());
         }
 
     }
-
     //MÉTODOS
 
-    /**
-     * EN ESTE MÉTODO NOS ABRIREMOS UNA CONEXIÓN, INTRODUCIREMOS LA URL QUE NOS LLEVARÁ AL PHP QUE NOS INTERESA
-     * DEL SERVIDOR (YA SEA EL DE BORRADO, INSERCIÓN...) Y NOS CONECTAMOS A ESE PHP (ESPECIFICAMOS QUE NOS
-     * VAMOS A CONECTAR A UN ARCHIVO TIPO JSON)
-     *
-     * @param cadena
-     */
     public void conexionServidor(String cadena) {
 
         try {
@@ -168,14 +169,6 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         }
     }
 
-    /**
-     * EN ESTE MÉTODO VALIDAMOS LO QUE NOS DEVUELVE EL PHP, PRIMERO SE HA HECHO LA CONEXIÓN CON EL MÉTODO
-     * conexionServidor, LUEGO HEMOS CREADO UN OBJETO JSON CON LOS PARÁMETROS QUE SE NECESITA (URL Y ATRIBUTOS DE LA TABLA)
-     * Y EN ESTE MÉTODO VALIDAMOS QUE CONEXIÓN ES CORRECTA (LÍNEA 191) QUE LA SENTENCIA DML ES CORRECTA (LINEA 206)
-     *
-     * @param jsonParam ES UN OBJETO DE LA CLASE JSONOBJECT QUE HEMOS USADO PARA CREAR EL JSON QUE VA A REALIZAR
-     *                  LA SENTENCIA DML
-     */
     public void validacion(JSONObject jsonParam) {
         try {
             OutputStream os = urlConn.getOutputStream();
@@ -221,10 +214,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         }
     }
 
-    /**
-     * HACEMOS QUE LAS TAREAS PESADAS (INSERT, UPDATE, DELETE, GET SE EJECUTEN EN UN HILO EN SEGUNDO PLANO)
-     * EL HILO SE ENCUENTRA DENTRO DE ASYNCTASK ES UN HILO PARA TRABAJAR CON TAREAS ASÍNCRONAS
-     */
+    //HACEMOS QUE LAS TAREAS PESADAS (INSERT, UPDATE, DELETE, GET SE EJECUTEN EN UN HILO EN SEGUNDO PLANO)
     public class conectionDataBase extends AsyncTask<String, Void, String> {
         //ASYNCTASK ESTÁ OBSOLETA PARA API 30 PERO COMO TRABAJAMOS CON LA 21 LA TENEMOS QUE UTILIZAR
 
@@ -266,19 +256,20 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                         String resultJSON = respuestaJSON.getString("estado");   // estado es el nombre del campo en el JSON
 
                         if (resultJSON.equals("1")) {      // hay alumnos a mostrar
-                            JSONArray workpodsJSON = respuestaJSON.getJSONArray("workpods");   // estado es el nombre del campo en el JSON
-
+                            JSONArray workpodsJSON = respuestaJSON.getJSONArray("workpod");   // estado es el nombre del campo en el JSON
+                           // tVListarWorkpod.setText("No hay workpods");
                             for (int i = 0; i < workpodsJSON.length(); i++) {
 
                                 devuelve += "ID:" + workpodsJSON.getJSONObject(i).getString("id") + "\n" +
-                                        "Latitud: " + workpodsJSON.getJSONObject(i).getString("x") + "\n" +
-                                        "Longitud: " + workpodsJSON.getJSONObject(i).getString("y") + "\n" +
+                                        "Latitud: " + workpodsJSON.getJSONObject(i).getString("lat") + "\n" +
+                                        "Longitud: " + workpodsJSON.getJSONObject(i).getString("lon") + "\n" +
                                         "Ubicación: " + workpodsJSON.getJSONObject(i).getString("ubicacion") + "\n" +
                                         "----------------------------------------------------------" + "\n";
                             }
                         } else if (resultJSON == "2") {
                             devuelve = "No hay workpods";
                         }
+                        return devuelve;
 
                     } else {
                         Toast.makeText(getApplicationContext(), "Problema", Toast.LENGTH_LONG).show();
@@ -297,8 +288,8 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                     conexionServidor(URL_INSERT);
                     //CREO EL OBJETO JSON
                     JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("x", parametros[2]);
-                    jsonParam.put("y", parametros[3]);
+                    jsonParam.put("lat", parametros[2]);
+                    jsonParam.put("lon", parametros[3]);
                     jsonParam.put("ubicacion", parametros[4]);
                     //VALIDAMOS CONEXIÓN Y SENTENCIAS EJECUTADAS
                     validacion(jsonParam);
@@ -308,7 +299,6 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                 }
                 return devuelve;
 
-                //ACTUALIZAR
             } else if (parametros[1].equals("3")) {
                 try {
                     //CONECTAMOS CON EL SERVIDOR
@@ -316,8 +306,8 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                     //CREO EL OBJETO JSON
                     JSONObject jsonParam = new JSONObject();
                     jsonParam.put("id", parametros[2]);
-                    jsonParam.put("x", parametros[3]);
-                    jsonParam.put("y", parametros[4]);
+                    jsonParam.put("lat", parametros[3]);
+                    jsonParam.put("lon", parametros[4]);
                     jsonParam.put("ubicacion", parametros[5]);
                     //VALIDAMOS CONEXIÓN Y SENTENCIAS EJECUTADAS
                     validacion(jsonParam);
@@ -327,7 +317,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                     e.printStackTrace();
                 }
 
-                //BORRAR
+                //DELETE
             } else if (parametros[1] == "4") {
                 try {
                     //CONECTAMOS CON EL SERVIDOR
@@ -340,6 +330,55 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }else if(parametros[1].equals("5")){
+                try {
+                    url = new URL(cadena);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //Abrir la conexión
+                    //connection.setHeader("content-type", "application/json");
+
+                    int respuesta = connection.getResponseCode();
+                    StringBuilder result = new StringBuilder();
+
+                    if (respuesta == HttpURLConnection.HTTP_OK){
+                        InputStream in = new BufferedInputStream(connection.getInputStream());  // preparo la cadena de entrada
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));  // la introduzco en un BufferedReader
+
+                        // El siguiente proceso lo hago porque el JSONOBject necesita un String y tengo
+                        // que tranformar el BufferedReader a String. Esto lo hago a traves de un
+                        // StringBuilder.
+
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            result.append(line);        // Paso toda la entrada al StringBuilder
+                        }
+
+                        //Creamos un objeto JSONObject para poder acceder a los atributos (campos) del objeto.
+                        JSONObject respuestaJSON = new JSONObject(result.toString());   //Creo un JSONObject a partir del StringBuilder pasado a cadena
+                        //Accedemos al vector de resultados
+
+                        String resultJSON = respuestaJSON.getString("estado");   // estado es el nombre del campo en el JS
+                        if (resultJSON.equals("1")){      // hay un alumno que mostrar
+                            devuelve = respuestaJSON.getJSONObject("workpod").getString("id") + " " +
+                                    respuestaJSON.getJSONObject("workpod").getString("lat") + " " +
+                                    respuestaJSON.getJSONObject("workpod").getString("lon")+" "+
+                                    respuestaJSON.getJSONObject("workpod").getString("ubicacion");
+                        }
+                        else if (resultJSON=="2"){
+                            devuelve = "No hay alumnos";
+                        }else if(resultJSON.equals("3")){
+                            devuelve="mete ID";
+                        }
+
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return devuelve;
             }
 
             return devuelve;
@@ -356,4 +395,3 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
 
     }
 }
-
