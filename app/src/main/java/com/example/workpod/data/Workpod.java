@@ -83,6 +83,16 @@ public class Workpod implements DataDb{
         return lstWorkpods;
     }
 
+    @Override
+    public DataDb JSONaData(JSONObject JSON) {
+        return null;
+    }
+
+    @Override
+    public String getTabla() {
+        return "workpod";
+    }
+
     public Workpod(int id, String ubicacion, double x, double y, Reserva reserva, boolean mantenimiento) {
         this.id = id;
         this.ubicacion = ubicacion;
@@ -99,15 +109,5 @@ public class Workpod implements DataDb{
     }
 
     public Workpod() {
-    }
-
-    @Override
-    public DataDb JSONaData(JSONObject JSON) {
-        return null;
-    }
-
-    @Override
-    public String getTabla() {
-        return "workpod";
     }
 }
