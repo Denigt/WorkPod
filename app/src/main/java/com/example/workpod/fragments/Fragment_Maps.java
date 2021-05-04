@@ -188,7 +188,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         @Override
         public void onLocationChanged(@NonNull Location location) {
             posicion = new LatLng(location.getLatitude(), location.getLongitude());
-            getActivity().runOnUiThread(this);
+            if(getActivity()!=null){
+                getActivity().runOnUiThread(this);
+            }
         }
 
         @Override
