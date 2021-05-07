@@ -11,18 +11,15 @@ public class LsV_Transaction_History {
     private ZonedDateTime fechaSalida;
     private Double precio;
     private String oferta;
-    private String tarjeta;
-
 
     public LsV_Transaction_History(int codigo, String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida,
-                                   Double precio, String oferta, String tarjeta) {
+                                   Double precio, String oferta) {
         this.codigo = codigo;
         this.ubicacion = ubicacion;
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.precio = precio;
         this.oferta = oferta;
-        this.tarjeta = tarjeta;
     }
 
     public int getCodigo() {
@@ -63,14 +60,6 @@ public class LsV_Transaction_History {
 
     public void setOferta(String oferta) {
         this.oferta = oferta;
-    }
-
-    public String getTarjeta() {
-        return tarjeta;
-    }
-
-    public void setTarjeta(String tarjeta) {
-        this.tarjeta = tarjeta;
     }
 
     public ZonedDateTime getFechaSalida() {

@@ -39,8 +39,6 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     private TextView tVDialogOffers;
     private TextView tVDialogSessionTime;
     private TextView tVDialogPrice;
-    private TextView tVDialogCard;
-    private TextView tVDialogIDSession;
 
     //VARIABLES CON LAS QUE COGEREMOS LOS DATOS DEL CONSTRUCTOR
     private String ubication;
@@ -48,7 +46,6 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     private ZonedDateTime fechaSalida;
     private String ofertas;
     private Double precio;
-    private String tarjeta;
     private Double precioFinal;
     private ImageView iVSalirDialogSession;
 
@@ -60,7 +57,6 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     private Date fecha2;
 
     //VARIABLES PARA CREAR EL ID DE LA SESIÓN
-    private String idSesionWorkpod;
     private int nAleatorio;
     private String letra;
     int letraAleatoria1;
@@ -73,20 +69,18 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
 
 
     //CONSTRUCTOR
-    public Fragment_Dialog_Transaction_Session(String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida, String offers, Double precio, String tarjeta) {
+    public Fragment_Dialog_Transaction_Session(String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida, String offers, Double precio) {
         this.ubication = ubicacion;
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.ofertas = offers;
         this.precio = precio;
-        this.tarjeta = tarjeta;
 
         //INICIALIZAMOS EL RESTO DE ELEMENTOS
         precioFinal = 0.0;
         hour = 0;
         min = 0;
         seg = 0;
-        idSesionWorkpod="";
         nAleatorio = 0;
         letra = "a";
         letraAleatoria1 = 0;
@@ -138,16 +132,13 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         tVDialogDateHour = (TextView) v.findViewById(R.id.TVDialogDateHour);
         tVDialogOffers = (TextView) v.findViewById(R.id.TVDialogOffers);
         tVDialogPrice = (TextView) v.findViewById(R.id.TVDialogPrice);
-        tVDialogCard = (TextView) v.findViewById(R.id.TVDialogCard);
         tVDialogSessionTime = (TextView) v.findViewById(R.id.TVDialogSessionTime);
-        tVDialogIDSession = (TextView) v.findViewById(R.id.TVDialogIDSesion);
 
 
         //AÑADIMOS AL XML LOS DATOS DE LA SESIÓN DE WORPOD DEL USUARIO
         tVDialogUbication.setText(ubication);
         tVDialogDateHour.setText("Fecha: " + fechaEntrada.format(DateTimeFormatter.ofPattern("dd-MM-yy")) + "\nEntrada:" + fechaEntrada.format(DateTimeFormatter.ofPattern("HH:mm "))
                 + "\nSalida: " + fechaSalida.format(DateTimeFormatter.ofPattern("HH:mm")));//HH 0 a 24 h con hh de 0 a 12h
-        tVDialogCard.setText(tarjeta);
 
         //MÉTODO PARA CALCULAR LAS 2 FECHAS Y AGREGARLAS AL TV DEL XML
         calcularTiempoSesion(fecha1, fecha2, hour, min, seg);
@@ -217,8 +208,8 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         //SI HAY OFERTAS
         if (!ofertas.equals(SIN_OFERTAS)) {
             precioFinal = precio - (precio * (Double.parseDouble(ofertas)) / 100);
-            tVDialogOffers.setText("Descuento del "+ofertas + "%");
-            tVDialogPrice.setText(String.format("Precio Final:%.2f", precioFinal) + "€");
+            tVDialogOffers.setText(ofertas + "%");
+            tVDialogPrice.setText(String.format("%.2f", precioFinal) + "€");
         } else {
             //SI NO HAY OFERTAS
             tVDialogPrice.setText(precio.toString() + "€");
@@ -266,9 +257,10 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         nAleatorio = new Random().nextInt(90) + 10;
 
         //GUARDAMOS EL ID EN UNA VARIABLE
+        String idSesionWorkpod;
         idSesionWorkpod=String.valueOf(nAleatorio) + matrizSignos[signoAleatorio1] + alfabeto[letraAleatoria1] +
                 matrizSignos[signoAleatorio2] + alfabeto[letraAleatoria2];
         //MOSTRAMOS EL RESULTADO PARA VER SI SE HA FORMADO UN ID ALEATORIO CORRECTO
-        Toast.makeText(getActivity(),idSesionWorkpod,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(),idSesionWorkpod,Toast.LENGTH_LONG).show();
     }
 }

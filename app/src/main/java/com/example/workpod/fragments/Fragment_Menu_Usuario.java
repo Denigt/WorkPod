@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.workpod.Prueba_Persistencia_Clase_Workpod;
 import com.example.workpod.WorkpodActivity;
@@ -167,9 +164,8 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     private void onClickInvita(int index){
         if (index == InfoFragment.INVITA) {
-            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
-            InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.INVITA;
+
+
 
         }
     }

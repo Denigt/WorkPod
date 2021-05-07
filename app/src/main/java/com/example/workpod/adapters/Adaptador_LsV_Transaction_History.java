@@ -59,10 +59,7 @@ public class Adaptador_LsV_Transaction_History extends BaseAdapter {
         view = inflater.inflate(R.layout.item_lsv_transaction_history, null);
         TextView tVUbicacion;
         TextView tVFecha;
-        TextView tVOfertas;
-        TextView tVPrecio;
         TextView tVTiempo;
-        TextView tvTarjeta;
         tVUbicacion = (TextView) view.findViewById(R.id.iTVUbicacion);
         tVFecha = (TextView) view.findViewById(R.id.iTVFecha);
         tVTiempo = (TextView) view.findViewById(R.id.iTVHora);
