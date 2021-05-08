@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -41,6 +42,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
+    private boolean havePermission = false;
 
     // VARIABLES PARA LA GESTION DEL MAPA Y LA LOCALIZACION
     private final double errorMedida = 0.01;
@@ -55,6 +57,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // ALMACENAMIENTO DE DATOS
     private List<Workpod> lstWorkpods;
 
+    // INFORMAR DE QUE TODOS LOS HILOS HAN DE FINALIZAR
+    private boolean killHilos = false;
+
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
         lstWorkpods = new ArrayList<>();
@@ -66,12 +71,12 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
 
         // COMPROBAR Y SOLICITAR PERMISOS
-        if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) &&
-                (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED))
-            locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        else{
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+        locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
+                (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+        {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 
@@ -108,9 +113,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             System.err.println("Error al abrir el fichero");
             e.printStackTrace();
         }*/
-        Database<Workpod> dbWorkpod = new Database<>(Database.SELECTALL, new Workpod());
-        new Thread(dbWorkpod).start();
-        lstWorkpods.addAll(dbWorkpod.getLstSelect());
 
         return view;
     }
@@ -125,24 +127,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         // Iniciar el hilo para solicitar la ubicacion
         try {
-            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new UbicacionListener());
+            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
         }catch (SecurityException e) {  }
 
         // Establecer workpods en el mapa
-        dibujaWorkpods();
-        // Establecer zoom y posicion inicial del mapa (Posicion inicial puerta del Sol)
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(40.41704890982951, -3.703483401820587), defaultZoom));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_PERMISSION_CODE:
-                // SI SE RECHAZA DAR EL PERMISO SE PONE EL LOCATION SERVICE A NULL
-                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                    locationService = null;
-                break;
-        }
+        Database<Workpod> dbWorkpod = new Database<>(Database.SELECTALL, new Workpod());
+        dbWorkpod.postRun(()->{lstWorkpods.addAll(dbWorkpod.getLstSelect());});
+        dbWorkpod.postRunOnUI(getActivity(), () ->{dibujaWorkpods();});
+        dbWorkpod.start();
     }
 
     // LISTENERS
@@ -157,13 +149,23 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         public UbicacionListener() {
             markPosicion = null;
-            try {
-                Location aux = locationService.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (aux != null) {
+
+            // SE COMPRUEBA SI SE TIENEN PERMISOS Y EN CASO DE TENERLOS SE SOLICITA LA ULTIMA UBICACION CONOCIDA PARA INICIAR EL MAPA EN ELLA
+            new Thread(() -> {
+                Location aux = null;
+                while (!havePermission && !killHilos) {
+                    try {
+                        aux = locationService.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        havePermission = true;
+                    } catch (SecurityException e) {
+                        havePermission = false;
+                    }
+                }
+                if(!killHilos) {
                     posicion = new LatLng(aux.getLatitude(), aux.getLongitude());
                     getActivity().runOnUiThread(this);
                 }
-            }catch(SecurityException e) {}
+            }).start();
         }
 
         @Override
@@ -188,9 +190,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         @Override
         public void onLocationChanged(@NonNull Location location) {
             posicion = new LatLng(location.getLatitude(), location.getLongitude());
-            if(getActivity()!=null){
+            if(!killHilos)
                 getActivity().runOnUiThread(this);
-            }
+
         }
 
         @Override
@@ -226,7 +228,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
          */
         public boolean compruebaGPS(){
             boolean error = false;
-            if (locationService == null){
+
+            if (!havePermission){
                 Toast.makeText(getContext(), "Conceda permisos para acceder a la ubicación", Toast.LENGTH_LONG).show();
                 error = true;
             }
@@ -290,5 +293,13 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         Canvas canvas = new Canvas(bm);
         vectorImg.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bm);
+    }
+
+    @Override
+    public void onDestroy() {
+        killHilos = true;
+        locationService.removeUpdates(new UbicacionListener());
+
+        super.onDestroy();
     }
 }

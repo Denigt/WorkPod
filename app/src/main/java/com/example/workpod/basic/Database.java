@@ -1,5 +1,6 @@
 package com.example.workpod.basic;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.example.workpod.data.*;
@@ -77,6 +78,21 @@ public class Database<T extends DataDb> extends Thread {
      */
     private int tipoDB;
 
+
+    // CODIGO A EJECUTAR TRAS LA EJECUCION DEL RUN
+    /**
+     * Runnable que se ejecuta en un hilo separado tras la ejecucion de la consulta
+     */
+    private Runnable postRun;
+    /**
+     * Runnable que se ejecuta tras la consulta en el hilo de la interfaz, necesita que se ke pase la Activity principal
+     */
+    private Runnable postRunOnUI;
+    /**
+     * Activity necesaria para que se pueda ejecutar el Runnable posterior a la consulta en la interfaz
+     */
+    private Activity activity;
+
     /**
      * Inicializar variables estaticas
      */
@@ -86,8 +102,7 @@ public class Database<T extends DataDb> extends Thread {
         TABLAS.add("usuario");
     }
 
-    // METODOS HEREDADOS
-
+    // HILOS A EJECUTAR
     @Override
     public void run() {
         finish = false;
@@ -96,7 +111,41 @@ public class Database<T extends DataDb> extends Thread {
                 lstSelect = select(dato);
                 break;
         }
+        // INDICAR FINALIZACION DE LA CONSULTA
         finish = true;
+
+        // EJECUTAR CODIGO POSTCONSULTA
+        try {
+            if (postRun != null) {
+                Thread posConsulta = new Thread(postRun);
+                posConsulta.start();
+                posConsulta.join();
+            }
+
+            if (activity != null && postRunOnUI != null)
+                activity.runOnUiThread(postRunOnUI);
+        }catch (Exception e) {
+            System.err.println("Error al ejecutar los metodos postConsulta\n" +
+                    "com.example.workpod -> basic -> Database.class metodo run");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Se ejecuta tras la realizacion de una consulta en otro hilo
+     * @param method Runnable a ejecutar
+     */
+    public void postRun(Runnable method){
+        postRun = method;
+    }
+
+    /**
+     * Se ejecuta tras la realizacion de una consulta la interfaz de la activity
+     * @param method Runnable a ejecutar
+     */
+    public void postRunOnUI(Activity contextActivity, Runnable method){
+        activity = contextActivity;
+        postRunOnUI = method;
     }
 
     // METODOS PRIVADOS PARA LAS CONSULTAS
@@ -242,8 +291,7 @@ public class Database<T extends DataDb> extends Thread {
         return datoUpdate;
     }
 
-    public synchronized List<T> getLstSelect() {
-        while (!finish);
+    public List<T> getLstSelect() {
         return lstSelect;
     }
 
