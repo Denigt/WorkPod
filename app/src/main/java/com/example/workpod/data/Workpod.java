@@ -93,6 +93,11 @@ public class Workpod implements DataDb{
         return "workpod";
     }
 
+    @Override
+    public String getID() {
+        return String.valueOf(id);
+    }
+
     public Workpod(int id, String descripcion, double x, double y, Reserva reserva, boolean mantenimiento) {
         this.id = id;
         this.descripcion = descripcion;

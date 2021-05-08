@@ -19,4 +19,9 @@ public class Facturacion implements DataDb{
     public String getTabla() {
         return "dirFactutacion";
     }
+
+    @Override
+    public String getID() {
+        return "";
+    }
 }

@@ -115,4 +115,9 @@ public class Sesion implements DataDb{
     public String getTabla() {
         return "sesion";
     }
+
+    @Override
+    public String getID() {
+        return String.valueOf(id);
+    }
 }

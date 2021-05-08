@@ -23,4 +23,9 @@ public class Reserva implements DataDb{
     public String getTabla() {
         return "reserva";
     }
+
+    @Override
+    public String getID() {
+        return String.valueOf(id);
+    }
 }

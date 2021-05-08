@@ -32,4 +32,10 @@ public interface DataDb {
      * @return Nombre de la tabla
      */
     public String getTabla();
+
+    /**
+     * Retorna el id de la clase transformado a String
+     * @return ID de la clase
+     */
+    public String getID();
 }

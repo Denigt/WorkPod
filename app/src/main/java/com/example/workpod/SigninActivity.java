@@ -1,6 +1,7 @@
 package com.example.workpod;
 
 import com.example.workpod.basic.*;
+import com.example.workpod.data.Usuario;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;

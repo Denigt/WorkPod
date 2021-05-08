@@ -89,9 +89,41 @@ public class Usuario implements DataDb{
         this.dni = dni;
     }
 
+    public Usuario() {
+    }
+
+    public Usuario(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public Usuario(String email, String nombre, String apellidos, String dni, String password, double tiempo, Reserva reserva, Tarjeta tarjeta, List<Sesion> sesiones) {
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.dni = dni;
+        this.password = password;
+        this.tiempo = tiempo;
+        this.reserva = reserva;
+        this.tarjeta = tarjeta;
+        this.sesiones = sesiones;
+    }
+
     @Override
-    public DataDb JSONaData(JSONObject JSON) {
-        return null;
+    public DataDb JSONaData(JSONObject json) {
+        Usuario usuario = new Usuario();
+        try {
+            JSONObject usuarioJSON = json.getJSONObject("usuario");
+
+            usuario.setEmail(usuarioJSON.getString("email"));
+            usuario.setNombre(usuarioJSON.getString("nombre"));
+            usuario.setApellidos(usuarioJSON.getString("apellidos"));
+            usuario.setDni(usuarioJSON.getString("dni"));
+        }catch(Exception e){
+
+        }
+
+        return usuario;
     }
 
     @Override
@@ -120,5 +152,10 @@ public class Usuario implements DataDb{
     @Override
     public String getTabla() {
         return "usuario";
+    }
+
+    @Override
+    public String getID() {
+        return String.valueOf(email);
     }
 }

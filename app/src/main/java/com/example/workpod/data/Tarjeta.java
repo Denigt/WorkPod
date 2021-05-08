@@ -26,4 +26,9 @@ public class Tarjeta implements DataDb{
     public String getTabla() {
         return "tarjeta";
     }
+
+    @Override
+    public String getID() {
+        return String.valueOf(numero);
+    }
 }

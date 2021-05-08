@@ -2,6 +2,7 @@ package com.example.workpod.basic;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.example.workpod.data.*;
 
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,7 +41,7 @@ public class Database<T extends DataDb> extends Thread {
 
 //--TIPOS DE CONSULTA------------------------
     public static final int SELECTALL = 0;
-    public static final int SELECT = 1;
+    public static final int SELECTID = 1;
     public static final int INSERT = 2;
     public static final int UPDATE = 3;
     public static final int DELETE = 4;
@@ -109,6 +111,9 @@ public class Database<T extends DataDb> extends Thread {
         switch (tipoConsulta){
             case SELECTALL:
                 lstSelect = select(dato);
+                break;
+            case SELECTID:
+                dato = selectId(dato);
                 break;
         }
         // INDICAR FINALIZACION DE LA CONSULTA
@@ -202,14 +207,59 @@ public class Database<T extends DataDb> extends Thread {
     }
 
     /**
-     * Realiza un select de una tabla retornando los datos que cumplan la condicion
-     * @param tabla Tabla a la que se le realiza la consulta
-     * @param where Condicion de la consulta
-     * @return Lista con los valores retornados
+     * Realiza un select de una tabla retornando el dato con la clave primaria que se indique como segundo parametro
+     * @param obj Objeto con la id a buscar en la base de datos (En caso del usuario tambien la contrasena)
+     * @return Objeto con los datos recuperados de la base de datos
      */
-    private List select(String tabla, String where){
-        List retorno = null;
-        // realizacion del select aqui
+    private T selectId(T obj){
+        T retorno = null;
+
+        // PREPARAR LA CONEXION
+        if (TABLAS.contains(obj.getTabla())) {
+            String urlString = String.format("%s/php/%s/%s.php", URL_SERVIDOR, obj.getTabla(), "selectID");
+
+            try {
+                // Establecemos los parametros necesarios para el metodo SelectID
+                urlString += "?id=" + obj.getID();
+                if (obj instanceof Usuario)
+                    urlString += "&pass=" + ((Usuario) obj).getPassword();
+
+                URL url = new URL(urlString);
+                // ABRIMOS CONEXIÓN
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                int respuesta = connection.getResponseCode();
+
+                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
+                if (respuesta == HttpURLConnection.HTTP_OK) {
+                    // PREPARAMOS LA CADENA DE ENTRADA
+                    String result = new String();
+                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+
+                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
+                    BufferedReader reader = new BufferedReader(in);
+
+                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+
+                    // TRANSFORMAR STRING A JSON
+                    JSONObject json = new JSONObject(result);
+
+                    // OBTENER LOS OBJETOS ENUMERADOS EN EL JSON
+                    retorno = (T) obj.JSONaData(json);
+                }
+
+                // realizacion del select aqui
+        }catch (MalformedURLException e) {
+            System.err.println("URL invalida");
+        }catch (IOException e) {
+            System.err.println("Error al leer los datos del servidor");
+        }catch(JSONException e){
+            System.err.println("Error obtener JSON");
+        }
+        }
         return retorno;
     }
 
@@ -258,6 +308,26 @@ public class Database<T extends DataDb> extends Thread {
         return retorno;
     }
 
+    /**
+     * Inicia una conexion que permite el envio y la recepcion de datos como JSON
+     * @param url URL a la que conectarse
+     * @throws IOException En caso de que no se pueda abrir la conexion
+     */
+    private void conexion(URL url) throws IOException{
+        //ABRO CONEXIÓN
+        URLConnection urlConn = (HttpURLConnection) url.openConnection();
+        //PODER METER DATOS DE ENTRADA
+        urlConn.setDoInput(true);
+        //PODER METER DATOS DE SALIDA
+        urlConn.setDoOutput(true);
+        //CACHÉ A FALSE PARA QUE LO HAGA NUEVO
+        urlConn.setUseCaches(false);
+        //ESPECIFICAMOS QUE EL CONTENIDO DEL ARCHIVO QUE SE VA A ABRIR EN LA CONEXIÓN ES UN JSON
+        urlConn.setRequestProperty("Content-Type", "application/json");
+        urlConn.setRequestProperty("Accept", "application/json");
+        //NOS CONECTAMOS
+        urlConn.connect();
+    }
 //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
         if (tipoConsulta == 3 || tipoConsulta < 0  || tipoConsulta > 4)
