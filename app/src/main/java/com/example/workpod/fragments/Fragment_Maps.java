@@ -153,7 +153,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             // SE COMPRUEBA SI SE TIENEN PERMISOS Y EN CASO DE TENERLOS SE SOLICITA LA ULTIMA UBICACION CONOCIDA PARA INICIAR EL MAPA EN ELLA
             new Thread(() -> {
                 Location aux = null;
-                while (!havePermission && !killHilos) {
+                while ((!havePermission || aux == null) && !killHilos) {
                     try {
                         aux = locationService.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         havePermission = true;
