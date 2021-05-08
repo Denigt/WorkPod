@@ -68,6 +68,12 @@ public class Database<T extends DataDb> extends Thread {
     private List<T> lstSelect;
 
     /**
+     * Informa de si el JSON recibido informa algun error
+     * Si ha habido algun error tiene codigo negativo
+     */
+    private ErrorMessage error;
+
+    /**
      * Indica si se ha terminado de ejecutar la consulta
      */
     private boolean finish;
@@ -192,6 +198,9 @@ public class Database<T extends DataDb> extends Thread {
 
                     // OBTENER LOS OBJETOS ENUMERADOS EN EL JSON
                     retorno = (List<T>) tipo.JSONaList(json);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
                 } else {
                     System.err.println("No se ha podido conectar con el servidor");
                 }
@@ -249,6 +258,9 @@ public class Database<T extends DataDb> extends Thread {
 
                     // OBTENER LOS OBJETOS ENUMERADOS EN EL JSON
                     retorno = (T) obj.JSONaData(json);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
                 }
 
                 // realizacion del select aqui
@@ -363,6 +375,10 @@ public class Database<T extends DataDb> extends Thread {
 
     public List<T> getLstSelect() {
         return lstSelect;
+    }
+
+    public ErrorMessage getError() {
+        return error;
     }
 
     public boolean isFinish() {

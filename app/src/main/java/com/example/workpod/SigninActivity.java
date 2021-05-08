@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -162,9 +163,16 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     error = true;
                 }
                 if(!error) {
-                    Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
-                    startActivity(activity);
-                    //finish();
+                    // COMPROBAR QUE NO EXISTA UN USUARIO CON EL MISMO EMAIL
+                    Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
+                    consulta.postRunOnUI(this, ()->{
+                        if (consulta.getError().code == -1) {
+                            Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                            startActivity(activity);
+                            finish();
+                        }else Toast.makeText(this, "Ya existe un usuario con el mismo Email", Toast.LENGTH_LONG).show();
+                    });
+                    consulta.start();
                 }
             }
         }
