@@ -46,6 +46,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
     public static final String URL_DELETE = URL_SERVIDOR + "/php/workpod/delete.php";
     public static final String URL_SELECT = URL_SERVIDOR + "/php/workpod/selectAll.php";
     public static final String URL_SELECT_ID = URL_SERVIDOR + "/php/workpod/selectID.php";
+    public static final String URL_SELECT_EXT = URL_SERVIDOR + "/php/workpod/selectExt.php";
 
     public String sentencia;
 
@@ -55,7 +56,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
     String devuelve = "";
 
     //DECLARACIÓN VARIABLES XML
-    private Button btnInsert, btnUpdate, btnDelete, btnListar;
+    private Button btnInsert, btnUpdate, btnDelete, btnListar, btnSelectExt;
     private EditText eTLatitud, eTLongitud, eTUbicacion, etID;
     TextView tVListarWorkpod;
 
@@ -81,6 +82,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         btnUpdate = (Button) findViewById(R.id.BtnUpdate);
         btnDelete = (Button) findViewById(R.id.BtnDelete);
         btnListar = (Button) findViewById(R.id.BtnListar);
+        btnSelectExt=(Button)findViewById(R.id.BtnSelectExt);
         tVListarWorkpod = (TextView) findViewById(R.id.TVListarWorkpod);
         eTLatitud = (EditText) findViewById(R.id.ETLatitud);
         eTLongitud = (EditText) findViewById(R.id.ETLongitud);
@@ -91,6 +93,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
         btnListar.setOnClickListener(this);
+        btnSelectExt.setOnClickListener(this);
 
     }
 
@@ -141,6 +144,11 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
         } else if (v.getId() == R.id.BtnDelete) {
             conexion = new conectionDataBase();
             conexion.execute(URL_DELETE, "4", etID.getText().toString());
+        }else if (v.getId() == R.id.BtnSelectExt) {
+            conexion = new conectionDataBase();
+            String cadenallamada = URL_SELECT_EXT + "?id=" + etID.getText().toString().trim();
+
+            conexion.execute(cadenallamada,"6");
         }
 
     }
@@ -254,7 +262,7 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
                         //Accedemos al vector de resultados
 
                         String resultJSON = respuestaJSON.getString("estado");   // estado es el nombre del campo en el JSON
-
+                        devuelve="";
                         if (resultJSON.equals("1")) {      // hay alumnos a mostrar
                             JSONArray workpodsJSON = respuestaJSON.getJSONArray("workpod");   // estado es el nombre del campo en el JSON
                            // tVListarWorkpod.setText("No hay workpods");
@@ -358,10 +366,69 @@ public class Prueba_Persistencia_Clase_Workpod extends AppCompatActivity impleme
 
                         String resultJSON = respuestaJSON.getString("estado");   // estado es el nombre del campo en el JS
                         if (resultJSON.equals("1")){      // hay un alumno que mostrar
+                            devuelve="";
                             devuelve = respuestaJSON.getJSONObject("workpod").getString("id") + " " +
                                     respuestaJSON.getJSONObject("workpod").getString("lat") + " " +
                                     respuestaJSON.getJSONObject("workpod").getString("lon")+" "+
                                     respuestaJSON.getJSONObject("workpod").getString("ubicacion");
+                        }
+                        else if (resultJSON=="2"){
+                            devuelve = "No hay alumnos";
+                        }else if(resultJSON.equals("3")){
+                            devuelve="mete ID";
+                        }
+
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return devuelve;
+            }else if(parametros[1].equals("6")){
+                try {
+                    url = new URL(cadena);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //Abrir la conexión
+                    //connection.setHeader("content-type", "application/json");
+
+                    int respuesta = connection.getResponseCode();
+                    StringBuilder result = new StringBuilder();
+
+                    if (respuesta == HttpURLConnection.HTTP_OK){
+                        InputStream in = new BufferedInputStream(connection.getInputStream());  // preparo la cadena de entrada
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));  // la introduzco en un BufferedReader
+
+                        // El siguiente proceso lo hago porque el JSONOBject necesita un String y tengo
+                        // que tranformar el BufferedReader a String. Esto lo hago a traves de un
+                        // StringBuilder.
+
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            result.append(line);        // Paso toda la entrada al StringBuilder
+                        }
+
+                        //Creamos un objeto JSONObject para poder acceder a los atributos (campos) del objeto.
+                        JSONObject respuestaJSON = new JSONObject(result.toString());   //Creo un JSONObject a partir del StringBuilder pasado a cadena
+                        //Accedemos al vector de resultados
+
+                        String resultJSON = respuestaJSON.getString("estado");   // estado es el nombre del campo en el JS
+                        if (resultJSON.equals("1")){      // hay un alumno que mostrar
+                            JSONArray workpodsJSON = respuestaJSON.getJSONArray("workpod");   // estado es el nombre del campo en el JSON
+                            // tVListarWorkpod.setText("No hay workpods");
+                            devuelve="";
+                            for (int i = 0; i < workpodsJSON.length(); i++) {
+                                devuelve += "UBICACION ID" + workpodsJSON.getJSONObject(i).getString("ubicacion") + "\n" +
+                                        "Dirección:" + workpodsJSON.getJSONObject(i).getString("direccion") + "\n" +
+                                        "Provincia:" + workpodsJSON.getJSONObject(i).getString("provincia") + "\n" +
+                                        "Ciudad:" + workpodsJSON.getJSONObject(i).getString("ciudad") + "\n" +
+                                        "INFORMACIÓN WORPOD ID" + workpodsJSON.getJSONObject(i).getString("id") + "\n" +
+                                        "Latitud:" + workpodsJSON.getJSONObject(i).getString("lat") + "\n" +
+                                        "Longitud:" + workpodsJSON.getJSONObject(i).getString("lon") +
+                                        "---------------------------------------------------------------------------------------\n";
+                            }
                         }
                         else if (resultJSON=="2"){
                             devuelve = "No hay alumnos";

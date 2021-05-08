@@ -50,6 +50,13 @@
                 android:backgroundTint="#CBCECF"
                 android:text="Listar"
                 android:textAllCaps="false" />
+            <Button
+                android:id="@+id/BtnSelectExt"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:backgroundTint="#CBCECF"
+                android:text="SelectExt"
+                android:textAllCaps="false" />
         </LinearLayout>
 
         <LinearLayout
