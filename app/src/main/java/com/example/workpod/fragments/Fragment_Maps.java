@@ -50,6 +50,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     private GoogleMap mMap;
     private LocationManager locationService;
     private LatLng posicion;
+    private int TAM_ICON = 120;
 
     // VARIABLES PARA LOS CONTROLES DEL FRAGMENT
     private ImageButton btnCentrar;
@@ -211,7 +212,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 if (posicion != null) {
                     if (markPosicion == null) {
                         markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title("Mi posición"));
-                        markPosicion.setIcon(VectortoBitmap(getContext() , R.drawable.button_btn_centrar, 160, 160));
+                        markPosicion.setIcon(VectortoBitmap(getContext() , R.drawable.button_btn_centrar, TAM_ICON, TAM_ICON));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, defaultZoom));
                     }
                     else

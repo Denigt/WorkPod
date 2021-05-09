@@ -87,6 +87,17 @@ public class Sesion implements DataDb{
     }
 
     @Override
+    public JSONObject dataAJSON() {
+        JSONObject json = new JSONObject();
+        try {
+        }catch(Exception e){
+
+        }
+
+        return json;
+    }
+
+    @Override
     public List<Sesion> JSONaList(JSONObject json) {
         ArrayList<Sesion> lstSesiones = new ArrayList<>();
         try {

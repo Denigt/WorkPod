@@ -111,7 +111,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     private void btnAccederOnClick(View v){
         if(v.getId() == btnAcceder.getId()){
             // PROVISIONAL PARA NO CAMBIAR EL MANIFIEST
-            Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+            Intent activity = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(activity);
         }
     }

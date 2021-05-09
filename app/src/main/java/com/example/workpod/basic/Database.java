@@ -2,6 +2,7 @@ package com.example.workpod.basic;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.workpod.data.*;
@@ -10,12 +11,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -121,6 +124,9 @@ public class Database<T extends DataDb> extends Thread {
             case SELECTID:
                 dato = selectId(dato);
                 break;
+            case INSERT:
+                insert(dato);
+                break;
         }
         // INDICAR FINALIZACION DE LA CONSULTA
         finish = true;
@@ -192,6 +198,7 @@ public class Database<T extends DataDb> extends Thread {
                     while ((line = reader.readLine()) != null) {
                         result += line;
                     }
+                    connection.disconnect();
 
                     // TRANSFORMAR STRING A JSON
                     JSONObject json = new JSONObject(result);
@@ -205,11 +212,11 @@ public class Database<T extends DataDb> extends Thread {
                     System.err.println("No se ha podido conectar con el servidor");
                 }
             }catch (MalformedURLException e) {
-                System.err.println("URL invalida");
+                Log.e("DATABASE SELECTALL", "URL invalida");
             }catch (IOException e) {
-                System.err.println("Error al leer los datos del servidor");
-            }catch(JSONException e){
-                System.err.println("Error obtener JSON");
+                Log.e("DATABASE SELECTALL", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                Log.e("DATABASE SELECTALL", "Error obtener JSON");
             }
         }
         return retorno;
@@ -252,6 +259,7 @@ public class Database<T extends DataDb> extends Thread {
                     while ((line = reader.readLine()) != null) {
                         result += line;
                     }
+                    connection.disconnect();
 
                     // TRANSFORMAR STRING A JSON
                     JSONObject json = new JSONObject(result);
@@ -263,14 +271,13 @@ public class Database<T extends DataDb> extends Thread {
                     error = new ErrorMessage(json);
                 }
 
-                // realizacion del select aqui
-        }catch (MalformedURLException e) {
-            System.err.println("URL invalida");
-        }catch (IOException e) {
-            System.err.println("Error al leer los datos del servidor");
-        }catch(JSONException e){
-            System.err.println("Error obtener JSON");
-        }
+            }catch (MalformedURLException e) {
+                Log.e("DATABASE SELECTID", "URL invalida");
+            }catch (IOException e) {
+                Log.e("DATABASE SELECTID", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                Log.e("DATABASE SELECTID", "Error obtener JSON");
+            }
         }
         return retorno;
     }
@@ -278,12 +285,60 @@ public class Database<T extends DataDb> extends Thread {
     /**
      * Inserta el objeto en la tabla que le corresponda
      * @param obj Objeto a insertar
-     * @return true si se ha podido ingresar el objeto
      */
-    private boolean insert(Object obj){
+    private void insert(T obj){
         boolean retorno = false;
-        // realizacion del insert aqui
-        return retorno;
+        // PREPARAR LA CONEXION
+        if (TABLAS.contains(obj.getTabla())) {
+            String urlString = String.format("%s/php/%s/%s.php", URL_SERVIDOR, obj.getTabla(), "insert");
+
+            try {
+                URL url = new URL(urlString);
+                // ABRIMOS CONEXIÓN
+                HttpURLConnection connection = conexion(url);
+
+                // PREPARAMOS LA CADENA PARA ENVIAR LOS DATOS A INSERTAR
+                OutputStream out = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
+
+                // ENVIAR LOS DATOS
+                writer.write(obj.dataAJSON().toString());
+                writer.flush();
+                writer.close();
+
+                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
+                int respuesta = connection.getResponseCode();
+
+                if (respuesta == HttpURLConnection.HTTP_OK) {
+                    // PREPARAMOS LA CADENA DE ENTRADA PARA RECOGER LA RESPUESTA DEL SERVIDOR
+                    String result = new String();
+                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+
+                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
+                    BufferedReader reader = new BufferedReader(in);
+
+                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+                    connection.disconnect();
+
+                    // TRANSFORMAR STRING A JSON
+                    JSONObject json = new JSONObject(result);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
+                }
+
+            }catch (MalformedURLException e) {
+                Log.e("DATABASE INSERT", "URL invalida\n" + e.getMessage());
+            }catch (IOException e) {
+                Log.e("DATABASE INSERT", "Error al leer los datos del servidor\n" + e.getMessage());
+            }catch(JSONException e){
+                Log.e("DATABASE INSERT", "Error obtener JSON\n" + e.getMessage());
+            }
+        }
     }
 
     /**
@@ -325,20 +380,23 @@ public class Database<T extends DataDb> extends Thread {
      * @param url URL a la que conectarse
      * @throws IOException En caso de que no se pueda abrir la conexion
      */
-    private void conexion(URL url) throws IOException{
-        //ABRO CONEXIÓN
-        URLConnection urlConn = (HttpURLConnection) url.openConnection();
-        //PODER METER DATOS DE ENTRADA
-        urlConn.setDoInput(true);
-        //PODER METER DATOS DE SALIDA
-        urlConn.setDoOutput(true);
-        //CACHÉ A FALSE PARA QUE LO HAGA NUEVO
-        urlConn.setUseCaches(false);
-        //ESPECIFICAMOS QUE EL CONTENIDO DEL ARCHIVO QUE SE VA A ABRIR EN LA CONEXIÓN ES UN JSON
-        urlConn.setRequestProperty("Content-Type", "application/json");
-        urlConn.setRequestProperty("Accept", "application/json");
-        //NOS CONECTAMOS
-        urlConn.connect();
+    private HttpURLConnection conexion(URL url) throws IOException{
+        // Abrir conexion
+        HttpURLConnection conex = (HttpURLConnection) url.openConnection();
+
+        // Establecer la conexion como conexion de envio y recepcion de datos, descartar informacion almacenar en cache
+        //conex.setRequestMethod("POST");
+        conex.setDoInput(true);
+        conex.setDoOutput(true);
+        conex.setUseCaches(false);
+
+        // Indicar que se va a enviar y recibir contenido en formato JSON
+        conex.setRequestProperty("Content-Type", "application/json");
+        conex.setRequestProperty("Accept", "application/json");
+
+        // Conectarse
+        conex.connect();
+        return conex;
     }
 //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
@@ -348,6 +406,7 @@ public class Database<T extends DataDb> extends Thread {
         this.tipoConsulta = tipoConsulta;
         this.dato = dato;
         this.lstSelect = new LinkedList<>();
+        this.error = new ErrorMessage();
     }
 
     public Database(int tipoConsulta, T dato, T datoUpdate) {
@@ -358,6 +417,7 @@ public class Database<T extends DataDb> extends Thread {
         this.dato = dato;
         this.datoUpdate = datoUpdate;
         this.lstSelect = new LinkedList<>();
+        this.error = new ErrorMessage();
     }
 
 //== GETTERS Y SETTERS ==========================================================
@@ -365,7 +425,7 @@ public class Database<T extends DataDb> extends Thread {
         return tipoConsulta;
     }
 
-    public synchronized  T getDato() {
+    public T getDato() {
         return dato;
     }
 

@@ -8,10 +8,12 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,17 +23,22 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     int pantalla;
     String nombre;
     String apellido;
+    String dni;
     String email;
     String contrasena;
+
+    private final String[] TIPOS_DOCUMENTO = {"NIF", "NIE"};
 
     // CONTROLES DEL XML
     private EditText txtNombre;
     private EditText txtApellido;
+    private EditText txtDNI;
     private EditText txtEmail;
     private EditText txtContrasena;
     private EditText txtRContrasena;
     private ImageButton btnSiguiente;
     private CheckBox btnShowContrasena;
+    private Spinner spnDNI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +137,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     txtApellido.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
                 }
+                if (dni.equals(null) || dni.equals("")){
+                    Method.showError(this, "Introduzca su documento de identificación");
+                    txtDNI.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                }
                 if(!error) {
                     pantalla = 1;
                     initActivity();
@@ -167,9 +179,17 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
                     consulta.postRunOnUI(this, ()->{
                         if (consulta.getError().code == -1) {
-                            Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
-                            startActivity(activity);
-                            finish();
+                            // SI NO EXISTE EL USUARIO INSERTAR EN LA BASE DE DATOS
+                            Database<Usuario> insert = new Database<>(Database.INSERT, new Usuario(email, nombre, apellido, dni, contrasena, 0, null, null, null));
+                            insert.postRunOnUI(this, () -> {
+                                if (insert.getError().code > -1){
+                                    // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
+                                    Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                                    startActivity(activity);
+                                    finish();
+                                }else Toast.makeText(this, "No se ha podido crear el usuario", Toast.LENGTH_LONG).show();
+                            });
+                            insert.start();
                         }else Toast.makeText(this, "Ya existe un usuario con el mismo Email", Toast.LENGTH_LONG).show();
                     });
                     consulta.start();
@@ -198,6 +218,14 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             txtNombre.setText(nombre);
             txtApellido = findViewById(R.id.txtApellido);
             txtApellido.setText(apellido);
+            txtDNI = findViewById(R.id.txtDNI);
+            txtDNI.setText(dni);
+
+            spnDNI = findViewById(R.id.spnDNI);
+
+            // LLENAR EL SPINNER DEL TIPO DE DOCUMENTO
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_spinner_basic, TIPOS_DOCUMENTO);
+            spnDNI.setAdapter(adapter);
         }else {
             txtEmail = findViewById(R.id.txtEmail);
             txtEmail.setText(email);
@@ -212,6 +240,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         if (pantalla == 0){
             txtNombre.setOnFocusChangeListener(this);
             txtApellido.setOnFocusChangeListener(this);
+            txtDNI.setOnFocusChangeListener(this);
         }
         else {
             txtEmail.setOnFocusChangeListener(this);
@@ -230,6 +259,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         if (pantalla == 0) {
             nombre = txtNombre.getText().toString();
             apellido = txtApellido.getText().toString();
+            dni = txtDNI.getText().toString();
         }else {
             email = txtEmail.getText().toString();
             contrasena = txtContrasena.getText().toString();

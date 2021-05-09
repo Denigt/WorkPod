@@ -9,12 +9,17 @@ public class ErrorMessage {
     public final int code;
     public final String message;
 
+    public ErrorMessage(){
+        this.code = 0;
+        this.message = "Sin informacion";
+    }
+
     public ErrorMessage(int codError, String messageError){
         this.code = codError;
         this.message =messageError;
 
         if (code < 0)
-            Log.e("UNKNOW ERROR | ", message);
+            Log.e("UNKNOW ERROR", message);
     }
 
     public ErrorMessage(JSONObject json){
@@ -34,6 +39,6 @@ public class ErrorMessage {
         this.message = auxMessageError;
 
         if (code < 0)
-            Log.e("DATABASE ERROR | ", message);
+            Log.e("DATABASE ERROR", message);
     }
 }

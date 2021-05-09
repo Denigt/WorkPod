@@ -1,9 +1,11 @@
 package com.example.workpod.data;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Usuario implements DataDb{
@@ -99,14 +101,28 @@ public class Usuario implements DataDb{
 
     public Usuario(String email, String nombre, String apellidos, String dni, String password, double tiempo, Reserva reserva, Tarjeta tarjeta, List<Sesion> sesiones) {
         this.email = email;
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.dni = dni;
+
+        if (nombre != null) this.nombre = nombre;
+        else this.nombre = "";
+
+        if (apellidos != null) this.apellidos = apellidos;
+        else this.apellidos = "";
+
+        if (dni != null) this.dni = dni;
+        else this.dni = "";
+
         this.password = password;
+
         this.tiempo = tiempo;
-        this.reserva = reserva;
-        this.tarjeta = tarjeta;
-        this.sesiones = sesiones;
+
+        if (reserva != null) this.reserva = reserva;
+        else this.reserva = new Reserva();
+
+        if (tarjeta != null) this.tarjeta = tarjeta;
+        else this.tarjeta = new Tarjeta();
+
+        if (sesiones != null) this.sesiones = sesiones;
+        else this.sesiones = new LinkedList<>();
     }
 
     @Override
@@ -124,6 +140,22 @@ public class Usuario implements DataDb{
         }
 
         return usuario;
+    }
+
+    @Override
+    public JSONObject dataAJSON() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("email", email);
+            json.put("nombre", nombre);
+            json.put("contrasena", password);
+            json.put("apellidos", apellidos);
+            json.put("dni", dni);
+        }catch(JSONException e){
+
+        }
+
+        return json;
     }
 
     @Override

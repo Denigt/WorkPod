@@ -20,6 +20,13 @@ public interface DataDb {
     public DataDb JSONaData(JSONObject JSON);
 
     /**
+     * Crea un objeto JSON a partir del objeto
+     * Los campos de JSON han de tener los nombres de las variables de las tablas si se quieren enviar a un PHP
+     * @return JSON con cada uno de los datos del objeto
+     */
+    public JSONObject dataAJSON();
+
+    /**
      * Crea una Lista con los objetos contenidos en el JSON
      * El JSON ha de tener un array llamado igual que la tabla a la que referencia el dato
      * @param JSON Objeto JSON desde el que obtener los datos

@@ -18,6 +18,17 @@ public class Tarjeta implements DataDb{
     }
 
     @Override
+    public JSONObject dataAJSON() {
+        JSONObject json = new JSONObject();
+        try {
+        }catch(Exception e){
+
+        }
+
+        return json;
+    }
+
+    @Override
     public List<Tarjeta> JSONaList(JSONObject JSON) {
         return null;
     }
