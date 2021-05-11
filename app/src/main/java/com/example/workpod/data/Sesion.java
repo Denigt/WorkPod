@@ -4,13 +4,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sesion implements DataDb{
     private int id;
-    private Date entrada;
-    private Date salida;
+    private ZonedDateTime entrada;
+    private ZonedDateTime salida;
     private double precio;
     private double tiempo;
     private int descuento;
@@ -25,20 +27,66 @@ public class Sesion implements DataDb{
         this.id = id;
     }
 
-    public Date getEntrada() {
+    public ZonedDateTime getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(Date entrada) {
+    public void setEntrada(ZonedDateTime entrada) {
         this.entrada = entrada;
     }
 
-    public Date getSalida() {
+    public void setEntrada(String entrada) {
+        String[] aux = entrada.split(" ");
+        String[] diaS = null;
+        String[] horaS = null;
+        if (aux.length == 1){
+            diaS = aux[0].split("-");
+            horaS = aux[1].split(":");
+        }
+        if (aux.length > 1){
+            diaS = aux[0].split("-");
+        }
+        try{
+            if (diaS != null && horaS != null && diaS.length > 2 && horaS.length > 2)
+                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
+                    Integer.parseInt(horaS[0]), Integer.parseInt(horaS[1]), Integer.parseInt(horaS[2]), 0, ZoneId.systemDefault());
+            else if (diaS != null && diaS.length > 2 )
+                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
+                        0, 0, 0, 0, ZoneId.systemDefault());
+        }catch (NumberFormatException e){
+
+        }
+    }
+
+    public ZonedDateTime getSalida() {
         return salida;
     }
 
-    public void setSalida(Date salida) {
+    public void setSalida(ZonedDateTime salida) {
         this.salida = salida;
+    }
+
+    public void setSalida(String salida) {
+        String[] aux = salida.split(" ");
+        String[] diaS = null;
+        String[] horaS = null;
+        if (aux.length > 1){
+            diaS = aux[0].split("-");
+            horaS = aux[1].split(":");
+        }
+        else{
+            diaS = aux[0].split("-");
+        }
+        try{
+            if (diaS != null && horaS != null && diaS.length > 2 && horaS.length > 2)
+                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
+                        Integer.parseInt(horaS[0]), Integer.parseInt(horaS[1]), Integer.parseInt(horaS[2]), 0, ZoneId.systemDefault());
+            else if (diaS != null && diaS.length > 2 )
+                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
+                        0, 0, 0, 0, ZoneId.systemDefault());
+        }catch (NumberFormatException e){
+
+        }
     }
 
     public double getPrecio() {
@@ -107,8 +155,8 @@ public class Sesion implements DataDb{
                 JSONObject sesionJSON = lstSesionesJSON.getJSONObject(i);
 
                 sesion.setId(sesionJSON.getInt("id"));
-                sesion.setEntrada(Date.valueOf(sesionJSON.getString("entrada")));
-                sesion.setSalida(Date.valueOf(sesionJSON.getString("salida")));
+                sesion.setEntrada(sesionJSON.getString("entrada"));
+                sesion.setSalida(sesionJSON.getString("salida"));
                 sesion.setPrecio(sesionJSON.getDouble("precio"));
                 sesion.setTiempo(sesionJSON.getDouble("tiempo"));
                 sesion.setDescuento(sesionJSON.getInt("descuento"));

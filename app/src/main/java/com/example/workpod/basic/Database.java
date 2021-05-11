@@ -111,6 +111,7 @@ public class Database<T extends DataDb> extends Thread {
         TABLAS = new LinkedList();
         TABLAS.add("workpod");
         TABLAS.add("usuario");
+        TABLAS.add("sesion");
     }
 
     // HILOS A EJECUTAR
