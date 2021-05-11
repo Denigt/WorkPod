@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Ubicacion implements DataDb{
@@ -12,6 +13,7 @@ public class Ubicacion implements DataDb{
     private double lat;
     private double lon;
     private List<Workpod> workpods;
+    private Direccion direccion;
 
     public int getId() {
         return id;
@@ -21,20 +23,67 @@ public class Ubicacion implements DataDb{
         this.id = id;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public double getLat() {
         return lat;
     }
 
-    public void setLat(double x) {
-        this.lat = x;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
     public double getLon() {
         return lon;
     }
 
-    public void setLon(double y) {
-        this.lon = y;
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public List<Workpod> getWorkpods() {
+        return workpods;
+    }
+
+    public void setWorkpods(List<Workpod> workpods) {
+        this.workpods = workpods;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    public Ubicacion() {
+        this.id = 0;
+        this.lat = 0;
+        this.lon = 0;
+        this.workpods = new LinkedList<>();
+    }
+
+    public Ubicacion(int id, double lat, double lon) {
+        this.id = id;
+        this.lat = lat;
+        this.lon = lon;
+        this.workpods = new LinkedList<>();
+    }
+
+    public Ubicacion(int id, String nombre, double lat, double lon, List<Workpod> workpods, Direccion direccion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.lat = lat;
+        this.lon = lon;
+        this.workpods = workpods;
+        this.direccion = direccion;
     }
 
     public List<Ubicacion> JSONaList(JSONObject json){
@@ -46,8 +95,10 @@ public class Ubicacion implements DataDb{
                 JSONObject ubicacionJSON = lstWorkpodsJSON.getJSONObject(i);
 
                 ubicacion.setId(ubicacionJSON.getInt("id"));
+                ubicacion.setNombre(ubicacionJSON.getString("nombre"));
                 ubicacion.setLat(ubicacionJSON.getDouble("lat"));
                 ubicacion.setLon(ubicacionJSON.getDouble("lon"));
+                ubicacion.setWorkpods(new Workpod().JSONaList(ubicacionJSON));
 
                 lstUbicacion.add(ubicacion);
             }

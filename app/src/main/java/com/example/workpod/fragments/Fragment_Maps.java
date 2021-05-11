@@ -272,7 +272,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
 
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
-            markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.markers_cluster, 130, 130, "2", 60, R.color.blue));
+            markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.markers_cluster, 130, 130, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
         }
     }
 

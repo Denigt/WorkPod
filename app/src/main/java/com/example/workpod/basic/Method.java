@@ -70,20 +70,20 @@ public abstract class Method {
             for(int i = 0; i < hora.length; i++)
                 hora[i] = 0;
 
-        }else if (fecha.matches("\\d\\d[-/]\\d\\d[-/]\\d{2,4} \\d\\d:\\d\\d:\\d\\d(:\\d\\d)?$")) {
+        }else if (fecha.matches("\\d{2,4}[-/]\\d\\d[-/]\\d\\d \\d\\d:\\d\\d:\\d\\d(:\\d\\d)?$")) {
             String[] aux = fecha.split(" ");
             String[] auxF = aux[0].split("[-/]");
             String[] auxH = aux[1].split(":");
 
             for(int i = 0; i < auxF.length; i++)
-                dia[i] = Integer.parseInt(aux[i]);
+                dia[i] = Integer.parseInt(auxF[i]);
 
             for(int i = 0; i < auxH.length; i++)
-                hora[i] = Integer.parseInt(aux[i]);
+                hora[i] = Integer.parseInt(auxH[i]);
 
             if(auxH.length < 4)
                 hora[3] = 0;
-        }else ZonedDateTime.of(0,0,0,0,0,0,0, zona);
+        }else return ZonedDateTime.of(0,0,0,0,0,0,0, zona);
 
         return ZonedDateTime.of(dia[0], dia[1], dia[2], hora[0], hora[1], hora[2], hora[3], zona);
     }

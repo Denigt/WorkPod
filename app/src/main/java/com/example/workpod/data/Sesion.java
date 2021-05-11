@@ -1,5 +1,7 @@
 package com.example.workpod.data;
 
+import android.util.Log;
+
 import com.example.workpod.basic.Method;
 
 import org.json.JSONArray;
@@ -38,7 +40,7 @@ public class Sesion implements DataDb{
     }
 
     public void setEntrada(String entrada) {
-        Method.stringToDate(entrada, ZoneId.systemDefault());
+        this.entrada = Method.stringToDate(entrada, ZoneId.systemDefault());
     }
 
     public ZonedDateTime getSalida() {
@@ -50,8 +52,7 @@ public class Sesion implements DataDb{
     }
 
     public void setSalida(String salida) {
-
-        Method.stringToDate(salida, ZoneId.systemDefault());
+        this.salida = Method.stringToDate(salida, ZoneId.systemDefault());
     }
 
     public double getPrecio() {
@@ -129,7 +130,7 @@ public class Sesion implements DataDb{
                 lstSesiones.add(sesion);
             }
         }catch(Exception e){
-
+            Log.e("ERROR", e.getMessage());
         }
 
         return lstSesiones;
