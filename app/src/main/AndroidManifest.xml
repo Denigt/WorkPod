@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkPod">
+        <activity android:name=".Prueba_Transaction_History"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -32,9 +33,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Prueba_Persistencia_Clase_Workpod" />
-
-        <!-- ACTIVIDAD INICIAL -->
+        <activity android:name=".Prueba_Persistencia_Clase_Workpod" /> <!-- ACTIVIDAD INICIAL -->
         <activity
             android:name=".InitActivity"
             android:label="@string/app_name">
@@ -43,29 +42,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- ACTIVIDAD DE REGISTRO -->
+        </activity> <!-- ACTIVIDAD DE REGISTRO -->
         <activity
             android:name=".SigninActivity"
-            android:label="Registrarse" />
-
-        <!-- ACTIVIDAD DE LOGIN -->
+            android:label="Registrarse" /> <!-- ACTIVIDAD DE LOGIN -->
         <activity
             android:name=".LoginActivity"
-            android:label="Acceder" />
-
-        <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
+            android:label="Acceder" /> <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
         <activity
             android:name=".WorkpodActivity"
-            android:label="Navegacion" />
-
-        <!-- ACTIVIDAD PARA MODIFICAR PERFIL -->
+            android:label="Navegacion" /> <!-- ACTIVIDAD PARA MODIFICAR PERFIL -->
         <activity
             android:name=".ModPerfilActivity"
-            android:label="Modificar perfil" />
-
-        <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
+            android:label="Modificar perfil" /> <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
         <activity android:name=".Valoracion_Workpod_Final" />
         <activity android:name=".testUsuario.Informacion_Usuario3" />
         <activity android:name=".testUsuario.Informacion_Usuario2" />
