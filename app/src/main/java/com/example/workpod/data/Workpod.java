@@ -3,16 +3,21 @@ package com.example.workpod.data;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Workpod implements DataDb{
     private int id;
+    private String nombre;
     private String descripcion;
-    private double lat;
-    private double lon;
-    private Reserva reserva;
+    private int numUsuarios;
+    private double precio;
+    private boolean luz;
     private boolean mantenimiento;
+    private Reserva reserva;
+    private ZonedDateTime ultimoUso;
+    private Reserva limpieza;
 
     public int getId() {
         return id;
@@ -20,6 +25,14 @@ public class Workpod implements DataDb{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -30,20 +43,36 @@ public class Workpod implements DataDb{
         this.descripcion = descripcion;
     }
 
-    public double getLat() {
-        return lat;
+    public int getNumUsuarios() {
+        return numUsuarios;
     }
 
-    public void setLat(double x) {
-        this.lat = x;
+    public void setNumUsuarios(int numUsuarios) {
+        this.numUsuarios = numUsuarios;
     }
 
-    public double getLon() {
-        return lon;
+    public double getPrecio() {
+        return precio;
     }
 
-    public void setLon(double y) {
-        this.lon = y;
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public boolean isLuz() {
+        return luz;
+    }
+
+    public void setLuz(boolean luz) {
+        this.luz = luz;
+    }
+
+    public boolean isMantenimiento() {
+        return mantenimiento;
+    }
+
+    public void setMantenimiento(boolean mantenimiento) {
+        this.mantenimiento = mantenimiento;
     }
 
     public Reserva getReserva() {
@@ -54,12 +83,20 @@ public class Workpod implements DataDb{
         this.reserva = reserva;
     }
 
-    public boolean isMantenimiento() {
-        return mantenimiento;
+    public ZonedDateTime getUltimoUso() {
+        return ultimoUso;
     }
 
-    public void setMantenimiento(boolean mantenimiento) {
-        this.mantenimiento = mantenimiento;
+    public void setUltimoUso(ZonedDateTime ultimoUso) {
+        this.ultimoUso = ultimoUso;
+    }
+
+    public Reserva getLimpieza() {
+        return limpieza;
+    }
+
+    public void setLimpieza(Reserva limpieza) {
+        this.limpieza = limpieza;
     }
 
     public List<Workpod> JSONaList(JSONObject json){
@@ -71,8 +108,12 @@ public class Workpod implements DataDb{
                 JSONObject workpodJSON = lstWorkpodsJSON.getJSONObject(i);
 
                 workpod.setId(workpodJSON.getInt("id"));
-                workpod.setLat(workpodJSON.getDouble("lat"));
-                workpod.setLon(workpodJSON.getDouble("lon"));
+                workpod.setNombre(workpodJSON.getString("nombre"));
+                workpod.setDescripcion(workpodJSON.getString("descripcion"));
+                workpod.setNumUsuarios(workpodJSON.getInt("usuarios"));
+                workpod.setPrecio(workpodJSON.getDouble("precio"));
+                workpod.setMantenimiento(workpodJSON.getBoolean("mantenimiento"));
+                workpod.setLuz(workpodJSON.getBoolean("luz"));
 
                 lstWorkpods.add(workpod);
             }
@@ -109,19 +150,15 @@ public class Workpod implements DataDb{
         return String.valueOf(id);
     }
 
-    public Workpod(int id, String descripcion, double x, double y, Reserva reserva, boolean mantenimiento) {
+    public Workpod(int id, String descripcion, Reserva reserva, boolean mantenimiento) {
         this.id = id;
         this.descripcion = descripcion;
-        this.lat = x;
-        this.lon = y;
         this.reserva = reserva;
         this.mantenimiento = mantenimiento;
     }
 
-    public Workpod(int id, double x, double y) {
+    public Workpod(int id) {
         this.id = id;
-        this.lat = x;
-        this.lon = y;
     }
 
     public Workpod() {

@@ -1,5 +1,7 @@
 package com.example.workpod.data;
 
+import com.example.workpod.basic.Method;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,26 +38,7 @@ public class Sesion implements DataDb{
     }
 
     public void setEntrada(String entrada) {
-        String[] aux = entrada.split(" ");
-        String[] diaS = null;
-        String[] horaS = null;
-        if (aux.length == 1){
-            diaS = aux[0].split("-");
-            horaS = aux[1].split(":");
-        }
-        if (aux.length > 1){
-            diaS = aux[0].split("-");
-        }
-        try{
-            if (diaS != null && horaS != null && diaS.length > 2 && horaS.length > 2)
-                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
-                    Integer.parseInt(horaS[0]), Integer.parseInt(horaS[1]), Integer.parseInt(horaS[2]), 0, ZoneId.systemDefault());
-            else if (diaS != null && diaS.length > 2 )
-                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
-                        0, 0, 0, 0, ZoneId.systemDefault());
-        }catch (NumberFormatException e){
-
-        }
+        Method.stringToDate(entrada, ZoneId.systemDefault());
     }
 
     public ZonedDateTime getSalida() {
@@ -67,26 +50,8 @@ public class Sesion implements DataDb{
     }
 
     public void setSalida(String salida) {
-        String[] aux = salida.split(" ");
-        String[] diaS = null;
-        String[] horaS = null;
-        if (aux.length > 1){
-            diaS = aux[0].split("-");
-            horaS = aux[1].split(":");
-        }
-        else{
-            diaS = aux[0].split("-");
-        }
-        try{
-            if (diaS != null && horaS != null && diaS.length > 2 && horaS.length > 2)
-                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
-                        Integer.parseInt(horaS[0]), Integer.parseInt(horaS[1]), Integer.parseInt(horaS[2]), 0, ZoneId.systemDefault());
-            else if (diaS != null && diaS.length > 2 )
-                this.entrada = ZonedDateTime.of(Integer.parseInt(diaS[0]), Integer.parseInt(diaS[1]), Integer.parseInt(diaS[2]),
-                        0, 0, 0, 0, ZoneId.systemDefault());
-        }catch (NumberFormatException e){
 
-        }
+        Method.stringToDate(salida, ZoneId.systemDefault());
     }
 
     public double getPrecio() {

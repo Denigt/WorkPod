@@ -112,6 +112,7 @@ public class Database<T extends DataDb> extends Thread {
         TABLAS.add("workpod");
         TABLAS.add("usuario");
         TABLAS.add("sesion");
+        TABLAS.add("ubicacion");
     }
 
     // HILOS A EJECUTAR

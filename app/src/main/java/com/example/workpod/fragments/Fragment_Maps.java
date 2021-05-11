@@ -6,11 +6,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,7 +25,7 @@ import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.basic.Database;
-import com.example.workpod.data.Workpod;
+import com.example.workpod.data.Ubicacion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,20 +51,20 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     private GoogleMap mMap;
     private LocationManager locationService;
     private LatLng posicion;
-    private int TAM_ICON = 120;
+    private int TAM_ICON = 130;
 
     // VARIABLES PARA LOS CONTROLES DEL FRAGMENT
     private ImageButton btnCentrar;
 
     // ALMACENAMIENTO DE DATOS
-    private List<Workpod> lstWorkpods;
+    private List<Ubicacion> lstUbicacion;
 
     // INFORMAR DE QUE TODOS LOS HILOS HAN DE FINALIZAR
     private boolean killHilos = false;
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
-        lstWorkpods = new ArrayList<>();
+        lstUbicacion = new ArrayList<>();
     }
 
     //SOBREESCRITURAS
@@ -107,7 +108,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 JSONString += aux;
 
 
-            lstWorkpods.addAll(new Workpod().JSONaList(new JSONObject(JSONString)));
+            lstUbicacion.addAll(new Ubicacion().JSONaList(new JSONObject(JSONString)));
 
             System.err.println(JSONString);
         }catch(Exception e){
@@ -132,10 +133,10 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         }catch (SecurityException e) {  }
 
         // Establecer workpods en el mapa
-        Database<Workpod> dbWorkpod = new Database<>(Database.SELECTALL, new Workpod());
-        dbWorkpod.postRun(()->{lstWorkpods.addAll(dbWorkpod.getLstSelect());});
-        dbWorkpod.postRunOnUI(getActivity(), () ->{dibujaWorkpods();});
-        dbWorkpod.start();
+        Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
+        dbUbicacion.postRun(()->{lstUbicacion.addAll(dbUbicacion.getLstSelect());});
+        dbUbicacion.postRunOnUI(getActivity(), () ->{dibujaWorkpods();});
+        dbUbicacion.start();
     }
 
     // LISTENERS
@@ -267,11 +268,11 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     private void dibujaWorkpods(){
         Marker markPosicion;
 
-        for(Workpod workpod : lstWorkpods){
-            LatLng posicion = new LatLng(workpod.getLat(), workpod.getLon());
+        for(Ubicacion ubicacion : lstUbicacion){
+            LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
 
-            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title(workpod.getDescripcion()));
-            markPosicion.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
+            markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.markers_cluster, 130, 130, "2", 60, R.color.blue));
         }
     }
 
@@ -293,6 +294,39 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // Dibujar en el bitmat
         Canvas canvas = new Canvas(bm);
         vectorImg.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bm);
+    }
+
+    /**
+     * Transforma un vectorAsset en un bitmapDrawable y escribe texto centrado sobre el
+     * @param context Contexto de la app
+     * @param drawable Imagen vectorial
+     * @param width Ancho de la imagen en px
+     * @param height Alto de la imagen en px
+     * @param text Texto a escribir
+     * @param textTam Tamano del texto
+     * @param textColor Color del texto (id en los Resources de la app)
+     * @return Bitmap a partir del vectorAsset
+     */
+    private static BitmapDescriptor VectortoBitmap(Context context, int drawable, int width, int height, String text, int textTam, int textColor){
+        // Declarar pincel para hacer el texto
+        Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+        Paint pen = new Paint();
+        pen.setTextSize(textTam);
+        pen.setTextAlign(Paint.Align.CENTER);
+        pen.setTypeface(font);
+        pen.setColor(context.getResources().getColor(textColor));
+
+        // Obtener el Drawable
+        Drawable vectorImg = ContextCompat.getDrawable(context, drawable);
+        // Establecer tamanos
+        vectorImg.setBounds(0, 0, width, height);
+        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Dibujar en el bitmat
+        Canvas canvas = new Canvas(bm);
+        vectorImg.draw(canvas);
+        canvas.drawText(text, canvas.getWidth()/2, (canvas.getHeight()/2) + (textTam/4), pen);
         return BitmapDescriptorFactory.fromBitmap(bm);
     }
 

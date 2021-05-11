@@ -3,6 +3,11 @@ package com.example.workpod.basic;
 import android.content.Context;
 import android.widget.Toast;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+import kotlin.jvm.Throws;
+
 /**
  * Incorpora metodos estaticos para funciones basicas
  */
@@ -50,5 +55,36 @@ public abstract class Method {
      */
     public static boolean checkEmail(String email){
         return email.matches(EMAIL_PATTERN);
+    }
+
+    public static ZonedDateTime stringToDate(String fecha, ZoneId zona){
+        int[] dia = new int[3];
+        int[] hora = new int[4];
+
+        fecha = fecha.trim();
+        if (fecha.matches("\\d{2,4}[-/]\\d\\d[-/]\\d\\d$")) {
+            String[] aux = fecha.split("[-/]");
+            for(int i = 0; i < aux.length; i++)
+                dia[i] = Integer.parseInt(aux[i]);
+
+            for(int i = 0; i < hora.length; i++)
+                hora[i] = 0;
+
+        }else if (fecha.matches("\\d\\d[-/]\\d\\d[-/]\\d{2,4} \\d\\d:\\d\\d:\\d\\d(:\\d\\d)?$")) {
+            String[] aux = fecha.split(" ");
+            String[] auxF = aux[0].split("[-/]");
+            String[] auxH = aux[1].split(":");
+
+            for(int i = 0; i < auxF.length; i++)
+                dia[i] = Integer.parseInt(aux[i]);
+
+            for(int i = 0; i < auxH.length; i++)
+                hora[i] = Integer.parseInt(aux[i]);
+
+            if(auxH.length < 4)
+                hora[3] = 0;
+        }else ZonedDateTime.of(0,0,0,0,0,0,0, zona);
+
+        return ZonedDateTime.of(dia[0], dia[1], dia[2], hora[0], hora[1], hora[2], hora[3], zona);
     }
 }
