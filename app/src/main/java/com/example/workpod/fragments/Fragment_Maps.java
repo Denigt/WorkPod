@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,19 +40,38 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener {
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener {
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
     private boolean havePermission = false;
 
     // VARIABLES PARA LA GESTION DEL MAPA Y LA LOCALIZACION
+    /**
+     * Rango en el que el boton de centrar tiene el efecto de acercar el mapa
+     */
     private final double errorMedida = 0.01;
+    /**
+     * Zoom por defecto en el mapa
+     */
     private final int defaultZoom = 12;
+    /**
+     * El mapa
+     */
     private GoogleMap mMap;
+    /**
+     * Administrador de la geolocalizacion, maneja tambien el dibujado de la posicion del usuario
+     */
     private LocationManager locationService;
+    /**
+     * Posicion del usuario
+     * Cuidado al leerlo, puede ser null
+     */
     private LatLng posicion;
+
+    // TAMANO DE LOS ICONOS Y MARCADORES DE MAPA
     private int TAM_ICON = 130;
+    private int TAM_MARKERS = 140;
 
     // VARIABLES PARA LOS CONTROLES DEL FRAGMENT
     private ImageButton btnCentrar;
@@ -69,6 +89,10 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     //SOBREESCRITURAS
     @Override
+    /**
+     * Se ejecuta al iniciar el fragment
+     * Comprueba que se tengan los permisos necesarios y de no tenerlos los solicita al usuario
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -83,6 +107,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     }
 
     @Override
+    /**
+     * Pone el fragment de maps y establece variables para botonos y cuadros de busqueda
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Introducir el Layout del fragment
@@ -99,7 +126,26 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // Establecer listeners de los controles
         btnCentrar.setOnClickListener(this);
 
-        // Leer workpods del JSON
+        return view;
+    }
+
+    /**
+     * Es llamado cuando el mapa esta listo
+     * El movil ha de tener instalados los servicios de Google
+     * Inicia el proveedor de ubicacion y el administrador de la geolocalizacion (locationService)
+     * Coloca los workpods en el mapa
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Iniciar el hilo para solicitar la ubicacion
+        try {
+            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
+        }catch (SecurityException e) {  }
+
+        // Establecer workpods en el mapa
+        // Leer workpods del JSON (para cuando no los lea de la base de datos)
         /*BufferedReader JSONReader = new BufferedReader(new InputStreamReader(getActivity().getResources().openRawResource(R.raw.pruebas)));
         try {
             String JSONString = "";
@@ -115,24 +161,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             System.err.println("Error al abrir el fichero");
             e.printStackTrace();
         }*/
-
-        return view;
-    }
-
-    /**
-     * Modifica el mapa cuando esta disponible
-     * El movil ha de tener instalados los servicios de google
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Iniciar el hilo para solicitar la ubicacion
-        try {
-            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
-        }catch (SecurityException e) {  }
-
-        // Establecer workpods en el mapa
         Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
         dbUbicacion.postRun(()->{lstUbicacion.addAll(dbUbicacion.getLstSelect());});
         dbUbicacion.postRunOnUI(getActivity(), () ->{dibujaWorkpods();});
@@ -145,7 +173,54 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         btnCentrarOnClick(v);
     }
 
+    @Override
+    /**
+     * Se ejecuta al hacer click sobre un marcador
+     * Los marcadores tienen en su atributo Tag la ubicacion a la que hacer referencia
+     */
+    public boolean onMarkerClick(Marker marker) {
+        // COMPROBAR QUE EL MARCADOR TIENE DATOS EN SU TAG Y SON INSTACIA DE UBICACION
+        if (marker.getTag() != null && marker.getTag() instanceof Ubicacion) {
+            try {
+                // Ubicacion a la que referencia el marcador (desde ella se pueden ver la lista de workpods del marcador)
+                Ubicacion ubicacion = (Ubicacion) marker.getTag();
+
+                //TODO: Codigo para mostrar lista de workpods al hacer click en una ubicacion
+            } catch (Exception e) {
+                Log.e("ERROR ONMARKERCLICK", e.getMessage());
+            }
+        }
+
+        return false;
+    }
+
+    // ONCLICK LISTENERS
+    /**
+     * Centra el mapa sobre la posicion del usuario
+     * @param v Control pulsado
+     */
+    private void btnCentrarOnClick(View v){
+        if (v.getId() == btnCentrar.getId() && posicion != null){
+            // COMPROBAR SI LA CAMARA ESTA MAS O MENOS EN LA POSICION QUE LA DEJA POR DEFECTO EL BOTON CENTRAR
+            if (!((mMap.getCameraPosition().target.latitude < posicion.latitude + errorMedida) &&
+                    (mMap.getCameraPosition().target.latitude > posicion.latitude - errorMedida) &&
+                    (mMap.getCameraPosition().target.longitude < posicion.longitude + errorMedida) &&
+                    (mMap.getCameraPosition().target.longitude > posicion.longitude - errorMedida) &&
+                    (mMap.getCameraPosition().zoom == defaultZoom)))
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, defaultZoom));
+                // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
+            else
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 19));
+        }
+    }
+
+//=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================
+
     // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION
+    /**
+     * Esta clase funciona como LocationListener, es decir se ejecuta en segundo plano solicitando y
+     * actualizando la posicion del usuario
+     */
     public class UbicacionListener implements LocationListener, Runnable {
         Marker markPosicion;
 
@@ -244,27 +319,10 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         }
     }
 
-    // ONCLICK LISTENERS
-    /**
-     * Centra el mapa sobre la posicion del usuario
-     * @param v Control pulsado
-     */
-    private void btnCentrarOnClick(View v){
-        if (v.getId() == btnCentrar.getId() && posicion != null){
-            // COMPROBAR SI LA CAMARA ESTA MAS O MENOS EN LA POSICION QUE LA DEJA POR DEFECTO EL BOTON CENTRAR
-            if (!((mMap.getCameraPosition().target.latitude < posicion.latitude + errorMedida) &&
-                    (mMap.getCameraPosition().target.latitude > posicion.latitude - errorMedida) &&
-                    (mMap.getCameraPosition().target.longitude < posicion.longitude + errorMedida) &&
-                    (mMap.getCameraPosition().target.longitude > posicion.longitude - errorMedida) &&
-                    (mMap.getCameraPosition().zoom == defaultZoom)))
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, defaultZoom));
-            // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
-            else
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 19));
-        }
-    }
-
     // METODOS
+    /**
+     * Dibuja las ubicaciones de los workpods en el mapa
+     */
     private void dibujaWorkpods(){
         Marker markPosicion;
 
@@ -272,7 +330,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
 
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
-            markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.markers_cluster, 130, 130, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
+            markPosicion.setTag(ubicacion);
+            markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
         }
     }
 
@@ -331,6 +390,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     }
 
     @Override
+    /**
+     * Ademas de funcionar como metodo onDestroy ordena a todos los hilos que se detengan y al ubicationListener que deje de solicitar la posicion
+     */
     public void onDestroy() {
         killHilos = true;
         locationService.removeUpdates(new UbicacionListener());

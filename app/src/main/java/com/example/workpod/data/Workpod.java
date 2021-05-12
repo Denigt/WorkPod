@@ -1,8 +1,13 @@
 package com.example.workpod.data;
 
+import android.util.Log;
+
+import com.example.workpod.basic.Method;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +22,7 @@ public class Workpod implements DataDb{
     private boolean mantenimiento;
     private Reserva reserva;
     private ZonedDateTime ultimoUso;
-    private Reserva limpieza;
+    private ZonedDateTime limpieza;
 
     public int getId() {
         return id;
@@ -67,12 +72,20 @@ public class Workpod implements DataDb{
         this.luz = luz;
     }
 
+    public void setLuz(int luz) {
+        this.luz = (luz < 1);
+    }
+
     public boolean isMantenimiento() {
         return mantenimiento;
     }
 
     public void setMantenimiento(boolean mantenimiento) {
         this.mantenimiento = mantenimiento;
+    }
+
+    public void setMantenimiento(int mantenimiento) {
+        this.mantenimiento = (mantenimiento < 1);
     }
 
     public Reserva getReserva() {
@@ -91,11 +104,11 @@ public class Workpod implements DataDb{
         this.ultimoUso = ultimoUso;
     }
 
-    public Reserva getLimpieza() {
+    public ZonedDateTime getLimpieza() {
         return limpieza;
     }
 
-    public void setLimpieza(Reserva limpieza) {
+    public void setLimpieza(ZonedDateTime limpieza) {
         this.limpieza = limpieza;
     }
 
@@ -107,18 +120,29 @@ public class Workpod implements DataDb{
                 Workpod workpod = new Workpod();
                 JSONObject workpodJSON = lstWorkpodsJSON.getJSONObject(i);
 
-                workpod.setId(workpodJSON.getInt("id"));
-                workpod.setNombre(workpodJSON.getString("nombre"));
-                workpod.setDescripcion(workpodJSON.getString("descripcion"));
-                workpod.setNumUsuarios(workpodJSON.getInt("usuarios"));
-                workpod.setPrecio(workpodJSON.getDouble("precio"));
-                workpod.setMantenimiento(workpodJSON.getBoolean("mantenimiento"));
-                workpod.setLuz(workpodJSON.getBoolean("luz"));
+                if (workpodJSON.has("id") && !workpodJSON.isNull("id"))
+                    workpod.setId(workpodJSON.getInt("id"));
+                if (workpodJSON.has("nombre") && !workpodJSON.isNull("nombre"))
+                    workpod.setNombre(workpodJSON.getString("nombre"));
+                if (workpodJSON.has("descripcion") && !workpodJSON.isNull("descripcion"))
+                    workpod.setDescripcion(workpodJSON.getString("descripcion"));
+                if (workpodJSON.has("usuarios") && !workpodJSON.isNull("usuarios"))
+                    workpod.setNumUsuarios(workpodJSON.getInt("usuarios"));
+                if (workpodJSON.has("precio") && !workpodJSON.isNull("precio"))
+                    workpod.setPrecio(workpodJSON.getDouble("precio"));
+                if (workpodJSON.has("mantenimiento") && !workpodJSON.isNull("mantenimiento"))
+                    workpod.setMantenimiento(workpodJSON.getInt("mantenimiento"));
+                if (workpodJSON.has("luz") && !workpodJSON.isNull("luz"))
+                    workpod.setLuz(workpodJSON.getInt("luz"));
+                if (workpodJSON.has("ultLimpieza") && !workpodJSON.isNull("ultLimpieza"))
+                    workpod.setLimpieza(Method.stringToDate(workpodJSON.getString("ultLimpieza"), ZoneId.systemDefault()));
+                if (workpodJSON.has("ultUso") && !workpodJSON.isNull("ultUso"))
+                    workpod.setUltimoUso(Method.stringToDate(workpodJSON.getString("ultUso"), ZoneId.systemDefault()));
 
                 lstWorkpods.add(workpod);
             }
         }catch(Exception e){
-
+            Log.e("ERROR JSON_WORKPOD", e.getMessage());
         }
 
         return lstWorkpods;

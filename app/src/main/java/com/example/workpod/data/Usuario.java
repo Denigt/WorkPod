@@ -1,5 +1,7 @@
 package com.example.workpod.data;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -131,12 +133,16 @@ public class Usuario implements DataDb{
         try {
             JSONObject usuarioJSON = json.getJSONObject("usuario");
 
-            usuario.setEmail(usuarioJSON.getString("email"));
-            usuario.setNombre(usuarioJSON.getString("nombre"));
-            usuario.setApellidos(usuarioJSON.getString("apellidos"));
-            usuario.setDni(usuarioJSON.getString("dni"));
+            if (usuarioJSON.has("email") && !usuarioJSON.isNull("email"))
+                usuario.setEmail(usuarioJSON.getString("email"));
+            if (usuarioJSON.has("nombre") && !usuarioJSON.isNull("nombre"))
+                usuario.setNombre(usuarioJSON.getString("nombre"));
+            if (usuarioJSON.has("apellidos") && !usuarioJSON.isNull("apellidos"))
+                usuario.setApellidos(usuarioJSON.getString("apellidos"));
+            if (usuarioJSON.has("dni") && !usuarioJSON.isNull("dni"))
+                usuario.setDni(usuarioJSON.getString("dni"));
         }catch(Exception e){
-
+            Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
 
         return usuario;
@@ -152,7 +158,7 @@ public class Usuario implements DataDb{
             json.put("apellidos", apellidos);
             json.put("dni", dni);
         }catch(JSONException e){
-
+            Log.e("ERROR USUARIO_JSON", e.getMessage());
         }
 
         return json;
@@ -167,15 +173,19 @@ public class Usuario implements DataDb{
                 Usuario usuario = new Usuario();
                 JSONObject usuarioJSON = lstUsuariosJSON.getJSONObject(i);
 
-                usuario.setEmail(usuarioJSON.getString("email"));
-                usuario.setNombre(usuarioJSON.getString("nombre"));
-                usuario.setApellidos(usuarioJSON.getString("apellidos"));
-                usuario.setDni(usuarioJSON.getString("dni"));
+                if (usuarioJSON.has("email") && !usuarioJSON.isNull("email"))
+                    usuario.setEmail(usuarioJSON.getString("email"));
+                if (usuarioJSON.has("nombre") && !usuarioJSON.isNull("nombre"))
+                    usuario.setNombre(usuarioJSON.getString("nombre"));
+                if (usuarioJSON.has("apellidos") && !usuarioJSON.isNull("apellidos"))
+                    usuario.setApellidos(usuarioJSON.getString("apellidos"));
+                if (usuarioJSON.has("dni") && !usuarioJSON.isNull("dni"))
+                    usuario.setDni(usuarioJSON.getString("dni"));
 
                 lstUsuarios.add(usuario);
             }
         }catch(Exception e){
-
+            Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
 
         return lstUsuarios;

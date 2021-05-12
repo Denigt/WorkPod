@@ -120,17 +120,23 @@ public class Sesion implements DataDb{
                 Sesion sesion = new Sesion();
                 JSONObject sesionJSON = lstSesionesJSON.getJSONObject(i);
 
-                sesion.setId(sesionJSON.getInt("id"));
-                sesion.setEntrada(sesionJSON.getString("entrada"));
-                sesion.setSalida(sesionJSON.getString("salida"));
-                sesion.setPrecio(sesionJSON.getDouble("precio"));
-                sesion.setTiempo(sesionJSON.getDouble("tiempo"));
-                sesion.setDescuento(sesionJSON.getInt("descuento"));
+                if (sesionJSON.has("id") && !sesionJSON.isNull("id"))
+                    sesion.setId(sesionJSON.getInt("id"));
+                if (sesionJSON.has("entrada") && !sesionJSON.isNull("entrada"))
+                    sesion.setEntrada(sesionJSON.getString("entrada"));
+                if (sesionJSON.has("salida") && !sesionJSON.isNull("salida"))
+                    sesion.setSalida(sesionJSON.getString("salida"));
+                if (sesionJSON.has("precio") && !sesionJSON.isNull("precio"))
+                    sesion.setPrecio(sesionJSON.getDouble("precio"));
+                if (sesionJSON.has("tiempo") && !sesionJSON.isNull("tiempo"))
+                    sesion.setTiempo(sesionJSON.getDouble("tiempo"));
+                if (sesionJSON.has("descuento") && !sesionJSON.isNull("descuento"))
+                    sesion.setDescuento(sesionJSON.getInt("descuento"));
 
                 lstSesiones.add(sesion);
             }
         }catch(Exception e){
-            Log.e("ERROR", e.getMessage());
+            Log.e("ERROR JSON_SESION", e.getMessage());
         }
 
         return lstSesiones;

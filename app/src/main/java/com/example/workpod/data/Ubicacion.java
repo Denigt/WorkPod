@@ -1,5 +1,7 @@
 package com.example.workpod.data;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -94,16 +96,21 @@ public class Ubicacion implements DataDb{
                 Ubicacion ubicacion = new Ubicacion();
                 JSONObject ubicacionJSON = lstWorkpodsJSON.getJSONObject(i);
 
-                ubicacion.setId(ubicacionJSON.getInt("id"));
-                ubicacion.setNombre(ubicacionJSON.getString("nombre"));
-                ubicacion.setLat(ubicacionJSON.getDouble("lat"));
-                ubicacion.setLon(ubicacionJSON.getDouble("lon"));
+                if (ubicacionJSON.has("id") && !ubicacionJSON.isNull("id"))
+                    ubicacion.setId(ubicacionJSON.getInt("id"));
+                if (ubicacionJSON.has("nombre") && !ubicacionJSON.isNull("nombre"))
+                    ubicacion.setNombre(ubicacionJSON.getString("nombre"));
+                if (ubicacionJSON.has("lat") && !ubicacionJSON.isNull("lat"))
+                    ubicacion.setLat(ubicacionJSON.getDouble("lat"));
+                if (ubicacionJSON.has("lon") && !ubicacionJSON.isNull("lon"))
+                    ubicacion.setLon(ubicacionJSON.getDouble("lon"));
                 ubicacion.setWorkpods(new Workpod().JSONaList(ubicacionJSON));
+                ubicacion.setDireccion(Direccion.fromJSON(ubicacionJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
                 lstUbicacion.add(ubicacion);
             }
         }catch(Exception e){
-
+            Log.e("ERROR JSON_UBICACION", e.getMessage());
         }
 
         return lstUbicacion;
