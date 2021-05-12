@@ -2,6 +2,8 @@ package com.example.workpod.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,12 +20,12 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_Spinner;
 import com.example.workpod.basic.Database;
 import com.example.workpod.data.Sesion;
-import com.example.workpod.otherclass.ComparadorFechas;
 import com.example.workpod.otherclass.Spinner_Years_Transaction_History;
 
 import java.time.ZonedDateTime;
@@ -63,7 +65,7 @@ public class Fragment_Transaction_History extends Fragment {
     HashMap<String, List<Sesion>> itemList;//ALMACENAMOS LA SESIÓN (ITEMS DEL ELSV)
 
     //LIST
-    List<Sesion> lstTransaction = new ArrayList<>();//LAS SESIONES DE WORKPOD
+    List<Sesion> lstSesiones = new ArrayList<>();//LAS SESIONES DE WORKPOD
 
 
     //CONSTRUCTOR POR DEFECTO
@@ -85,6 +87,9 @@ public class Fragment_Transaction_History extends Fragment {
         super.onAttach(activity);
     }
 
+    //EL METODO DE ORDENAR LA LIST DE SESIONES REQUIERE LA API 24, POR ELLO USAMOS REQUIRESAPI
+    //PARA QUE SEA COMPATIBLE CON LA API 21
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,23 +98,8 @@ public class Fragment_Transaction_History extends Fragment {
         eLsV = (ExpandableListView) view.findViewById(R.id.eLsV2);
         spinnerYears = (Spinner) view.findViewById(R.id.SpinnerYears2);
 
-        try {
-            Database<Sesion> dbSesion = new Database<>(Database.SELECTALL, new Sesion());
-            dbSesion.postRun(() -> {
-                lstTransaction.addAll(dbSesion.getLstSelect());
-            });
-            dbSesion.postRunOnUI(getActivity(), () -> {
-                montandoSpinner(view, lstTransaction, i, lstYears, lstSpinner);
-            });
-            dbSesion.start();
-        } catch (NullPointerException e) {
-
-        }
-        //VOLCAMOS LAS SESIONES DE LA BD. POR AHORA TRABAJAMOS EN LOCAL
-
-
-        //SPINNER
-        montandoSpinner(view, lstTransaction, i, lstYears, lstSpinner);
+        //CONEXIÓN CON LA BD, VOLCADO DE LAS SESIONES EN LSTSESIONES
+        conectarseBDSesion(view, getActivity());
 
         //PARA ACTIVAR EL MENU EMERGENTE
         setHasOptionsMenu(true);
@@ -120,6 +110,35 @@ public class Fragment_Transaction_History extends Fragment {
 
     //MÉTODOS
 
+    /**
+     * Este método servirá para que si no estás conectado a internet, no se realice la conexión
+     * con la BD, Si no estás conectado a internet, te salta el Toast, si lo estás,se realiza la conexión
+     * @param context contexto de la app
+     * @param view instancia de la clase View
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void conectarseBDSesion(View view, Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
+        if (networkInfo == null || (networkInfo.isConnected() == false)) {
+            Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                Database<Sesion> dbSesion = new Database<>(Database.SELECTALL, new Sesion());
+                dbSesion.postRun(() -> {
+                    lstSesiones.addAll(dbSesion.getLstSelect());
+                });
+                dbSesion.postRunOnUI(getActivity(), () -> {
+                    montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
+                });
+                dbSesion.start();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     /**
      * EN ESTE MÉTODO CREAMOS UNA LISTA CON TODAS LAS SESIONES DEL USUARIO ALMACENADAS EN LA BD
      * POR AHORA ES LOCAL PERO EN UNOS DÍAS SERÁ UN SELECTALL DE LA BD
@@ -143,10 +162,11 @@ public class Fragment_Transaction_History extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void montandoSpinner(View view, List<Sesion> lstTransaction, int i, List<String> lstYears, List<Spinner_Years_Transaction_History> lstSpinner) {
-        //RECORREMOS LAS SESIONES
+        //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
         lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
+        //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
         Collections.reverse(lstTransaction);
-
+        //RECORREMOS LAS SESIONES
         for (Sesion transaction : lstTransaction) {
             //SI LA LISTA DE AÑOS NO CONTIENE UN AÑO EN EL QUE SE HA REALIZADO UNA SESIÓN, QUE LO AÑADA A LA LISTA
             if (!lstYears.contains(String.valueOf(transaction.getEntrada().getYear()))) {
@@ -197,8 +217,7 @@ public class Fragment_Transaction_History extends Fragment {
      * EN ESTE MÉTODO LE VAMOS A PASAR EL AÑO QUE SE SELECCIONA EN EL SPINNER AL ELSV, Y SE CONSTRUIRÁ
      * CON LAS SESIONES REALIZADAS EN DICHO AÑO
      *
-     * @param year      AÑO SELECCIONADO EN EL SPINNER
-
+     * @param year AÑO SELECCIONADO EN EL SPINNER
      */
     private void construyendoELsV(int year) {
         //INICIALIZAMOS LA LISTA DE MESES
@@ -206,7 +225,7 @@ public class Fragment_Transaction_History extends Fragment {
         //INICIALIZAMOS LA LISTA DE SESIONES
         itemList = new HashMap<String, List<Sesion>>();
         //METEMOS EN LOS TITULOS DEL ELSV LOS MESES
-        for (Sesion transaction : lstTransaction) {
+        for (Sesion transaction : lstSesiones) {
             //SI EL AÑO DE LA SESIÓN APUNTA AL AÑO QUE HEMOS SELECCIONADO EN EL SPINNER
             if (String.valueOf(transaction.getEntrada().getYear()).equals(String.valueOf(year))) {
                 //SI LA LISTA DE MESES NO CONTIENE YA ESE MES (EN EL IDIOMA EN EL QUE ESTEMOS TRABAJANDO) LO AÑADIMOS A LA LIST DE MESES
@@ -224,13 +243,13 @@ public class Fragment_Transaction_History extends Fragment {
             //CREAMOS AQUÍ LA LISTA DONDE IRÁN LAS SESIONE PARA QUE SE APLIQUEN LOS FILTROS
             List<Sesion> lstSesion = new ArrayList<>();
             //RECORRO LA LISTA DE SESIONES
-            for (Sesion transaction : lstTransaction) {
+            for (Sesion transaction : lstSesiones) {
                 //SI EL MES A PUNTA AL MES DE LA SESIÓN (EN EL IDIOMA EN EL QUE ESTEMOS TRABAJANDO)
                 if (meses.equals(transaction.getEntrada().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase())) {
                     //SI EL AÑO DE LA SESIÓN APUNTA AL AÑO QUE HEMOS SELECCIONADO EN EL SPINNER
                     if (String.valueOf(transaction.getEntrada().getYear()).equals(String.valueOf(year))) {
                         //AÑADIMOS A LA LISTA LA SESIÓN
-                        lstSesion.add(new Sesion(transaction.getId(),  transaction.getEntrada(), transaction.getSalida(), transaction.getPrecio(),transaction.getDescuento(),transaction.getDireccion()));
+                        lstSesion.add(new Sesion(transaction.getId(), transaction.getEntrada(), transaction.getSalida(), transaction.getPrecio(), transaction.getDescuento(), transaction.getDireccion()));
                         //CONSTRUIMOS EL HASHMAP DONDE ESTAMOS CONTROLANDO QUE EN CADA MES (CLAVE) SE METE LA SESIÓN HECHA EN DICHO MES (VALOR) Y EN EL AÑO
                         //EN EL QUE ESTAMOS TRABAJANDO
                         itemList.put(meses, lstSesion);
@@ -326,7 +345,7 @@ public class Fragment_Transaction_History extends Fragment {
         //CONSTRUIMOS LA PARTE DE LOS ITEMS DEL ELSV
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
-           //COMO EN LOS ITEMS QUEREMOS PONER VARIOS ATRIBUTOS DE LA CLASE LSV, CREAMOS UN OBJETO DE LA CLASE LSV
+            //COMO EN LOS ITEMS QUEREMOS PONER VARIOS ATRIBUTOS DE LA CLASE LSV, CREAMOS UN OBJETO DE LA CLASE LSV
             //Y LO ASOCIAMOS CON LO QUE DEVUELVE LOS ITEMS DEL ELSV (ESPECIFICANDO EL TITULO Y EL ITEM CON SUS RESPECTIVAS POSICIONES)
             final Sesion sesion = (Sesion) getChild(groupPosition, childPosition);
             //EN EL CASO DE QUE SEA NULO, QUE NOS INFLE EL ELSV IGUALMENTE (POR DEFECTO, PARA EVITAR ERRORES)
@@ -343,7 +362,7 @@ public class Fragment_Transaction_History extends Fragment {
             tVUbicacion = (TextView) view.findViewById(R.id.iTVUbicacion);
             tVFecha = (TextView) view.findViewById(R.id.iTVFecha);
             tVTiempo = (TextView) view.findViewById(R.id.iTVHora);
-           // tVUbicacion.setText(sesion.getUbicacion());
+            // tVUbicacion.setText(sesion.getUbicacion());
 
             //LE PASAMOS LA INFORMACIÓN DE LAS SESIONES
             //PARA ELLO UTILIZAMOS EL OBJETO DE LA CLASE LSV AL QUE LE HEMOS ASOCIADO LA DEVOLUCIÓN DE LOS ITEMS
@@ -365,7 +384,7 @@ public class Fragment_Transaction_History extends Fragment {
                     //CREAMOS UN OBJETO DEL FRAGMENT QUE HACE DE DIALOGO EMERGENTE Y EN SU CONSTRUCTOR A TRAVÉS DEL OBJETO LSV LE PASAMOS LOS
                     //VALORES DE LA SESIÓN SELECCIONADA
                     Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(sesion.getDireccion(), sesion.getEntrada(),
-                            sesion.getSalida(), String.valueOf(sesion.getDescuento()) , sesion.getPrecio());
+                            sesion.getSalida(), String.valueOf(sesion.getDescuento()), sesion.getPrecio());
                     fragmentDialogTransactionSession.show(myContext.getSupportFragmentManager(), "DialogToCall");
                 }
             });

@@ -3,19 +3,16 @@ package com.example.workpod.data;
 import android.util.Log;
 
 import com.example.workpod.basic.Method;
-import com.example.workpod.otherclass.ComparadorFechas;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class Sesion implements DataDb, ComparadorFechas<Sesion> {
+public class Sesion implements DataDb {
     private int id;
     private ZonedDateTime entrada;
     private ZonedDateTime salida;
@@ -180,9 +177,4 @@ public class Sesion implements DataDb, ComparadorFechas<Sesion> {
         return String.valueOf(id);
     }
 
-
-    @Override
-    public int compare(Sesion sesion1, Sesion sesion2) {
-        return sesion1.getEntrada().compareTo(sesion2.getEntrada());
-    }
 }
