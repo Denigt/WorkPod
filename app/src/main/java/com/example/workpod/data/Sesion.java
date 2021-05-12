@@ -3,6 +3,7 @@ package com.example.workpod.data;
 import android.util.Log;
 
 import com.example.workpod.basic.Method;
+import com.example.workpod.otherclass.ComparadorFechas;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,9 +12,10 @@ import java.sql.Date;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class Sesion implements DataDb{
+public class Sesion implements DataDb, ComparadorFechas<Sesion> {
     private int id;
     private ZonedDateTime entrada;
     private ZonedDateTime salida;
@@ -22,6 +24,22 @@ public class Sesion implements DataDb{
     private int descuento;
     private Usuario usuario;
     private Workpod workpod;
+    private String direccion;
+
+    //CONSTRUCTOR POR DEFECTO
+
+    public Sesion() {
+    }
+
+    public Sesion(int id, ZonedDateTime entrada, ZonedDateTime salida, double precio, int descuento, String direccion) {
+        this.id = id;
+        this.entrada = entrada;
+        this.salida = salida;
+        this.precio = precio;
+        this.tiempo = tiempo;
+        this.descuento = descuento;
+        this.direccion = direccion;
+    }
 
     public int getId() {
         return id;
@@ -95,6 +113,14 @@ public class Sesion implements DataDb{
         this.workpod = workpod;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
     @Override
     public DataDb JSONaData(JSONObject JSON) {
         return null;
@@ -104,7 +130,7 @@ public class Sesion implements DataDb{
     public JSONObject dataAJSON() {
         JSONObject json = new JSONObject();
         try {
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -116,7 +142,7 @@ public class Sesion implements DataDb{
         ArrayList<Sesion> lstSesiones = new ArrayList<>();
         try {
             JSONArray lstSesionesJSON = json.getJSONArray("sesion");
-            for (int i = 0; i < lstSesionesJSON.length(); i++){
+            for (int i = 0; i < lstSesionesJSON.length(); i++) {
                 Sesion sesion = new Sesion();
                 JSONObject sesionJSON = lstSesionesJSON.getJSONObject(i);
 
@@ -132,10 +158,12 @@ public class Sesion implements DataDb{
                     sesion.setTiempo(sesionJSON.getDouble("tiempo"));
                 if (sesionJSON.has("descuento") && !sesionJSON.isNull("descuento"))
                     sesion.setDescuento(sesionJSON.getInt("descuento"));
+                if (sesionJSON.has("direccion") && !sesionJSON.isNull("direccion"))
+                    sesion.setDireccion(sesionJSON.getString("direccion"));
 
                 lstSesiones.add(sesion);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("ERROR JSON_SESION", e.getMessage());
         }
 
@@ -150,5 +178,11 @@ public class Sesion implements DataDb{
     @Override
     public String getID() {
         return String.valueOf(id);
+    }
+
+
+    @Override
+    public int compare(Sesion sesion1, Sesion sesion2) {
+        return sesion1.getEntrada().compareTo(sesion2.getEntrada());
     }
 }
