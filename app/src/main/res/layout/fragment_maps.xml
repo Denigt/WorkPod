@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-
     <fragment
         xmlns:map="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -15,16 +14,20 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <FrameLayout
+        android:id="@+id/lytBusqueda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#88FFFFFF"
         android:background="@drawable/rounded_border_square"
-        android:layout_margin="20dp">
-        <EditText
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp">
+        <SearchView
+            android:id="@+id/etxtBusqueda"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:layout_marginHorizontal="20dp"/>
+            android:layout_marginRight="20dp"
+            android:iconifiedByDefault="false"/>
     </FrameLayout>
 
     <FrameLayout
@@ -48,4 +51,11 @@
             android:scaleType="fitCenter"
             android:src="@drawable/button_btn_centrar" />
     </FrameLayout>
+
+    <ListView
+        android:id="@+id/lsvBusqueda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lytBusqueda"
+        android:layout_marginHorizontal="50dp" />
 </RelativeLayout>

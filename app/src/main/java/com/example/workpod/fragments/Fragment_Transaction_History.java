@@ -372,7 +372,7 @@ public class Fragment_Transaction_History extends Fragment {
                     , seg);
             tVFecha.setText(String.valueOf(sesion.getEntrada().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
             tVTiempo.setText(hour + "h:" + min + "min");
-            tVUbicacion.setText(sesion.getDireccion());
+            tVUbicacion.setText(sesion.getDireccion().toString());
             //CREAMOS LA CONDICIÓN DE QUE AL TOCAR EN UN ITEM DEL ELSV SE ABRA EL CUADRO DE DIALOGO CON TODA LA INFORMACIÓN DE LA SESIÓN
 
             //CREO UN OBJETO LAYOUT PARA QUE AL TOCAR EL ITEM DEL ELSV SE ME ABRA EL DIALOGO EMERGENTE
@@ -383,7 +383,7 @@ public class Fragment_Transaction_History extends Fragment {
                 public void onClick(View v) {
                     //CREAMOS UN OBJETO DEL FRAGMENT QUE HACE DE DIALOGO EMERGENTE Y EN SU CONSTRUCTOR A TRAVÉS DEL OBJETO LSV LE PASAMOS LOS
                     //VALORES DE LA SESIÓN SELECCIONADA
-                    Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(sesion.getDireccion(), sesion.getEntrada(),
+                    Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(sesion.getDireccion().toString(), sesion.getEntrada(),
                             sesion.getSalida(), String.valueOf(sesion.getDescuento()), sesion.getPrecio());
                     fragmentDialogTransactionSession.show(myContext.getSupportFragmentManager(), "DialogToCall");
                 }

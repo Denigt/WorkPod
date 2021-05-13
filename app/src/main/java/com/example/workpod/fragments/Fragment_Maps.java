@@ -21,12 +21,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.adapters.Adaptador_Lsv_Search;
 import com.example.workpod.basic.Database;
+import com.example.workpod.data.Direccion;
 import com.example.workpod.data.Ubicacion;
+import com.example.workpod.otherclass.MapSearchListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +48,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener {
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener {
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
@@ -75,9 +83,12 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     // VARIABLES PARA LOS CONTROLES DEL FRAGMENT
     private ImageButton btnCentrar;
+    private SearchView etxtBusqueda;
+    private ListView lsvBusqueda;
 
     // ALMACENAMIENTO DE DATOS
     private List<Ubicacion> lstUbicacion;
+    Adaptador_Lsv_Search adpBusqueda;
 
     // INFORMAR DE QUE TODOS LOS HILOS HAN DE FINALIZAR
     private boolean killHilos = false;
@@ -122,9 +133,17 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         // Obtener los controles de fragment
         btnCentrar = view.findViewById(R.id.btnCentrar);
+        etxtBusqueda = view.findViewById(R.id.etxtBusqueda);
+        lsvBusqueda = view.findViewById(R.id.lsvBusqueda);
+
+        // Adaptador para la lsvBusqueda y el etxtBusqueda
+        adpBusqueda = new Adaptador_Lsv_Search(getContext(), R.layout.item_lsv_search);
+        lsvBusqueda.setAdapter(adpBusqueda);
 
         // Establecer listeners de los controles
         btnCentrar.setOnClickListener(this);
+        lsvBusqueda.setOnItemClickListener(this);
+        etxtBusqueda.setOnQueryTextListener(new MapSearchListener(adpBusqueda));
 
         return view;
     }
@@ -162,8 +181,17 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             e.printStackTrace();
         }*/
         Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
-        dbUbicacion.postRun(()->{lstUbicacion.addAll(dbUbicacion.getLstSelect());});
-        dbUbicacion.postRunOnUI(getActivity(), () ->{dibujaWorkpods();});
+        dbUbicacion.postRun(()->{
+            if(!dbUbicacion.getError().get())
+                lstUbicacion.addAll(dbUbicacion.getLstSelect());
+        });
+        dbUbicacion.postRunOnUI(getActivity(), () ->{
+            if(!dbUbicacion.getError().get()) {
+                dibujaWorkpods();
+                adpBusqueda.addAll(lstUbicacion);
+            }else if(dbUbicacion.getError().code == -404)
+                Toast.makeText(getContext(), "No hay conexión a Internet", Toast.LENGTH_LONG).show();
+        });
         dbUbicacion.start();
     }
 
@@ -194,6 +222,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         return false;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (parent.equals(adpBusqueda)){
+            Ubicacion seleccion = (Ubicacion) adpBusqueda.getItem(position);
+            etxtBusqueda.setQuery(seleccion.getDireccion().toLongString(), true);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(seleccion.getPosicion(), defaultZoom));
+        }
+    }
     // ONCLICK LISTENERS
     /**
      * Centra el mapa sobre la posicion del usuario

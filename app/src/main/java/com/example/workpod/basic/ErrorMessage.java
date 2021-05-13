@@ -9,6 +9,15 @@ public class ErrorMessage {
     public final int code;
     public final String message;
 
+    /**
+     * Indica si ha habido algun error
+     * @return True en caso de error
+     *          False en caso contrario
+     */
+    public boolean get(){
+        return code < 0;
+    }
+
     public ErrorMessage(){
         this.code = 0;
         this.message = "Sin informacion";

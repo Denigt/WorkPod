@@ -216,6 +216,7 @@ public class Database<T extends DataDb> extends Thread {
             }catch (MalformedURLException e) {
                 Log.e("DATABASE SELECTALL", "URL invalida");
             }catch (IOException e) {
+                error = new ErrorMessage(-404, "No hay conexion a internet");
                 Log.e("DATABASE SELECTALL", "Error al leer los datos del servidor");
             }catch(JSONException e) {
                 Log.e("DATABASE SELECTALL", "Error obtener JSON");

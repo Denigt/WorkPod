@@ -111,4 +111,17 @@ public class Direccion {
         this.pais = pais;
         this.codPostal = codPostal;
     }
+
+    public String toShortString() {
+        return String.format("%s, %s", direccion, ciudad);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s, %s | %s %d", direccion, ciudad, provincia, codPostal);
+    }
+
+    public String toLongString() {
+        return String.format("%s, %s | %s %d (%s)", direccion, ciudad, provincia, codPostal, pais);
+    }
 }

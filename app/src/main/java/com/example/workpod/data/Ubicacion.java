@@ -2,6 +2,8 @@ package com.example.workpod.data;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,6 +49,10 @@ public class Ubicacion implements DataDb{
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    public LatLng getPosicion() {
+        return new LatLng(lat, lon);
     }
 
     public List<Workpod> getWorkpods() {

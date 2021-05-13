@@ -21,14 +21,14 @@ public class Sesion implements DataDb {
     private int descuento;
     private Usuario usuario;
     private Workpod workpod;
-    private String direccion;
+    private Direccion direccion;
 
     //CONSTRUCTOR POR DEFECTO
 
     public Sesion() {
     }
 
-    public Sesion(int id, ZonedDateTime entrada, ZonedDateTime salida, double precio, int descuento, String direccion) {
+    public Sesion(int id, ZonedDateTime entrada, ZonedDateTime salida, double precio, int descuento, Direccion direccion) {
         this.id = id;
         this.entrada = entrada;
         this.salida = salida;
@@ -110,11 +110,11 @@ public class Sesion implements DataDb {
         this.workpod = workpod;
     }
 
-    public String getDireccion() {
+    public Direccion getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(String direccion) {
+    public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
 
@@ -155,8 +155,7 @@ public class Sesion implements DataDb {
                     sesion.setTiempo(sesionJSON.getDouble("tiempo"));
                 if (sesionJSON.has("descuento") && !sesionJSON.isNull("descuento"))
                     sesion.setDescuento(sesionJSON.getInt("descuento"));
-                if (sesionJSON.has("direccion") && !sesionJSON.isNull("direccion"))
-                    sesion.setDireccion(sesionJSON.getString("direccion"));
+                sesion.setDireccion(Direccion.fromJSON(sesionJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
                 lstSesiones.add(sesion);
             }
