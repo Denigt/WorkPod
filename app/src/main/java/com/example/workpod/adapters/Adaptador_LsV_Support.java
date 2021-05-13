@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class Adaptador_LsV_Support extends BaseAdapter {
 
     Context context;
-    ArrayList<LsV_Support>aLstSupport=new ArrayList<>();
-    public static TextView tVIcono;
+    ArrayList<LsV_Support> aLstSupport = new ArrayList<>();
+    public TextView tVIcono;
 
     public Adaptador_LsV_Support() {
     }
@@ -46,16 +46,16 @@ public class Adaptador_LsV_Support extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
-        LayoutInflater inflater= LayoutInflater.from(context);
-        view=inflater.inflate(R.layout.item_support,null);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        view = inflater.inflate(R.layout.item_support, null);
         ImageView iVIcono;
-        tVIcono=(TextView)view.findViewById(R.id.iTVSupport);
-        iVIcono=(ImageView)view.findViewById(R.id.iIVSupport);
+        tVIcono = (TextView) view.findViewById(R.id.iTVSupport);
+        iVIcono = (ImageView) view.findViewById(R.id.iIVSupport);
 
-        if(aLstSupport.get(i).getCodigo()==1){
-            Adaptador_LsV_Support.tVIcono.setText(Html.fromHtml("<a href=\"mailto:workpodtfg@gmail.com\">workpodtfg@gmail.com </a>"));
+        if (aLstSupport.get(i).getCodigo() == 1) {
+            tVIcono.setText(Html.fromHtml("<a href=\"mailto:workpodtfg@gmail.com\">workpodtfg@gmail.com </a>"));
             tVIcono.setMovementMethod(LinkMovementMethod.getInstance());
-        }else{
+        } else {
             tVIcono.setText(aLstSupport.get(i).getTexto());
         }
         iVIcono.setImageResource(aLstSupport.get(i).getIcono());

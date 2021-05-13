@@ -28,11 +28,14 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.workpod.Fragment_Dialog_Cluster;
+import com.example.workpod.Fragment_Dialog_Workpod;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_Lsv_Search;
 import com.example.workpod.basic.Database;
 import com.example.workpod.data.Direccion;
 import com.example.workpod.data.Ubicacion;
+import com.example.workpod.data.Workpod;
 import com.example.workpod.otherclass.MapSearchListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -93,6 +96,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // INFORMAR DE QUE TODOS LOS HILOS HAN DE FINALIZAR
     private boolean killHilos = false;
 
+    //LISTA CON LOS WORKPODS QUE HAY UN UNA UBICACIÓN
+    List<Workpod> lstWorkpod = new ArrayList<>();
+
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
         lstUbicacion = new ArrayList<>();
@@ -110,9 +116,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // COMPROBAR Y SOLICITAR PERMISOS
         locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
-                (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
-        {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,
+                (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
@@ -157,11 +162,12 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setOnMarkerClickListener(this);
         // Iniciar el hilo para solicitar la ubicacion
         try {
             locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
-        }catch (SecurityException e) {  }
+        } catch (SecurityException e) {
+        }
 
         // Establecer workpods en el mapa
         // Leer workpods del JSON (para cuando no los lea de la base de datos)
@@ -181,15 +187,15 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             e.printStackTrace();
         }*/
         Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
-        dbUbicacion.postRun(()->{
-            if(!dbUbicacion.getError().get())
+        dbUbicacion.postRun(() -> {
+            if (!dbUbicacion.getError().get())
                 lstUbicacion.addAll(dbUbicacion.getLstSelect());
         });
-        dbUbicacion.postRunOnUI(getActivity(), () ->{
-            if(!dbUbicacion.getError().get()) {
+        dbUbicacion.postRunOnUI(getActivity(), () -> {
+            if (!dbUbicacion.getError().get()) {
                 dibujaWorkpods();
                 adpBusqueda.addAll(lstUbicacion);
-            }else if(dbUbicacion.getError().code == -404)
+            } else if (dbUbicacion.getError().code == -404)
                 Toast.makeText(getContext(), "No hay conexión a Internet", Toast.LENGTH_LONG).show();
         });
         dbUbicacion.start();
@@ -199,6 +205,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     @Override
     public void onClick(View v) {
         btnCentrarOnClick(v);
+        Toast.makeText(getActivity(), "23", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -212,6 +219,16 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             try {
                 // Ubicacion a la que referencia el marcador (desde ella se pueden ver la lista de workpods del marcador)
                 Ubicacion ubicacion = (Ubicacion) marker.getTag();
+                //PRIMERO LIMPIAMOS LA LISTA
+                lstWorkpod.clear();
+                //LLENAMOS LA LISTA CON LA INFORMACIÓN DE LOS WORKPODS QUE HAY EN ESA UBICACIÓN
+                for (Workpod workpod : ubicacion.getWorkpods()) {
+                    lstWorkpod.add(new Workpod(workpod.getId(), workpod.getNombre(), workpod.getDescripcion(), workpod.getNumUsuarios(), workpod.getPrecio(),
+                            workpod.isLuz(), workpod.isMantenimiento(), workpod.getReserva(), workpod.getUltimoUso(), workpod.getLimpieza(),ubicacion));
+                }
+                //ABRIMOS EL DIALOGO EMERGENTE
+                Fragment_Dialog_Cluster fragmentDialogCluster=new Fragment_Dialog_Cluster(lstWorkpod);
+                fragmentDialogCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN ESA UBICACIÓN");
 
                 //TODO: Codigo para mostrar lista de workpods al hacer click en una ubicacion
             } catch (Exception e) {
@@ -224,19 +241,21 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.equals(adpBusqueda)){
+        if (parent.equals(adpBusqueda)) {
             Ubicacion seleccion = (Ubicacion) adpBusqueda.getItem(position);
             etxtBusqueda.setQuery(seleccion.getDireccion().toLongString(), true);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(seleccion.getPosicion(), defaultZoom));
         }
     }
     // ONCLICK LISTENERS
+
     /**
      * Centra el mapa sobre la posicion del usuario
+     *
      * @param v Control pulsado
      */
-    private void btnCentrarOnClick(View v){
-        if (v.getId() == btnCentrar.getId() && posicion != null){
+    private void btnCentrarOnClick(View v) {
+        if (v.getId() == btnCentrar.getId() && posicion != null) {
             // COMPROBAR SI LA CAMARA ESTA MAS O MENOS EN LA POSICION QUE LA DEJA POR DEFECTO EL BOTON CENTRAR
             if (!((mMap.getCameraPosition().target.latitude < posicion.latitude + errorMedida) &&
                     (mMap.getCameraPosition().target.latitude > posicion.latitude - errorMedida) &&
@@ -253,6 +272,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 //=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================
 
     // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION
+
     /**
      * Esta clase funciona como LocationListener, es decir se ejecuta en segundo plano solicitando y
      * actualizando la posicion del usuario
@@ -274,7 +294,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                         havePermission = false;
                     }
                 }
-                if(!killHilos) {
+                if (!killHilos) {
                     posicion = new LatLng(aux.getLatitude(), aux.getLongitude());
                     getActivity().runOnUiThread(this);
                 }
@@ -303,7 +323,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         @Override
         public void onLocationChanged(@NonNull Location location) {
             posicion = new LatLng(location.getLatitude(), location.getLongitude());
-            if(!killHilos)
+            if (!killHilos)
                 getActivity().runOnUiThread(this);
 
         }
@@ -324,10 +344,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 if (posicion != null) {
                     if (markPosicion == null) {
                         markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title("Mi posición"));
-                        markPosicion.setIcon(VectortoBitmap(getContext() , R.drawable.button_btn_centrar, TAM_ICON, TAM_ICON));
+                        markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.button_btn_centrar, TAM_ICON, TAM_ICON));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, defaultZoom));
-                    }
-                    else
+                    } else
                         markPosicion.setPosition(posicion);
 
                 }
@@ -337,16 +356,16 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         /**
          * Informa de los pasos a seguir para poder obtener la ubicacion
          * Debe correrse en un runOnUIThread
+         *
          * @return true si no se podra obtener la ubicacion
          */
-        public boolean compruebaGPS(){
+        public boolean compruebaGPS() {
             boolean error = false;
 
-            if (!havePermission){
+            if (!havePermission) {
                 Toast.makeText(getContext(), "Conceda permisos para acceder a la ubicación", Toast.LENGTH_LONG).show();
                 error = true;
-            }
-            else if (!locationService.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            } else if (!locationService.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 Toast.makeText(getContext(), "Active el GPS del teléfono", Toast.LENGTH_LONG).show();
                 error = true;
             }
@@ -356,13 +375,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     }
 
     // METODOS
+
     /**
      * Dibuja las ubicaciones de los workpods en el mapa
      */
-    private void dibujaWorkpods(){
+    private void dibujaWorkpods() {
         Marker markPosicion;
 
-        for(Ubicacion ubicacion : lstUbicacion){
+        for (Ubicacion ubicacion : lstUbicacion) {
             LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
 
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
@@ -373,13 +393,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     /**
      * Transforma un vectorAsset en un bitmapDrawable
-     * @param context Contexto de la app
+     *
+     * @param context  Contexto de la app
      * @param drawable Imagen vectorial
-     * @param width Ancho de la imagen en px
-     * @param height Alto de la imagen en px
+     * @param width    Ancho de la imagen en px
+     * @param height   Alto de la imagen en px
      * @return Bitmap a partir del vectorAsset
      */
-    private static BitmapDescriptor VectortoBitmap(Context context, int drawable, int width, int height){
+    private static BitmapDescriptor VectortoBitmap(Context context, int drawable, int width, int height) {
         // Obtener el Drawable
         Drawable vectorImg = ContextCompat.getDrawable(context, drawable);
         // Establecer tamanos
@@ -394,16 +415,17 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     /**
      * Transforma un vectorAsset en un bitmapDrawable y escribe texto centrado sobre el
-     * @param context Contexto de la app
-     * @param drawable Imagen vectorial
-     * @param width Ancho de la imagen en px
-     * @param height Alto de la imagen en px
-     * @param text Texto a escribir
-     * @param textTam Tamano del texto
+     *
+     * @param context   Contexto de la app
+     * @param drawable  Imagen vectorial
+     * @param width     Ancho de la imagen en px
+     * @param height    Alto de la imagen en px
+     * @param text      Texto a escribir
+     * @param textTam   Tamano del texto
      * @param textColor Color del texto (id en los Resources de la app)
      * @return Bitmap a partir del vectorAsset
      */
-    private static BitmapDescriptor VectortoBitmap(Context context, int drawable, int width, int height, String text, int textTam, int textColor){
+    private static BitmapDescriptor VectortoBitmap(Context context, int drawable, int width, int height, String text, int textTam, int textColor) {
         // Declarar pincel para hacer el texto
         Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
         Paint pen = new Paint();
@@ -421,7 +443,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // Dibujar en el bitmat
         Canvas canvas = new Canvas(bm);
         vectorImg.draw(canvas);
-        canvas.drawText(text, canvas.getWidth()/2, (canvas.getHeight()/2) + (textTam/4), pen);
+        canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() / 2) + (textTam / 4), pen);
         return BitmapDescriptorFactory.fromBitmap(bm);
     }
 

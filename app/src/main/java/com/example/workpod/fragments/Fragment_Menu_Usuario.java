@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.workpod.Prueba_Persistencia_Clase_Workpod;
-import com.example.workpod.Prueba_Transaction_History;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
 import com.example.workpod.otherclass.LsV_Menu_Usuario;
@@ -107,12 +105,7 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     // EVENTOS ON CLICK PARA LOS ITEMS DEL LISTVIEW
     private void onClickPago(int index){
         if (index == InfoFragment.PAGO) {
-            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
-            InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.PAGO;
-            Intent activity = new Intent(getActivity(), Prueba_Transaction_History.class);
-            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(activity);
+
         }
     }
 

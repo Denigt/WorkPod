@@ -23,6 +23,7 @@ public class Workpod implements DataDb{
     private Reserva reserva;
     private ZonedDateTime ultimoUso;
     private ZonedDateTime limpieza;
+    private Ubicacion ubicacion;
 
     public int getId() {
         return id;
@@ -112,6 +113,14 @@ public class Workpod implements DataDb{
         this.limpieza = limpieza;
     }
 
+    public Ubicacion getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public List<Workpod> JSONaList(JSONObject json){
         ArrayList<Workpod> lstWorkpods = new ArrayList<>();
         try {
@@ -186,5 +195,19 @@ public class Workpod implements DataDb{
     }
 
     public Workpod() {
+    }
+
+    public Workpod(int id, String nombre, String descripcion, int numUsuarios, double precio, boolean luz, boolean mantenimiento, Reserva reserva, ZonedDateTime ultimoUso, ZonedDateTime limpieza, Ubicacion ubicacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.numUsuarios = numUsuarios;
+        this.precio = precio;
+        this.luz = luz;
+        this.mantenimiento = mantenimiento;
+        this.reserva = reserva;
+        this.ultimoUso = ultimoUso;
+        this.limpieza = limpieza;
+        this.ubicacion=ubicacion;
     }
 }
