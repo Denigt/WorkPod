@@ -218,15 +218,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             try {
                 // Ubicacion a la que referencia el marcador (desde ella se pueden ver la lista de workpods del marcador)
                 Ubicacion ubicacion = (Ubicacion) marker.getTag();
-                //PRIMERO LIMPIAMOS LA LISTA
-                lstWorkpod.clear();
-                //LLENAMOS LA LISTA CON LA INFORMACIÓN DE LOS WORKPODS QUE HAY EN ESA UBICACIÓN
-                for (Workpod workpod : ubicacion.getWorkpods()) {
-                    lstWorkpod.add(new Workpod(workpod.getId(), workpod.getNombre(), workpod.getDescripcion(), workpod.getNumUsuarios(), workpod.getPrecio(),
-                            workpod.isLuz(), workpod.isMantenimiento(), workpod.getReserva(), workpod.getUltimoUso(), workpod.getLimpieza(),ubicacion));
-                }
                 //ABRIMOS EL DIALOGO EMERGENTE
-                Fragment_Dialog_Cluster fragmentDialogCluster=new Fragment_Dialog_Cluster(lstWorkpod);
+                Fragment_Dialog_Cluster fragmentDialogCluster=new Fragment_Dialog_Cluster(ubicacion);
                 fragmentDialogCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN ESA UBICACIÓN");
 
                 //TODO: Codigo para mostrar lista de workpods al hacer click en una ubicacion

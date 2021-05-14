@@ -1,6 +1,7 @@
 package com.example.workpod;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -132,8 +134,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                         startActivity(activity);
                         finish();
-                    }else if (consulta.getError().code == -1) Toast.makeText(this, "El email introducido no esta registrado", Toast.LENGTH_LONG).show();
-                    else if (consulta.getError().code == -2) Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                    }else if (consulta.getError().code > -2) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                     else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
                 });
                 consulta.start();
@@ -195,6 +196,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnSiguiente.setOnClickListener(this);
         btnAcceder.setOnClickListener(this);
         btnRegistrar.setOnClickListener(this);
+
+        // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            FrameLayout lyt = findViewById(R.id.lytForeground1);
+            lyt.setBackground(getDrawable(R.drawable.rounded_border_button));
+        }
     }
 
     /**

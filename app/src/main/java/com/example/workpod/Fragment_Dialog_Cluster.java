@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.workpod.adapters.Adaptador_LsV_Workpod;
 import com.example.workpod.data.Reserva;
+import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 
 import java.time.ZonedDateTime;
@@ -26,7 +27,7 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
 
     //DECLARAMOS VARIABLES DEL XML
     private ListView lsV_Workpods;
-    private List<Workpod> lstWorkpods = new ArrayList<>();
+    private Ubicacion ubicacion;
     private TextView tVTituloDialogCluster;
     private ImageView iVSalirDialogCluster;
 
@@ -42,12 +43,12 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
     //CONSTRUCTOR
 
 
-    public Fragment_Dialog_Cluster(List<Workpod> lstWorkpods) {
-        this.lstWorkpods = lstWorkpods;
+    public Fragment_Dialog_Cluster(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     public Fragment_Dialog_Cluster() {
-        // Required empty public constructor
+        ubicacion = new Ubicacion();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -90,11 +91,10 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
      */
     private void construyendo_LsV(View view) {
 
-        final Adaptador_LsV_Workpod adaptadorLsVWorkpod = new Adaptador_LsV_Workpod(view.getContext(), lstWorkpods);
+        final Adaptador_LsV_Workpod adaptadorLsVWorkpod = new Adaptador_LsV_Workpod(view.getContext(), ubicacion.getWorkpods());
         lsV_Workpods.setAdapter(adaptadorLsVWorkpod);
-        for (Workpod workpod : lstWorkpods) {
-            tVTituloDialogCluster.setText(String.valueOf(workpod.getUbicacion().getDireccion()));
-        }
+
+        tVTituloDialogCluster.setText(String.valueOf(ubicacion.getDireccion()));
     }
 
     @Override
