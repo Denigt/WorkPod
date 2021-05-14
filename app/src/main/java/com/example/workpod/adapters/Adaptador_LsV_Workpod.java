@@ -48,7 +48,7 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
     public View getView(int i, View view, ViewGroup parent) {
         //INFLAMOS EL LAYOUT DE LOS ITEMS DEL LSV
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.items_lsv_worpods, null);
+        view = inflater.inflate(R.layout.temp_items_lsv_worpods, null);
 
         //DECLARAMOS VARIABLES
         TextView iTvNombreWorkpod = (TextView) view.findViewById(R.id.iTVNombreWorkpod);

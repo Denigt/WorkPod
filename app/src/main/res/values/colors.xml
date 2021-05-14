@@ -9,17 +9,21 @@
 
     <!--COLORES DE LA APLICACION-->
     <color name="black">#FF000000</color>
-    <color name="blue">#FF58B1E3</color>
-    <color name="tblue">#8858B1E3</color>
-    <color name="darkblue">#FF061E47</color>
-    <color name="textgray">#FF445469</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="twhite">#88FFFFFF</color>
     <color name="red">#FFFF0000</color>
-    <color name="transparente">#00FFFFFF</color>
     <color name="Fondos">#FFFFFF</color>
     <color name="Texto"> #58B1E3</color>
     <color name="ResaltarTexto">#061E47</color>
     <color name="TextoSegundoNivel">#445469</color>
     <color name="BtnRojo">#DA4B4B</color>
+
+    <!--COLORES RAUL-->
+    <color name="blue">#FF58B1E3</color>
+    <color name="tblue">#8858B1E3</color>
+    <color name="green">#58E3A2</color>
+    <color name="orange">#E39058</color>
+    <color name="darkblue">#FF061E47</color>
+    <color name="textgray">#FF445469</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="twhite">#88FFFFFF</color>
+    <color name="transparente">#00FFFFFF</color>
 </resources>
