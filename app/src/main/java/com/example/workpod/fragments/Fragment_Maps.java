@@ -218,9 +218,15 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             try {
                 // Ubicacion a la que referencia el marcador (desde ella se pueden ver la lista de workpods del marcador)
                 Ubicacion ubicacion = (Ubicacion) marker.getTag();
-                //ABRIMOS EL DIALOGO EMERGENTE
-                Fragment_Dialog_Cluster fragmentDialogCluster=new Fragment_Dialog_Cluster(ubicacion);
-                fragmentDialogCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN ESA UBICACIÓN");
+                //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
+                if(ubicacion.getWorkpods().size()>1){
+                    //ABRIMOS EL DIALOGO EMERGENTE
+                    Fragment_Dialog_Cluster fragmentDialogCluster=new Fragment_Dialog_Cluster(ubicacion);
+                    fragmentDialogCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN ESA UBICACIÓN");
+                }else{
+                    Toast.makeText(getActivity(),"JE JE JE",Toast.LENGTH_SHORT).show();
+                }
+
 
                 //TODO: Codigo para mostrar lista de workpods al hacer click en una ubicacion
             } catch (Exception e) {

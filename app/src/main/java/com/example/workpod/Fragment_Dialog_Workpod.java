@@ -1,8 +1,17 @@
 package com.example.workpod;
 
+import androidx.appcompat.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +22,7 @@ import android.view.ViewGroup;
  * Use the {@link Fragment_Dialog_Workpod#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Dialog_Workpod extends Fragment {
+public class Fragment_Dialog_Workpod extends DialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

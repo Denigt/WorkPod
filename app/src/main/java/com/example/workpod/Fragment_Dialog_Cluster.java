@@ -1,7 +1,10 @@
 package com.example.workpod;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -71,18 +74,38 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment__dialog__cluster, container, false);
+        return view;
+    }
+
+    //ESTA SOBREESCRITURA PERMITE CREAR UN DIALOGRESULT
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        return createDialog();
+    }
+
+    private Dialog createDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment__dialog__cluster, null);
+        builder.setView(view);
+
         //INICIALIZAMOS LOS ELEMENTOS DEL XML
         lsV_Workpods = (ListView) view.findViewById(R.id.LsV_Workpods);
         tVTituloDialogCluster = (TextView) view.findViewById(R.id.TVTituloDialogCluster);
-        iVSalirDialogCluster=(ImageView)view.findViewById(R.id.IVSalirDialogCluster);
+        iVSalirDialogCluster = (ImageView) view.findViewById(R.id.IVSalirDialogCluster);
 
         //MÉTODO PARA ARMAR EL LSV
         construyendo_LsV(view);
 
         //LISTENER
         iVSalirDialogCluster.setOnClickListener(this);
-        return view;
+
+        //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
+        return builder.create();
     }
+
 
     /**
      * En este método armamos el LsV pasandole el adapatador y la lista con los workpods en los que hay ubicaciones
