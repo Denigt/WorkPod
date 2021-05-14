@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.workpod.basic.Method;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.ZoneId;
@@ -127,8 +128,14 @@ public class Sesion implements DataDb {
     public JSONObject dataAJSON() {
         JSONObject json = new JSONObject();
         try {
-        } catch (Exception e) {
-
+            json.put("id", id);
+            json.put("entrada", Method.dateToString(entrada, ZoneId.systemDefault()));
+            json.put("salida", Method.dateToString(salida, ZoneId.systemDefault()));
+            json.put("tiempo", tiempo);
+            json.put("precio", precio);
+            json.put("descuento", descuento);
+        }catch(JSONException e){
+            Log.e("ERROR USUARIO_JSON", e.getMessage());
         }
 
         return json;

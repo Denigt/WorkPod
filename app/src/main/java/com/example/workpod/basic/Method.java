@@ -57,6 +57,12 @@ public abstract class Method {
         return email.matches(EMAIL_PATTERN);
     }
 
+    /**
+     * Obtiene un ZonedDateTime a partir de una String
+     * @param fecha Fecha en formato yyyy-mm-dd hh:mm:ss:nn
+     * @param zona Zona horaria del ZonedDateTime
+     * @return ZonedDateTime con fecha indicada
+     */
     public static ZonedDateTime stringToDate(String fecha, ZoneId zona){
         int[] dia = new int[3];
         int[] hora = new int[4];
@@ -86,5 +92,17 @@ public abstract class Method {
         }else return ZonedDateTime.of(0,0,0,0,0,0,0, zona);
 
         return ZonedDateTime.of(dia[0], dia[1], dia[2], hora[0], hora[1], hora[2], hora[3], zona);
+    }
+
+    /**
+     * Obtiene una String en formato yyyy-mm-dd hh:mm:ss a partir de un ZonedDateTime
+     * @param fecha Fecha
+     * @param zona Zona horaria a la que se transformara la fecha
+     * @return String con fecha indicada
+     */
+    public static String dateToString(ZonedDateTime fecha, ZoneId zona){
+        fecha = fecha.withZoneSameInstant(zona);
+        return String.format("%04d-%02d-%02d %02d:%02d:%02d",
+                fecha.getYear(), fecha.getDayOfMonth(), fecha.getMonthValue(), fecha.getHour(), fecha.getMinute(), fecha.getSecond());
     }
 }
