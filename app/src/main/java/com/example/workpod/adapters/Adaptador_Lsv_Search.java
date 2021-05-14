@@ -129,6 +129,10 @@ public class Adaptador_Lsv_Search extends BaseAdapter implements Filterable {
 
             for (int i = 0; i < count; i++) {
                 filterableUbicacion = list.get(i);
+                if (filterableUbicacion.getDireccion().toLongString().equalsIgnoreCase(filterString)){
+                    nlist.clear();
+                    break;
+                }
                 if (filterableUbicacion.getDireccion().toLongString().toLowerCase().contains(filterString)) {
                     nlist.add(filterableUbicacion);
                 }

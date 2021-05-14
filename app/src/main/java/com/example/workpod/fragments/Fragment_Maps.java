@@ -51,7 +51,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener {
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener{
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
@@ -148,7 +148,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // Establecer listeners de los controles
         btnCentrar.setOnClickListener(this);
         lsvBusqueda.setOnItemClickListener(this);
-        etxtBusqueda.setOnQueryTextListener(new MapSearchListener(adpBusqueda));
+        etxtBusqueda.setOnQueryTextListener(new MapSearchListener(etxtBusqueda, lsvBusqueda));
 
         return view;
     }
@@ -205,7 +205,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     @Override
     public void onClick(View v) {
         btnCentrarOnClick(v);
-        Toast.makeText(getActivity(), "23", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -241,14 +240,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.equals(adpBusqueda)) {
+        if (parent.getId() == lsvBusqueda.getId()) {
             Ubicacion seleccion = (Ubicacion) adpBusqueda.getItem(position);
             etxtBusqueda.setQuery(seleccion.getDireccion().toLongString(), true);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(seleccion.getPosicion(), defaultZoom));
         }
     }
-    // ONCLICK LISTENERS
 
+    // ONCLICK LISTENERS
     /**
      * Centra el mapa sobre la posicion del usuario
      *

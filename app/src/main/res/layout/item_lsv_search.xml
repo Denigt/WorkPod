@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
+    android:id="@+id/lyt_item_lsv_search"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="40dp"
-    android:background="@color/twhite">
-
-    <HorizontalScrollView
-        android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="40dp">
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_weight="7">
+        android:layout_width="match_parent"
+        android:background="@color/twhite">
+
+            <TextView
+                android:id="@+id/txtDireccion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:ellipsize="marquee"
+                android:padding="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="Item"
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:singleLine="true" />
+
         <TextView
-            android:id="@+id/txtDireccion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:text="Item"
-            android:textSize="18dp"
-            android:layout_gravity="center"/>
-    </HorizontalScrollView>
-    <TextView
-        android:id="@+id/txtNumWorkpod"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginVertical="10dp"
+            android:id="@+id/txtNumWorkpod"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginVertical="10dp"
+            android:layout_marginRight="10dp"
 
-        android:text="0"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="@color/white"
+            android:text="0"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/white"
 
-        android:background="@drawable/rounded_back_button"
-        android:backgroundTint="@color/tblue"/>
-</LinearLayout>
+            android:background="@drawable/rounded_back_button"
+            android:backgroundTint="@color/tblue"/>
+    </LinearLayout>
+</FrameLayout>
