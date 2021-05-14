@@ -22,22 +22,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.workpod.Fragment_Dialog_Cluster;
-import com.example.workpod.Fragment_Dialog_Workpod;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_Lsv_Search;
 import com.example.workpod.basic.Database;
-import com.example.workpod.data.Direccion;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.otherclass.MapSearchListener;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -221,13 +216,12 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
-                    Fragment_Dialog_Cluster fragmentDialogCluster=new Fragment_Dialog_Cluster(ubicacion);
-                    fragmentDialogCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN ESA UBICACIÓN");
+                    Fragment_Dialog_Cluster fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
-                    Toast.makeText(getActivity(),"JE JE JE",Toast.LENGTH_SHORT).show();
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
+                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");
                 }
-
-
                 //TODO: Codigo para mostrar lista de workpods al hacer click en una ubicacion
             } catch (Exception e) {
                 Log.e("ERROR ONMARKERCLICK", e.getMessage());

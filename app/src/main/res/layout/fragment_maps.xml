@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragments.Fragment_Maps"
     android:layout_height="match_parent"
+    android:id="@+id/RLMaps"
     android:layout_width="match_parent">
 
     <fragment

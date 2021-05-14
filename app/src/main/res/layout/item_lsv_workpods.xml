@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/twhite"
+    android:backgroundTint="@color/white"
     android:background="@drawable/rounded_back_button">
 
     <LinearLayout
@@ -84,6 +84,7 @@
                 android:gravity="end"
                 android:orientation="horizontal">
                 <ImageView
+                    android:id="@+id/IV_Icon_Historial"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/fill_icon_historial"
@@ -108,11 +109,13 @@
                 android:gravity="end"
                 android:orientation="horizontal">
                 <ImageView
+                    android:id="@+id/IV_Icon_Limpieza"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/fill_icon_historial"
                     android:scaleType="centerInside"
                     app:tint="@color/blue"
+                    android:backgroundTint="@color/blue"
                     android:layout_marginLeft="10dp"/>
 
                 <TextView
