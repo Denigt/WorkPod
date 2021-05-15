@@ -5,8 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/white"
-    android:background="@drawable/rounded_back_button">
+    android:background="@drawable/rounded_back_lsv">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -34,7 +33,7 @@
                 android:layout_height="40dp"
                 android:src="@drawable/fill_icon_friends"
                 android:scaleType="centerInside"
-                app:tint="@color/blue"
+                android:tint="@color/blue"
                 android:layout_marginLeft="10dp"/>
 
             <TextView

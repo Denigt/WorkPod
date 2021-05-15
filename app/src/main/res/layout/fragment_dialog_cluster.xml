@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,34 +7,17 @@
     tools:context=".fragments.Fragment_Dialog_Cluster">
 
     <LinearLayout
+        android:id="@+id/lytLsv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="6dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="10" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="center"
+        android:layout_marginTop="200dp"
+        android:paddingBottom="80dp"
         android:orientation="vertical">
 
         <ListView
             android:id="@+id/LsV_Workpods"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
             android:dividerHeight="10dp" />
 
     </LinearLayout>
@@ -44,9 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:background="@drawable/rounded_back_button"
-        android:backgroundTint="@color/white"
-        android:orientation="vertical">
+        android:background="@drawable/rounded_back_lsv"
+        android:orientation="vertical"
+        android:layout_alignBottom="@id/lytLsv">
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -58,14 +41,13 @@
                 android:id="@+id/TVTituloDialogCluster"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@color/white"
+                android:layout_marginVertical="5dp"
+                android:layout_marginHorizontal="10dp"
                 android:text="Workpods en Calle Rafael Alberti, 2, Torrejón de Ardoz, Madrid"
-                android:textColor="@color/Texto"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+                android:textColor="@color/textgray"
+                android:textSize="18dp"/>
         </HorizontalScrollView>
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
