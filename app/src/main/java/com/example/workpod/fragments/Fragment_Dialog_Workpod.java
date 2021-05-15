@@ -22,7 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.workpod.R;
+import com.example.workpod.data.Direccion;
 import com.example.workpod.data.Ubicacion;
+import com.example.workpod.data.Workpod;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +35,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     //INSTANCIAMOS LA CLASE UBICACION
     Ubicacion ubicacion;
+    Workpod workpod;
     //XML
     private TextView tVCapacidad1;
     private TextView tVDireccion;
@@ -55,6 +58,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     //CONSTRUCTOR CON PARAMETROS
 
+
+    public Fragment_Dialog_Workpod(Workpod workpod, String direccion) {
+        this.workpod = workpod;
+        this.direccion = direccion;
+    }
 
     public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
@@ -92,10 +100,33 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
         //LE PASAMOS LOS DATOS DEL WORKPOD
-        tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
-        tVCapacidad2.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
-        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-        tVDireccion.setText(ubicacion.getDireccion().toLongString());
+        if (workpod == null) {
+            if (ubicacion.getWorkpods().get(0).getNumUsuarios() == 1) {
+                tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
+                tVCapacidad2.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
+                tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
+                tVDireccion.setText(ubicacion.getDireccion().toLongString());
+            } else {
+                tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
+                tVCapacidad2.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
+                tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
+                tVDireccion.setText(ubicacion.getDireccion().toLongString());
+            }
+        } else {
+            //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
+            if (workpod.getNumUsuarios() == 1) {
+                tVCapacidad1.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " persona");
+                tVCapacidad2.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " persona");
+                tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
+                tVDireccion.setText(direccion);
+            }else{
+                tVCapacidad1.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " personas");
+                tVCapacidad2.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " personas");
+                tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
+                tVDireccion.setText(direccion);
+            }
+        }
+
 
         //LISTENERS
         btnReservarWorkpod.setOnClickListener(this);
@@ -126,12 +157,21 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     @Override
     public void onClick(View v) {
 
-        if(v.getId()==R.id.BtnAbrirAhora){
-            //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-            Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
-            //CERRAMOS EL DIALOGO EMERGENTE
-            dismiss();
+        if (v.getId() == R.id.BtnAbrirAhora) {
+            if (workpod == null) {
+                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
+                Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(ubicacion);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
+                //CERRAMOS EL DIALOGO EMERGENTE
+                dismiss();
+            } else {
+                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
+                Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(workpod, direccion);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
+                //CERRAMOS EL DIALOGO EMERGENTE
+                dismiss();
+            }
+
         }
     }
 }

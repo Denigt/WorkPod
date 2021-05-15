@@ -199,7 +199,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // LISTENERS
     @Override
     public void onClick(View v) {
+
         btnCentrarOnClick(v);
+
     }
 
     @Override
@@ -217,7 +219,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
                     Fragment_Dialog_Cluster fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
+                    fragmentCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN UNA UBICACIÓN");
                 }else{
                     Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");
@@ -259,6 +261,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             else
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 19));
         }
+
     }
 
 //=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================

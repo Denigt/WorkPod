@@ -1,22 +1,17 @@
 package com.example.workpod;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.workpod.fragments.Fragment_Maps;
 import com.example.workpod.fragments.Fragment_Menu_Usuario;
 import com.example.workpod.fragments.Fragment_Transaction_History;
-import com.example.workpod.fragments.Fragment_sesion_finalizada;
 import com.example.workpod.fragments.InfoFragment;
 import com.example.workpod.fragments.fragment_support;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,7 +27,7 @@ public class WorkpodActivity extends FragmentActivity {
     public static Boolean boolLoc = false;
 
     //INSTANCIA DEL FRAGMENT INICIAL
-    Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();
+    Fragment_Maps fragment_maps = new Fragment_Maps();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +48,7 @@ public class WorkpodActivity extends FragmentActivity {
         //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
         FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
         fTransaction = fragmentManager.beginTransaction();
-        fTransaction.add(R.id.LLFragment, sesion_finalizada).commit();
+        fTransaction.add(R.id.LLFragment, fragment_maps).commit();
         boolLoc = true;
     }
 
@@ -127,7 +122,7 @@ public class WorkpodActivity extends FragmentActivity {
         //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
         fTransaction = fragmentManager.beginTransaction();
         //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
-        fTransaction.replace(R.id.LLFragment, sesion_finalizada).commit();
+        fTransaction.replace(R.id.LLFragment, fragment_maps).commit();
         boolLoc = true;
     }
 
