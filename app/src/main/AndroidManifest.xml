@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.workpod">
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- PERMISO PARA LLAMAR -->
-    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- PERMISO INTERNET -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- PERMISO READ EXTERNAL STORAGE -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- PERMISO WRITE EXTERNAL STORAGE -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- PERMISO PARA LLAMAR -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- PERMISOS DE INTERNET -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- PERMISO READ EXTERNAL STORAGE -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- PERMISO WRITE EXTERNAL STORAGE -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--PERMISOS PARA ACCEDER A LA UBICACION-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -33,7 +34,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Prueba_Persistencia_Clase_Workpod" /> <!-- ACTIVIDAD INICIAL -->
+        <activity android:name=".Prueba_Persistencia_Clase_Workpod" />
+        <!-- ACTIVIDAD INICIAL -->
         <activity
             android:name=".InitActivity"
             android:label="@string/app_name">
@@ -42,19 +44,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- ACTIVIDAD DE REGISTRO -->
+        </activity>
+        <!-- ACTIVIDAD DE REGISTRO -->
         <activity
             android:name=".SigninActivity"
-            android:label="Registrarse" /> <!-- ACTIVIDAD DE LOGIN -->
+            android:label="Registrarse" />
+        <!-- ACTIVIDAD DE LOGIN -->
         <activity
             android:name=".LoginActivity"
-            android:label="Acceder" /> <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
+            android:windowSoftInputMode="stateHidden"
+            android:label="Acceder" />
+        <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
         <activity
             android:name=".WorkpodActivity"
-            android:label="Navegacion" /> <!-- ACTIVIDAD PARA MODIFICAR PERFIL -->
+            android:windowSoftInputMode="stateHidden"
+            android:label="Navegacion" />
+        <!-- ACTIVIDAD PARA MODIFICAR PERFIL -->
         <activity
             android:name=".ModPerfilActivity"
-            android:label="Modificar perfil" /> <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
+            android:label="Modificar perfil" />
+        <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
         <activity android:name=".Valoracion_Workpod_Final" />
         <activity android:name=".testUsuario.Informacion_Usuario3" />
         <activity android:name=".testUsuario.Informacion_Usuario2" />

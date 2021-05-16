@@ -27,7 +27,6 @@ import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 
 /**
- * A simple {@link Fragment} subclass.
  * Use the {@link Fragment_Dialog_Workpod#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -148,7 +147,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Window window = getDialog().getWindow();
-        window.setGravity(Gravity.BOTTOM | Gravity.CENTER);
+        window.setGravity(Gravity.CENTER);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_dialog_workpod, container, false);
         return view;
