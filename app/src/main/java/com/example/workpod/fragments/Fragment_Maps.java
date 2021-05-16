@@ -46,7 +46,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener{
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener {
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
@@ -93,6 +93,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     //LISTA CON LOS WORKPODS QUE HAY UN UNA UBICACIÓN
     List<Workpod> lstWorkpod = new ArrayList<>();
+
+    // FRAGMENT CON LISTA DE WORKPODS
+    Fragment_Dialog_Cluster fragmentCluster = null;
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
@@ -143,6 +146,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         // Establecer listeners de los controles
         btnCentrar.setOnClickListener(this);
         lsvBusqueda.setOnItemClickListener(this);
+        etxtBusqueda.setOnClickListener(this);
         etxtBusqueda.setOnQueryTextListener(new MapSearchListener(etxtBusqueda, lsvBusqueda));
 
         return view;
@@ -158,6 +162,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
         // Iniciar el hilo para solicitar la ubicacion
         try {
             locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
@@ -201,7 +206,22 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     public void onClick(View v) {
 
         btnCentrarOnClick(v);
+        if (fragmentCluster != null && v.getId() != fragmentCluster.getId()){
+            getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentCluster).commit();
+            fragmentCluster = null;
+        }
 
+    }
+
+    @Override
+    /**
+     * Detecta los clicks en el mapa y cierra el fragment de la lista de workpods
+     */
+    public void onMapClick(LatLng latLng) {
+        if (fragmentCluster != null){
+            getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentCluster).commit();
+            fragmentCluster = null;
+        }
     }
 
     @Override
@@ -218,8 +238,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
-                    Fragment_Dialog_Cluster fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
-                    fragmentCluster.show(getActivity().getSupportFragmentManager(),"WORKPODS EN UNA UBICACIÓN");
+                    fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
                     Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");

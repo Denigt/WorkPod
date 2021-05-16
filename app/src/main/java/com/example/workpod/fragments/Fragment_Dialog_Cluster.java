@@ -1,26 +1,19 @@
 package com.example.workpod.fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.app.Dialog;
 import android.os.Bundle;
+
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView;
 
-import androidx.fragment.app.DialogFragment;
-
-import android.app.Dialog;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_LsV_Workpod;
@@ -31,7 +24,7 @@ import com.example.workpod.data.Workpod;
 import java.time.ZonedDateTime;
 
 
-public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnClickListener {
+public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickListener {
 
     //DECLARAMOS VARIABLES DEL XML
     private ListView lsV_Workpods;
@@ -67,30 +60,6 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
         return fragment;
     }
 
-    //SOBREESCRITURAS
-    //ESTA SOBREESCRITURA PERMITE CREAR UN DIALOGRESULT
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return createDialog();
-    }
-
-    private Dialog createDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_dialog_cluster, null);
-        builder.setView(view);
-        //INICIALIZAMOS LOS ELEMENTOS DEL XML
-        lsV_Workpods = (ListView) view.findViewById(R.id.LsV_Workpods);
-        tVTituloDialogCluster = (TextView) view.findViewById(R.id.TVTituloDialogCluster);
-
-        //MÉTODO PARA ARMAR EL LSV
-        construyendo_LsV(view);
-        //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
-        return builder.create();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +71,15 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Window window = getDialog().getWindow();
-        window.setGravity(Gravity.CENTER | Gravity.CENTER);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = inflater.inflate(R.layout.fragment_dialog_cluster, container, false);
+
+        //INICIALIZAMOS LOS ELEMENTOS DEL XML
+        lsV_Workpods = (ListView) view.findViewById(R.id.LsV_Workpods);
+        tVTituloDialogCluster = (TextView) view.findViewById(R.id.TVTituloDialogCluster);
+
+        //MÉTODO PARA ARMAR EL LSV
+        construyendo_LsV(view);
+
         return view;
     }
 
@@ -135,19 +109,14 @@ public class Fragment_Dialog_Cluster extends DialogFragment implements View.OnCl
 
             }
         });
-
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 
     public void cerrarFragment() {
         //CERRAR FRAGMENT
         getParentFragmentManager().beginTransaction().remove(this).commit();
-        //DEPRECADO
-        //getFragmentManager().beginTransaction().remove(this).commit();
-        //CIERRA EL ACTIVITY
-        //this.getActivity().finish();
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 }

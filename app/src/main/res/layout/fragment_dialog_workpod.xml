@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_weight="9"
     android:orientation="vertical"
-    android:background="@drawable/rounded_back_button"
+    android:background="@drawable/rounded_back_solid"
     android:backgroundTint="@color/white"
     tools:context=".fragments.Fragment_Dialog_Workpod">
 
@@ -92,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:background="@drawable/rounded_border_square"
+                        android:background="@drawable/rounded_border_button"
                         android:padding="10dp"
                         android:text="0,20€/min"
                         android:textColor="@color/blue"
@@ -107,7 +107,8 @@
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/rounded_back_button"
                         android:backgroundTint="#38B5FB"
-                        android:src="@drawable/empty_icon_mapa_dialog_workpod" />
+                        android:src="@drawable/empty_icon_mapa_dialog_workpod"
+                        android:padding="4dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -167,34 +168,46 @@
                 android:layout_weight="3"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/BtnReservarWorkpod"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
-                    android:backgroundTint="#58B1E3"
+                    android:background="@drawable/rounded_back_button">
+                <Button
+                    android:id="@+id/BtnReservarWorkpod"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:backgroundTint="@color/blue"
                     android:text="Reservar Workpod"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="24dp"
+                    android:background="?android:selectableItemBackground"/>
+                </FrameLayout>
 
-                <Button
-                    android:id="@+id/BtnAbrirAhora"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginBottom="35dp"
-                    android:backgroundTint="#99A1A0"
-                    android:text="¡Abrir Ahora!"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20dp" />
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/rounded_border_button">
+                    <Button
+                        android:id="@+id/BtnAbrirAhora"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:text="¡Abrir Ahora!"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:textSize="28dp"
+                        android:background="?android:selectableItemBackground"/>
+                </FrameLayout>
 
             </LinearLayout>
 
