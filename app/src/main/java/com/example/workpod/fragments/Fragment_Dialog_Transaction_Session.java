@@ -5,6 +5,7 @@ package com.example.workpod.fragments;
 import androidx.appcompat.app.AlertDialog;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.WorkpodActivity;
+import com.example.workpod.data.Usuario;
+import com.example.workpod.data.Workpod;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -39,6 +44,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     private TextView tVDialogOffers;
     private TextView tVDialogSessionTime;
     private TextView tVDialogPrice;
+    private ImageView iVDialogUbication;
 
     //VARIABLES CON LAS QUE COGEREMOS LOS DATOS DEL CONSTRUCTOR
     private String ubication;
@@ -48,6 +54,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     private Double precio;
     private Double precioFinal;
     private ImageView iVSalirDialogSession;
+    Workpod workpod;
 
     //VARIABLES PARA EL CÁLCULO DEL TIEMPO DE SESIÓN DEL USUARIO EN WORKPOD
     private int hour;
@@ -69,12 +76,14 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
 
 
     //CONSTRUCTOR
-    public Fragment_Dialog_Transaction_Session(String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida, String offers, Double precio) {
+    public Fragment_Dialog_Transaction_Session(String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida, String offers,
+                                               Double precio) {
         this.ubication = ubicacion;
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.ofertas = offers;
         this.precio = precio;
+        this.workpod=workpod;
 
         //INICIALIZAMOS EL RESTO DE ELEMENTOS
         precioFinal = 0.0;
@@ -133,6 +142,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         tVDialogOffers = (TextView) v.findViewById(R.id.TVDialogOffers);
         tVDialogPrice = (TextView) v.findViewById(R.id.TVDialogPrice);
         tVDialogSessionTime = (TextView) v.findViewById(R.id.TVDialogSessionTime);
+        iVDialogUbication=(ImageView)v.findViewById(R.id.IVDialogUbication);
 
 
         //AÑADIMOS AL XML LOS DATOS DE LA SESIÓN DE WORPOD DEL USUARIO
@@ -151,6 +161,7 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
 
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
         iVSalirDialogSession.setOnClickListener(this);
+        iVDialogUbication.setOnClickListener(this);
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -161,6 +172,16 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         //CIERRA EL CUADRO DE DIALOGO
         if (v.getId() == R.id.IVSalirDialogSession) {
             dismiss();
+        }else if(v.getId()==R.id.IVDialogUbication){
+          //Toast.makeText(getActivity(),String.valueOf(workpod.getUbicacion().getPosicion()),Toast.LENGTH_SHORT).show();
+            Fragment_Maps fragmentMaps=new Fragment_Maps();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment,fragmentMaps).commit();
+            //CAMBIAMOS EL ICONO SELECCIONADO
+            WorkpodActivity.boolLoc = true;
+            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_location);
+            //CERRAMOS EL DIALOGO EMERGENTE
+            dismiss();
+
         }
     }
 
