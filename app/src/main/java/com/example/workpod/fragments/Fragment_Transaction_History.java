@@ -127,7 +127,9 @@ public class Fragment_Transaction_History extends Fragment {
             try {
                 Database<Sesion> dbSesion = new Database<>(Database.SELECTALL, new Sesion());
                 dbSesion.postRun(() -> {
-                    lstSesiones.addAll(dbSesion.getLstSelect());
+                    for (Sesion sesion :dbSesion.getLstSelect())
+                        if (sesion.getEntrada() != null && sesion.getSalida() != null)
+                            lstSesiones.add(sesion);
                 });
                 dbSesion.postRunOnUI(getActivity(), () -> {
                     montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
