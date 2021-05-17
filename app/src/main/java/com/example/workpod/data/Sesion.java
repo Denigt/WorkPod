@@ -2,6 +2,8 @@ package com.example.workpod.data;
 
 import android.util.Log;
 
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 
 import org.json.JSONArray;
@@ -20,8 +22,8 @@ public class Sesion implements DataDb {
     private double precio;
     private double tiempo;
     private int descuento;
-    private Usuario usuario;
-    private Workpod workpod;
+    private int usuario;
+    private int workpod;
     private Direccion direccion;
 
     //CONSTRUCTOR POR DEFECTO
@@ -96,18 +98,50 @@ public class Sesion implements DataDb {
     }
 
     public Usuario getUsuario() {
-        return usuario;
+        Usuario retorno = new Usuario();
+
+        if(InfoApp.USER != null) {
+            Database<Usuario> bd = new Database<>(Database.SELECTID, InfoApp.USER);
+            bd.postRun(()->{
+                retorno.set(bd.getDato());
+            });
+            bd.start();
+            try {
+                bd.join();
+            }catch (InterruptedException e){
+                Log.e("ERROR GET USUARIO", e.getMessage());
+                return null;
+            }
+        } else return null;
+
+        return retorno;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(int usuario) {
         this.usuario = usuario;
     }
 
     public Workpod getWorkpod() {
-        return workpod;
+        Workpod retorno = new Workpod(workpod);
+
+        if(InfoApp.USER != null) {
+            Database<Workpod> bd = new Database<>(Database.SELECTID, retorno);
+            bd.postRun(()->{
+                retorno.set(bd.getDato());
+            });
+            bd.start();
+            try {
+                bd.join();
+            }catch (InterruptedException e){
+                Log.e("ERROR GET WORKPOD", e.getMessage());
+                return null;
+            }
+        } else return null;
+
+        return retorno;
     }
 
-    public void setWorkpod(Workpod workpod) {
+    public void setWorkpod(int workpod) {
         this.workpod = workpod;
     }
 

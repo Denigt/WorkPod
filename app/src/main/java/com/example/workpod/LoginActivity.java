@@ -18,8 +18,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Usuario;
+import com.example.workpod.fragments.InfoFragment;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, CompoundButton.OnCheckedChangeListener {
     // VARIABLES DE LOGIN
@@ -131,10 +133,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
                 consulta.postRunOnUI(this, ()->{
                     if (consulta.getError().code > -1) {
+                        InfoApp.USER = consulta.getDato();
                         Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                         startActivity(activity);
                         finish();
-                    }else if (consulta.getError().code > -2) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+                    }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                     else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
                 });
                 consulta.start();

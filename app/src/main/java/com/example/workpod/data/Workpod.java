@@ -24,6 +24,20 @@ public class Workpod implements DataDb{
     private ZonedDateTime ultimoUso;
     private ZonedDateTime limpieza;
 
+
+    public void set(Workpod workpod) {
+        id = workpod.getId();
+        nombre = workpod.getNombre();
+        descripcion = workpod.getDescripcion();
+        numUsuarios = workpod.getNumUsuarios();
+        precio = workpod.getPrecio();
+        luz = workpod.isLuz();
+        mantenimiento = workpod.isMantenimiento();
+        //reserva = workpod.getReserva();
+        ultimoUso = workpod.getUltimoUso();
+        limpieza = workpod.getLimpieza();
+    }
+
     public int getId() {
         return id;
     }

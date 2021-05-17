@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Usuario implements DataDb{
+    private int id;
     private String email;
     private String nombre;
     private String apellidos;
@@ -20,6 +21,27 @@ public class Usuario implements DataDb{
     private Reserva reserva;
     private Tarjeta tarjeta;
     private  List<Sesion> sesiones;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void set(Usuario user) {
+        id = user.getId();
+        email = user.getEmail();
+        nombre = user.getNombre();
+        apellidos = user.getApellidos();
+        dni = user.getDni();
+        password = user.getPassword();
+        tiempo = user.getId();
+        reserva = user.getReserva();
+        tarjeta = user.getTarjeta();
+        sesiones = user.getSesiones();
+    }
 
     public String getEmail() {
         return email;
@@ -141,6 +163,8 @@ public class Usuario implements DataDb{
                 usuario.setApellidos(usuarioJSON.getString("apellidos"));
             if (usuarioJSON.has("dni") && !usuarioJSON.isNull("dni"))
                 usuario.setDni(usuarioJSON.getString("dni"));
+            if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
+                usuario.setDni(usuarioJSON.getString("contrasena"));
         }catch(Exception e){
             Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
@@ -152,6 +176,7 @@ public class Usuario implements DataDb{
     public JSONObject dataAJSON() {
         JSONObject json = new JSONObject();
         try {
+            json.put("id", id);
             json.put("email", email);
             json.put("nombre", nombre);
             json.put("contrasena", password);
@@ -173,6 +198,8 @@ public class Usuario implements DataDb{
                 Usuario usuario = new Usuario();
                 JSONObject usuarioJSON = lstUsuariosJSON.getJSONObject(i);
 
+                if (usuarioJSON.has("id") && !usuarioJSON.isNull("id"))
+                    usuario.setId(usuarioJSON.getInt("id"));
                 if (usuarioJSON.has("email") && !usuarioJSON.isNull("email"))
                     usuario.setEmail(usuarioJSON.getString("email"));
                 if (usuarioJSON.has("nombre") && !usuarioJSON.isNull("nombre"))

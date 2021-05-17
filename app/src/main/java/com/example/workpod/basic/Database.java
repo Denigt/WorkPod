@@ -48,6 +48,7 @@ public class Database<T extends DataDb> extends Thread {
     public static final int INSERT = 2;
     public static final int UPDATE = 3;
     public static final int DELETE = 4;
+    public static final int SELECTEXT = 5;
 //-------------------------------------------
     /**
      * Consulta que se va a realizar
@@ -59,6 +60,11 @@ public class Database<T extends DataDb> extends Thread {
      * En el caso del select este dato ha de tener solo el id, el objeto se rellena tras buscar la informacion
      */
     private T dato;
+
+    /**
+     * Dato a buscar en un selectExt
+     */
+    private String datoExt;
 
     /**
      * Objeto con los datos modificados para actualizar el antiguo
@@ -211,14 +217,17 @@ public class Database<T extends DataDb> extends Thread {
                     // OBTENER EL CODIGO DE ERROR
                     error = new ErrorMessage(json);
                 } else {
-                    System.err.println("No se ha podido conectar con el servidor");
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE SELECTALL", "No se ha podido conectar con el servidor");
                 }
             }catch (MalformedURLException e) {
+                error = new ErrorMessage(-404, "URL invalida");
                 Log.e("DATABASE SELECTALL", "URL invalida");
             }catch (IOException e) {
                 error = new ErrorMessage(-404, "No hay conexion a internet");
                 Log.e("DATABASE SELECTALL", "Error al leer los datos del servidor");
             }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON");
                 Log.e("DATABASE SELECTALL", "Error obtener JSON");
             }
         }
@@ -272,13 +281,18 @@ public class Database<T extends DataDb> extends Thread {
 
                     // OBTENER EL CODIGO DE ERROR
                     error = new ErrorMessage(json);
+                }else{
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE SELECTID", "No se ha podido conectar con el servidor");
                 }
-
             }catch (MalformedURLException e) {
+                error = new ErrorMessage(-404, "URL invalida");
                 Log.e("DATABASE SELECTID", "URL invalida");
             }catch (IOException e) {
+                error = new ErrorMessage(-404, "No hay conexion a internet");
                 Log.e("DATABASE SELECTID", "Error al leer los datos del servidor");
             }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON");
                 Log.e("DATABASE SELECTID", "Error obtener JSON");
             }
         }
@@ -332,14 +346,19 @@ public class Database<T extends DataDb> extends Thread {
 
                     // OBTENER EL CODIGO DE ERROR
                     error = new ErrorMessage(json);
+                }else{
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE INSERT", "No se ha podido conectar con el servidor");
                 }
-
             }catch (MalformedURLException e) {
-                Log.e("DATABASE INSERT", "URL invalida\n" + e.getMessage());
+                error = new ErrorMessage(-404, "URL invalida");
+                Log.e("DATABASE INSERT", "URL invalida");
             }catch (IOException e) {
-                Log.e("DATABASE INSERT", "Error al leer los datos del servidor\n" + e.getMessage());
-            }catch(JSONException e){
-                Log.e("DATABASE INSERT", "Error obtener JSON\n" + e.getMessage());
+                error = new ErrorMessage(-404, "No hay conexion a internet");
+                Log.e("DATABASE INSERT", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON de error");
+                Log.e("DATABASE INSERT", "Error obtener JSON");
             }
         }
     }
