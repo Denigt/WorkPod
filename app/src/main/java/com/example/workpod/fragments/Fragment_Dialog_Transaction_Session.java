@@ -5,35 +5,26 @@ package com.example.workpod.fragments;
 import androidx.appcompat.app.AlertDialog;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workpod.R;
-import com.example.workpod.WorkpodActivity;
-import com.example.workpod.data.Usuario;
 import com.example.workpod.data.Workpod;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
 //PARA CREAR UN DIALOGRESULT DEBEMOS HEREDAR DE LA CLASE DIALOGFRAGMENT
-public class Fragment_Dialog_Transaction_Session extends DialogFragment implements View.OnClickListener {
+public class Fragment_Dialog_Transaction_Session extends Fragment implements View.OnClickListener {
 
     //CONSTANTES
     private static final String SIN_OFERTAS = "Sin ofertas";
@@ -116,33 +107,16 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_dialog_transaction_session, container, false);
-        return view;
-    }
-
-    //ESTA SOBREESCRITURA PERMITE CREAR UN DIALOGRESULT
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return createDialog();
-    }
-
-    private Dialog createDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View v = inflater.inflate(R.layout.fragment_dialog_transaction_session, null);
-        builder.setView(v);
-
+        View view = inflater.inflate(R.layout.fragment_transaction_session, container, false);
         //PARA QUE FUNCIONEN LOS ELEMENTOS DEL XML (BTN, IV...) EN UN DIALOG, LAS INSTANCIAS HAN DE ESTAR
         // EN EL MÉTODO onCreateDialog
-        iVSalirDialogSession = (ImageView) v.findViewById(R.id.IVSalirDialogSession);
-        tVDialogUbication = (TextView) v.findViewById(R.id.TVDialogUbication);
-        tVDialogDateHour = (TextView) v.findViewById(R.id.TVDialogDateHour);
-        tVDialogOffers = (TextView) v.findViewById(R.id.TVDialogOffers);
-        tVDialogPrice = (TextView) v.findViewById(R.id.TVDialogPrice);
-        tVDialogSessionTime = (TextView) v.findViewById(R.id.TVDialogSessionTime);
-        iVDialogUbication=(ImageView)v.findViewById(R.id.IVDialogUbication);
+       // iVSalirDialogSession = (ImageView) view.findViewById(R.id.IVSalirDialogSession);
+        tVDialogUbication = (TextView) view.findViewById(R.id.TVDialogUbication);
+        tVDialogDateHour = (TextView) view.findViewById(R.id.TVDialogDateHour);
+        tVDialogOffers = (TextView) view.findViewById(R.id.TVDialogOffers);
+        tVDialogPrice = (TextView) view.findViewById(R.id.TVDialogPrice);
+        tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
+        iVDialogUbication=(ImageView)view.findViewById(R.id.IVDialogUbication);
 
 
         //AÑADIMOS AL XML LOS DATOS DE LA SESIÓN DE WORPOD DEL USUARIO
@@ -162,6 +136,20 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
         iVSalirDialogSession.setOnClickListener(this);
         iVDialogUbication.setOnClickListener(this);
+        return view;
+
+    }
+
+
+
+    private Dialog createDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.fragment_transaction_session, null);
+        builder.setView(v);
+
+
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -170,17 +158,15 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
     @Override
     public void onClick(View v) {
         //CIERRA EL CUADRO DE DIALOGO
-        if (v.getId() == R.id.IVSalirDialogSession) {
-            dismiss();
-        }else if(v.getId()==R.id.IVDialogUbication){
+      if(v.getId()==R.id.IVDialogUbication){
           //Toast.makeText(getActivity(),String.valueOf(workpod.getUbicacion().getPosicion()),Toast.LENGTH_SHORT).show();
-            Fragment_Maps fragmentMaps=new Fragment_Maps();
+         /*   Fragment_Maps fragmentMaps=new Fragment_Maps();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment,fragmentMaps).commit();
             //CAMBIAMOS EL ICONO SELECCIONADO
             WorkpodActivity.boolLoc = true;
-            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_location);
+            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_location);*/
             //CERRAMOS EL DIALOGO EMERGENTE
-            dismiss();
+          //  dismiss();
 
         }
     }
@@ -284,4 +270,5 @@ public class Fragment_Dialog_Transaction_Session extends DialogFragment implemen
         //MOSTRAMOS EL RESULTADO PARA VER SI SE HA FORMADO UN ID ALEATORIO CORRECTO
         //Toast.makeText(getActivity(),idSesionWorkpod,Toast.LENGTH_LONG).show();
     }
+
 }

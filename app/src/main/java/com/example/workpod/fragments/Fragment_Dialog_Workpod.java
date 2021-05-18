@@ -90,7 +90,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         builder.setView(view);
 
         //INICIALIZAMOS LOS ELEMENTOS DEL XML
-        tVCapacidad1 = (TextView) view.findViewById(R.id.TVCapacidad1);
+        //tVCapacidad1 = (TextView) view.findViewById(R.id.TVCapacidad1);
         tVDireccion = (TextView) view.findViewById(R.id.TVDireccion);
         tVCapacidad2 = (TextView) view.findViewById(R.id.TVCapacidad2);
         tVPrecio = (TextView) view.findViewById(R.id.TVPrecio);
@@ -99,17 +99,17 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
         //LE PASAMOS LOS DATOS DEL WORKPOD
-        if (workpod == null) {
-            if (ubicacion.getWorkpods().get(0).getNumUsuarios() == 1) {
-                tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
+      /*  if (workpod == null) {
+          /*  if (ubicacion.getWorkpods().get(0).getNumUsuarios() == 1) {
+              /  tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
                 tVCapacidad2.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
                 tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                tVDireccion.setText(ubicacion.getDireccion().toLongString());
+               // tVDireccion.setText(ubicacion.getDireccion().toLongString());
             } else {
-                tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
+               // tVCapacidad1.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
                 tVCapacidad2.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
                 tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                tVDireccion.setText(ubicacion.getDireccion().toLongString());
+                //tVDireccion.setText(ubicacion.getDireccion().toLongString());
             }
         } else {
             //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
@@ -124,7 +124,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
                 tVDireccion.setText(direccion);
             }
-        }
+        }*/
 
 
         //LISTENERS

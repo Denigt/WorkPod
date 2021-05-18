@@ -25,9 +25,12 @@ public class WorkpodActivity extends FragmentActivity {
 
     //BOOLEANO PARA CONTROLAR LA NAVEGACIÓN POR LOS FRAGMENTS
     public static Boolean boolLoc = false;
+    public static Boolean boolfolder = false;
 
     //INSTANCIA DEL FRAGMENT INICIAL
     Fragment_Maps fragment_maps = new Fragment_Maps();
+    //INSTANCIA DEL FRAGMENT DEL HISTÓRICO DE TRANSACCIONES
+    Fragment_Transaction_History fragment_transaction_history=new Fragment_Transaction_History();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +101,8 @@ public class WorkpodActivity extends FragmentActivity {
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, transaction_history);
             fTransaction.commit();
-            boolLoc = false;
+            boolLoc=false;
+         //
         } else if (menuitem.getItemId() == R.id.inv_menu_user) {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
@@ -126,15 +130,31 @@ public class WorkpodActivity extends FragmentActivity {
         boolLoc = true;
     }
 
+    private void volverAlFragmentTransactionHistory() {
+        //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
+        FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+        //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+        fTransaction = fragmentManager.beginTransaction();
+        //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+        fTransaction.replace(R.id.LLFragment, fragment_transaction_history).commit();
+        boolLoc = false;
+        boolfolder=false;
+    }
+
     //LISTENERS
     @Override
     public void onBackPressed() {
-        if (boolLoc) {
-            super.onBackPressed();
-        } else {
+        if ((boolfolder)&&(boolLoc)) {
+            volverAlFragmentTransactionHistory();
+            //CAMBIAMOS LA SELECCIÓN DEL NV AL ICONO DE LOCATION
+            btnNV.setSelectedItemId(R.id.inv_folder);
+
+        } else if(!boolLoc) {
             volverAlFragmentInicial();
             //CAMBIAMOS LA SELECCIÓN DEL NV AL ICONO DE LOCATION
             btnNV.setSelectedItemId(R.id.inv_location);
+        }else if(boolLoc){
+           super.onBackPressed();
         }
     }
 }

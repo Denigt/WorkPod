@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_Spinner;
 import com.example.workpod.basic.Database;
 import com.example.workpod.data.Sesion;
@@ -251,7 +252,7 @@ public class Fragment_Transaction_History extends Fragment {
                     //SI EL AÑO DE LA SESIÓN APUNTA AL AÑO QUE HEMOS SELECCIONADO EN EL SPINNER
                     if (String.valueOf(transaction.getEntrada().getYear()).equals(String.valueOf(year))) {
                         //AÑADIMOS A LA LISTA LA SESIÓN
-                        lstSesion.add(new Sesion(transaction.getId(), transaction.getEntrada(), transaction.getSalida(), transaction.getPrecio(), transaction.getDescuento(), transaction.getDireccion()));
+                        lstSesion.add(transaction);
                         //CONSTRUIMOS EL HASHMAP DONDE ESTAMOS CONTROLANDO QUE EN CADA MES (CLAVE) SE METE LA SESIÓN HECHA EN DICHO MES (VALOR) Y EN EL AÑO
                         //EN EL QUE ESTAMOS TRABAJANDO
                         itemList.put(meses, lstSesion);
@@ -387,7 +388,11 @@ public class Fragment_Transaction_History extends Fragment {
                     //VALORES DE LA SESIÓN SELECCIONADA
                     Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(sesion.getDireccion().toString(), sesion.getEntrada(),
                             sesion.getSalida(), String.valueOf(sesion.getDescuento()), sesion.getPrecio());
-                    fragmentDialogTransactionSession.show(myContext.getSupportFragmentManager(), "DialogToCall");
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.LLFragment,fragmentDialogTransactionSession).addToBackStack(null).commit();
+                    //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE
+                    WorkpodActivity.boolfolder=true;
+                    WorkpodActivity.boolLoc=true;
                 }
             });
 
