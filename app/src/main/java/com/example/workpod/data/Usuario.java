@@ -164,7 +164,7 @@ public class Usuario implements DataDb{
             if (usuarioJSON.has("dni") && !usuarioJSON.isNull("dni"))
                 usuario.setDni(usuarioJSON.getString("dni"));
             if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
-                usuario.setDni(usuarioJSON.getString("contrasena"));
+                usuario.setPassword(usuarioJSON.getString("contrasena"));
         }catch(Exception e){
             Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
@@ -208,6 +208,8 @@ public class Usuario implements DataDb{
                     usuario.setApellidos(usuarioJSON.getString("apellidos"));
                 if (usuarioJSON.has("dni") && !usuarioJSON.isNull("dni"))
                     usuario.setDni(usuarioJSON.getString("dni"));
+                if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
+                    usuario.setPassword(usuarioJSON.getString("contrasena"));
 
                 lstUsuarios.add(usuario);
             }

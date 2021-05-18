@@ -126,7 +126,7 @@ public class Fragment_Transaction_History extends Fragment {
             Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
         } else {
             try {
-                Database<Sesion> dbSesion = new Database<>(Database.SELECTALL, new Sesion());
+                Database<Sesion> dbSesion = new Database<>(Database.SELECTUSER, new Sesion());
                 dbSesion.postRun(() -> {
                     for (Sesion sesion :dbSesion.getLstSelect())
                         if (sesion.getEntrada() != null && sesion.getSalida() != null)

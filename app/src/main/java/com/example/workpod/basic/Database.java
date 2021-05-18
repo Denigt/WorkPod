@@ -48,7 +48,7 @@ public class Database<T extends DataDb> extends Thread {
     public static final int INSERT = 2;
     public static final int UPDATE = 3;
     public static final int DELETE = 4;
-    public static final int SELECTEXT = 5;
+    public static final int SELECTUSER = 5;
 //-------------------------------------------
     /**
      * Consulta que se va a realizar
@@ -131,6 +131,9 @@ public class Database<T extends DataDb> extends Thread {
                 break;
             case SELECTID:
                 dato = selectId(dato);
+                break;
+            case SELECTUSER:
+                lstSelect = selectUser(dato);
                 break;
             case INSERT:
                 insert(dato);
@@ -300,6 +303,72 @@ public class Database<T extends DataDb> extends Thread {
     }
 
     /**
+     * Realiza un select de una tabla retornando los datos pertenecientes a un determinado usuario
+     * Obtiene los datos del usuario de InfoApp.USER
+     * @param obj Objeto con la id a buscar en la base de datos
+     * @return Objeto con los datos recuperados de la base de datos
+     */
+    private List<T> selectUser(T obj){
+        List<T> retorno = null;
+
+        // PREPARAR LA CONEXION
+        if (TABLAS.contains(obj.getTabla())) {
+            String urlString = String.format("%s/php/%s/%s.php", URL_SERVIDOR, obj.getTabla(), "selectUser");
+
+            try {
+                // Establecemos los parametros necesarios para el metodo SelectID
+                if(InfoApp.USER != null) {
+                    urlString += "?id=" + InfoApp.USER.getID();
+                    urlString += "&pass=" + InfoApp.USER.getPassword();
+                }
+                URL url = new URL(urlString);
+                // ABRIMOS CONEXIÓN
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                int respuesta = connection.getResponseCode();
+
+                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
+                if (respuesta == HttpURLConnection.HTTP_OK) {
+                    // PREPARAMOS LA CADENA DE ENTRADA
+                    String result = new String();
+                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+
+                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
+                    BufferedReader reader = new BufferedReader(in);
+
+                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+                    connection.disconnect();
+
+                    // TRANSFORMAR STRING A JSON
+                    JSONObject json = new JSONObject(result);
+
+                    // OBTENER LOS OBJETOS ENUMERADOS EN EL JSON
+                    retorno = (List<T>) obj.JSONaList(json);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
+                }else{
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE SELECTUSER", "No se ha podido conectar con el servidor");
+                }
+            }catch (MalformedURLException e) {
+                error = new ErrorMessage(-404, "URL invalida");
+                Log.e("DATABASE SELECTUSER", "URL invalida");
+            }catch (IOException e) {
+                error = new ErrorMessage(-404, "No hay conexion a internet");
+                Log.e("DATABASE SELECTUSER", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON");
+                Log.e("DATABASE SELECTUSER", "Error obtener JSON");
+            }
+        }
+        return retorno;
+    }
+
+    /**
      * Inserta el objeto en la tabla que le corresponda
      * @param obj Objeto a insertar
      */
@@ -422,7 +491,7 @@ public class Database<T extends DataDb> extends Thread {
     }
 //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
-        if (tipoConsulta == 3 || tipoConsulta < 0  || tipoConsulta > 4)
+        if (tipoConsulta == 3 || tipoConsulta < 0  || tipoConsulta > 6)
             tipoConsulta = -1;
 
         this.tipoConsulta = tipoConsulta;
@@ -432,7 +501,7 @@ public class Database<T extends DataDb> extends Thread {
     }
 
     public Database(int tipoConsulta, T dato, T datoUpdate) {
-        if (tipoConsulta < 0  || tipoConsulta > 4)
+        if (tipoConsulta < 0  || tipoConsulta > 6)
             tipoConsulta = -1;
 
         this.tipoConsulta = tipoConsulta;
