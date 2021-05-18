@@ -19,6 +19,15 @@ public class Ubicacion implements DataDb{
     private List<Workpod> workpods;
     private Direccion direccion;
 
+    public void set(Ubicacion ubicacion) {
+        id = ubicacion.getId();
+        nombre = ubicacion.getNombre();
+        lat = ubicacion.getLat();
+        lon = ubicacion.getLon();
+        workpods = ubicacion.getWorkpods();
+        direccion = ubicacion.getDireccion();
+    }
+
     public int getId() {
         return id;
     }
@@ -78,6 +87,11 @@ public class Ubicacion implements DataDb{
         this.workpods = new LinkedList<>();
     }
 
+    public Ubicacion(int id) {
+        this.id = id;
+        this.workpods = new LinkedList<>();
+    }
+
     public Ubicacion(int id, double lat, double lon) {
         this.id = id;
         this.lat = lat;
@@ -97,10 +111,10 @@ public class Ubicacion implements DataDb{
     public List<Ubicacion> JSONaList(JSONObject json){
         ArrayList<Ubicacion> lstUbicacion = new ArrayList<>();
         try {
-            JSONArray lstWorkpodsJSON = json.getJSONArray("ubicacion");
-            for (int i = 0; i < lstWorkpodsJSON.length(); i++){
+            JSONArray lstUbicacionJSON = json.getJSONArray("ubicacion");
+            for (int i = 0; i < lstUbicacionJSON.length(); i++){
                 Ubicacion ubicacion = new Ubicacion();
-                JSONObject ubicacionJSON = lstWorkpodsJSON.getJSONObject(i);
+                JSONObject ubicacionJSON = lstUbicacionJSON.getJSONObject(i);
 
                 if (ubicacionJSON.has("id") && !ubicacionJSON.isNull("id"))
                     ubicacion.setId(ubicacionJSON.getInt("id"));
@@ -123,8 +137,26 @@ public class Ubicacion implements DataDb{
     }
 
     @Override
-    public DataDb JSONaData(JSONObject JSON) {
-        return null;
+    public DataDb JSONaData(JSONObject json) {
+        Ubicacion ubicacion = new Ubicacion();
+        try {
+                JSONObject ubicacionJSON = json.getJSONObject("ubicacion");
+
+                if (ubicacionJSON.has("id") && !ubicacionJSON.isNull("id"))
+                    ubicacion.setId(ubicacionJSON.getInt("id"));
+                if (ubicacionJSON.has("nombre") && !ubicacionJSON.isNull("nombre"))
+                    ubicacion.setNombre(ubicacionJSON.getString("nombre"));
+                if (ubicacionJSON.has("lat") && !ubicacionJSON.isNull("lat"))
+                    ubicacion.setLat(ubicacionJSON.getDouble("lat"));
+                if (ubicacionJSON.has("lon") && !ubicacionJSON.isNull("lon"))
+                    ubicacion.setLon(ubicacionJSON.getDouble("lon"));
+                ubicacion.setWorkpods(new Workpod().JSONaList(ubicacionJSON));
+                ubicacion.setDireccion(Direccion.fromJSON(ubicacionJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
+        }catch(Exception e){
+            Log.e("ERROR JSON_UBICACION", e.getMessage());
+        }
+
+        return ubicacion;
     }
 
     @Override

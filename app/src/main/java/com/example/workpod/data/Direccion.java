@@ -5,6 +5,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class Direccion {
     private String direccion;
     private String ciudad;
@@ -123,5 +125,26 @@ public class Direccion {
 
     public String toLongString() {
         return String.format("%s, %s | %s %d (%s)", direccion, ciudad, provincia, codPostal, pais);
+    }
+
+    public boolean isInicialized(){
+        return !this.equals(getInstance());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Direccion)) return false;
+        Direccion direccion1 = (Direccion) o;
+        return codPostal == direccion1.codPostal &&
+                Objects.equals(direccion, direccion1.direccion) &&
+                Objects.equals(ciudad, direccion1.ciudad) &&
+                Objects.equals(provincia, direccion1.provincia) &&
+                Objects.equals(pais, direccion1.pais);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(direccion, ciudad, provincia, pais, codPostal);
     }
 }

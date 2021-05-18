@@ -2,6 +2,8 @@ package com.example.workpod.data;
 
 import android.util.Log;
 
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 
 import org.json.JSONArray;
@@ -23,7 +25,7 @@ public class Workpod implements DataDb{
     private Reserva reserva;
     private ZonedDateTime ultimoUso;
     private ZonedDateTime limpieza;
-
+    private int ubicacion;
 
     public void set(Workpod workpod) {
         id = workpod.getId();
@@ -36,6 +38,7 @@ public class Workpod implements DataDb{
         //reserva = workpod.getReserva();
         ultimoUso = workpod.getUltimoUso();
         limpieza = workpod.getLimpieza();
+        ubicacion = workpod.ubicacion;
     }
 
     public int getId() {
@@ -126,6 +129,28 @@ public class Workpod implements DataDb{
         this.limpieza = limpieza;
     }
 
+    public Ubicacion getUbicacion() {
+        Ubicacion retorno = new Ubicacion(ubicacion);
+
+        Database<Ubicacion> bd = new Database<>(Database.SELECTID, retorno);
+        bd.postRun(()->{
+            retorno.set(bd.getDato());
+        });
+        bd.start();
+        try {
+            bd.join();
+        }catch (InterruptedException e){
+            Log.e("ERROR GET WORKPOD", e.getMessage());
+            return null;
+        }
+
+        return retorno;
+    }
+
+    public void setUbicacion(int ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public List<Workpod> JSONaList(JSONObject json){
         ArrayList<Workpod> lstWorkpods = new ArrayList<>();
         try {
@@ -152,6 +177,8 @@ public class Workpod implements DataDb{
                     workpod.setLimpieza(Method.stringToDate(workpodJSON.getString("ultLimpieza"), ZoneId.systemDefault()));
                 if (workpodJSON.has("ultUso") && !workpodJSON.isNull("ultUso"))
                     workpod.setUltimoUso(Method.stringToDate(workpodJSON.getString("ultUso"), ZoneId.systemDefault()));
+                if (workpodJSON.has("ubicacion") && !workpodJSON.isNull("ubicacion"))
+                    workpod.setUbicacion(workpodJSON.getInt("ubicacion"));
 
                 lstWorkpods.add(workpod);
             }
@@ -163,8 +190,35 @@ public class Workpod implements DataDb{
     }
 
     @Override
-    public DataDb JSONaData(JSONObject JSON) {
-        return null;
+    public DataDb JSONaData(JSONObject json) {
+        Workpod workpod = new Workpod();
+        try {
+            JSONObject workpodJSON = json.getJSONObject("workpod");
+
+            if (workpodJSON.has("id") && !workpodJSON.isNull("id"))
+                workpod.setId(workpodJSON.getInt("id"));
+            if (workpodJSON.has("nombre") && !workpodJSON.isNull("nombre"))
+                workpod.setNombre(workpodJSON.getString("nombre"));
+            if (workpodJSON.has("descripcion") && !workpodJSON.isNull("descripcion"))
+                workpod.setDescripcion(workpodJSON.getString("descripcion"));
+            if (workpodJSON.has("usuarios") && !workpodJSON.isNull("usuarios"))
+                workpod.setNumUsuarios(workpodJSON.getInt("usuarios"));
+            if (workpodJSON.has("precio") && !workpodJSON.isNull("precio"))
+                workpod.setPrecio(workpodJSON.getDouble("precio"));
+            if (workpodJSON.has("mantenimiento") && !workpodJSON.isNull("mantenimiento"))
+                workpod.setMantenimiento(workpodJSON.getInt("mantenimiento"));
+            if (workpodJSON.has("luz") && !workpodJSON.isNull("luz"))
+                workpod.setLuz(workpodJSON.getInt("luz"));
+            if (workpodJSON.has("ultLimpieza") && !workpodJSON.isNull("ultLimpieza"))
+                workpod.setLimpieza(Method.stringToDate(workpodJSON.getString("ultLimpieza"), ZoneId.systemDefault()));
+            if (workpodJSON.has("ultUso") && !workpodJSON.isNull("ultUso"))
+                workpod.setUltimoUso(Method.stringToDate(workpodJSON.getString("ultUso"), ZoneId.systemDefault()));
+            if (workpodJSON.has("ubicacion") && !workpodJSON.isNull("ubicacion"))
+                workpod.setUbicacion(workpodJSON.getInt("ubicacion"));
+        }catch(Exception e){
+            Log.e("ERROR JSON_WORKPOD", e.getMessage());
+        }
+        return workpod;
     }
 
     @Override

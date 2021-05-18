@@ -124,19 +124,17 @@ public class Sesion implements DataDb {
     public Workpod getWorkpod() {
         Workpod retorno = new Workpod(workpod);
 
-        if(InfoApp.USER != null) {
-            Database<Workpod> bd = new Database<>(Database.SELECTID, retorno);
-            bd.postRun(()->{
-                retorno.set(bd.getDato());
-            });
-            bd.start();
-            try {
-                bd.join();
-            }catch (InterruptedException e){
-                Log.e("ERROR GET WORKPOD", e.getMessage());
-                return null;
-            }
-        } else return null;
+        Database<Workpod> bd = new Database<>(Database.SELECTID, retorno);
+        bd.postRun(()->{
+            retorno.set(bd.getDato());
+        });
+        bd.start();
+        try {
+            bd.join();
+        }catch (InterruptedException e){
+            Log.e("ERROR GET WORKPOD", e.getMessage());
+            return null;
+        }
 
         return retorno;
     }
@@ -146,6 +144,9 @@ public class Sesion implements DataDb {
     }
 
     public Direccion getDireccion() {
+        if (direccion == null || !direccion.isInicialized())
+            direccion = getWorkpod().getUbicacion().getDireccion();
+
         return direccion;
     }
 
@@ -196,6 +197,10 @@ public class Sesion implements DataDb {
                     sesion.setTiempo(sesionJSON.getDouble("tiempo"));
                 if (sesionJSON.has("descuento") && !sesionJSON.isNull("descuento"))
                     sesion.setDescuento(sesionJSON.getInt("descuento"));
+                if (sesionJSON.has("workpod") && !sesionJSON.isNull("workpod"))
+                    sesion.setWorkpod(sesionJSON.getInt("workpod"));
+                if (sesionJSON.has("usuario") && !sesionJSON.isNull("usuario"))
+                    sesion.setWorkpod(sesionJSON.getInt("usuario"));
                 sesion.setDireccion(Direccion.fromJSON(sesionJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
                 lstSesiones.add(sesion);
