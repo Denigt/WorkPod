@@ -23,7 +23,7 @@ public class Sesion implements DataDb {
     private double tiempo;
     private int descuento;
     private int usuario;
-    private int workpod;
+    private Workpod workpod;
     private Direccion direccion;
 
     //CONSTRUCTOR POR DEFECTO
@@ -122,32 +122,15 @@ public class Sesion implements DataDb {
     }
 
     public Workpod getWorkpod() {
-        Workpod retorno = new Workpod(workpod);
-
-        Database<Workpod> bd = new Database<>(Database.SELECTID, retorno);
-        bd.postRun(()->{
-            retorno.set(bd.getDato());
-        });
-        bd.start();
-        try {
-            bd.join();
-        }catch (InterruptedException e){
-            Log.e("ERROR GET WORKPOD", e.getMessage());
-            return null;
-        }
-
-        return retorno;
+        return workpod;
     }
 
-    public void setWorkpod(int workpod) {
+    public void setWorkpod(Workpod workpod) {
         this.workpod = workpod;
     }
 
     public Direccion getDireccion() {
-        if (direccion == null || !direccion.isInicialized())
-            direccion = getWorkpod().getUbicacion().getDireccion();
-
-        return direccion;
+        return this.workpod.getDireccion();
     }
 
     public void setDireccion(Direccion direccion) {
@@ -197,10 +180,10 @@ public class Sesion implements DataDb {
                     sesion.setTiempo(sesionJSON.getDouble("tiempo"));
                 if (sesionJSON.has("descuento") && !sesionJSON.isNull("descuento"))
                     sesion.setDescuento(sesionJSON.getInt("descuento"));
-                if (sesionJSON.has("workpod") && !sesionJSON.isNull("workpod"))
-                    sesion.setWorkpod(sesionJSON.getInt("workpod"));
                 if (sesionJSON.has("usuario") && !sesionJSON.isNull("usuario"))
-                    sesion.setWorkpod(sesionJSON.getInt("usuario"));
+                    sesion.setUsuario(sesionJSON.getInt("usuario"));
+                if (sesionJSON.has("workpod") && !sesionJSON.isNull("workpod"))
+                    sesion.setWorkpod((Workpod) new Workpod().JSONaData(sesionJSON));
                 sesion.setDireccion(Direccion.fromJSON(sesionJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
                 lstSesiones.add(sesion);

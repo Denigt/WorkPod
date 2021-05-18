@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,19 +27,23 @@ public class Workpod implements DataDb{
     private ZonedDateTime ultimoUso;
     private ZonedDateTime limpieza;
     private int ubicacion;
+    private Direccion direccion;
+    private LatLng posicion;
 
     public void set(Workpod workpod) {
-        id = workpod.getId();
-        nombre = workpod.getNombre();
-        descripcion = workpod.getDescripcion();
-        numUsuarios = workpod.getNumUsuarios();
-        precio = workpod.getPrecio();
-        luz = workpod.isLuz();
-        mantenimiento = workpod.isMantenimiento();
-        //reserva = workpod.getReserva();
-        ultimoUso = workpod.getUltimoUso();
-        limpieza = workpod.getLimpieza();
+        id = workpod.id;
+        nombre = workpod.nombre;
+        descripcion = workpod.descripcion;
+        numUsuarios = workpod.numUsuarios;
+        precio = workpod.precio;
+        luz = workpod.luz;
+        mantenimiento = workpod.mantenimiento;
+        reserva = workpod.reserva;
+        ultimoUso = workpod.ultimoUso;
+        limpieza = workpod.limpieza;
         ubicacion = workpod.ubicacion;
+        direccion = workpod.direccion;
+        posicion = workpod.posicion;
     }
 
     public int getId() {
@@ -147,6 +152,22 @@ public class Workpod implements DataDb{
         return retorno;
     }
 
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    public LatLng getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(LatLng posicion) {
+        this.posicion = posicion;
+    }
+
     public void setUbicacion(int ubicacion) {
         this.ubicacion = ubicacion;
     }
@@ -179,6 +200,10 @@ public class Workpod implements DataDb{
                     workpod.setUltimoUso(Method.stringToDate(workpodJSON.getString("ultUso"), ZoneId.systemDefault()));
                 if (workpodJSON.has("ubicacion") && !workpodJSON.isNull("ubicacion"))
                     workpod.setUbicacion(workpodJSON.getInt("ubicacion"));
+                if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
+                    workpod.setPosicion(new LatLng(workpodJSON.getDouble("lat"), workpodJSON.getDouble("lon")));
+
+                workpod.setDireccion(Direccion.fromJSON(workpodJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
                 lstWorkpods.add(workpod);
             }
@@ -215,6 +240,10 @@ public class Workpod implements DataDb{
                 workpod.setUltimoUso(Method.stringToDate(workpodJSON.getString("ultUso"), ZoneId.systemDefault()));
             if (workpodJSON.has("ubicacion") && !workpodJSON.isNull("ubicacion"))
                 workpod.setUbicacion(workpodJSON.getInt("ubicacion"));
+            if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
+                workpod.setPosicion(new LatLng(workpodJSON.getDouble("lat"), workpodJSON.getDouble("lon")));
+
+            workpod.setDireccion(Direccion.fromJSON(workpodJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
         }catch(Exception e){
             Log.e("ERROR JSON_WORKPOD", e.getMessage());
         }
