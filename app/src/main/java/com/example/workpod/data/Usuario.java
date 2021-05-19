@@ -192,6 +192,8 @@ public class Usuario implements DataDb{
             json.put("contrasena", password);
             json.put("apellidos", apellidos);
             json.put("dni", dni);
+            if (reserva != 0)
+                json.put("reserva", reserva);
         }catch(JSONException e){
             Log.e("ERROR USUARIO_JSON", e.getMessage());
         }
