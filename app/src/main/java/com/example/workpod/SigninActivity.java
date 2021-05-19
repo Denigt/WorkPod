@@ -265,11 +265,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      */
     private void saveActivity(){
         if (pantalla == 0) {
-            nombre = txtNombre.getText().toString();
-            apellido = txtApellido.getText().toString();
-            dni = txtDNI.getText().toString();
+            nombre = txtNombre.getText().toString().trim();
+            apellido = txtApellido.getText().toString().trim();
+            dni = txtDNI.getText().toString().trim();
         }else {
-            email = txtEmail.getText().toString();
+            email = txtEmail.getText().toString().trim().toLowerCase();
             contrasena = txtContrasena.getText().toString();
         }
     }

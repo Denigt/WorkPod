@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      *    Almacena en las variables de la actividad los valores de todos los campos de la misma
      */
     private void saveActivity(){
-        email = txtEmail.getText().toString();
+        email = txtEmail.getText().toString().trim().toLowerCase();
         contrasena = txtContrasena.getText().toString();
     }
 }
