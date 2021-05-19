@@ -65,10 +65,10 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
 
         //CONTROL DEL ESTADO
         try {
-            if ((lstWorkpods.get(i).getReserva() != null) &&(!lstWorkpods.get(i).isMantenimiento())) {
+            if ((lstWorkpods.get(i).getReserva() >0) &&(!lstWorkpods.get(i).isMantenimiento())) {
                 txtEstado.setText("Reservado");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
-            } else if((lstWorkpods.get(i).getReserva()==null)&&(!lstWorkpods.get(i).isMantenimiento())) {
+            } else if((lstWorkpods.get(i).getReserva()==0)&&(!lstWorkpods.get(i).isMantenimiento())) {
                 txtEstado.setText("Disponible");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
             }else if(lstWorkpods.get(i).isMantenimiento()){
