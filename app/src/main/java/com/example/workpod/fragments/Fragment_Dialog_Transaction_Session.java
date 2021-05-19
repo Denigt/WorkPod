@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.workpod.R;
+import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Workpod;
 
 import java.time.ZonedDateTime;
@@ -44,7 +45,6 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     private String ofertas;
     private Double precio;
     private Double precioFinal;
-    private ImageView iVSalirDialogSession;
     Workpod workpod;
 
     //VARIABLES PARA EL CÁLCULO DEL TIEMPO DE SESIÓN DEL USUARIO EN WORKPOD
@@ -67,14 +67,13 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
 
 
     //CONSTRUCTOR
-    public Fragment_Dialog_Transaction_Session(String ubicacion, ZonedDateTime fechaEntrada, ZonedDateTime fechaSalida, String offers,
-                                               Double precio) {
-        this.ubication = ubicacion;
-        this.fechaEntrada = fechaEntrada;
-        this.fechaSalida = fechaSalida;
-        this.ofertas = offers;
-        this.precio = precio;
-        this.workpod=workpod;
+    public Fragment_Dialog_Transaction_Session(Sesion sesion) {
+        this.ubication = sesion.getDireccion().toLongString();
+        this.fechaEntrada = sesion.getEntrada();
+        this.fechaSalida = sesion.getSalida();
+        this.ofertas = String.valueOf(sesion.getDescuento());
+        this.precio = sesion.getPrecio();
+        this.workpod=sesion.getWorkpod();
 
         //INICIALIZAMOS EL RESTO DE ELEMENTOS
         precioFinal = 0.0;
@@ -91,6 +90,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         alfabeto = new String[52];
         matrizSignos = new String[9];
     }
+
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Dialog_Transaction_Session() {
@@ -134,39 +134,18 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         crearIDSesion(nAleatorio, letra, signo, letraAleatoria1, letraAleatoria2, signoAleatorio1, signoAleatorio2);
 
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
-        iVSalirDialogSession.setOnClickListener(this);
         iVDialogUbication.setOnClickListener(this);
         return view;
 
-    }
-
-
-
-    private Dialog createDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View v = inflater.inflate(R.layout.fragment_transaction_session, null);
-        builder.setView(v);
-
-
-
-        //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
-        return builder.create();
     }
 
     @Override
     public void onClick(View v) {
         //CIERRA EL CUADRO DE DIALOGO
       if(v.getId()==R.id.IVDialogUbication){
-          //Toast.makeText(getActivity(),String.valueOf(workpod.getUbicacion().getPosicion()),Toast.LENGTH_SHORT).show();
-         /*   Fragment_Maps fragmentMaps=new Fragment_Maps();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment,fragmentMaps).commit();
-            //CAMBIAMOS EL ICONO SELECCIONADO
-            WorkpodActivity.boolLoc = true;
-            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_location);*/
-            //CERRAMOS EL DIALOGO EMERGENTE
-          //  dismiss();
+
+          Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod,ubication);
+          fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");;
 
         }
     }

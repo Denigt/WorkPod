@@ -32,6 +32,7 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         this.lstWorkpods = lstWorkpods;
     }
 
+    //SOBREESCRITURAS
     @Override
     public int getCount() {
         return lstWorkpods.size();
@@ -85,14 +86,14 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
             txtLimpieza.setText(String.valueOf(lstWorkpods.get(i).getLimpieza().getDayOfMonth()) + "/" +
                     String.valueOf(lstWorkpods.get(i).getLimpieza().getMonthValue() + "/" + String.valueOf(lstWorkpods.get(i).getLimpieza().getYear())));
         } else {
-            txtLimpieza.setText("desconocida");
+            txtLimpieza.setText("");
         }
         if (lstWorkpods.get(i).getUltimoUso() != null) {
 
             txtUso.setText(String.valueOf(lstWorkpods.get(i).getUltimoUso().getDayOfMonth()) + "/" +
                     String.valueOf(lstWorkpods.get(i).getUltimoUso().getMonthValue() + "/" + String.valueOf(lstWorkpods.get(i).getUltimoUso().getYear())));
         } else {
-            txtUso.setText("desconocido");
+            txtUso.setText("");
         }
 
         //CAMBIO COLOR AL ICONO

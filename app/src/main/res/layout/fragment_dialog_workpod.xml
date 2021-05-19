@@ -41,11 +41,11 @@
                             android:id="@+id/TVNombreWorkpod"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+
                             android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
                             android:text="W0001"
                             android:textColor="@color/blue"
-                            android:textSize="40dp"
+                            android:textSize="55dp"
                             android:textStyle="bold" />
 
                         <LinearLayout
@@ -65,13 +65,12 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="15dp"
-                                android:src="@drawable/fill_icon_friends"
-                                app:tint="@color/blue" />
+                                android:src="@drawable/fill_icon_friends_blue"/>
 
                             <TextView
                                 android:id="@+id/TVCapacidad"
-                                android:layout_width="80dp"
-                                android:layout_height="match_parent"
+                                android:layout_width="70dp"
+                                android:layout_height="40dp"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="20dp"
                                 android:background="@drawable/rounded_back_button"
@@ -166,15 +165,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
                     android:layout_marginRight="20dp"
+                    android:layout_weight="0.5"
                     android:src="@drawable/cabina_workpod_1" />
 
                 <ImageView
@@ -186,35 +185,51 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/LLInfoWorkpod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="dp15"
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/IVUltUso"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginRight="15dp"
-                        android:src="@drawable/fill_icon_ultimo_uso"
-                        app:tint="@color/blue" />
+                        android:src="@drawable/empty_icon_clock" />
 
                     <TextView
                         android:id="@+id/TVUltUso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Último uso: 03/04/2021"
+                        android:text="Último uso  03/04/2021"
                         android:textColor="@color/black"
                         android:textSize="17dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/IVFlechas_Informacion_Descripcion"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/flechas_informacion_descripcion" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -224,11 +239,10 @@
 
                     <ImageView
                         android:id="@+id/IVUltLimpieza"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginRight="15dp"
-                        android:src="@drawable/fill_icon_ultimo_uso"
-                        app:tint="@color/blue" />
+                        android:src="@drawable/empty_icon_limpiar" />
 
                     <TextView
                         android:id="@+id/TVUltLimpieza"
@@ -243,15 +257,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/IVIluminacion"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginRight="15dp"
-                        android:src="@drawable/fill_icon_ultimo_uso"
-                        app:tint="@color/blue" />
+                        android:src="@drawable/empty_icon_bombilla" />
 
                     <TextView
                         android:id="@+id/TVIluminacion"
@@ -262,60 +276,112 @@
                         android:textColor="@color/black"
                         android:textSize="17dp" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:text="Descripción"
+                        android:textColor="@color/blue"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/IVFlechas_Descripcion_Informacion"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/flechas_descripcion_informacion" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/TVDescripcionWorkpod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:justificationMode="inter_word"
+                    android:text="Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás trabajar sin problemas. Esta cabina se encuentra en el centro de Madrid"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_weight="3"
+                android:gravity="center"
+                android:orientation="horizontal">
 
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_back_button">
+                    android:background="@drawable/rounded_back_button"
+                    android:padding="2dp">
+
                     <Button
                         android:id="@+id/BtnReservarWorkpod"
-                        android:layout_width="match_parent"
-                        android:layout_height="70dp"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:background="?android:selectableItemBackground"
                         android:backgroundTint="@color/blue"
                         android:text="Reservar"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="25dp"
-                        android:background="?android:selectableItemBackground"/>
-                </FrameLayout>
+                        android:textSize="25dp" />
+                </LinearLayout>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_border_button">
+                    android:background="@drawable/rounded_border_button"
+                    android:padding="2dp">
+
                     <Button
                         android:id="@+id/BtnAbrirAhora"
-                        android:layout_width="match_parent"
-                        android:layout_height="70dp"
+                        android:layout_width="180dp"
+                        android:layout_height="50dp"
+                        android:background="?android:selectableItemBackground"
                         android:text="¡Abrir Ahora!"
                         android:textAllCaps="false"
                         android:textColor="@color/blue"
-                        android:textSize="20dp"
-                        android:background="?android:selectableItemBackground"/>
-                </FrameLayout>
+                        android:textSize="20dp" />
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

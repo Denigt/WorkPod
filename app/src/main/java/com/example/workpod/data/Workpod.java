@@ -95,7 +95,7 @@ public class Workpod implements DataDb{
     }
 
     public void setLuz(int luz) {
-        this.luz = (luz < 1);
+        this.luz=luz==1;
     }
 
     public boolean isMantenimiento() {
@@ -107,7 +107,8 @@ public class Workpod implements DataDb{
     }
 
     public void setMantenimiento(int mantenimiento) {
-        this.mantenimiento = (mantenimiento < 1);
+            this.mantenimiento=mantenimiento==1;
+
     }
 
     public Reserva getReserva() {
