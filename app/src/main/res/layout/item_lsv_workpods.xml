@@ -113,7 +113,7 @@
                     android:id="@+id/IV_Icon_Limpieza"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/fill_icon_historial"
+                    android:src="@drawable/empty_icon_limpiar"
                     android:scaleType="centerInside"
                     app:tint="@color/blue"
                     android:backgroundTint="@color/blue"

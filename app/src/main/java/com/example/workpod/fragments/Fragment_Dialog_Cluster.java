@@ -94,6 +94,7 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
         final Adaptador_LsV_Workpod adaptadorLsVWorkpod = new Adaptador_LsV_Workpod(view.getContext(), ubicacion.getWorkpods());
         lsV_Workpods.setAdapter(adaptadorLsVWorkpod);
 
+
         tVTituloDialogCluster.setText(String.valueOf(ubicacion.getDireccion()));
         lsV_Workpods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -3,6 +3,7 @@ package com.example.workpod.adapters;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
 import com.example.workpod.R;
 import com.example.workpod.data.Workpod;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Adaptador_LsV_Workpod extends BaseAdapter {
@@ -30,6 +36,7 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
     public Adaptador_LsV_Workpod(Context context, List<Workpod> lstWorkpods) {
         this.context = context;
         this.lstWorkpods = lstWorkpods;
+
     }
 
     //SOBREESCRITURAS
@@ -48,12 +55,12 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         return lstWorkpods.get(i).getId();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View getView(int i, View view, ViewGroup parent) {
         //INFLAMOS EL LAYOUT DE LOS ITEMS DEL LSV
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.item_lsv_workpods, null);
-
         //DECLARAMOS VARIABLES
         TextView txtNombre=(TextView)view.findViewById(R.id.txtNombre);
         TextView txtEstado = (TextView) view.findViewById(R.id.txtEstado);
@@ -65,14 +72,14 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
 
         //CONTROL DEL ESTADO
         try {
-            if ((lstWorkpods.get(i).getReserva() >0) &&(!lstWorkpods.get(i).isMantenimiento())) {
-                txtEstado.setText("Reservado");
+            if (lstWorkpods.get(i).isMantenimiento()) {
+                txtEstado.setText("Mantenimiento");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
-            } else if((lstWorkpods.get(i).getReserva()==0)&&(!lstWorkpods.get(i).isMantenimiento())) {
+            } else if((lstWorkpods.get(i).getReserva()==0)) {
                 txtEstado.setText("Disponible");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
-            }else if(lstWorkpods.get(i).isMantenimiento()){
-                txtEstado.setText("Mantenimiento");
+            }else {
+                txtEstado.setText("Reservado");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
             }
         } catch (NullPointerException e) {
@@ -83,17 +90,17 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
 
         //CONTROLAMOS QUE NO CASQUE LA APP SI UNA FECHA APUNTA A NULL
         if (lstWorkpods.get(i).getLimpieza() != null) {
-            txtLimpieza.setText(String.valueOf(lstWorkpods.get(i).getLimpieza().getDayOfMonth()) + "/" +
-                    String.valueOf(lstWorkpods.get(i).getLimpieza().getMonthValue() + "/" + String.valueOf(lstWorkpods.get(i).getLimpieza().getYear())));
+            txtLimpieza.setText(String.valueOf(lstWorkpods.get(i).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"))));
         } else {
             txtLimpieza.setText("");
+            iV_Icon_Limpieza.setVisibility(View.GONE);
         }
         if (lstWorkpods.get(i).getUltimoUso() != null) {
 
-            txtUso.setText(String.valueOf(lstWorkpods.get(i).getUltimoUso().getDayOfMonth()) + "/" +
-                    String.valueOf(lstWorkpods.get(i).getUltimoUso().getMonthValue() + "/" + String.valueOf(lstWorkpods.get(i).getUltimoUso().getYear())));
+            txtUso.setText(String.valueOf(lstWorkpods.get(i).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"))));
         } else {
             txtUso.setText("");
+            iV_Icon_Historial.setVisibility(View.GONE);
         }
 
         //CAMBIO COLOR AL ICONO
