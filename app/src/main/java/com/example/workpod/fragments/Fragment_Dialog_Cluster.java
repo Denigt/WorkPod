@@ -103,7 +103,7 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
                 for (int j = 0; j < ubicacion.getWorkpods().size(); j++) {
                     if (workpod == ubicacion.getWorkpods().get(j)) {
                         Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion.getDireccion().toLongString());
-                        fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                        fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESA UBICACIÓN");
                         cerrarFragment();
                     }
                 }

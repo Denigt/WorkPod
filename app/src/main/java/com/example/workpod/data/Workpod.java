@@ -204,7 +204,7 @@ public class Workpod implements DataDb{
                 if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
                     workpod.setPosicion(new LatLng(workpodJSON.getDouble("lat"), workpodJSON.getDouble("lon")));
                 if (workpodJSON.has("reserva") && !workpodJSON.isNull("reserva"))
-                    workpod.setUbicacion(workpodJSON.getInt("reserva"));
+                    workpod.setReserva(workpodJSON.getInt("reserva"));
 
                 workpod.setDireccion(Direccion.fromJSON(workpodJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
@@ -246,7 +246,7 @@ public class Workpod implements DataDb{
             if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
                 workpod.setPosicion(new LatLng(workpodJSON.getDouble("lat"), workpodJSON.getDouble("lon")));
             if (workpodJSON.has("reserva") && !workpodJSON.isNull("reserva"))
-                workpod.setUbicacion(workpodJSON.getInt("reserva"));
+                workpod.setReserva(workpodJSON.getInt("reserva"));
 
             workpod.setDireccion(Direccion.fromJSON(workpodJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
         }catch(Exception e){

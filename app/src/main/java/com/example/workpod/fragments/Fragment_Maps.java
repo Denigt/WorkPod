@@ -242,9 +242,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
                     Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
-                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");
+                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
-                //TODO: Codigo para mostrar lista de workpods al hacer click en una ubicacion
             } catch (Exception e) {
                 Log.e("ERROR ONMARKERCLICK", e.getMessage());
             }
