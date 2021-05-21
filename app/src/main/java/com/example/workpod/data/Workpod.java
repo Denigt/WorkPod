@@ -15,7 +15,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Workpod implements DataDb{
+public class Workpod implements DataDb, Comparable<Workpod>{
     private int id;
     private String nombre;
     private String descripcion;
@@ -274,6 +274,22 @@ public class Workpod implements DataDb{
     @Override
     public String getID() {
         return String.valueOf(id);
+    }
+
+    @Override
+    public int compareTo(Workpod workpod) {
+        int ret = 0;
+        if(reserva < workpod.reserva && !mantenimiento){
+            ret = -1;
+        }else if (reserva > workpod.reserva){
+            ret = 1;
+        }else{
+            if(mantenimiento != workpod.mantenimiento){
+                ret = mantenimiento? 1:-1;
+            }else ret = nombre.compareTo(workpod.nombre);
+        }
+
+        return ret;
     }
 
     public Workpod(int id, String descripcion, int reserva, boolean mantenimiento) {

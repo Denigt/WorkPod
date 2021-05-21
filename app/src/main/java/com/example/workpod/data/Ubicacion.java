@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class Ubicacion implements DataDb{
 
     public void setWorkpods(List<Workpod> workpods) {
         this.workpods = workpods;
+        Collections.sort(this.workpods);
     }
 
     public Direccion getDireccion() {
