@@ -335,26 +335,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="3"
                 android:gravity="center"
                 android:orientation="horizontal">
 
 
                 <LinearLayout
+                    android:id="@+id/LLEstadoWorkpod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"
+                    android:gravity="center"
                     android:background="@drawable/rounded_back_button"
                     android:padding="2dp">
 
                     <Button
                         android:id="@+id/BtnReservarWorkpod"
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
                         android:layout_height="50dp"
                         android:background="?android:selectableItemBackground"
-                        android:backgroundTint="@color/blue"
+                        android:backgroundTint="#FF58B1E3"
                         android:text="Reservar"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
@@ -362,6 +371,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/LLAbrirAhora"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -375,6 +385,10 @@
                         android:id="@+id/BtnAbrirAhora"
                         android:layout_width="180dp"
                         android:layout_height="50dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
                         android:background="?android:selectableItemBackground"
                         android:text="¡Abrir Ahora!"
                         android:textAllCaps="false"

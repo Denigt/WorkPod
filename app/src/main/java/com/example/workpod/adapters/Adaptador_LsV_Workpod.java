@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -62,25 +63,32 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.item_lsv_workpods, null);
         //DECLARAMOS VARIABLES
-        TextView txtNombre=(TextView)view.findViewById(R.id.txtNombre);
+        LinearLayout lLEstadoLsV = (LinearLayout) view.findViewById(R.id.LLEstadoLsV);
+        TextView txtNombre = (TextView) view.findViewById(R.id.txtNombre);
         TextView txtEstado = (TextView) view.findViewById(R.id.txtEstado);
         TextView txtNumPersonas = (TextView) view.findViewById(R.id.txtNumPersonas);
         TextView txtUso = (TextView) view.findViewById(R.id.txtUso);
         TextView txtLimpieza = (TextView) view.findViewById(R.id.txtLimpieza);
-        ImageView iV_Icon_Historial=(ImageView)view.findViewById(R.id.IV_Icon_Historial);
-        ImageView iV_Icon_Limpieza=(ImageView)view.findViewById(R.id.IV_Icon_Limpieza);
+        ImageView iV_Icon_Historial = (ImageView) view.findViewById(R.id.IV_Icon_Historial);
+        ImageView iV_Icon_Limpieza = (ImageView) view.findViewById(R.id.IV_Icon_Limpieza);
 
         //CONTROL DEL ESTADO
         try {
             if (lstWorkpods.get(i).isMantenimiento()) {
                 txtEstado.setText("Mantenimiento");
-                txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
-            } else if((lstWorkpods.get(i).getReserva()==0)) {
+                //APIS SUPERIORES A LA 21
+                txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+                //API 21
+                txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_orange));
+            } else if ((lstWorkpods.get(i).getReserva() == 0)) {
                 txtEstado.setText("Disponible");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
-            }else {
+            } else {
                 txtEstado.setText("Reservado");
-                txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+                //APIS SUPERIORES A LA 21
+                txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
+                //API 21
+                txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
             }
         } catch (NullPointerException e) {
 
