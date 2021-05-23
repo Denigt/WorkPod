@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener {
 
@@ -401,7 +402,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
             markPosicion.setTag(ubicacion);
-            markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
+            markPosicion.setIcon(VectortoBitmap(requireContext(), R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
         }
     }
 

@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.example.workpod.ModPerfilActivity;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_LsV_Transaction_History;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.otherclass.LsV_Transaction_History;
 
 import java.util.ArrayList;
@@ -36,7 +37,10 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     // CONTROLES DEL FRAGMENT
     private ImageButton btnEdit;
     private Button btnShowInfo;
+    private TextView txtNombre;
     private TextView txtEmail;
+    private TextView txtDNI;
+    private TextView txtTelefono;
     private LinearLayout lytPrivate;
 
     // VARIABLES QUE MANEJAN EL ESTADO DEL FRAGMENT
@@ -79,7 +83,10 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         // BUSQUEDA E INICIALIZACION DE LOS CONTROLES DEL LAYOUT
         btnEdit = view.findViewById(R.id.btnEdit);
         btnShowInfo = view.findViewById(R.id.btnShowInfo);
+        txtNombre = view.findViewById(R.id.txtNombre);
         txtEmail = view.findViewById(R.id.txtEmail);
+        txtDNI = view.findViewById(R.id.txtDNI);
+        txtTelefono = view.findViewById(R.id.txtTelefono);
         lytPrivate = view.findViewById(R.id.lytPrivate);
         lytPrivate.setVisibility(View.GONE);
 
@@ -94,6 +101,14 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         // ASIGNACION DE LOS LISTENERS A LOS CONTROLES
         btnEdit.setOnClickListener(this);
         btnShowInfo.setOnClickListener(this);
+
+        // INICIALIZAR DATOS DEL FRAGMENT SI HAY UN USUARIO REGISTRADO
+        if (InfoApp.USER != null) {
+            txtNombre.setText(InfoApp.USER.getNombre() + " " + InfoApp.USER.getApellidos());
+            txtEmail.setText(InfoApp.USER.getEmail());
+            txtDNI.setText(InfoApp.USER.getDni());
+            //txtDNI.setText(InfoApp.USER.getTelefono());
+        }
 
         return view;
     }
