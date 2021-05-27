@@ -67,11 +67,6 @@ public class Database<T extends DataDb> extends Thread {
     private String datoExt;
 
     /**
-     * Objeto con los datos modificados para actualizar el antiguo
-     */
-    private T datoUpdate;
-
-    /**
      * Datos recuperados de un selectAll
      */
     private List<T> lstSelect;
@@ -137,6 +132,8 @@ public class Database<T extends DataDb> extends Thread {
                 break;
             case INSERT:
                 insert(dato);
+            case UPDATE:
+                update(dato);
                 break;
         }
         // INDICAR FINALIZACION DE LA CONSULTA
@@ -437,10 +434,64 @@ public class Database<T extends DataDb> extends Thread {
      * @param obj Objeto a actualizar
      * @return true si se ha podido actualizar el objeto
      */
-    private boolean update(Object obj){
+    private void update(T obj){
         boolean retorno = false;
-        // realizacion del update aqui
-        return retorno;
+        // PREPARAR LA CONEXION
+        if (TABLAS.contains(obj.getTabla())) {
+            String urlString = String.format("%s/php/%s/%s.php", URL_SERVIDOR, obj.getTabla(), "update");
+
+            try {
+                URL url = new URL(urlString);
+                // ABRIMOS CONEXIÓN
+                HttpURLConnection connection = conexion(url);
+
+                // PREPARAMOS LA CADENA PARA ENVIAR LOS DATOS A INSERTAR
+                OutputStream out = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
+
+                // ENVIAR LOS DATOS
+                writer.write(obj.dataAJSON().toString());
+                writer.flush();
+                writer.close();
+
+                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
+                int respuesta = connection.getResponseCode();
+
+                if (respuesta == HttpURLConnection.HTTP_OK) {
+                    // PREPARAMOS LA CADENA DE ENTRADA PARA RECOGER LA RESPUESTA DEL SERVIDOR
+                    String result = new String();
+                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+
+                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
+                    BufferedReader reader = new BufferedReader(in);
+
+                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+                    connection.disconnect();
+
+                    // TRANSFORMAR STRING A JSON
+                    JSONObject json = new JSONObject(result);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
+                }else{
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE UPDATE", "No se ha podido conectar con el servidor");
+                }
+            }catch (MalformedURLException e) {
+                error = new ErrorMessage(-404, "URL invalida");
+                Log.e("DATABASE UPDATE", "URL invalida");
+            }catch (IOException e) {
+                error = new ErrorMessage(-404, "No hay conexion a internet");
+                Log.e("DATABASE UPDATE", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON de error");
+                Log.e("DATABASE UPDATE", "Error obtener JSON");
+            }
+        }
     }
 
     /**
@@ -491,22 +542,11 @@ public class Database<T extends DataDb> extends Thread {
     }
 //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
-        if (tipoConsulta == 3 || tipoConsulta < 0  || tipoConsulta > 6)
-            tipoConsulta = -1;
-
-        this.tipoConsulta = tipoConsulta;
-        this.dato = dato;
-        this.lstSelect = new LinkedList<>();
-        this.error = new ErrorMessage();
-    }
-
-    public Database(int tipoConsulta, T dato, T datoUpdate) {
         if (tipoConsulta < 0  || tipoConsulta > 6)
             tipoConsulta = -1;
 
         this.tipoConsulta = tipoConsulta;
         this.dato = dato;
-        this.datoUpdate = datoUpdate;
         this.lstSelect = new LinkedList<>();
         this.error = new ErrorMessage();
     }
@@ -518,10 +558,6 @@ public class Database<T extends DataDb> extends Thread {
 
     public T getDato() {
         return dato;
-    }
-
-    public T getDatoUpdate() {
-        return datoUpdate;
     }
 
     public List<T> getLstSelect() {

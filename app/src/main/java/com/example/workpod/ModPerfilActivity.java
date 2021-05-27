@@ -28,6 +28,7 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
     EditText txtDNI;
     EditText txtEmail;
     ImageButton btnGuardar;
+    ImageButton btnCancelar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,11 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
         txtDNI = findViewById(R.id.txtDNI);
         txtEmail = findViewById(R.id.txtEmail);
         btnGuardar = findViewById(R.id.btnGuardar);
+        btnCancelar = findViewById(R.id.btnCancelar);
+
+        // LISTENERS
+        btnGuardar.setOnClickListener(this);
+        btnCancelar.setOnClickListener(this);
 
         // LLENAR EL SPINNER DEL TIPO DE DOCUMENTO
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_spinner_basic, TIPOS_DOCUMENTO);
@@ -59,25 +65,37 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (InfoApp.USER != null) {
+        if (v.getId() == btnCancelar.getId()){
+            finish();
+        }
+        else if (InfoApp.USER != null && v.getId() == btnGuardar.getId()) {
             Usuario modUser = new Usuario();
 
             modUser.set(InfoApp.USER);
-            modUser.setNombre(txtNombre.getText().toString());
-            modUser.setApellidos(txtApellido.getText().toString());
+            if (!txtNombre.getText().toString().equals(""))
+                modUser.setNombre(txtNombre.getText().toString());
+
+            if (!txtApellido.getText().toString().equals(""))
+                modUser.setApellidos(txtApellido.getText().toString());
+
             if (Method.checkEmail(txtEmail.getText().toString()))
                 modUser.setEmail(txtEmail.getText().toString());
-            //if (Method.checkDNI(txtDNI.getText().toString()))
-            modUser.setDni(txtDNI.getText().toString());
 
-            Database<Usuario> update = new Database<>(Database.UPDATE, InfoApp.USER, modUser);
+            //if (Method.checkDNI(txtDNI.getText().toString()))
+            if (!txtEmail.getText().toString().equals(""))
+                modUser.setDni(txtDNI.getText().toString());
+
+            Database<Usuario> update = new Database<>(Database.UPDATE, modUser);
             update.postRunOnUI(this, () -> {
                 if(update.getError().code > -1){
                     Toast.makeText(this, "Datos modificados", Toast.LENGTH_SHORT).show();
+                    InfoApp.USER.set(modUser);
+                    finish();
                 }else{
                     Toast.makeText(this, "No se han podido modificar los datos", Toast.LENGTH_SHORT).show();
                 }
             });
+            update.start();
         }
     }
 }

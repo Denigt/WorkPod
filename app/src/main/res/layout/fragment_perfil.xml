@@ -84,7 +84,7 @@
                     android:text="correoelectronico@electronico.com"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:gravity="right"/>
+                    android:layout_gravity="right"/>
             </HorizontalScrollView>
         </LinearLayout>
     </LinearLayout>

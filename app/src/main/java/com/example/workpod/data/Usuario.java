@@ -163,6 +163,8 @@ public class Usuario implements DataDb{
         try {
             JSONObject usuarioJSON = json.getJSONObject("usuario");
 
+            if (usuarioJSON.has("id") && !usuarioJSON.isNull("id"))
+                usuario.setId(usuarioJSON.getInt("id"));
             if (usuarioJSON.has("email") && !usuarioJSON.isNull("email"))
                 usuario.setEmail(usuarioJSON.getString("email"));
             if (usuarioJSON.has("nombre") && !usuarioJSON.isNull("nombre"))
@@ -194,6 +196,8 @@ public class Usuario implements DataDb{
             json.put("dni", dni);
             if (reserva != 0)
                 json.put("reserva", reserva);
+            if (tarjeta != null)
+                json.put("tarjeta", tarjeta.getID());
         }catch(JSONException e){
             Log.e("ERROR USUARIO_JSON", e.getMessage());
         }

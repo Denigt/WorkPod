@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.workpod.ModPerfilActivity;
@@ -75,6 +76,17 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (InfoApp.USER != null) {
+            txtNombre.setText(InfoApp.USER.getNombre() + " " + InfoApp.USER.getApellidos());
+            txtEmail.setText(InfoApp.USER.getEmail());
+            txtDNI.setText(InfoApp.USER.getDni());
+            //txtDNI.setText(InfoApp.USER.getTelefono());
+        }
+    }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
