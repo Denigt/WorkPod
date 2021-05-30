@@ -21,6 +21,7 @@ public class Usuario implements DataDb{
     private int reserva;
     private Tarjeta tarjeta;
     private  List<Sesion> sesiones;
+    private  List<Facturacion> dirFacturacion;
 
     public int getId() {
         return id;
@@ -41,6 +42,7 @@ public class Usuario implements DataDb{
         reserva = user.getReserva();
         tarjeta = user.getTarjeta();
         sesiones = user.getSesiones();
+        dirFacturacion = user.getDirFacturacion();
     }
 
     public String getEmail() {
@@ -115,6 +117,14 @@ public class Usuario implements DataDb{
         this.dni = dni;
     }
 
+    public List<Facturacion> getDirFacturacion() {
+        return dirFacturacion;
+    }
+
+    public void setDirFacturacion(List<Facturacion> dirFacturacion) {
+        this.dirFacturacion = dirFacturacion;
+    }
+
     public Usuario() {
         this.email = "";
         this.nombre = "";
@@ -125,6 +135,7 @@ public class Usuario implements DataDb{
         this.reserva = 0;
         this.tarjeta = new Tarjeta();
         this.sesiones = new LinkedList<>();
+        this.dirFacturacion = new LinkedList<>();
     }
 
     public Usuario(String email, String password) {
@@ -177,6 +188,8 @@ public class Usuario implements DataDb{
                 usuario.setPassword(usuarioJSON.getString("contrasena"));
             if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                 usuario.setReserva(usuarioJSON.getInt("reserva"));
+
+            usuario.setDirFacturacion(new Facturacion().JSONaList(usuarioJSON));
         }catch(Exception e){
             Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
@@ -229,6 +242,7 @@ public class Usuario implements DataDb{
                 if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                     usuario.setReserva(usuarioJSON.getInt("reserva"));
 
+                usuario.setDirFacturacion(new Facturacion().JSONaList(usuarioJSON));
                 lstUsuarios.add(usuario);
             }
         }catch(Exception e){

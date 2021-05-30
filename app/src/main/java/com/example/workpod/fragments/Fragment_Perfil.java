@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.example.workpod.ModPerfilActivity;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_LsV_Transaction_History;
+import com.example.workpod.adapters.Adaptador_Lsv_dirfacturacion;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.otherclass.LsV_Transaction_History;
 
@@ -43,6 +46,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     private TextView txtDNI;
     private TextView txtTelefono;
     private LinearLayout lytPrivate;
+    private ExpandableListView elsvFacturacion;
 
     // VARIABLES QUE MANEJAN EL ESTADO DEL FRAGMENT
     private boolean showInfo = false;
@@ -77,6 +81,17 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (InfoApp.USER != null) {
+            txtNombre.setText(InfoApp.USER.getNombre() + " " + InfoApp.USER.getApellidos());
+            txtEmail.setText(InfoApp.USER.getEmail());
+            txtDNI.setText(InfoApp.USER.getDni());
+            //txtDNI.setText(InfoApp.USER.getTelefono());
+        }
+    }
+
+    @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (InfoApp.USER != null) {
@@ -99,6 +114,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         txtEmail = view.findViewById(R.id.txtEmail);
         txtDNI = view.findViewById(R.id.txtDNI);
         txtTelefono = view.findViewById(R.id.txtTelefono);
+        elsvFacturacion = view.findViewById(R.id.elsvFacturacion);
         lytPrivate = view.findViewById(R.id.lytPrivate);
         lytPrivate.setVisibility(View.GONE);
 
@@ -119,6 +135,16 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             txtNombre.setText(InfoApp.USER.getNombre() + " " + InfoApp.USER.getApellidos());
             txtEmail.setText(InfoApp.USER.getEmail());
             txtDNI.setText(InfoApp.USER.getDni());
+
+            Adaptador_Lsv_dirfacturacion adaptador = new Adaptador_Lsv_dirfacturacion(requireContext(), InfoApp.USER.getDirFacturacion());
+            elsvFacturacion.setAdapter(adaptador);
+            elsvFacturacion.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                    return false;
+                }
+            });
+
             //txtDNI.setText(InfoApp.USER.getTelefono());
         }
 

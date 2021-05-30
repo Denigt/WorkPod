@@ -105,15 +105,16 @@
     </FrameLayout>
 
     <ScrollView
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbars="vertical">
         <LinearLayout
             android:id="@+id/lytPrivate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:scrollbars="vertical">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -169,10 +170,13 @@
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <ExpandableListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"/>
+                <ExpandableListView
+                    android:id="@+id/elsvFacturacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="50dp"
+                    android:scrollbars="none"
+                    android:isScrollContainer="false"/>
         </LinearLayout>
     </ScrollView>
 

@@ -3,31 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="10dp">
-
-    <HorizontalScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3.5"
-        android:scrollbars="horizontal">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:text="Calle de facturación"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/textgray"
-            android:layout_gravity="center"/>
-    </HorizontalScrollView>
+    android:paddingVertical="10dp"
+    android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/txtNombre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="3"
 
-        android:text="28053"
-        android:textSize="16dp"
+        android:text="Calle de facturación"
+        android:textSize="18dp"
         android:textStyle="bold"
-        android:textColor="@color/blue"/>
+        android:textColor="@color/blue"
+        android:gravity="center"/>
+
 </LinearLayout>
