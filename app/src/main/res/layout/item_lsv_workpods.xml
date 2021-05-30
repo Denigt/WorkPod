@@ -65,6 +65,7 @@
             android:id="@+id/LLEstadoLsV"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_back_button"
             android:backgroundTint="@color/green"
             android:gravity="center">

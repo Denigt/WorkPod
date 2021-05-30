@@ -153,7 +153,7 @@ public class Sesion implements DataDb {
             json.put("precio", precio);
             json.put("descuento", descuento);
         }catch(JSONException e){
-            Log.e("ERROR USUARIO_JSON", e.getMessage());
+            Log.e("ERROR SESION_JSON", e.getMessage());
         }
 
         return json;
