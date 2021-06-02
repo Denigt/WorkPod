@@ -172,6 +172,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         } else if (v.getId() == R.id.IVFlechas_Descripcion_Informacion) {
             onClickIVFlechas_Descripcion_Informacion();
 
+        }else if(v.getId()==R.id.BtnReservarWorkpod){
+            
         }
     }
 
