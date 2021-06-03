@@ -60,6 +60,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private ImageView iVComoLlegar;
     private ImageView iVFlechas_Informacion_Desripcion;
     private ImageView iVFlechas_Descripcion_Informacion;
+    private ImageView iVUltUso;
+    private ImageView iVUltLimpieza;
     private Button btnReservarWorkpod;
     private Button btnAbrirAhora;
     private LinearLayout lLInfoWorkpod;
@@ -129,6 +131,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         tVDescripcionWorkpod = (TextView) view.findViewById(R.id.TVDescripcionWorkpod);
         iVFlechas_Informacion_Desripcion = (ImageView) view.findViewById(R.id.IVFlechas_Informacion_Descripcion);
         iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
+        iVUltUso=(ImageView)view.findViewById(R.id.IVUltUso);
+        iVUltLimpieza=(ImageView)view.findViewById(R.id.IVUltLimpieza);
         btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
@@ -298,8 +302,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
                         tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Con iluminación regulable");
                         descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
                         btnReservarWorkpod.setText("Mantenimiento");
@@ -317,8 +324,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
                         tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Con iluminación regulable");
                         descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
                         btnReservarWorkpod.setText("Reservado");
@@ -336,8 +346,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
                         tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Con iluminación regulable");
                         descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
                     }
@@ -350,8 +363,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
                         tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Sin iluminación regulable");
                         descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
                         btnReservarWorkpod.setText("Mantenimiento");
@@ -368,8 +384,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
                         tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Sin iluminación regulable");
                         descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
                         btnReservarWorkpod.setText("Reservado");
@@ -386,8 +405,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
                         tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Sin iluminación regulable");
                         descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
                     }
@@ -507,8 +529,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
                         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltLimpieza.setText("Última limpieza ");
-                        tVUltUso.setText("Último uso ");
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Con iluminación regulable");
                         descripcion = workpod.getDescripcion();
                         btnReservarWorkpod.setText("Mantenimiento");
@@ -525,8 +550,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
                         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltLimpieza.setText("Última limpieza ");
-                        tVUltUso.setText("Último uso ");
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Con iluminación regulable");
                         descripcion = workpod.getDescripcion();
                         //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
@@ -542,8 +570,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
                         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltLimpieza.setText("Última limpieza ");
-                        tVUltUso.setText("Último uso ");
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Con iluminación regulable");
                         descripcion = workpod.getDescripcion();
                     }
@@ -554,8 +585,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
                         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso ");
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Sin iluminación regulable");
                         descripcion = workpod.getDescripcion();
                         btnReservarWorkpod.setText("Mantenimiento");
@@ -572,8 +606,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
                         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso ");
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
                         tVIlumincion.setText("Sin iluminación regulable");
                         descripcion = workpod.getDescripcion();
                         btnReservarWorkpod.setText("Reservado");
@@ -589,8 +626,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
                         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso ");
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+                        tVUltUso.setText("");
+                        tVUltLimpieza.setText("");
+                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
+                        iVUltLimpieza.setVisibility(View.GONE);
+                        iVUltUso.setVisibility(View.GONE);
+
                         tVIlumincion.setText("Sin iluminación regulable");
                         descripcion = workpod.getDescripcion();
                     }
