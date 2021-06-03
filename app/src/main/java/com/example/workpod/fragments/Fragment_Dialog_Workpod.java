@@ -26,12 +26,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
+import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -173,7 +178,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             onClickIVFlechas_Descripcion_Informacion();
 
         }else if(v.getId()==R.id.BtnReservarWorkpod){
-            
+            onClickReservarWorkpod((Button) v);
         }
     }
 
@@ -181,7 +186,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * Metodo que nos permitirá que al pulsar en la flecha, se oculte la descripción del workpod y muestren los iconos con la información de
      * último uso, última limpieza y si la luz es regulable
      */
-
     private void onClickIVFlechas_Descripcion_Informacion() {
         lLInfoWorkpod.setVisibility(LinearLayout.VISIBLE);
         lLDescripcion.setVisibility(LinearLayout.GONE);
@@ -224,6 +228,20 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //CERRAMOS EL DIALOGO EMERGENTE
             dismiss();
         }
+    }
+
+    public void onClickReservarWorkpod(Button btn){
+        Reserva reserva = new Reserva();
+        reserva.setFecha(ZonedDateTime.now());
+        reserva.setUsuario(InfoApp.USER.getId());
+        reserva.setWorkpod(workpod.getId());
+        Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
+        insert.postRunOnUI(requireActivity(), ()->{
+            if (insert.getError().code >-1){
+                btn.setText("Reservado");
+            }else Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
+        });
+        insert.start();
     }
 
     /**
