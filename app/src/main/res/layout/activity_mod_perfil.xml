@@ -7,6 +7,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="20dp"
+        android:background="@drawable/subrayado">
+
+        <ImageButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/button_btn_aceptar" />
+
+        <ImageButton
+            android:id="@+id/btnCancelar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/button_btn_cancelar" />
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -22,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="Modificar mi perfil"
                 android:textColor="@color/blue"
@@ -126,50 +155,9 @@
                 style="@style/Theme.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp" />
+                android:layout_marginHorizontal="30dp"
+                android:inputType="textEmailAddress" />
 
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="30dp">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start">
-
-            <ImageButton
-                android:id="@+id/btnCancelar"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="bottom"
-                android:src="@drawable/button_btn_cancelar"
-                android:background="?selectableItemBackgroundBorderless"
-                android:focusable="true"
-                android:scaleType="fitCenter"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end">
-
-            <ImageButton
-                android:id="@+id/btnGuardar"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="bottom"
-                android:src="@drawable/button_btn_aceptar"
-                android:background="?selectableItemBackgroundBorderless"
-                android:focusable="true"
-                android:scaleType="fitCenter"/>
-        </LinearLayout>
-
-    </LinearLayout>
 </LinearLayout>

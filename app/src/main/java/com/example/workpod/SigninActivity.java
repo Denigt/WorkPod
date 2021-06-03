@@ -37,6 +37,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     private EditText txtContrasena;
     private EditText txtRContrasena;
     private ImageButton btnSiguiente;
+    private ImageButton btnVolver;
     private CheckBox btnShowContrasena;
     private Spinner spnDNI;
 
@@ -76,6 +77,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         btnSiguienteOnClick(v);
+        btnVolverOnClick(v);
     }
 
     @Override
@@ -206,6 +208,22 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * Cierra la ventana de Login
+     * @param v Vista clicada
+     */
+    private void btnVolverOnClick(View v){
+        if (v.getId() == btnVolver.getId()) {
+            if (pantalla == 0) {
+                finish();
+            } else {
+                saveActivity();
+                pantalla = 0;
+                initActivity();
+            }
+        }
+    }
+
     // OTROS METODOS
     /**
      * Inicializa la actividad:
@@ -243,6 +261,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             btnShowContrasena = findViewById(R.id.btnShowContrasena);
         }
         btnSiguiente = findViewById(R.id.btnSiguiente);
+        btnVolver = findViewById(R.id.btnVolver);
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         if (pantalla == 0){
@@ -257,6 +276,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             btnShowContrasena.setOnCheckedChangeListener(this);
         }
         btnSiguiente.setOnClickListener(this);
+        btnVolver.setOnClickListener(this);
     }
 
     /**

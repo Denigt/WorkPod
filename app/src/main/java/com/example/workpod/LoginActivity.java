@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText txtEmail;
     private EditText txtContrasena;
     private ImageButton btnSiguiente;
+    private ImageButton btnVolver;
     private CheckBox btnShowContrasena;
     private Button btnAcceder;
     private Button btnRegistrar;
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         btnSiguienteOnClick(v);
+        btnVolverOnClick(v);
         btnAccederOnClick(v);
         btnRegistrarOnClick(v);
     }
@@ -146,6 +148,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
+     * Cierra la ventana de Login
+     * @param v Vista clicada
+     */
+    private void btnVolverOnClick(View v){
+        if (v.getId() == btnVolver.getId()){
+            finish();
+        }
+    }
+
+    /**
      * Lleva al usuario a la aplicacion principal como usuario no registrado
      * @param v Vista clicada
      */
@@ -188,6 +200,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnShowContrasena = findViewById(R.id.btnShowContrasena);
 
         btnSiguiente = findViewById(R.id.btnSiguiente);
+        btnVolver = findViewById(R.id.btnVolver);
         btnAcceder = findViewById(R.id.btnAcceder);
         btnRegistrar = findViewById(R.id.btnRegistrar);
 
@@ -197,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnShowContrasena.setOnCheckedChangeListener(this);
 
         btnSiguiente.setOnClickListener(this);
+        btnVolver.setOnClickListener(this);
         btnAcceder.setOnClickListener(this);
         btnRegistrar.setOnClickListener(this);
 
