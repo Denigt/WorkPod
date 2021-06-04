@@ -235,17 +235,20 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     public void onClickReservarWorkpod(Button btn){
-        Reserva reserva = new Reserva();
-        reserva.setFecha(ZonedDateTime.now());
-        reserva.setUsuario(InfoApp.USER.getId());
-        reserva.setWorkpod(workpod.getId());
-        Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
-        insert.postRunOnUI(requireActivity(), ()->{
-            if (insert.getError().code >-1){
-                btn.setText("Reservado");
-            }else Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
-        });
-        insert.start();
+        if (workpod.getReserva() == 0 && !workpod.isMantenimiento()) {
+            Reserva reserva = new Reserva();
+            reserva.setFecha(ZonedDateTime.now());
+            reserva.setUsuario(InfoApp.USER.getId());
+            reserva.setWorkpod(workpod.getId());
+            Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
+            insert.postRunOnUI(requireActivity(), () -> {
+                if (insert.getError().code > -1) {
+                    btn.setText("Reservado");
+                } else
+                    Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
+            });
+            insert.start();
+        }
     }
 
     /**

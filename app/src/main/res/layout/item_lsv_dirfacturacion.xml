@@ -1,160 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="2dp"
-    android:background="@color/blue"
+    android:layout_marginHorizontal="10dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/twhite"
+        android:background="@drawable/subrayado"
         android:orientation="horizontal"
-        android:layout_marginBottom="1dp" >
+        android:layout_marginBottom="4dp"
+        android:padding="10dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Dirección Postal"
-            android:textColor="@color/textgray"
-            android:textStyle="bold"
-            android:gravity="center"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/fill_icon_historial"
+            android:tint="@color/blue"
+            tools:ignore="UseAppTint" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:layout_marginBottom="1dp" >
-
-        <TextView
-            android:id="@+id/txtDireccion"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Calle las pruebas del gato, 8"
-            android:textColor="@color/textgray"
-            android:gravity="center"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtProvincia"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Provincia"
-                android:textColor="@color/textgray"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/txtCodPostal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="00000"
-                android:textColor="@color/textgray"
-                android:gravity="center"/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/txtPais"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginLeft="1dp"
-            android:text="Pais"
-            android:background="@color/twhite"
-            android:textColor="@color/textgray"
-            android:textStyle="bold"
-            android:gravity="center"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/twhite"
-        android:orientation="horizontal"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="1dp" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Dirección de Facturación"
-            android:textColor="@color/textgray"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:layout_marginBottom="1dp" >
-
-        <TextView
-            android:id="@+id/txtDireccionF"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Calle las pruebas del gato, 8"
-            android:textColor="@color/textgray"
-            android:gravity="center"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@color/white"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            android:gravity="center">
             <TextView
-                android:id="@+id/txtProvinciaF"
+                android:id="@+id/txtDireccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Provincia"
+                android:text="Calle las pruebas del gato, 8"
+                android:textSize="14dp"
                 android:textColor="@color/textgray"
                 android:gravity="center"/>
-
             <TextView
-                android:id="@+id/txtCodPostalF"
+                android:id="@+id/txtPais"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="00000"
-                android:textColor="@color/textgray"
+                android:text="España 28053"
+                android:textSize="16dp"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
                 android:gravity="center"/>
         </LinearLayout>
-        <TextView
-            android:id="@+id/txtPaisF"
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/subrayado"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/fill_icon_historial"
+            android:tint="@color/blue"
+            tools:ignore="UseAppTint" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginLeft="1dp"
-            android:text="Pais"
-            android:background="@color/twhite"
-            android:textColor="@color/textgray"
-            android:textStyle="bold"
-            android:gravity="center"/>
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/txtDireccionF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Calle las pruebas del gato, 8"
+                android:textSize="14dp"
+                android:textColor="@color/textgray"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/txtPaisF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="España 28053"
+                android:textSize="16dp"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:gravity="center"/>
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

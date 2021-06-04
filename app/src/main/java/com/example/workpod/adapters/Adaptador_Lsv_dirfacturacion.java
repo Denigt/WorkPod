@@ -79,24 +79,16 @@ public class Adaptador_Lsv_dirfacturacion extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.item_lsv_dirfacturacion, null);
         }
         TextView txtDireccion = convertView.findViewById(R.id.txtDireccion);
-        TextView txtProvincia = convertView.findViewById(R.id.txtProvincia);
         TextView txtPais = convertView.findViewById(R.id.txtPais);
-        TextView txtCodPostal = convertView.findViewById(R.id.txtCodPostal);
 
         TextView txtDireccionF = convertView.findViewById(R.id.txtDireccionF);
-        TextView txtProvinciaF = convertView.findViewById(R.id.txtProvinciaF);
         TextView txtPaisF = convertView.findViewById(R.id.txtPaisF);
-        TextView txtCodPostalF = convertView.findViewById(R.id.txtCodPostalF);
 
         txtDireccion.setText(facturacion.getPostal().getDireccion());
-        txtProvincia.setText(String.valueOf(facturacion.getPostal().getProvincia()));
-        txtPais.setText(facturacion.getPostal().getPais());
-        txtCodPostal.setText(String.valueOf(facturacion.getPostal().getCodPostal()));
+        txtPais.setText(facturacion.getPostal().getPais() + " " + facturacion.getPostal().getCodPostal());
 
         txtDireccionF.setText(facturacion.getFacturacion().getDireccion());
-        txtProvinciaF.setText(String.valueOf(facturacion.getFacturacion().getProvincia()));
-        txtPaisF.setText(facturacion.getFacturacion().getPais());
-        txtCodPostalF.setText(String.valueOf(facturacion.getFacturacion().getCodPostal()));
+        txtPaisF.setText(facturacion.getFacturacion().getPais() + " " + facturacion.getFacturacion().getCodPostal());
         return convertView;
     }
 
