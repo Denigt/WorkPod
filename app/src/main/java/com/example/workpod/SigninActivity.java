@@ -182,7 +182,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     consulta.postRunOnUI(this, ()->{
                         if (consulta.getError().code == -1) {
                             // SI NO EXISTE EL USUARIO INSERTAR EN LA BASE DE DATOS
-                            Database<Usuario> insert = new Database<>(Database.INSERT, new Usuario(email, nombre, apellido, dni, contrasena, 0, 0, null, null));
+                            Database<Usuario> insert = new Database<>(Database.INSERT, new Usuario(email, nombre, apellido, dni, contrasena, 0, null, null, null));
                             insert.postRun(()->{
                                 Database<Usuario> select = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
                                 select.postRun(()->{

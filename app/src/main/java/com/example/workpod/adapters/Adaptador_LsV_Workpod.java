@@ -80,7 +80,7 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
                 //API 21
                 txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_orange));
-            } else if ((lstWorkpods.get(i).getReserva() == 0)) {
+            } else if ((lstWorkpods.get(i).getReserva() == null)) {
                 txtEstado.setText("Disponible");
                 txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
             } else {

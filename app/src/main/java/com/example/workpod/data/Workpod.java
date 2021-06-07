@@ -23,7 +23,7 @@ public class Workpod implements DataDb, Comparable<Workpod>{
     private double precio;
     private boolean luz;
     private boolean mantenimiento;
-    private int reserva;
+    private Reserva reserva;
     private ZonedDateTime ultimoUso;
     private ZonedDateTime limpieza;
     private int ubicacion;
@@ -111,11 +111,11 @@ public class Workpod implements DataDb, Comparable<Workpod>{
 
     }
 
-    public int getReserva() {
+    public Reserva getReserva() {
         return reserva;
     }
 
-    public void setReserva(int reserva) {
+    public void setReserva(Reserva reserva) {
         this.reserva = reserva;
     }
 
@@ -204,7 +204,8 @@ public class Workpod implements DataDb, Comparable<Workpod>{
                 if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
                     workpod.setPosicion(new LatLng(workpodJSON.getDouble("lat"), workpodJSON.getDouble("lon")));
                 if (workpodJSON.has("reserva") && !workpodJSON.isNull("reserva"))
-                    workpod.setReserva(workpodJSON.getInt("reserva"));
+                    workpod.setReserva((Reserva)new Reserva().JSONaData(workpodJSON));
+                else workpod.setReserva(null);
 
                 workpod.setDireccion(Direccion.fromJSON(workpodJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
 
@@ -246,7 +247,8 @@ public class Workpod implements DataDb, Comparable<Workpod>{
             if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
                 workpod.setPosicion(new LatLng(workpodJSON.getDouble("lat"), workpodJSON.getDouble("lon")));
             if (workpodJSON.has("reserva") && !workpodJSON.isNull("reserva"))
-                workpod.setReserva(workpodJSON.getInt("reserva"));
+                workpod.setReserva((Reserva)new Reserva().JSONaData(workpodJSON));
+            else workpod.setReserva(null);
 
             workpod.setDireccion(Direccion.fromJSON(workpodJSON, "direccion", "ciudad", "provincia", "pais", "codPostal"));
         }catch(Exception e){
@@ -279,9 +281,9 @@ public class Workpod implements DataDb, Comparable<Workpod>{
     @Override
     public int compareTo(Workpod workpod) {
         int ret = 0;
-        if(reserva == 0 && (workpod.reserva != 0 || workpod.mantenimiento)){
+        if(reserva == null && (workpod.reserva != null || workpod.mantenimiento)){
             ret = -1;
-        }else if (reserva != 0 && (workpod.reserva == 0 || workpod.mantenimiento)){
+        }else if (reserva != null && (workpod.reserva == null || workpod.mantenimiento)){
             ret = 1;
         }else{
             if(mantenimiento != workpod.mantenimiento){
@@ -292,7 +294,7 @@ public class Workpod implements DataDb, Comparable<Workpod>{
         return ret;
     }
 
-    public Workpod(int id, String descripcion, int reserva, boolean mantenimiento) {
+    public Workpod(int id, String descripcion, Reserva reserva, boolean mantenimiento) {
         this.id = id;
         this.descripcion = descripcion;
         this.reserva = reserva;
@@ -311,12 +313,12 @@ public class Workpod implements DataDb, Comparable<Workpod>{
         this.precio = 0;
         this.luz = false;
         this.mantenimiento = false;
-        this.reserva = 0;
+        this.reserva = null;
         this.ultimoUso = null;
         this.limpieza = null;
     }
 
-    public Workpod(int id, String nombre, String descripcion, int numUsuarios, double precio, boolean luz, boolean mantenimiento, int reserva, ZonedDateTime ultimoUso, ZonedDateTime limpieza) {
+    public Workpod(int id, String nombre, String descripcion, int numUsuarios, double precio, boolean luz, boolean mantenimiento, Reserva reserva, ZonedDateTime ultimoUso, ZonedDateTime limpieza) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;

@@ -235,7 +235,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     public void onClickReservarWorkpod(Button btn){
-        if (workpod.getReserva() == 0 && !workpod.isMantenimiento()) {
+        if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
             Reserva reserva = new Reserva();
             reserva.setFecha(ZonedDateTime.now());
             reserva.setUsuario(InfoApp.USER.getId());
@@ -322,7 +322,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //OCULTAMOS EL BOTÓN ABRIR AHORA
                         btnAbrirAhora.setVisibility(View.GONE);
                     } //SI EL WORKPOD ESTÁ RESERVADO
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=0) {
+                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null) {
                         tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
@@ -382,7 +382,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                         btnAbrirAhora.setVisibility(View.GONE);
                     }//WORKPOD RESERVADO
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=0){
+                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null){
                         tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
@@ -441,7 +441,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                         btnAbrirAhora.setVisibility(View.GONE);
                     }//WORKPOD RESERVADO
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=0) {
+                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null) {
                         tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
@@ -491,7 +491,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                         btnAbrirAhora.setVisibility(View.GONE);
                     }
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=0){
+                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null){
                         tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
                         tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
                         tVDireccion.setText(ubicacion.getDireccion().toLongString());
@@ -548,7 +548,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                         btnAbrirAhora.setVisibility(View.GONE);
-                    } else if (workpod.getReserva() != 0) {
+                    } else if (workpod.getReserva() != null) {
                         tVNombreWorkpod.setText(workpod.getNombre());
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
@@ -604,7 +604,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                         btnAbrirAhora.setVisibility(View.GONE);
-                    } else if (workpod.getReserva() != 0) {
+                    } else if (workpod.getReserva() != null) {
                         tVNombreWorkpod.setText(workpod.getNombre());
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
@@ -660,7 +660,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         btnReservarWorkpod.setTextSize(20);
 
                         btnAbrirAhora.setVisibility(View.GONE);
-                    } else if (workpod.getReserva() != 0) {
+                    } else if (workpod.getReserva() != null) {
                         tVNombreWorkpod.setText(workpod.getNombre());
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
@@ -707,7 +707,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                         btnAbrirAhora.setVisibility(View.GONE);
-                    } else if(workpod.getReserva()!=0) {
+                    } else if(workpod.getReserva()!=null) {
                         tVNombreWorkpod.setText(workpod.getNombre());
                         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
                         tVDireccion.setText(direccion);
