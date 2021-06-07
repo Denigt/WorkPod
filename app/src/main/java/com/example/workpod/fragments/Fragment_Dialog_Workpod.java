@@ -75,6 +75,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private String direccion;
     private String descripcion;
 
+    //INSTANCIA DE OTRAS CLASES
+    Reserva reserva;
+
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Dialog_Workpod() {
@@ -119,7 +122,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         lLInfoWorkpod = (LinearLayout) view.findViewById(R.id.LLInfoWorkpod);
         lLDescripcion = (LinearLayout) view.findViewById(R.id.LLDescripcion);
         lLEstadoWorkpod = (LinearLayout) view.findViewById(R.id.LLEstadoWorkpod);
-        lLAbrirAhora=(LinearLayout)view.findViewById(R.id.LLAbrirAhora);
+        lLAbrirAhora = (LinearLayout) view.findViewById(R.id.LLAbrirAhora);
         tVPrecio = (TextView) view.findViewById(R.id.TVPrecio);
         tVNombreWorkpod = (TextView) view.findViewById(R.id.TVNombreWorkpod);
         tVDireccion = (TextView) view.findViewById(R.id.TVDireccion);
@@ -131,11 +134,13 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         tVDescripcionWorkpod = (TextView) view.findViewById(R.id.TVDescripcionWorkpod);
         iVFlechas_Informacion_Desripcion = (ImageView) view.findViewById(R.id.IVFlechas_Informacion_Descripcion);
         iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
-        iVUltUso=(ImageView)view.findViewById(R.id.IVUltUso);
-        iVUltLimpieza=(ImageView)view.findViewById(R.id.IVUltLimpieza);
+        iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
+        iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
         btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
+        //INICIALIZAMOS LA INSTANCIA DE RESERVA
+        reserva = new Reserva();
         //LE PASAMOS LOS DATOS DEL WORKPOD
         asignarDatosBDAlXML();
 
@@ -148,9 +153,19 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         iVFlechas_Informacion_Desripcion.setOnClickListener(this);
         iVFlechas_Descripcion_Informacion.setOnClickListener(this);
 
+        //COMPROBAMOS SI USUARIO ESTÁ REGISTRADO
+
+        /* DESACTIVAR BTN CUANDO USUARIO NO ESTÉ REGISTRADO
+         if(InfoApp.USER.getId()==0){
+                usuarioNoRegistrado();
+            }*/
+
+
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -181,9 +196,20 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         } else if (v.getId() == R.id.IVFlechas_Descripcion_Informacion) {
             onClickIVFlechas_Descripcion_Informacion();
 
-        }else if(v.getId()==R.id.BtnReservarWorkpod){
+        } else if (v.getId() == R.id.BtnReservarWorkpod) {
             onClickReservarWorkpod((Button) v);
         }
+    }
+
+    //MÉTODOS
+
+    /**
+     * En este método servirá ara adaptar los elementos del diálogo emergente del workpod a todo
+     * lo que tiene acceso el usuario no registrado
+     */
+    private void usuarioNoRegistrado() {
+        btnReservarWorkpod.setEnabled(false);
+        btnAbrirAhora.setEnabled(false);
     }
 
     /**
@@ -238,16 +264,22 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
             Reserva reserva = new Reserva();
             reserva.setFecha(ZonedDateTime.now());
+            //COGEMOS EL ID DEL USUARIO
             reserva.setUsuario(InfoApp.USER.getId());
+            //COGEMOS EL ID DEL WORKPOD
             reserva.setWorkpod(workpod.getId());
+            //HACEMOS EL INSERT
             Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
             insert.postRunOnUI(requireActivity(), () -> {
                 if (insert.getError().code > -1) {
+                    //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                     btn.setText("Reservado");
+                    lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
                 } else
                     Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
             });
             insert.start();
+
         }
     }
 
@@ -296,447 +328,124 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private void asignarDatosBDAlXML() {
         //SI WORKPOD==NULL ESTAMOS ACCEDIENDO MEDIANTE UN ITEM DEL LSV
         if (workpod == null) {
-            if ((ubicacion.getWorkpods().get(0).getUltimoUso() == null) || (ubicacion.getWorkpods().get(0).getLimpieza() == null)) {
-                //CONTROLAMOS QUE NADA APUNTE A NULO Y SI EL VALOR DE LUZ ES TRUE O FALSE
-                if (ubicacion.getWorkpods().get(0).isLuz()) {
-                    //EN ESTA ESTRUCTURA CONTROLAMOS  SI EL WORKPOD ESTÁ EN MANTENIMIENTO, RESERVADO O DISPONIBLE
-                    if (ubicacion.getWorkpods().get(0).isMantenimiento()) {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        //OCULTAMOS EL BOTÓN ABRIR AHORA
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } //SI EL WORKPOD ESTÁ RESERVADO
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null) {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        //OCULTAMOS EL BOTÓN ABRIR AHORA
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }//WORKPOD DISPONIBLE
-                    else{
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                    }
 
-                }//LUZ NO REGULABLE
-                else {
-                    //WORPOD EN MANTENIMIENTO
-                    if (ubicacion.getWorkpods().get(0).isMantenimiento()) {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }//WORKPOD RESERVADO
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null){
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }//WORKPOD DISPONIBLE
-                    else {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                    }
-
-                }
-            }//NI ÚLTIMO USO NI ÚLTIMA LIMPIEZA SON NULOS
-            else{
-                //CONTROLAMOS QUE NADA APUNTE A NULO Y SI EL VALOR DE LUZ ES TRUE O FALSE
-                if (ubicacion.getWorkpods().get(0).isLuz()) {
-                    //WORKPOD EN MANTENIMIENTO
-                    if (ubicacion.getWorkpods().get(0).isMantenimiento()) {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }//WORKPOD RESERVADO
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null) {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }//WORKPOD DISPONIBLE
-                    else{
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                    }
-
-                } //LUZ NO REGULABLE
-                else {
-                    //WORKPOD EN MANTENIMIENTO
-                    if (ubicacion.getWorkpods().get(0).isMantenimiento()) {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }
-                    else if(ubicacion.getWorkpods().get(0).getReserva()!=null){
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else {
-                        tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-                        tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-                        tVDireccion.setText(ubicacion.getDireccion().toLongString());
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(ubicacion.getWorkpods().get(0).getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-                        btnReservarWorkpod.setBackgroundTintList(getActivity().getResources().getColorStateList(R.color.blue));
-                    }
-
-                }
-            }
-            //SI WORPOD!=NULL, ACCEDEMOS DE UN MARCADOR DONDE HAY UN SOLO WORKPOD O DESDE EL FRAGMENT DE SESION DEL HISTÓRICO DE TRANSACCIONES
-        } else {
-            //CONTROLAMOS QUE NADA APUNTE A NULO Y SI EL VALOR DE LUZ ES TRUE O FALSE
-            if ((workpod.getUltimoUso() == null) || (workpod.getLimpieza() == null)) {
-                if (workpod.isLuz()) {
-                    if (workpod.isMantenimiento()) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        btnReservarWorkpod.setTextSize(20);
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else if (workpod.getReserva() != null) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnReservarWorkpod.setText("Reservado");
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                    }
-
-                } else {
-                    if (workpod.isMantenimiento()) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        btnReservarWorkpod.setTextSize(20);
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else if (workpod.getReserva() != null) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("");
-                        tVUltLimpieza.setText("");
-                        //HACEMOS INVISIBLES LOS ELEMENTOS NULOS
-                        iVUltLimpieza.setVisibility(View.GONE);
-                        iVUltUso.setVisibility(View.GONE);
-
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                    }
-                }
+            //CAMPOS QUE NUNCA VARÍAN
+            tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
+            tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
+            tVDireccion.setText(ubicacion.getDireccion().toLongString());
+            tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
+            //SI WORKPOD NO TIENE FECHA ULT USO
+            if (ubicacion.getWorkpods().get(0).getUltimoUso() == null) {
+                tVUltUso.setText("");
+                iVUltUso.setVisibility(View.GONE);
             } else {
-                if (workpod.isLuz()) {
-                    if (workpod.isMantenimiento()) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnReservarWorkpod.setTextSize(20);
-
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else if (workpod.getReserva() != null) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Con iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                    }
-
-                } else {
-                    if (workpod.isMantenimiento()) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Mantenimiento");
-                        btnReservarWorkpod.setTextSize(20);
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                        //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    } else if(workpod.getReserva()!=null) {
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                        btnReservarWorkpod.setText("Reservado");
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                        //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                        //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                        btnAbrirAhora.setVisibility(View.GONE);
-                    }else{
-                        tVNombreWorkpod.setText(workpod.getNombre());
-                        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-                        tVDireccion.setText(direccion);
-                        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-                        tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-                        tVIlumincion.setText("Sin iluminación regulable");
-                        descripcion = workpod.getDescripcion();
-                    }
-
-                }
+                tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+            }
+            //SI ESTE WORKPOD NO FECHA DE ULT LIMPIEZA
+            if (ubicacion.getWorkpods().get(0).getLimpieza() == null) {
+                tVUltLimpieza.setText("");
+                iVUltLimpieza.setVisibility(View.GONE);
             }
 
+            //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE
+            if (ubicacion.getWorkpods().get(0).isLuz()) {
+                tVIlumincion.setText("Con iluminación regulable");
+            } else {
+                tVIlumincion.setText("Sin iluminación regulable");
+            }
+
+            //SI ESTE WORKPOD NO POSEE UNA DESCRIPCIÓN PARTICULAR, PONEMOS LA DE POR DEFECTO
+            if (ubicacion.getWorkpods().get(0).getDescripcion().equals("")) {
+                descripcion = "Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate " +
+                        "de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás" +
+                        " trabajar sin problemas.";
+            } else {
+                descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
+            }
+
+            //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
+            if (ubicacion.getWorkpods().get(0).isMantenimiento()) {
+                btnReservarWorkpod.setText("Mantenimiento");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            }//SI EL WORKPOD ESTÁ RESERVADO
+            else if (ubicacion.getWorkpods().get(0).getReserva() != null) {
+                btnReservarWorkpod.setText("Reservado");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            }
+
+        } else {
+            //CAMPOS QUE NUNCA VARÍAN
+            tVNombreWorkpod.setText(workpod.getNombre());
+            tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
+            tVDireccion.setText(direccion);
+            tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
+            //SI WORKPOD NO TIENE FECHA ULT USO
+            if (workpod.getUltimoUso() == null) {
+                tVUltUso.setText("");
+                iVUltUso.setVisibility(View.GONE);
+            } else {
+                tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+
+            }
+            //SI ESTE WORKPOD NO FECHA DE ULT LIMPIEZA
+            if (workpod.getLimpieza() == null) {
+                tVUltLimpieza.setText("");
+                iVUltLimpieza.setVisibility(View.GONE);
+            }
+
+            //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE
+            if (workpod.isLuz()) {
+                tVIlumincion.setText("Con iluminación regulable");
+            } else {
+                tVIlumincion.setText("Sin iluminación regulable");
+            }
+
+            //SI ESTE WORKPOD NO POSEE UNA DESCRIPCIÓN PARTICULAR, PONEMOS LA DE POR DEFECTO
+            if (workpod.getDescripcion().equals("")) {
+                descripcion = "Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate " +
+                        "de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás" +
+                        " trabajar sin problemas.";
+            } else {
+                descripcion = workpod.getDescripcion();
+            }
+
+            //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
+            if (workpod.isMantenimiento()) {
+                btnReservarWorkpod.setText("Mantenimiento");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            }//SI EL WORKPOD ESTÁ RESERVADO
+            else if (workpod.getReserva() != null) {
+                btnReservarWorkpod.setText("Reservado");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            }
         }
     }
 }

@@ -325,7 +325,6 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
                     android:justificationMode="inter_word"
-                    android:text="Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás trabajar sin problemas. Esta cabina se encuentra en el centro de Madrid"
                     android:textColor="@color/black" />
 
             </LinearLayout>
