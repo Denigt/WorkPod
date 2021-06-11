@@ -105,4 +105,18 @@ public abstract class Method {
         return String.format("%04d-%02d-%02d %02d:%02d:%02d",
                 fecha.getYear(), fecha.getDayOfMonth(), fecha.getMonthValue(), fecha.getHour(), fecha.getMinute(), fecha.getSecond());
     }
+
+    /**
+     * Resta a la fecha1 la fecha2 y devuelve el resultado en segundos
+     * Si las fechas son anteriores a 1970 el metodo no es funcional
+     * @param fecha1 Fecha
+     * @param fecha2 Fecha a restar
+     * @return long con segundos de diferencia entre las dos fechas
+     * Si la fecha2 es mayor a fecha1 se devuelve un valor negativo
+     */
+    public static long subsDate(ZonedDateTime fecha1, ZonedDateTime fecha2){
+        long seg1 = fecha1.toEpochSecond();
+        long seg2 = fecha2.toEpochSecond();
+        return seg1 - seg2;
+    }
 }

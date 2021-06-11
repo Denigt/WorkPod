@@ -144,7 +144,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         //CIERRA EL CUADRO DE DIALOGO
       if(v.getId()==R.id.IVDialogUbication){
 
-          Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod,ubication);
+          Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion());
           fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");;
 
         }

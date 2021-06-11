@@ -32,6 +32,7 @@ import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
+import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
@@ -85,14 +86,25 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     //CONSTRUCTOR CON INSTANCIA DE WORKPOS Y DIRECCION
-    public Fragment_Dialog_Workpod(Workpod workpod, String direccion) {
+    /**
+     * Crea un fragment con la informacion del workpod que hay en la ubicacion
+     * @param workpod Workpod del que obtener la informacion
+     * @param ubicacion Ubicacion en la que se encuentra el workpod
+     */
+    public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion) {
         this.workpod = workpod;
-        this.direccion = direccion;
+        this.ubicacion = ubicacion;
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
+    /**
+     * Crea un fragment con la informacion del workpod que hay en la ubicacion
+     * Solo usar si la ubicacion tiene un solo workpod
+     * @param ubicacion Ubicacion en la que se encuentra el workpod
+     */
     public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
+        this.workpod = ubicacion.getWorkpods().get(0);
     }
 
 
@@ -261,7 +273,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     public void onClickReservarWorkpod(Button btn){
-        if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
+        if (InfoApp.USER == null){
+            Toast.makeText(requireContext(), "Debes registrarte para poder realizar una reserva", Toast.LENGTH_LONG).show();
+        }else if (InfoApp.USER.getReserva() != null && Method.subsDate(ZonedDateTime.now(), InfoApp.USER.getReserva().getFecha())/60. <= 20) {
+            Toast.makeText(requireContext(), "Ya tienes una reserva", Toast.LENGTH_SHORT).show();
+        }else if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
             Reserva reserva = new Reserva();
             reserva.setFecha(ZonedDateTime.now());
             //COGEMOS EL ID DEL USUARIO
@@ -275,6 +291,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                     btn.setText("Reservado");
                     lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                    for (Workpod item: ubicacion.getWorkpods())
+                        if(item.getId() == workpod.getId())
+                            item.setReserva(reserva);
                 } else
                     Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
             });
@@ -326,126 +346,63 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * ubicacion, se machaca y solo salen los datos del primer item independientemente de el item que pulse.
      */
     private void asignarDatosBDAlXML() {
-        //SI WORKPOD==NULL ESTAMOS ACCEDIENDO MEDIANTE UN ITEM DEL LSV
-        if (workpod == null) {
-
-            //CAMPOS QUE NUNCA VARÍAN
-            tVNombreWorkpod.setText(ubicacion.getWorkpods().get(0).getNombre());
-            tVCapacidad.setText(String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()));
-            tVDireccion.setText(ubicacion.getDireccion().toLongString());
-            tVPrecio.setText(String.valueOf(String.format("%.2f", ubicacion.getWorkpods().get(0).getPrecio())) + "€/min");
-            //SI WORKPOD NO TIENE FECHA ULT USO
-            if (ubicacion.getWorkpods().get(0).getUltimoUso() == null) {
-                tVUltUso.setText("");
-                iVUltUso.setVisibility(View.GONE);
-            } else {
-                tVUltUso.setText("Último uso " + String.valueOf(ubicacion.getWorkpods().get(0).getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-            }
-            //SI ESTE WORKPOD NO FECHA DE ULT LIMPIEZA
-            if (ubicacion.getWorkpods().get(0).getLimpieza() == null) {
-                tVUltLimpieza.setText("");
-                iVUltLimpieza.setVisibility(View.GONE);
-            }
-
-            //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE
-            if (ubicacion.getWorkpods().get(0).isLuz()) {
-                tVIlumincion.setText("Con iluminación regulable");
-            } else {
-                tVIlumincion.setText("Sin iluminación regulable");
-            }
-
-            //SI ESTE WORKPOD NO POSEE UNA DESCRIPCIÓN PARTICULAR, PONEMOS LA DE POR DEFECTO
-            if (ubicacion.getWorkpods().get(0).getDescripcion().equals("")) {
-                descripcion = "Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate " +
-                        "de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás" +
-                        " trabajar sin problemas.";
-            } else {
-                descripcion = ubicacion.getWorkpods().get(0).getDescripcion();
-            }
-
-            //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
-            if (ubicacion.getWorkpods().get(0).isMantenimiento()) {
-                btnReservarWorkpod.setText("Mantenimiento");
-                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                //OCULTAMOS EL BOTÓN ABRIR AHORA
-                btnAbrirAhora.setVisibility(View.GONE);
-            }//SI EL WORKPOD ESTÁ RESERVADO
-            else if (ubicacion.getWorkpods().get(0).getReserva() != null) {
-                btnReservarWorkpod.setText("Reservado");
-                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                //OCULTAMOS EL BOTÓN ABRIR AHORA
-                btnAbrirAhora.setVisibility(View.GONE);
-            }
-
+        //CAMPOS QUE NUNCA VARÍAN
+        tVNombreWorkpod.setText(workpod.getNombre());
+        tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
+        tVDireccion.setText(ubicacion.getDireccion().toLongString());
+        tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
+        //SI WORKPOD NO TIENE FECHA ULT USO
+        if (workpod.getUltimoUso() == null) {
+            tVUltUso.setText("");
+            iVUltUso.setVisibility(View.GONE);
         } else {
-            //CAMPOS QUE NUNCA VARÍAN
-            tVNombreWorkpod.setText(workpod.getNombre());
-            tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
-            tVDireccion.setText(direccion);
-            tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-            //SI WORKPOD NO TIENE FECHA ULT USO
-            if (workpod.getUltimoUso() == null) {
-                tVUltUso.setText("");
-                iVUltUso.setVisibility(View.GONE);
-            } else {
-                tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+            tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
 
-            }
-            //SI ESTE WORKPOD NO FECHA DE ULT LIMPIEZA
-            if (workpod.getLimpieza() == null) {
-                tVUltLimpieza.setText("");
-                iVUltLimpieza.setVisibility(View.GONE);
-            }
+        }
+        //SI ESTE WORKPOD NO FECHA DE ULT LIMPIEZA
+        if (workpod.getLimpieza() == null) {
+            tVUltLimpieza.setText("");
+            iVUltLimpieza.setVisibility(View.GONE);
+        }
 
-            //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE
-            if (workpod.isLuz()) {
-                tVIlumincion.setText("Con iluminación regulable");
-            } else {
-                tVIlumincion.setText("Sin iluminación regulable");
-            }
+        //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE
+        if (workpod.isLuz()) {
+            tVIlumincion.setText("Con iluminación regulable");
+        } else {
+            tVIlumincion.setText("Sin iluminación regulable");
+        }
 
-            //SI ESTE WORKPOD NO POSEE UNA DESCRIPCIÓN PARTICULAR, PONEMOS LA DE POR DEFECTO
-            if (workpod.getDescripcion().equals("")) {
-                descripcion = "Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate " +
-                        "de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás" +
-                        " trabajar sin problemas.";
-            } else {
-                descripcion = workpod.getDescripcion();
-            }
+        //SI ESTE WORKPOD NO POSEE UNA DESCRIPCIÓN PARTICULAR, PONEMOS LA DE POR DEFECTO
+        if (workpod.getDescripcion().equals("")) {
+            descripcion = "Los workpods son cabinas con las que podrás obtener una grata experiencia teletrabajando, olvídate " +
+                    "de los problemas que suponía trabajar en casa, workpod es una mini oficina personalizada en la que podrás" +
+                    " trabajar sin problemas.";
+        } else {
+            descripcion = workpod.getDescripcion();
+        }
 
-            //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
-            if (workpod.isMantenimiento()) {
-                btnReservarWorkpod.setText("Mantenimiento");
-                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                //OCULTAMOS EL BOTÓN ABRIR AHORA
-                btnAbrirAhora.setVisibility(View.GONE);
-            }//SI EL WORKPOD ESTÁ RESERVADO
-            else if (workpod.getReserva() != null) {
-                btnReservarWorkpod.setText("Reservado");
-                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-                //OCULTAMOS EL BOTÓN ABRIR AHORA
-                btnAbrirAhora.setVisibility(View.GONE);
-            }
+        //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
+        if (workpod.isMantenimiento()) {
+            btnReservarWorkpod.setText("Mantenimiento");
+            //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
+            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
+            //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+            lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+            //OCULTAMOS EL BOTÓN ABRIR AHORA
+            btnAbrirAhora.setVisibility(View.GONE);
+        }//SI EL WORKPOD ESTÁ RESERVADO
+        else if (workpod.getReserva() != null) {
+            btnReservarWorkpod.setText("Reservado");
+            //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+            //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+            lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+            //OCULTAMOS EL BOTÓN ABRIR AHORA
+            btnAbrirAhora.setVisibility(View.GONE);
         }
     }
 }

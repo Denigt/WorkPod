@@ -66,6 +66,7 @@ public class Ubicacion implements DataDb{
     }
 
     public List<Workpod> getWorkpods() {
+        Collections.sort(this.workpods);
         return workpods;
     }
 

@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_Lsv_Search;
 import com.example.workpod.basic.Database;
+import com.example.workpod.basic.Method;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.otherclass.MapSearchListener;
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -239,6 +241,11 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
+                    for(Workpod workpod : ubicacion.getWorkpods()){
+                        if (workpod.getReserva() != null && (Method.subsDate(ZonedDateTime.now(), workpod.getReserva().getFecha())/60.) > 20){
+                            workpod.setReserva(null);
+                        }
+                    }
                     fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
