@@ -46,9 +46,11 @@ import java.util.Map;
  */
 public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnClickListener {
 
-    //INSTANCIAMOS LA CLASE UBICACION
+    //INSTANCIAS DE LA CLASE DATA
     Ubicacion ubicacion;
     Workpod workpod;
+    Reserva reserva;
+
     //XML
     private TextView tVNombreWorkpod;
     private TextView tVDireccion;
@@ -76,9 +78,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private String direccion;
     private String descripcion;
 
-    //INSTANCIA DE OTRAS CLASES
-    Reserva reserva;
-
     //COLECCIONES
     Map<Button,Integer> mButtonsGrandes;
     Map<Button,Integer> mButtonsPequenos;
@@ -86,7 +85,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     Map<TextView,Integer> mTvPequenos;
 
 
-    //CONSTRUCTOR POR DEFECTO
+    //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
     public Fragment_Dialog_Workpod() {
         ubicacion = new Ubicacion();
     }
@@ -325,7 +324,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //COGEMOS EL ID DEL WORKPOD
             reserva.setWorkpod(workpod.getId());
             //HACEMOS EL INSERT
-          /*  Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
+            Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
             insert.postRunOnUI(requireActivity(), () -> {
                 if (insert.getError().code > -1) {
                     //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
@@ -338,12 +337,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 } else
                     Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
             });
-            insert.start();*/
-
-            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-            btn.setText("Reservado");
-            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-
+            insert.start();
         }
     }
 
