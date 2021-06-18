@@ -407,10 +407,26 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         for (Ubicacion ubicacion : lstUbicacion) {
             LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
 
+
+
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
             markPosicion.setTag(ubicacion);
             markPosicion.setIcon(VectortoBitmap(requireContext(), R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
         }
+
+        //CALCULAR DISTANCIA ENTRE 2 COORDENADAS
+        Ubicacion ubicacion=new Ubicacion();
+        Location locationA = new Location("punto A");
+        locationA.setLatitude(lstUbicacion.get(0).getLat());
+        locationA.setLongitude(lstUbicacion.get(0).getLon());
+
+        Location locationB = new Location("punto B");
+
+        locationB.setLatitude(lstUbicacion.get(1).getLat());
+        locationB.setLongitude(lstUbicacion.get(1).getLon());
+
+        float distance = locationA.distanceTo(locationB);
+        Toast.makeText(getActivity(),String.valueOf(distance/1000),Toast.LENGTH_LONG).show();
     }
 
     /**

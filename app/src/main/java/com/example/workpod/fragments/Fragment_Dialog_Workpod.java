@@ -1,9 +1,7 @@
 package com.example.workpod.fragments;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -39,6 +37,8 @@ import com.example.workpod.data.Workpod;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Use the {@link Fragment_Dialog_Workpod#newInstance} factory method to
@@ -79,13 +79,19 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     //INSTANCIA DE OTRAS CLASES
     Reserva reserva;
 
+    //COLECCIONES
+    Map<Button,Integer> mButtonsGrandes;
+    Map<Button,Integer> mButtonsPequenos;
+    Map<TextView,Integer> mTvGrandes;
+    Map<TextView,Integer> mTvPequenos;
+
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Dialog_Workpod() {
         ubicacion = new Ubicacion();
     }
 
-    //CONSTRUCTOR CON INSTANCIA DE WORKPOS Y DIRECCION
+    //CONSTRUCTOR CON INSTANCIA DE WORKPODS Y DIRECCION
     /**
      * Crea un fragment con la informacion del workpod que hay en la ubicacion
      * @param workpod Workpod del que obtener la informacion
@@ -94,6 +100,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion) {
         this.workpod = workpod;
         this.ubicacion = ubicacion;
+        this.mButtonsGrandes =new HashMap<>();
+        this.mButtonsPequenos =new HashMap<>();
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
@@ -153,11 +161,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
         //INICIALIZAMOS LA INSTANCIA DE RESERVA
         reserva = new Reserva();
-        //LE PASAMOS LOS DATOS DEL WORKPOD
-        asignarDatosBDAlXML();
 
-        //ESCALAMOS ESTE FRAGMENT A CUALQUIER DISPOSITIVO
-        escalabilidad();
+
+        escalarElementos();
+
+        //VOLCAMOS DATOS DE LA BD
+        volcarDatos();
 
         //LISTENERS
         btnReservarWorkpod.setOnClickListener(this);
@@ -177,6 +186,37 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         return builder.create();
     }
 
+    /**
+     * En este método vamos a coger los parámetros de nuestro dispositivo con getMetrics ya que en la clase Method que no forma parte
+     * de ningún actívity no podemos inicialiar nuestro objeto metrics con los parámetros de nuestro dispoditivo
+     *
+     * También será donde llenaremos las colecciones de nuestros widgets y donde se lo pasaremos al método donde se realizará el
+     * escalamiento.
+     */
+    private void escalarElementos() {
+        //INICIALIZAMOS COLECCIONES
+        this.mButtonsGrandes =new HashMap<>();
+        this.mButtonsPequenos =new HashMap<>();
+        this.mTvGrandes=new HashMap<>();
+        this.mTvPequenos=new HashMap<>();
+
+        DisplayMetrics metrics= new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        mButtonsGrandes.put(btnAbrirAhora,20);
+        mButtonsGrandes.put(btnReservarWorkpod,25);
+
+        mButtonsPequenos.put(btnReservarWorkpod,20);
+        mButtonsPequenos.put(btnAbrirAhora,15);
+
+        mTvPequenos.put(tVNombreWorkpod,40);
+        mTvPequenos.put(tVPrecio,13);
+
+
+        Method.scaleButtons(metrics, mButtonsPequenos,mButtonsGrandes);
+        Method.scaleTxt(metrics,mTvPequenos,null);
+    }
 
 
     @Override
@@ -285,7 +325,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //COGEMOS EL ID DEL WORKPOD
             reserva.setWorkpod(workpod.getId());
             //HACEMOS EL INSERT
-            Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
+          /*  Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
             insert.postRunOnUI(requireActivity(), () -> {
                 if (insert.getError().code > -1) {
                     //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
@@ -298,40 +338,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 } else
                     Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
             });
-            insert.start();
+            insert.start();*/
 
-        }
-    }
+            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+            btn.setText("Reservado");
+            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
 
-    /**
-     * Esclaremos los elementos del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
-     * absolutos, sino los reales.
-     */
-    private void escalabilidad() {
-        //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
-        float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
-        float height = metrics.heightPixels / metrics.density; // alto absoluto en pixels
-
-        //LOS MOVILES GRANDESCOGERÁN EL VALOR DEL XML
-        //MOVILES MEDIANOS
-        if ((width <= (1200 / metrics.density)) && (width > (550 / metrics.density))) {
-            btnAbrirAhora.setTextSize(20);
-            btnReservarWorkpod.setTextSize(25);
-            btnReservarWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            btnAbrirAhora.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            //MOVILES PEQUEÑOS
-        } else if (width <= (550 / metrics.density)) {
-            //CAMBIAMOS TAMAÑO TEXTO
-            btnAbrirAhora.setTextSize(12);
-            btnReservarWorkpod.setTextSize(20);
-            tVNombreWorkpod.setTextSize(40);
-            tVPrecio.setTextSize(13);
-            //CAMBIAMOS TAMAÑO BOTÓN
-            btnReservarWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            btnAbrirAhora.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
         }
     }
 
@@ -345,7 +357,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * Por lo que cuando tengo q acceder al Dialog de Reservar Workpod desde un item del LsV tengo q hacerlo de un objeto workpod, si lo hago con un objeto
      * ubicacion, se machaca y solo salen los datos del primer item independientemente de el item que pulse.
      */
-    private void asignarDatosBDAlXML() {
+    private void volcarDatos() {
         //CAMPOS QUE NUNCA VARÍAN
         tVNombreWorkpod.setText(workpod.getNombre());
         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));

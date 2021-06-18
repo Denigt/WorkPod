@@ -77,24 +77,24 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
             if (lstWorkpods.get(i).isMantenimiento()) {
                 txtEstado.setText("Mantenimiento");
                 //APIS SUPERIORES A LA 21
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
                 //API 21
-                else
+                else*/
                     txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_orange));
             } else if ((lstWorkpods.get(i).getReserva() == null)) {
                 txtEstado.setText("Disponible");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+              /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
-                else
+                else*/
                     txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
             } else {
                 txtEstado.setText("Reservado");
                 //APIS SUPERIORES A LA 21
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+             /*   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
                 //API 21
-                else
+                else*/
                     txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
             }
         } catch (NullPointerException e) {
