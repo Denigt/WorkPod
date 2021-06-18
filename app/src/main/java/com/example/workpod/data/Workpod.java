@@ -111,7 +111,13 @@ public class Workpod implements DataDb, Comparable<Workpod>{
 
     }
 
+    /**
+     * Reserva del wortkpod
+     * @return Los datos de la reserva o null si no hay reserva o esta caducada
+     */
     public Reserva getReserva() {
+        if (reserva != null && reserva.isCancelada())
+            return null;
         return reserva;
     }
 

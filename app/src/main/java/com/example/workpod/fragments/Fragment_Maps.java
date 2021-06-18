@@ -241,11 +241,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
-                    for(Workpod workpod : ubicacion.getWorkpods()){
-                        if (workpod.getReserva() != null && (Method.subsDate(ZonedDateTime.now(), workpod.getReserva().getFecha())/60.) > 20){
-                            workpod.setReserva(null);
-                        }
-                    }
                     fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{

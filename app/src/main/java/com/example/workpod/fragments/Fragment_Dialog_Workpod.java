@@ -314,7 +314,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     public void onClickReservarWorkpod(Button btn){
         if (InfoApp.USER == null){
             Toast.makeText(requireContext(), "Debes registrarte para poder realizar una reserva", Toast.LENGTH_LONG).show();
-        }else if (InfoApp.USER.getReserva() != null && Method.subsDate(ZonedDateTime.now(), InfoApp.USER.getReserva().getFecha())/60. <= 20) {
+        }else if (InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()) {
             Toast.makeText(requireContext(), "Ya tienes una reserva", Toast.LENGTH_SHORT).show();
         }else if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
             Reserva reserva = new Reserva();
@@ -323,6 +323,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             reserva.setUsuario(InfoApp.USER.getId());
             //COGEMOS EL ID DEL WORKPOD
             reserva.setWorkpod(workpod.getId());
+            //ESTABLECEMOS EL ESTADO DE LA RESERVA
+            reserva.setEstado("RESERVADA");
             //HACEMOS EL INSERT
             Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
             insert.postRunOnUI(requireActivity(), () -> {
