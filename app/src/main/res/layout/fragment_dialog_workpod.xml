@@ -349,7 +349,7 @@
 
                 <LinearLayout
                     android:id="@+id/LLEstadoWorkpod"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
@@ -402,7 +402,8 @@
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/blue"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:visibility="gone"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

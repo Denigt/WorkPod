@@ -336,6 +336,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                     btn.setText("Reservado");
                     lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                    //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+                    lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    btnAbrirAhora.setVisibility(View.VISIBLE);
                     // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                     for (Workpod item: ubicacion.getWorkpods())
                         if(item.getId() == workpod.getId())
