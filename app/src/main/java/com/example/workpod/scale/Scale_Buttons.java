@@ -5,7 +5,7 @@ import android.widget.Button;
 public class Scale_Buttons {
     //DECLARAMOS VARIABLES
     private Button button;
-    private String widht;
+    private String width;
     private String style;
     private int sizeLittle;
     private int sizeBig;
@@ -13,7 +13,7 @@ public class Scale_Buttons {
     //CONSTRUCTOR
     public Scale_Buttons(Button button, String widht, String style, int sizeLittle, int sizeBig) {
         this.button = button;
-        this.widht = widht;
+        this.width = widht;
         this.style = style;
         this.sizeLittle = sizeLittle;
         this.sizeBig = sizeBig;
@@ -28,12 +28,12 @@ public class Scale_Buttons {
         this.button = button;
     }
 
-    public String getWidht() {
-        return widht;
+    public String getWidth() {
+        return width;
     }
 
-    public void setWidht(String widht) {
-        this.widht = widht;
+    public void setWidth(String width) {
+        this.width = width;
     }
 
     public String getStyle() {

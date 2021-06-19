@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,6 +105,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     public Fragment_Maps() {
         lstUbicacion = new ArrayList<>();
     }
+
+
 
     //SOBREESCRITURAS
     @Override
