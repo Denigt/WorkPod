@@ -194,7 +194,7 @@ public abstract class Method {
     public static String dateToString(ZonedDateTime fecha, ZoneId zona) {
         fecha = fecha.withZoneSameInstant(zona);
         return String.format("%04d-%02d-%02d %02d:%02d:%02d",
-                fecha.getYear(), fecha.getDayOfMonth(), fecha.getMonthValue(), fecha.getHour(), fecha.getMinute(), fecha.getSecond());
+                fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth(), fecha.getHour(), fecha.getMinute(), fecha.getSecond());
     }
 
     /**

@@ -133,6 +133,7 @@ public class Database<T extends DataDb> extends Thread {
                 break;
             case INSERT:
                 insert(dato);
+                break;
             case UPDATE:
                 update(dato);
                 break;
