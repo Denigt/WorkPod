@@ -36,6 +36,7 @@ import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
+import com.example.workpod.otherclass.Comprobar_Reserva;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
 
@@ -87,7 +88,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
-    List<Scale_TextView>lstTv;
+    List<Scale_TextView> lstTv;
+
+    //INSTANCIA CLASE COMPROBAR_RESERVA
+    int idUsuario;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -96,9 +100,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     //CONSTRUCTOR CON INSTANCIA DE WORKPODS Y DIRECCION
+
     /**
      * Crea un fragment con la informacion del workpod que hay en la ubicacion
-     * @param workpod Workpod del que obtener la informacion
+     *
+     * @param workpod   Workpod del que obtener la informacion
      * @param ubicacion Ubicacion en la que se encuentra el workpod
      */
     public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion) {
@@ -107,14 +113,17 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
+
     /**
      * Crea un fragment con la informacion del workpod que hay en la ubicacion
      * Solo usar si la ubicacion tiene un solo workpod
+     *
      * @param ubicacion Ubicacion en la que se encuentra el workpod
      */
-    public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
+    public Fragment_Dialog_Workpod(Ubicacion ubicacion, int idUsuario) {
         this.ubicacion = ubicacion;
         this.workpod = ubicacion.getWorkpods().get(0);
+        this.idUsuario=idUsuario;
     }
 
 
@@ -161,6 +170,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
         iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
 
+
+
         btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
@@ -187,9 +198,27 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 usuarioNoRegistrado();
             }*/
 
+        comprobarReserva();
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
+    }
+
+    /**
+     * Método que comprueba si el usuario tiene una reserva en un determinado workpod que aún no ha caducado.
+     * Este Método modificará la interfaz del Fragment a reservado
+     */
+    private void comprobarReserva() {
+        if ((workpod.getReserva() != null) && (workpod.getReserva().getUsuario() == idUsuario)) {
+            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+            btnReservarWorkpod.setText("Reservado");
+            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            btnAbrirAhora.setVisibility(View.VISIBLE);
+            //ECO DEL TIEMPO HASTA CADUCAR RESERVA
+            Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -199,32 +228,31 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn=new ArrayList<>();
-        this.lstTv=new ArrayList<>();
+        this.lstBtn = new ArrayList<>();
+        this.lstTv = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnReservarWorkpod,"wrap_content","normal",20,25));
-        lstBtn.add(new Scale_Buttons(btnAbrirAhora,"","normal",15,20));
+        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 20, 25));
+        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 15, 20));
 
-        lstTv.add(new Scale_TextView(tVNombreWorkpod,"wrap_content","bold",40,55));
-        lstTv.add(new Scale_TextView(tVPrecio,"wrap_content","bold",13,25));
-        lstTv.add(new Scale_TextView(tVDireccion,"wrap_content","normal",20,20));
-        lstTv.add(new Scale_TextView(tVDescripcionWorkpod,"wrap_content","normal",15,15));
-        lstTv.add(new Scale_TextView(tVIlumincion,"wrap_content","normal",17,17));
-        lstTv.add(new Scale_TextView(tVUltLimpieza,"wrap_content","normal",15,17));
-        lstTv.add(new Scale_TextView(tVUltUso,"wrap_content","normal",17,17));
+        lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 55));
+        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 13, 25));
+        lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20));
+        lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15));
+        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "normal", 17, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "normal", 15, 17));
+        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "normal", 17, 17));
 
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
@@ -262,7 +290,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
         } else if (v.getId() == R.id.BtnReservarWorkpod) {
             onClickReservarWorkpod((Button) v);
-        }else if(v.getId()==R.id.iVComoLlegar){
+        } else if (v.getId() == R.id.iVComoLlegar) {
             onClickComoLlegar();
         }
     }
@@ -331,26 +359,25 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * todos los intents de Google Maps se llaman ACTION_VIEW.
      * Las llamadas setPackage("com.google.android.apps.maps")asegurarán que la aplicación Google Maps para Android maneje el Intent.
      * Si el paquete no está configurado, el sistema determinará qué aplicaciones pueden manejar el Intent
-     *
+     * <p>
      * Con la Uri en geo van las coordenadas, en z el zoom y q define los lugares que resaltar en el mapa
      */
-    public void onClickComoLlegar(){
+    public void onClickComoLlegar() {
         //METEMOS EN EL INTENT LAS COORDENADAS DEL WORKPOD
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:"+String.valueOf(ubicacion.getLat())+","+
-                String.valueOf(ubicacion.getLon())+"?z=16&q="+String.valueOf(ubicacion.getLat())+","+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:" + String.valueOf(ubicacion.getLat()) + "," +
+                String.valueOf(ubicacion.getLon()) + "?z=16&q=" + String.valueOf(ubicacion.getLat()) + "," +
                 String.valueOf(ubicacion.getLon())));
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
         //INICIAMOS LA ACTIVIDAD
         startActivity(intent);
     }
 
-    public void onClickReservarWorkpod(Button btn){
-        if (InfoApp.USER == null){
+    public void onClickReservarWorkpod(Button btn) {
+        if (InfoApp.USER == null) {
             Toast.makeText(requireContext(), "Debes registrarte para poder realizar una reserva", Toast.LENGTH_LONG).show();
-        }else if (InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()) {
+        } else if (InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()) {
             Toast.makeText(requireContext(), "Ya tienes una reserva", Toast.LENGTH_SHORT).show();
-        }else if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
-            Reserva reserva = new Reserva();
+        } else if (workpod.getReserva() == null && !workpod.isMantenimiento()) {
             reserva.setFecha(ZonedDateTime.now());
             //COGEMOS EL ID DEL USUARIO
             reserva.setUsuario(InfoApp.USER.getId());
@@ -369,16 +396,17 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                     btnAbrirAhora.setVisibility(View.VISIBLE);
                     //ECO DEL TIEMPO HASTA CADUCAR RESERVA
-                    Toast.makeText(getActivity(),"Tienes 20 min para llegar",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
                     // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                    for (Workpod item: ubicacion.getWorkpods())
-                        if(item.getId() == workpod.getId())
+                    for (Workpod item : ubicacion.getWorkpods())
+                        if (item.getId() == workpod.getId())
                             item.setReserva(reserva);
                 } else
                     Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
             });
             insert.start();
         }
+
     }
 
     /**
@@ -409,7 +437,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         if (workpod.getLimpieza() == null) {
             tVUltLimpieza.setText("");
             iVUltLimpieza.setVisibility(View.GONE);
-        }else{
+        } else {
             tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
         }
 
@@ -454,7 +482,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         }
     }
 
-    private void  distanciaTiempo(){
+    private void distanciaTiempo() {
 
     }
 }

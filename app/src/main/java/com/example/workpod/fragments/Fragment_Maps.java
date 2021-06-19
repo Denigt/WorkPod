@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_Lsv_Search;
 import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
@@ -247,7 +248,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                     fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
+                    int idUsuario= InfoApp.USER.getId();
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion,idUsuario);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
             } catch (Exception e) {
