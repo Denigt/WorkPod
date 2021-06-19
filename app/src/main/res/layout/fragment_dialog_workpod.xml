@@ -65,7 +65,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="15dp"
-                                android:src="@drawable/fill_icon_friends_blue"/>
+                                android:src="@drawable/fill_icon_friends_blue" />
 
                             <TextView
                                 android:id="@+id/TVCapacidad"
@@ -164,9 +164,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_weight="3"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -195,42 +195,48 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <LinearLayout
-
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/IVUltUso"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="15dp"
-                        android:src="@drawable/empty_icon_clock" />
-
-                    <TextView
-                        android:id="@+id/TVUltUso"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Último uso  03/04/2021"
-                        android:textColor="@color/black"
-                        android:textSize="17dp" />
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/IVFlechas_Informacion_Descripcion"
+                            android:id="@+id/IVUltUso"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/flechas_informacion_descripcion" />
-                    </LinearLayout>
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/empty_icon_clock" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/TVUltUso"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Último uso  03/04/2021"
+                            android:textColor="@color/black"
+                            android:textSize="17dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/IVFlechas_Informacion_Descripcion"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:src="@drawable/flechas_informacion_descripcion" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -288,14 +294,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginLeft="20dp"
+                        android:gravity="center"
                         android:text="Descripción"
                         android:textColor="@color/blue"
                         android:textSize="25dp"
@@ -322,8 +328,8 @@
                     android:id="@+id/TVDescripcionWorkpod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:justificationMode="inter_word"
                     android:textColor="@color/black" />
 
@@ -333,9 +339,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
                 android:layout_weight="3"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -346,21 +352,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:gravity="center"
                     android:background="@drawable/rounded_back_button"
+                    android:gravity="center"
                     android:padding="2dp">
 
                     <Button
                         android:id="@+id/BtnReservarWorkpod"
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
                         android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="1dp"
                         android:background="?android:selectableItemBackground"
                         android:backgroundTint="#FF58B1E3"
                         android:text="Reservar"
@@ -377,20 +383,20 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:gravity="center"
                     android:background="@drawable/rounded_border_button"
+                    android:gravity="center"
                     android:padding="2dp">
 
                     <Button
                         android:id="@+id/BtnAbrirAhora"
                         android:layout_width="180dp"
                         android:layout_height="50dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:background="?android:selectableItemBackground"
                         android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="?android:selectableItemBackground"
                         android:gravity="center"
                         android:text="¡Abrir Ahora!"
                         android:textAlignment="center"

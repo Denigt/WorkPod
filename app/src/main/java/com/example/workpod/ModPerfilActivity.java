@@ -1,12 +1,13 @@
 package com.example.workpod;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,19 +17,35 @@ import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Usuario;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModPerfilActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String[] TIPOS_DOCUMENTO = {"NIF", "NIE"};
 
     // CONTROLES DEL LAYOUT
-    Spinner spnDNI;
-    EditText txtNombre;
-    EditText txtApellido;
-    EditText txtDNI;
-    EditText txtEmail;
-    ImageButton btnGuardar;
-    ImageButton btnCancelar;
+    private Spinner spnDNI;
+    private EditText txtNombre;
+    private EditText txtApellido;
+    private EditText txtDNI;
+    private EditText txtEmail;
+    private TextView tVActModPerfilTitulo;
+    private TextView tVActModPerfilPregNombre;
+    private TextView tVActModPerfilNombre;
+    private TextView tVActModPerfilApellidos;
+    private TextView tVActModPerfilNIFNIE;
+    private TextView tVActModPerfilPregEmail;
+    private TextView tVActModPerfilEmail;
+    private ImageButton btnGuardar;
+    private ImageButton btnCancelar;
+
+    //COLECCIONES
+    List<Scale_Buttons> lstBtn;
+    List<Scale_TextView> lstTv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +59,13 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
         txtApellido = findViewById(R.id.txtApellido);
         txtDNI = findViewById(R.id.txtDNI);
         txtEmail = findViewById(R.id.txtEmail);
+        tVActModPerfilApellidos = findViewById(R.id.tVActModPerfilApellidos);
+        tVActModPerfilEmail = findViewById(R.id.tVActModPerfilEmail);
+        tVActModPerfilNIFNIE = findViewById(R.id.tVActModPerfilNIFNIE);
+        tVActModPerfilNombre = findViewById(R.id.tVActModPerfilNombre);
+        tVActModPerfilPregEmail = findViewById(R.id.tVActModPerfilPregEmail);
+        tVActModPerfilPregNombre = findViewById(R.id.tVActModPerfilPregNombre);
+        tVActModPerfilTitulo = findViewById(R.id.tVActModPerfilTitulo);
         btnGuardar = findViewById(R.id.btnGuardar);
         btnCancelar = findViewById(R.id.btnCancelar);
 
@@ -61,14 +85,15 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
             txtDNI.setHint(InfoApp.USER.getDni());
             //txtDNI.setText(InfoApp.USER.getTelefono());
         }
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == btnCancelar.getId()){
+        if (v.getId() == btnCancelar.getId()) {
             finish();
-        }
-        else if (InfoApp.USER != null && v.getId() == btnGuardar.getId()) {
+        } else if (InfoApp.USER != null && v.getId() == btnGuardar.getId()) {
             Usuario modUser = new Usuario();
 
             modUser.set(InfoApp.USER);
@@ -87,15 +112,51 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
 
             Database<Usuario> update = new Database<>(Database.UPDATE, modUser);
             update.postRunOnUI(this, () -> {
-                if(update.getError().code > -1){
+                if (update.getError().code > -1) {
                     Toast.makeText(this, "Datos modificados", Toast.LENGTH_SHORT).show();
                     InfoApp.USER.set(modUser);
                     finish();
-                }else{
+                } else {
                     Toast.makeText(this, "No se han podido modificar los datos", Toast.LENGTH_SHORT).show();
                 }
             });
             update.start();
         }
+    }
+
+    //METODOS
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+
+        //INICIALIZAMOS COLECCIONES
+        this.lstTv = new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstTv.add(new Scale_TextView(tVActModPerfilApellidos, "Match_Parent", "bold", 18, 18));
+        lstTv.add(new Scale_TextView(tVActModPerfilEmail, "Match_Parent", "bold", 18, 18));
+        lstTv.add(new Scale_TextView(tVActModPerfilNIFNIE, "Match_Parent", "bold", 24, 24));
+        lstTv.add(new Scale_TextView(tVActModPerfilNombre, "Match_Parent", "bold", 18, 18));
+        lstTv.add(new Scale_TextView(tVActModPerfilPregEmail, "Match_Parent", "bold", 24, 24));
+        lstTv.add(new Scale_TextView(tVActModPerfilPregNombre, "Match_Parent", "bold", 24, 24));
+        lstTv.add(new Scale_TextView(tVActModPerfilTitulo, "Match_Parent", "bold", 30, 34));
+
+        Method.scaleTv(metrics, lstTv);
+
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.workpod.R;
+import com.example.workpod.basic.Method;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Workpod;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 //PARA CREAR UN DIALOGRESULT DEBEMOS HEREDAR DE LA CLASE DIALOGFRAGMENT
@@ -65,6 +71,8 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     private String[] alfabeto;
     private String[] matrizSignos;
 
+    //COLECCIONES
+    List<Scale_TextView>lstTv;
 
     //CONSTRUCTOR
     public Fragment_Dialog_Transaction_Session(Sesion sesion) {
@@ -135,6 +143,10 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
 
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
         iVDialogUbication.setOnClickListener(this);
+
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
+
         return view;
 
     }
@@ -143,10 +155,8 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     public void onClick(View v) {
         //CIERRA EL CUADRO DE DIALOGO
       if(v.getId()==R.id.IVDialogUbication){
-
           Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion());
           fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");;
-
         }
     }
 
@@ -248,6 +258,36 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
                 matrizSignos[signoAleatorio2] + alfabeto[letraAleatoria2];
         //MOSTRAMOS EL RESULTADO PARA VER SI SE HA FORMADO UN ID ALEATORIO CORRECTO
         //Toast.makeText(getActivity(),idSesionWorkpod,Toast.LENGTH_LONG).show();
+    }
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+       //INICIALIZAMOS COLECCIONES
+        this.lstTv=new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstTv.add(new Scale_TextView(tVDialogUbication,"match_parent","bold",20,20));
+        lstTv.add(new Scale_TextView(tVDialogDateHour,"match_parent","bold",20,20));
+        lstTv.add(new Scale_TextView(tVDialogSessionTime,"match_parent","bold",20,20));
+        lstTv.add(new Scale_TextView(tVDialogOffers,"match_parent","bold",20,20));
+        lstTv.add(new Scale_TextView(tVDialogPrice,"match_parent","bold",20,20));
+
+        Method.scaleTv(metrics, lstTv);
     }
 
 }

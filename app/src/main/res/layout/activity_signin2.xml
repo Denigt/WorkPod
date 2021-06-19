@@ -46,6 +46,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tVActSignin2Titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -57,6 +58,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActSignin2PregEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -66,6 +68,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActSignin2Email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -84,6 +87,7 @@
                 android:inputType="textEmailAddress"/>
 
             <TextView
+                android:id="@+id/tVActSignin2PregContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -94,6 +98,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActSignin2Contrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -112,6 +117,7 @@
                 android:inputType="textPassword"/>
 
             <TextView
+                android:id="@+id/tVActSignin2InstruccionesContrasena"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="50dp"
@@ -121,6 +127,7 @@
             android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActSignin2RepetirContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"

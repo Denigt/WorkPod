@@ -34,11 +34,13 @@ import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Use the {@link Fragment_Dialog_Workpod#newInstance} factory method to
@@ -79,10 +81,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private String descripcion;
 
     //COLECCIONES
-    Map<Button,Integer> mButtonsGrandes;
-    Map<Button,Integer> mButtonsPequenos;
-    Map<TextView,Integer> mTvGrandes;
-    Map<TextView,Integer> mTvPequenos;
+    List<Scale_Buttons> lstBtn;
+    List<Scale_TextView>lstTv;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -99,8 +99,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion) {
         this.workpod = workpod;
         this.ubicacion = ubicacion;
-        this.mButtonsGrandes =new HashMap<>();
-        this.mButtonsPequenos =new HashMap<>();
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
@@ -161,7 +159,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         //INICIALIZAMOS LA INSTANCIA DE RESERVA
         reserva = new Reserva();
 
-
+        //ESCALAMOS ELEMENTOS
         escalarElementos();
 
         //VOLCAMOS DATOS DE LA BD
@@ -186,35 +184,41 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     /**
-     * En este método vamos a coger los parámetros de nuestro dispositivo con getMetrics ya que en la clase Method que no forma parte
-     * de ningún actívity no podemos inicialiar nuestro objeto metrics con los parámetros de nuestro dispoditivo
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
      *
-     * También será donde llenaremos las colecciones de nuestros widgets y donde se lo pasaremos al método donde se realizará el
-     * escalamiento.
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
      */
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.mButtonsGrandes =new HashMap<>();
-        this.mButtonsPequenos =new HashMap<>();
-        this.mTvGrandes=new HashMap<>();
-        this.mTvPequenos=new HashMap<>();
+        this.lstBtn=new ArrayList<>();
+        this.lstTv=new ArrayList<>();
 
-        DisplayMetrics metrics= new DisplayMetrics();
+        DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        mButtonsGrandes.put(btnAbrirAhora,20);
-        mButtonsGrandes.put(btnReservarWorkpod,25);
+        lstBtn.add(new Scale_Buttons(btnReservarWorkpod,"wrap_content","normal",20,25));
+        lstBtn.add(new Scale_Buttons(btnAbrirAhora,"","normal",15,20));
 
-        mButtonsPequenos.put(btnReservarWorkpod,20);
-        mButtonsPequenos.put(btnAbrirAhora,15);
+        lstTv.add(new Scale_TextView(tVNombreWorkpod,"wrap_content","bold",40,55));
+        lstTv.add(new Scale_TextView(tVPrecio,"wrap_content","bold",13,25));
+        lstTv.add(new Scale_TextView(tVDireccion,"wrap_content","normal",20,20));
+        lstTv.add(new Scale_TextView(tVDescripcionWorkpod,"wrap_content","normal",15,15));
+        lstTv.add(new Scale_TextView(tVIlumincion,"wrap_content","normal",17,17));
+        lstTv.add(new Scale_TextView(tVUltLimpieza,"wrap_content","normal",15,17));
+        lstTv.add(new Scale_TextView(tVUltUso,"wrap_content","normal",17,17));
 
-        mTvPequenos.put(tVNombreWorkpod,40);
-        mTvPequenos.put(tVPrecio,13);
-
-
-        Method.scaleButtons(metrics, mButtonsPequenos,mButtonsGrandes);
-        Method.scaleTxt(metrics,mTvPequenos,null);
+        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleTv(metrics, lstTv);
     }
 
 
@@ -371,6 +375,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         if (workpod.getLimpieza() == null) {
             tVUltLimpieza.setText("");
             iVUltLimpieza.setVisibility(View.GONE);
+        }else{
+            tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
         }
 
         //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE

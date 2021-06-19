@@ -9,6 +9,7 @@
     tools:context=".InitActivity">
 
     <TextView
+        android:id="@+id/tvTituloInitActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Para ti, que eres un trabajador activo"
@@ -97,6 +98,7 @@
                 android:id="@+id/btnAcceder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Acceder"
                 android:lines="1"
                 android:background="?selectableItemBackground"
@@ -127,17 +129,20 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:textSize="25dp"
+        android:layout_gravity="center"
         android:textColor="@color/white"
         android:layout_marginHorizontal="30dp"
         android:text="Registrarse"
         android:backgroundTint="@color/blue"/>
 
     <TextView
+        android:id="@+id/TVTerminosServicio"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1.5"
         android:text="Terminos del servicio"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_gravity="center"/>
 
 
 

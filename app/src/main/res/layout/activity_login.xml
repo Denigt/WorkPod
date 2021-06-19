@@ -48,6 +48,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tVActvityLoginBienvenido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -59,6 +60,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActvityLoginIniSesion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -68,6 +70,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActvityLoginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -86,6 +89,7 @@
                 android:inputType="textEmailAddress"/>
 
             <TextView
+                android:id="@+id/tVActvityLoginContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -115,6 +119,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActvityLoginAunNoLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -144,6 +149,7 @@
                         android:id="@+id/btnAcceder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="Acceder"
                         android:lines="1"
                         android:background="?selectableItemBackground"/>
@@ -155,16 +161,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.2"
                     android:layout_marginRight="5dp"
+                    android:layout_marginLeft="15dp"
                     android:background="@drawable/rounded_back_button"
                     >
+
                     <Button
                         android:id="@+id/btnRegistrar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                         android:layout_gravity="center"
+                        android:background="?selectableItemBackground"
                         android:lines="1"
                         android:text="Registrarse"
-                        android:textColor="@color/white"
-                        android:background="?selectableItemBackground"/>
+                        android:textColor="@color/white" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>

@@ -18,6 +18,7 @@
         android:background="@color/white"
         android:gravity="center">
         <TextView
+            android:id="@+id/tVfgmTransHistMisSesiones"
             android:layout_width="280dp"
             android:layout_height="100dp"
             android:layout_marginTop="5dp"
@@ -37,15 +38,18 @@
         android:orientation="horizontal"
         android:layout_margin="20dp"
         android:gravity="right">
+
         <TextView
+            android:id="@+id/tVfgmTransHistSelectAnio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="Seleccione Año"
-            android:textColor="@color/Texto"
             android:textAlignment="center"
+            android:textColor="@color/Texto"
             android:textSize="23dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <Spinner
             android:id="@+id/SpinnerYears2"
             android:layout_gravity="right"

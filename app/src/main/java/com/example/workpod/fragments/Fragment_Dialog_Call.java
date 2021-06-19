@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.workpod.R;
+import com.example.workpod.basic.Method;
+import com.example.workpod.scale.Scale_TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //PARA CREAR UN DIALOGRESULT DEBEMOS HEREDAR DE LA CLASE DIALOGFRAGMENT
 public class Fragment_Dialog_Call extends DialogFragment implements View.OnClickListener {
@@ -30,7 +36,10 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
     //XML
     private ImageView iVSalir;
     private ImageView iVLlamar;
+    private TextView tVFgmDialogCallTlfn;
 
+    //COLECCIONES
+    List<Scale_TextView> lstTv;
 
     //PERMISOS
     private static final int PERMISO_LLAMADA = 50;
@@ -73,10 +82,14 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
         // EN EL MÉTODO onCreateDialog
         iVSalir = (ImageView) v.findViewById(R.id.IVSalir);
         iVLlamar = (ImageView) v.findViewById(R.id.IVLlamar);
+        tVFgmDialogCallTlfn=v.findViewById(R.id.tVFgmDialogCallTlfn);
 
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
         iVSalir.setOnClickListener(this);
         iVLlamar.setOnClickListener(this);
+
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -115,5 +128,31 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
         } catch (Exception e) {
 
         }
+    }
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+        //INICIALIZAMOS COLECCIONES
+        this.lstTv=new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstTv.add(new Scale_TextView(tVFgmDialogCallTlfn,"wrap_content","bold",35,35));
+
+        Method.scaleTv(metrics, lstTv);
     }
 }

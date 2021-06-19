@@ -48,6 +48,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tVActModPerfilTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -59,7 +60,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tVActModPerfilPregNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -69,7 +70,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tVActModPerfilNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -87,7 +88,7 @@
                 android:layout_marginHorizontal="30dp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tVActModPerfilApellidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -105,6 +106,7 @@
                 android:layout_marginHorizontal="30dp" />
 
             <TextView
+                android:id="@+id/tVActModPerfilNIFNIE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -132,6 +134,7 @@
                 android:layout_marginHorizontal="30dp"/>
 
             <TextView
+                android:id="@+id/tVActModPerfilPregEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -141,6 +144,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActModPerfilEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"

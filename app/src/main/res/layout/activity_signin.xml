@@ -47,6 +47,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tVActSigninTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -58,6 +59,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActSigninPregNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -67,6 +69,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tVActSigninNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -84,6 +87,7 @@
                 android:layout_marginHorizontal="30dp"/>
 
             <TextView
+                android:id="@+id/tVActSigninApellidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
@@ -102,7 +106,7 @@
                 />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/tVActSigninPregNIFNIE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"

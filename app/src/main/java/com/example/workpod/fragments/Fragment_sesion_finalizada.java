@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,14 @@ import android.widget.Toast;
 import com.example.workpod.R;
 import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
+import com.example.workpod.basic.Method;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +41,10 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     private TextView tVSesionCapacidad;
     private TextView tVSesionDireccion;
     private TextView tVTiempoTranscurrido;
+
+    //COLECCIONES
+    List<Scale_Buttons> lstBtn;
+    List<Scale_TextView>lstTv;
 
     //BD
     Ubicacion ubicacion;
@@ -63,6 +74,7 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         return fragment;
     }
 
+    //SOBREESCRITURAS
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +101,33 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         btnContactarSoporte.setBackgroundColor(Color.parseColor("#C3A240"));
 
         valoresWorkpod();
+
         //LISTENERS
         btnCerrarWorPod.setOnClickListener(this);
         btnContactarSoporte.setOnClickListener(this);
+
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
+
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.BtnCerrarWorPod) {
+            Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
+        } else if (v.getId() == R.id.BtnContactarSoporte) {
+            fragment_support fragmentSupport = new fragment_support();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
+            //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
+            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
+            WorkpodActivity.boolLoc = false;
+        }
+    }
+
+    //MÉTODOS
 
     /**
      * Metodo donde asignaremos el valor del workpod a los elementos del xml
@@ -131,19 +165,37 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         }
     }
 
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+        //INICIALIZAMOS COLECCIONES
+        this.lstTv=new ArrayList<>();
+        this.lstBtn=new ArrayList<>();
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.BtnCerrarWorPod) {
-            Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
-            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(activity);
-        } else if (v.getId() == R.id.BtnContactarSoporte) {
-            fragment_support fragmentSupport = new fragment_support();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
-            //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
-            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
-            WorkpodActivity.boolLoc = false;
-        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstBtn.add(new Scale_Buttons(btnCerrarWorPod,"","normal",20,20));
+        lstBtn.add(new Scale_Buttons(btnContactarSoporte,"","normal",20,20));
+
+        lstTv.add(new Scale_TextView(tVWifi,"wrap_content","bold",18,18));
+        lstTv.add(new Scale_TextView(tVSesionCapacidad,"wrap_content","bold",18,18));
+        lstTv.add(new Scale_TextView(tVSesionDireccion,"wrap_content","bold",18,18));
+        lstTv.add(new Scale_TextView(tVTiempoTranscurrido,"wrap_content","bold",55,55));
+
+        Method.scaleTv(metrics, lstTv);
     }
 }

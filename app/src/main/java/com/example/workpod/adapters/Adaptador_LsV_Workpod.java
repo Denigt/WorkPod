@@ -123,4 +123,5 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         iV_Icon_Limpieza.setImageTintList(ColorStateList.valueOf(Color.parseColor("#58B1E3")));
         return view;
     }
+
 }

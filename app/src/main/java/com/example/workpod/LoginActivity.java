@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +21,11 @@ import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Usuario;
-import com.example.workpod.fragments.InfoFragment;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, CompoundButton.OnCheckedChangeListener {
     // VARIABLES DE LOGIN
@@ -36,6 +40,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox btnShowContrasena;
     private Button btnAcceder;
     private Button btnRegistrar;
+    private TextView tVActvityLoginBienvenido;
+    private TextView tVActvityLoginIniSesion;
+    private TextView tVActvityLoginEmail;
+    private TextView tVActvityLoginContrasena;
+    private TextView tVActvityLoginAunNoLogin;
+
+    //COLECCIONES
+    List<Scale_Buttons> lstBtn;
+    List<Scale_TextView>lstTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +217,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnAcceder = findViewById(R.id.btnAcceder);
         btnRegistrar = findViewById(R.id.btnRegistrar);
 
+        tVActvityLoginAunNoLogin=findViewById(R.id.tVActvityLoginAunNoLogin);
+        tVActvityLoginBienvenido=findViewById(R.id.tVActvityLoginBienvenido);
+        tVActvityLoginContrasena=findViewById(R.id.tVActvityLoginContrasena);
+        tVActvityLoginEmail=findViewById(R.id.tVActvityLoginEmail);
+        tVActvityLoginIniSesion=findViewById(R.id.tVActvityLoginIniSesion);
+
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         txtEmail.setOnFocusChangeListener(this);
         txtContrasena.setOnFocusChangeListener(this);
@@ -219,6 +238,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             FrameLayout lyt = findViewById(R.id.lytForeground1);
             lyt.setBackground(getDrawable(R.drawable.rounded_border_button));
         }
+
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
     }
 
     /**
@@ -228,5 +250,45 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void saveActivity(){
         email = txtEmail.getText().toString().trim().toLowerCase();
         contrasena = txtContrasena.getText().toString();
+    }
+
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+       //INICIALIZAMOS COLECCIONES
+        this.lstBtn=new ArrayList<>();
+        this.lstTv=new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,15));
+        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",12,15));
+
+        lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,24));
+        lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34));
+        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",24,24));
+
+        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleTv(metrics, lstTv);
+
+        //LLENAMOS COLECCIONES
+        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleTv(metrics,lstTv);
     }
 }

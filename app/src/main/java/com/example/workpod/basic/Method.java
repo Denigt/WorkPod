@@ -3,16 +3,15 @@ package com.example.workpod.basic;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Map;
-
-import kotlin.jvm.Throws;
+import java.util.List;
 
 /**
  * Incorpora metodos estaticos para funciones basicas
@@ -105,81 +104,81 @@ public abstract class Method {
     }
 
     /**
-     *  Esclaremos los btns del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
-     *  absolutos, sino los reales.
-     * @param metrics objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
-     * @param mBtnPequenos colección clave valor cuya clave son los btn y los valores su tamaño para dispositivos pequeños
-     * @param mBtnGrandes colección clave valor cuya clave son los tv y los valores su tamaño para dispositivos medianos y grandes
+     * Esclaremos los btns del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
+     * absolutos, sino los reales.
+     *
+     * @param metrics      objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
      */
-    public static void scaleButtons(DisplayMetrics metrics, Map<Button, Integer> mBtnPequenos, Map<Button, Integer> mBtnGrandes) {
+    public static void scaleButtons(DisplayMetrics metrics, List<Scale_Buttons> lstBtns) {
         //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
-
         //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
         float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
         float height = metrics.heightPixels / metrics.density; // alto absoluto en pixels
 
-        //LOS MOVILES GRANDESCOGERÁN EL VALOR DEL XML
-        //MOVILES MEDIANOS
-
-        if (mBtnGrandes != null) {
+        for (Scale_Buttons btn : lstBtns) {
+            //DEFINIMOS TAMAÑO FUENTE
             if ((width <= (1200 / metrics.density)) && (width > (550 / metrics.density))) {
-                for (Map.Entry<Button, Integer> buttons : mBtnGrandes.entrySet()) {
-                    buttons.getKey().setTextSize(buttons.getValue());
-                    buttons.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    buttons.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                }
+                btn.getButton().setTextSize(btn.getSizeBig());
+            } else if (width <= (550 / metrics.density)) {
+                btn.getButton().setTextSize(btn.getSizeLittle());
+            }
+            //APLICAMOS EL WIDHT CORRESPONDIENTE
+            if (btn.getWidht().trim().equalsIgnoreCase("Match_Parent")) {
+                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            } else if (btn.getWidht().trim().equalsIgnoreCase("Wrap_Content")) {
+                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            }
+            //APLICAMOS EL ESTILO CORRESPONDIENTE
+            if (btn.getStyle().trim().equalsIgnoreCase("bold")) {
+                btn.getButton().setTypeface(null, Typeface.BOLD);
+            } else if (btn.getStyle().trim().equalsIgnoreCase("italic")) {
+                btn.getButton().setTypeface(null, Typeface.ITALIC);
+            } else if (btn.getStyle().trim().equalsIgnoreCase("normal")) {
+                btn.getButton().setTypeface(null, Typeface.NORMAL);
+            } else if (btn.getStyle().trim().equalsIgnoreCase("bold_italic")) {
+                btn.getButton().setTypeface(null, Typeface.BOLD_ITALIC);
             }
         }
-        //MOVILES PEQUEÑOS
-        if (mBtnPequenos != null) {
-            if (width <= (550 / metrics.density)) {
-                //CAMBIAMOS TAMAÑO TEXTO
-                for (Map.Entry<Button, Integer> buttons : mBtnPequenos.entrySet()) {
-                    buttons.getKey().setTextSize(buttons.getValue());
-                    buttons.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    buttons.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                }
-            }
-        }
-
     }
 
     /**
      * escalaremos los tv del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
      * absolutos, sino los reales.
-     * @param metrics objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
-     * @param mTvPequenos colección clave valor cuya clave son los tv y los valores su tamaño para dispositivos pequeños
-     * @param mTvGrandes colección clave valor cuya clave son los tv y los valores su tamaño para dispositivos medianos y grandes
+     *
+     * @param metrics     objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
      */
-    public static void scaleTxt(DisplayMetrics metrics, Map<TextView, Integer> mTvPequenos, Map<TextView, Integer> mTvGrandes) {
+    public static void scaleTv(DisplayMetrics metrics, List<Scale_TextView> lstTv) {
         //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
-
         //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
         float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
         float height = metrics.heightPixels / metrics.density; // alto absoluto en pixels
 
-        //LOS MOVILES GRANDESCOGERÁN EL VALOR DEL XML
-        //MOVILES MEDIANOS
-
-        if (mTvGrandes != null) {
+          for (Scale_TextView tv : lstTv) {
+            //DEFINIMOS TAMAÑO FUENTE
             if ((width <= (1200 / metrics.density)) && (width > (550 / metrics.density))) {
-                for (Map.Entry<TextView, Integer> tv : mTvGrandes.entrySet()) {
-                    tv.getKey().setTextSize(tv.getValue());
-                    tv.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    tv.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                }
+                tv.getTextView().setTextSize(tv.getSizeBig());
+            } else if (width <= (550 / metrics.density)) {
+                tv.getTextView().setTextSize(tv.getSizeLittle());
             }
-        }
-        //MOVILES PEQUEÑOS
-        if (mTvPequenos != null) {
-            if (width <= (550 / metrics.density)) {
-                //CAMBIAMOS TAMAÑO TEXTO
-                for (Map.Entry<TextView, Integer> tv : mTvPequenos.entrySet()) {
-                    tv.getKey().setTextSize(tv.getValue());
-                    tv.getKey().setTypeface(null,Typeface.BOLD);
-                    tv.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    tv.getKey().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                }
+            //APLICAMOS EL WIDHT CORRESPONDIENTE
+            if (tv.getWidht().trim().equalsIgnoreCase("Match_Parent")) {
+                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            } else if (tv.getWidht().trim().equalsIgnoreCase("Wrap_Content")) {
+                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            }
+            //APLICAMOS EL ESTILO CORRESPONDIENTE
+            if (tv.getStyle().trim().equalsIgnoreCase("bold")) {
+                tv.getTextView().setTypeface(null, Typeface.BOLD);
+            } else if (tv.getStyle().trim().equalsIgnoreCase("italic")) {
+                tv.getTextView().setTypeface(null, Typeface.ITALIC);
+            } else if (tv.getStyle().trim().equalsIgnoreCase("normal")) {
+                tv.getTextView().setTypeface(null, Typeface.NORMAL);
+            } else if (tv.getStyle().trim().equalsIgnoreCase("bold_italic")) {
+                tv.getTextView().setTypeface(null, Typeface.BOLD_ITALIC);
             }
         }
 

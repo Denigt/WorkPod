@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,10 @@ import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_Spinner;
 import com.example.workpod.basic.Database;
+import com.example.workpod.basic.Method;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.otherclass.Spinner_Years_Transaction_History;
+import com.example.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,6 +53,10 @@ public class Fragment_Transaction_History extends Fragment {
     private List<String> lstYears = new ArrayList<>();
     List<Spinner_Years_Transaction_History> lstSpinner = new ArrayList<>();
 
+    //COLECCIONES
+    List<Scale_TextView>lstTv;
+    List<Sesion> lstSesiones = new ArrayList<>();//LAS SESIONES DE WORKPOD
+
     //ELSV Y SUS ELEMENTOS
     ExpandableListView eLsV;
 
@@ -65,8 +72,9 @@ public class Fragment_Transaction_History extends Fragment {
     ArrayList<String> monthList;//ALMACENAMOS EL MES (TITULOS DEL ELSV)
     HashMap<String, List<Sesion>> itemList;//ALMACENAMOS LA SESIÓN (ITEMS DEL ELSV)
 
-    //LIST
-    List<Sesion> lstSesiones = new ArrayList<>();//LAS SESIONES DE WORKPOD
+    //OTRAS VARIABLES
+    private TextView tVfgmTransHistMisSesiones;
+    private TextView tVfgmTransHistSelectAnio;
 
 
     //CONSTRUCTOR POR DEFECTO
@@ -98,12 +106,17 @@ public class Fragment_Transaction_History extends Fragment {
         //INICIALIZAMOS LOS ELEMENTOS DEL XML
         eLsV = (ExpandableListView) view.findViewById(R.id.eLsV2);
         spinnerYears = (Spinner) view.findViewById(R.id.SpinnerYears2);
+        tVfgmTransHistMisSesiones=view.findViewById(R.id.tVfgmTransHistMisSesiones);
+        tVfgmTransHistSelectAnio=view.findViewById(R.id.tVfgmTransHistSelectAnio);
 
         //CONEXIÓN CON LA BD, VOLCADO DE LAS SESIONES EN LSTSESIONES
         conectarseBDSesion(view, getActivity());
 
         //PARA ACTIVAR EL MENU EMERGENTE
         setHasOptionsMenu(true);
+
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
 
         return view;
     }
@@ -264,6 +277,35 @@ public class Fragment_Transaction_History extends Fragment {
                 }
             }
         }
+
+    }
+
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+        //INICIALIZAMOS COLECCIONES
+        this.lstTv=new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones,"","bold",35,35));
+        lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio,"wrap_content","bold",23,23));
+
+        Method.scaleTv(metrics, lstTv);
     }
 
     //CLASE DEL ADAPTADOR

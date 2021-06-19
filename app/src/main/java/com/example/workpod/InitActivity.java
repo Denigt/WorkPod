@@ -6,6 +6,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,12 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.example.workpod.basic.Method;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_TextView;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class InitActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,7 +33,13 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnRegistrar;
     private ImageSwitcher imgSwitcher;
     private TextSwitcher txtSwitcher;
+    private TextView tvTituloInitActivity;
+    private TextView tVTerminosServicio;
     private ArrayList<ImageButton> btnSwither = new ArrayList<ImageButton>();
+
+    //COLECCIONES
+    List<Scale_Buttons> lstBtn;
+    List<Scale_TextView>lstTv;
 
     // RECURSOS DEL LOS SWITCHER
     private final int[] images = {R.drawable.empty_icon_user_21, R.drawable.fill_icon_contact_us_cicle_21, R.drawable.fill_icon_friends};
@@ -45,9 +57,12 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         btnRegistrar = findViewById(R.id.btnRegistrar);
         imgSwitcher = findViewById(R.id.imgSwitcher);
         txtSwitcher = findViewById(R.id.txtSwitcher);
+        tvTituloInitActivity = findViewById(R.id.tvTituloInitActivity);
+        tVTerminosServicio = findViewById(R.id.TVTerminosServicio);
         btnSwither.add(findViewById(R.id.btnSwitcher0));
         btnSwither.add(findViewById(R.id.btnSwitcher1));
         btnSwither.add(findViewById(R.id.btnSwitcher2));
+
         //btnSwither.add(findViewById(R.id.btnSwitcher3));
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
@@ -89,13 +104,16 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         txtSwitcher.setOutAnimation(getApplicationContext(), R.anim.left_out);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             FrameLayout lyt = findViewById(R.id.lytForeground1);
             lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
 
             lyt = findViewById(R.id.lytForeground2);
             lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
         }
+
+        //ESCALAMOS ELEMENTOS
+        escalarElementos();
     }
 
     @Override
@@ -108,26 +126,27 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // CLICK DE LOS BOTONES
-    private void btnAccederOnClick(View v){
-        if(v.getId() == btnAcceder.getId()){
+    private void btnAccederOnClick(View v) {
+        if (v.getId() == btnAcceder.getId()) {
             // PROVISIONAL PARA NO CAMBIAR EL MANIFIEST
             Intent activity = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(activity);
         }
     }
 
-    private void btnConectarOnClick(View v){
-        if(v.getId() == btnConectar.getId()){
+    private void btnConectarOnClick(View v) {
+        if (v.getId() == btnConectar.getId()) {
 
         }
     }
 
     /**
      * Inicia una actividad para registrarse al pulsar "Registrarse"
+     *
      * @param v Vista clicada
      */
-    private void btnRegistrarOnClick(View v){
-        if(v.getId() == btnRegistrar.getId()){
+    private void btnRegistrarOnClick(View v) {
+        if (v.getId() == btnRegistrar.getId()) {
             Intent activity = new Intent(getApplicationContext(), SigninActivity.class);
             // Indicar la pantalla de registro
             activity.putExtra("screen", 0);
@@ -138,10 +157,11 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Pasa al siguiente elemento de los Switchers
+     *
      * @param v Vista clicada
      */
-    private void switcherOnClick(View v){
-        if(v.getId() == imgSwitcher.getId() || v.getId() == txtSwitcher.getId()){
+    private void switcherOnClick(View v) {
+        if (v.getId() == imgSwitcher.getId() || v.getId() == txtSwitcher.getId()) {
             if (lastPos < (images.length - 1))
                 ++lastPos;
             else lastPos = 0;
@@ -154,6 +174,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Maneja las pulsaciones a los botones del switcher
+     *
      * @param v Vista clicada
      */
     private void btnSwitcherOnClick(View v) {
@@ -176,14 +197,48 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // OTROS METODOS
-    private void chgButtons(int btnToChange){
-        if (btnToChange < btnSwither.size()){
-            for (int i = 0; i < btnSwither.size(); i++){
+    private void chgButtons(int btnToChange) {
+        if (btnToChange < btnSwither.size()) {
+            for (int i = 0; i < btnSwither.size(); i++) {
                 if (i != btnToChange)
                     btnSwither.get(i).setImageResource(R.drawable.fill_icon_circle);
                 else
                     btnSwither.get(i).setImageResource(R.drawable.empty_icon_circle);
             }
         }
+    }
+
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private void escalarElementos() {
+        //INICIALIZAMOS COLECCIONES
+        this.lstBtn=new ArrayList<>();
+        this.lstTv=new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        //LLENAMOS COLECCIONES
+        lstBtn.add(new Scale_Buttons(btnConectar,"Match_Parent","bold",11,15));
+        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,15));
+        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",25,25));
+
+        lstTv.add(new Scale_TextView(tvTituloInitActivity,"Match_Parent","bold",29,29));
+        lstTv.add(new Scale_TextView(tVTerminosServicio,"Match_Parent","normal",15,15));
+
+        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleTv(metrics, lstTv);
     }
 }
