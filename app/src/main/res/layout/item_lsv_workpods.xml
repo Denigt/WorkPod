@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="10dp"
         android:paddingVertical="10dp">
 
         <TextView
@@ -59,7 +59,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="10dp"
         android:paddingVertical="10dp">
         <LinearLayout
             android:id="@+id/LLEstadoLsV"
@@ -88,7 +88,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="end"
+                android:gravity="center"
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/IV_Icon_Historial"
@@ -97,7 +97,8 @@
                     android:src="@drawable/fill_icon_historial"
                     android:scaleType="centerInside"
                     app:tint="@color/blue"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"/>
 
                 <TextView
                     android:id="@+id/txtUso"
@@ -106,14 +107,14 @@
                     android:layout_marginHorizontal="5dp"
                     android:textColor="@color/textgray"
                     android:textSize="16dp"
-                    android:text="04/05/2021"
+                    android:text="04/05/2021 16:45"
                     android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="end"
+                android:gravity="center"
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/IV_Icon_Limpieza"
@@ -123,7 +124,8 @@
                     android:scaleType="centerInside"
                     app:tint="@color/blue"
                     android:backgroundTint="@color/blue"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"/>
 
                 <TextView
                     android:id="@+id/txtLimpieza"
@@ -132,7 +134,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:textColor="@color/textgray"
                     android:textSize="16dp"
-                    android:text="14/05/2021"
+                    android:text="14/05/2021 18:30"
                     android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>

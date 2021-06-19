@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,9 +42,10 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
     private ZonedDateTime ultLimpieza;
     private Reserva reserva;
 
+    //VARIABLES PARA EL ESCALADO
+    private DisplayMetrics metrics=new DisplayMetrics();
+
     //CONSTRUCTOR
-
-
     public Fragment_Dialog_Cluster(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
     }
@@ -77,6 +79,9 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
         lsV_Workpods = (ListView) view.findViewById(R.id.LsV_Workpods);
         tVTituloDialogCluster = (TextView) view.findViewById(R.id.TVTituloDialogCluster);
 
+        //INICIALIZO EL OBJETO DE LA CLASE DISPLAYMETRICS
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
         //MÉTODO PARA ARMAR EL LSV
         construyendo_LsV(view);
 
@@ -91,7 +96,7 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
      */
     private void construyendo_LsV(View view) {
 
-        final Adaptador_LsV_Workpod adaptadorLsVWorkpod = new Adaptador_LsV_Workpod(view.getContext(), ubicacion.getWorkpods());
+        final Adaptador_LsV_Workpod adaptadorLsVWorkpod = new Adaptador_LsV_Workpod(view.getContext(), ubicacion.getWorkpods(),metrics);
         lsV_Workpods.setAdapter(adaptadorLsVWorkpod);
 
 

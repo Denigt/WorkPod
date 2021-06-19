@@ -47,6 +47,7 @@ public class fragment_support extends Fragment {
     private ListView lsV_Support;
     private TextView tVFgmSupportTitulo;
     ArrayList<LsV_Support> aLstSupport = new ArrayList<>();
+    DisplayMetrics metrics = new DisplayMetrics();
 
     //COLECCIONES;
     List<Scale_TextView> lstTv;
@@ -78,6 +79,9 @@ public class fragment_support extends Fragment {
         lsV_Support = (ListView) view.findViewById(R.id.LsV_Support);
         tVFgmSupportTitulo=view.findViewById(R.id.tVFgmSupportTitulo);
 
+        //INICIALIZAMOS EL OBJETO DISPLAYMETRICS CON LOS PARÁMETROS DE NUESTRO DISPOSITIVO
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
         //ARMAMOS EL LSV
         construyendo_LsV(view);
 
@@ -100,7 +104,7 @@ public class fragment_support extends Fragment {
         aLstSupport.add(new LsV_Support(0, R.drawable.fill_icon_interrogacion, "Preguntas Frecuentes"));
         aLstSupport.add(new LsV_Support(1, R.drawable.fill_icon_gmail, "workpodtfg@gmail.com"));
         aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_llamar, "Contacta por Teléfono "));
-        final Adaptador_LsV_Support aSuport = new Adaptador_LsV_Support(view.getContext(), aLstSupport);
+        final Adaptador_LsV_Support aSuport = new Adaptador_LsV_Support(view.getContext(), aLstSupport, metrics);
         lsV_Support.setAdapter(aSuport);
         lsV_Support.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -131,9 +135,6 @@ public class fragment_support extends Fragment {
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
         this.lstTv=new ArrayList<>();
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
         lstTv.add(new Scale_TextView(tVFgmSupportTitulo,"","normal",30,30));
