@@ -1,7 +1,9 @@
 package com.example.workpod.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -62,13 +64,16 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private TextView tVUltLimpieza;
     private TextView tVIlumincion;
     private TextView tVDescripcionWorkpod;
+
     private ImageView iVComoLlegar;
     private ImageView iVFlechas_Informacion_Desripcion;
     private ImageView iVFlechas_Descripcion_Informacion;
     private ImageView iVUltUso;
     private ImageView iVUltLimpieza;
+
     private Button btnReservarWorkpod;
     private Button btnAbrirAhora;
+
     private LinearLayout lLInfoWorkpod;
     private LinearLayout lLDescripcion;
     private LinearLayout lLEstadoWorkpod;
@@ -140,6 +145,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         lLDescripcion = (LinearLayout) view.findViewById(R.id.LLDescripcion);
         lLEstadoWorkpod = (LinearLayout) view.findViewById(R.id.LLEstadoWorkpod);
         lLAbrirAhora = (LinearLayout) view.findViewById(R.id.LLAbrirAhora);
+
         tVPrecio = (TextView) view.findViewById(R.id.TVPrecio);
         tVNombreWorkpod = (TextView) view.findViewById(R.id.TVNombreWorkpod);
         tVDireccion = (TextView) view.findViewById(R.id.TVDireccion);
@@ -147,12 +153,14 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         tVUltUso = (TextView) view.findViewById(R.id.TVUltUso);
         tVUltLimpieza = (TextView) view.findViewById(R.id.TVUltLimpieza);
         tVIlumincion = (TextView) view.findViewById(R.id.TVIluminacion);
-        iVComoLlegar = (ImageView) view.findViewById(R.id.IVComoLlegar);
+
+        iVComoLlegar = (ImageView) view.findViewById(R.id.iVComoLlegar);
         tVDescripcionWorkpod = (TextView) view.findViewById(R.id.TVDescripcionWorkpod);
         iVFlechas_Informacion_Desripcion = (ImageView) view.findViewById(R.id.IVFlechas_Informacion_Descripcion);
         iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
         iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
         iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
+
         btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
@@ -170,6 +178,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         btnAbrirAhora.setOnClickListener(this);
         iVFlechas_Informacion_Desripcion.setOnClickListener(this);
         iVFlechas_Descripcion_Informacion.setOnClickListener(this);
+        iVComoLlegar.setOnClickListener(this);
 
         //COMPROBAMOS SI USUARIO ESTÁ REGISTRADO
 
@@ -253,6 +262,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
         } else if (v.getId() == R.id.BtnReservarWorkpod) {
             onClickReservarWorkpod((Button) v);
+        }else if(v.getId()==R.id.iVComoLlegar){
+            onClickComoLlegar();
         }
     }
 
@@ -315,6 +326,24 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         }
     }
 
+    /**
+     * Abrimos con un Intent google maps y le pasamos la ubicación y el nombre del workpod
+     * todos los intents de Google Maps se llaman ACTION_VIEW.
+     * Las llamadas setPackage("com.google.android.apps.maps")asegurarán que la aplicación Google Maps para Android maneje el Intent.
+     * Si el paquete no está configurado, el sistema determinará qué aplicaciones pueden manejar el Intent
+     *
+     * Con la Uri en geo van las coordenadas, en z el zoom y q define los lugares que resaltar en el mapa
+     */
+    public void onClickComoLlegar(){
+        //METEMOS EN EL INTENT LAS COORDENADAS DEL WORKPOD
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("geo:"+String.valueOf(ubicacion.getLat())+","+
+                String.valueOf(ubicacion.getLon())+"?z=16&q="+String.valueOf(ubicacion.getLat())+","+
+                String.valueOf(ubicacion.getLon())));
+        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        //INICIAMOS LA ACTIVIDAD
+        startActivity(intent);
+    }
+
     public void onClickReservarWorkpod(Button btn){
         if (InfoApp.USER == null){
             Toast.makeText(requireContext(), "Debes registrarte para poder realizar una reserva", Toast.LENGTH_LONG).show();
@@ -339,6 +368,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
                     lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                     btnAbrirAhora.setVisibility(View.VISIBLE);
+                    //ECO DEL TIEMPO HASTA CADUCAR RESERVA
+                    Toast.makeText(getActivity(),"Tienes 20 min para llegar",Toast.LENGTH_LONG).show();
                     // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                     for (Workpod item: ubicacion.getWorkpods())
                         if(item.getId() == workpod.getId())
@@ -421,5 +452,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //OCULTAMOS EL BOTÓN ABRIR AHORA
             btnAbrirAhora.setVisibility(View.GONE);
         }
+    }
+
+    private void  distanciaTiempo(){
+
     }
 }
