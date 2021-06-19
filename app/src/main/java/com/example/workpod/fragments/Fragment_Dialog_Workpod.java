@@ -36,7 +36,6 @@ import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
-import com.example.workpod.otherclass.Comprobar_Reserva;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
 
@@ -85,6 +84,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private double precio;
     private String direccion;
     private String descripcion;
+    int idWorkpodUsuario;
 
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
@@ -120,10 +120,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      *
      * @param ubicacion Ubicacion en la que se encuentra el workpod
      */
-    public Fragment_Dialog_Workpod(Ubicacion ubicacion, int idUsuario) {
+    public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
         this.workpod = ubicacion.getWorkpods().get(0);
-        this.idUsuario=idUsuario;
     }
 
 
@@ -170,13 +169,13 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
         iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
 
-
-
         btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
         btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
         //INICIALIZAMOS LA INSTANCIA DE RESERVA
         reserva = new Reserva();
+        //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
+        idWorkpodUsuario =InfoApp.USER.getReserva().getWorkpod();
 
         //ESCALAMOS ELEMENTOS
         escalarElementos();
@@ -209,7 +208,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * Este Método modificará la interfaz del Fragment a reservado
      */
     private void comprobarReserva() {
-        if ((workpod.getReserva() != null) && (workpod.getReserva().getUsuario() == idUsuario)) {
+        //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORPOD RESERVADO POR EL USUARIO
+        if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
             //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
             btnReservarWorkpod.setText("Reservado");
             lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));

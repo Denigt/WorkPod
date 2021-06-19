@@ -211,7 +211,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // LISTENERS
     @Override
     public void onClick(View v) {
-
         btnCentrarOnClick(v);
         if (fragmentCluster != null && v.getId() != fragmentCluster.getId()){
             getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentCluster).commit();
@@ -248,8 +247,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                     fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
-                    int idUsuario= InfoApp.USER.getId();
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion,idUsuario);
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
             } catch (Exception e) {
