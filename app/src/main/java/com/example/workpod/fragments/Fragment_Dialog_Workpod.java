@@ -3,6 +3,7 @@ package com.example.workpod.fragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -197,12 +198,51 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 usuarioNoRegistrado();
             }*/
 
+        //COMPROBAR SI ESTE WORKPOD ESTÁ RESERVADO POR EL USUARIO
         comprobarReserva();
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
     }
 
+    //SOBREESCRITURAS
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        Window window = getDialog().getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        View view = inflater.inflate(R.layout.fragment_dialog_workpod, container, false);
+        return view;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onClick(View v) {
+
+        if (v.getId() == R.id.BtnAbrirAhora) {
+            onClickBtnAbrirAhora();
+        } else if (v.getId() == R.id.IVFlechas_Informacion_Descripcion) {
+            onClickIVFlechas_Informacion_Descripcion();
+        } else if (v.getId() == R.id.IVFlechas_Descripcion_Informacion) {
+            onClickIVFlechas_Descripcion_Informacion();
+
+        } else if (v.getId() == R.id.BtnReservarWorkpod) {
+            onClickReservarWorkpod((Button) v);
+        } else if (v.getId() == R.id.iVComoLlegar) {
+            onClickComoLlegar();
+        }
+    }
+
+    //MÉTODOS
     /**
      * Método que comprueba si el usuario tiene una reserva en un determinado workpod que aún no ha caducado.
      * Este Método modificará la interfaz del Fragment a reservado
@@ -215,6 +255,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
             //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
             lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
             btnAbrirAhora.setVisibility(View.VISIBLE);
             //ECO DEL TIEMPO HASTA CADUCAR RESERVA
             Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
@@ -257,46 +298,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
     }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Window window = getDialog().getWindow();
-        window.setGravity(Gravity.CENTER);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        View view = inflater.inflate(R.layout.fragment_dialog_workpod, container, false);
-        return view;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onClick(View v) {
-
-        if (v.getId() == R.id.BtnAbrirAhora) {
-            onClickBtnAbrirAhora();
-        } else if (v.getId() == R.id.IVFlechas_Informacion_Descripcion) {
-            onClickIVFlechas_Informacion_Descripcion();
-        } else if (v.getId() == R.id.IVFlechas_Descripcion_Informacion) {
-            onClickIVFlechas_Descripcion_Informacion();
-
-        } else if (v.getId() == R.id.BtnReservarWorkpod) {
-            onClickReservarWorkpod((Button) v);
-        } else if (v.getId() == R.id.iVComoLlegar) {
-            onClickComoLlegar();
-        }
-    }
-
-    //MÉTODOS
-
     /**
      * En este método servirá ara adaptar los elementos del diálogo emergente del workpod a todo
      * lo que tiene acceso el usuario no registrado
