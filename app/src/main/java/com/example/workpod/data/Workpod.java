@@ -287,9 +287,9 @@ public class Workpod implements DataDb, Comparable<Workpod>{
     @Override
     public int compareTo(Workpod workpod) {
         int ret = 0;
-        if(reserva == null && (workpod.reserva != null || workpod.mantenimiento)){
+        if((reserva == null || reserva.isCancelada()) && ((workpod.reserva != null && !workpod.reserva.isCancelada()) || workpod.mantenimiento)){
             ret = -1;
-        }else if (reserva != null && (workpod.reserva == null || workpod.mantenimiento)){
+        }else if ((reserva != null && !reserva.isCancelada()) && (workpod.reserva == null || workpod.reserva.isCancelada() || workpod.mantenimiento)){
             ret = 1;
         }else{
             if(mantenimiento != workpod.mantenimiento){
