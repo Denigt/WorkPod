@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -39,17 +40,22 @@ import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 /**
  * Use the {@link Fragment_Dialog_Workpod#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnClickListener {
+
+    //CONSTANTES
+    private static final int TIEMPO_EMPIECE_CRONO = 3000;
 
     //INSTANCIAS DE LA CLASE DATA
     Ubicacion ubicacion;
@@ -91,8 +97,13 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
 
-    //INSTANCIA CLASE COMPROBAR_RESERVA
-    int idUsuario;
+    //VARIABLES
+    private int centesimas;
+    private int segundos;
+    private int minutos;
+    private Thread crono;
+    private Handler handler = new Handler();
+    private LatLng posicion;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -124,6 +135,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
         this.workpod = ubicacion.getWorkpods().get(0);
+        this.posicion=posicion;
     }
 
 
@@ -143,66 +155,83 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     private Dialog createDialog() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_dialog_workpod, null);
         builder.setView(view);
+        try {
+            //INICIALIZAMOS LOS ELEMENTOS DEL XML
+            lLInfoWorkpod = (LinearLayout) view.findViewById(R.id.LLInfoWorkpod);
+            lLDescripcion = (LinearLayout) view.findViewById(R.id.LLDescripcion);
+            lLEstadoWorkpod = (LinearLayout) view.findViewById(R.id.LLEstadoWorkpod);
+            lLAbrirAhora = (LinearLayout) view.findViewById(R.id.LLAbrirAhora);
 
-        //INICIALIZAMOS LOS ELEMENTOS DEL XML
-        lLInfoWorkpod = (LinearLayout) view.findViewById(R.id.LLInfoWorkpod);
-        lLDescripcion = (LinearLayout) view.findViewById(R.id.LLDescripcion);
-        lLEstadoWorkpod = (LinearLayout) view.findViewById(R.id.LLEstadoWorkpod);
-        lLAbrirAhora = (LinearLayout) view.findViewById(R.id.LLAbrirAhora);
+            tVPrecio = (TextView) view.findViewById(R.id.TVPrecio);
+            tVNombreWorkpod = (TextView) view.findViewById(R.id.TVNombreWorkpod);
+            tVDireccion = (TextView) view.findViewById(R.id.TVDireccion);
+            tVCapacidad = (TextView) view.findViewById(R.id.TVCapacidad);
+            tVUltUso = (TextView) view.findViewById(R.id.TVUltUso);
+            tVUltLimpieza = (TextView) view.findViewById(R.id.TVUltLimpieza);
+            tVIlumincion = (TextView) view.findViewById(R.id.TVIluminacion);
 
-        tVPrecio = (TextView) view.findViewById(R.id.TVPrecio);
-        tVNombreWorkpod = (TextView) view.findViewById(R.id.TVNombreWorkpod);
-        tVDireccion = (TextView) view.findViewById(R.id.TVDireccion);
-        tVCapacidad = (TextView) view.findViewById(R.id.TVCapacidad);
-        tVUltUso = (TextView) view.findViewById(R.id.TVUltUso);
-        tVUltLimpieza = (TextView) view.findViewById(R.id.TVUltLimpieza);
-        tVIlumincion = (TextView) view.findViewById(R.id.TVIluminacion);
+            iVComoLlegar = (ImageView) view.findViewById(R.id.iVComoLlegar);
+            tVDescripcionWorkpod = (TextView) view.findViewById(R.id.TVDescripcionWorkpod);
+            iVFlechas_Informacion_Desripcion = (ImageView) view.findViewById(R.id.IVFlechas_Informacion_Descripcion);
+            iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
+            iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
+            iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
 
-        iVComoLlegar = (ImageView) view.findViewById(R.id.iVComoLlegar);
-        tVDescripcionWorkpod = (TextView) view.findViewById(R.id.TVDescripcionWorkpod);
-        iVFlechas_Informacion_Desripcion = (ImageView) view.findViewById(R.id.IVFlechas_Informacion_Descripcion);
-        iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
-        iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
-        iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
+            btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
+            btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
 
-        btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
-        btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
+            //INICIALIZAMOS OTRAS VARIABLES
+            this.centesimas = 100;
+            this.segundos = 60;
+            this.minutos = 20;
 
-        //INICIALIZAMOS LA INSTANCIA DE RESERVA
-        reserva = new Reserva();
-        //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
-        idWorkpodUsuario =InfoApp.USER.getReserva().getWorkpod();
+            crono = cronometro();
 
-        //ESCALAMOS ELEMENTOS
-        escalarElementos();
+           // Toast.makeText(getActivity(),String.valueOf(posicion.latitude)+","+String.valueOf(posicion.longitude),Toast.LENGTH_LONG).show();
 
-        //VOLCAMOS DATOS DE LA BD
-        volcarDatos();
+            //INICIALIZAMOS LA INSTANCIA DE RESERVA
+            reserva = new Reserva();
 
-        //LISTENERS
-        btnReservarWorkpod.setOnClickListener(this);
-        btnAbrirAhora.setOnClickListener(this);
-        iVFlechas_Informacion_Desripcion.setOnClickListener(this);
-        iVFlechas_Descripcion_Informacion.setOnClickListener(this);
-        iVComoLlegar.setOnClickListener(this);
+            //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
+            if(InfoApp.USER!=null)
+            idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
 
-        //COMPROBAMOS SI USUARIO ESTÁ REGISTRADO
+            //ESCALAMOS ELEMENTOS
+            escalarElementos();
+
+            //VOLCAMOS DATOS DE LA BD
+            volcarDatos();
+
+            //LISTENERS
+            btnReservarWorkpod.setOnClickListener(this);
+            btnAbrirAhora.setOnClickListener(this);
+            iVFlechas_Informacion_Desripcion.setOnClickListener(this);
+            iVFlechas_Descripcion_Informacion.setOnClickListener(this);
+            iVComoLlegar.setOnClickListener(this);
+            lLEstadoWorkpod.setOnClickListener(this);
+
+            //COMPROBAMOS SI USUARIO ESTÁ REGISTRADO
 
         /* DESACTIVAR BTN CUANDO USUARIO NO ESTÉ REGISTRADO
          if(InfoApp.USER.getId()==0){
                 usuarioNoRegistrado();
             }*/
 
-        //COMPROBAR SI ESTE WORKPOD ESTÁ RESERVADO POR EL USUARIO
-        comprobarReserva();
+            //COMPROBAR SI ESTE WORKPOD ESTÁ RESERVADO POR EL USUARIO
+            comprobarReserva();
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
+
     }
 
     //SOBREESCRITURAS
@@ -234,20 +263,22 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             onClickIVFlechas_Informacion_Descripcion();
         } else if (v.getId() == R.id.IVFlechas_Descripcion_Informacion) {
             onClickIVFlechas_Descripcion_Informacion();
-
         } else if (v.getId() == R.id.BtnReservarWorkpod) {
-            onClickReservarWorkpod((Button) v);
+            onClickReservarWorkpod();
         } else if (v.getId() == R.id.iVComoLlegar) {
             onClickComoLlegar();
+        } else if(v.getId()==R.id.LLEstadoWorkpod){
+            onClickReservarWorkpod();
         }
     }
 
     //MÉTODOS
+
     /**
      * Método que comprueba si el usuario tiene una reserva en un determinado workpod que aún no ha caducado.
      * Este Método modificará la interfaz del Fragment a reservado
      */
-    private void comprobarReserva() {
+    private void comprobarReserva() throws InterruptedException {
         //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORPOD RESERVADO POR EL USUARIO
         if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
             //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
@@ -259,6 +290,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             btnAbrirAhora.setVisibility(View.VISIBLE);
             //ECO DEL TIEMPO HASTA CADUCAR RESERVA
             Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -298,6 +330,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
     }
+
     /**
      * En este método servirá ara adaptar los elementos del diálogo emergente del workpod a todo
      * lo que tiene acceso el usuario no registrado
@@ -373,7 +406,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         startActivity(intent);
     }
 
-    public void onClickReservarWorkpod(Button btn) {
+    public void onClickReservarWorkpod() {
         if (InfoApp.USER == null) {
             Toast.makeText(requireContext(), "Debes registrarte para poder realizar una reserva", Toast.LENGTH_LONG).show();
         } else if (InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()) {
@@ -390,18 +423,24 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             Database<Reserva> insert = new Database<>(Database.INSERT, reserva);
             insert.postRunOnUI(requireActivity(), () -> {
                 if (insert.getError().code > -1) {
-                    //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                    btn.setText("Reservado");
-                    lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-                    //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
-                    lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                    btnAbrirAhora.setVisibility(View.VISIBLE);
-                    //ECO DEL TIEMPO HASTA CADUCAR RESERVA
-                    Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
-                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                    for (Workpod item : ubicacion.getWorkpods())
-                        if (item.getId() == workpod.getId())
-                            item.setReserva(reserva);
+                    try {
+                        //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                        btnReservarWorkpod.setText("Reservado");
+                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                        btnAbrirAhora.setVisibility(View.VISIBLE);
+                        //EMPIEZA EL CRONOMETRO
+                        distanciaTiempo();
+                        //ECO DEL TIEMPO HASTA CADUCAR RESERVA
+                        Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
+                        // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                        for (Workpod item : ubicacion.getWorkpods())
+                            if (item.getId() == workpod.getId())
+                                item.setReserva(reserva);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 } else
                     Toast.makeText(getContext(), insert.getError().message, Toast.LENGTH_SHORT).show();
             });
@@ -483,7 +522,76 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         }
     }
 
-    private void distanciaTiempo() {
+    private void distanciaTiempo() throws InterruptedException {
+        //TIEMPO HASTA EMPIECE CRONOMETRO
+
+        //INTANCIA TIMER
+        Timer timer = new Timer();
+        crono.start();
+    }
+
+    public Thread cronometro() throws InterruptedException {
+        //PROGRAMAMOS LOS HILOS
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(TIEMPO_EMPIECE_CRONO);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                while (true) {
+                    try {
+                        centesimas -= 1;
+                        //LE QUITAMOS UNA UNIDAD AL SEGUNDO
+                        if (centesimas <= 0) {
+                            segundos--;
+                            centesimas = 100;
+                        }
+                        //LE QUITAMOS UNA UNIDAD AL MINUTO
+                        if ((segundos <= 0) || (segundos == 60) && (minutos > 0)) {
+                            minutos--;
+                            segundos = 59;
+                        }
+                        //Esto es lo que añadiremps a la interfaz
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    String cadMinutos = "", cadSegundos = "", cadCentesimas = "";
+                                    //Añado 0´s delante para los milisegundos cuando corresponda
+
+                                    if (segundos < 10) {
+                                        cadSegundos = "0" + segundos;
+                                    } else {
+                                        cadSegundos = "" + segundos;
+                                    }
+                                    if (minutos < 10) {
+                                        cadMinutos = "0" + minutos;
+                                    } else {
+                                        cadMinutos = "" + minutos;
+                                    }
+                                    //Incorporo las cadenas en el campo de texto
+                                    btnReservarWorkpod.setText(cadMinutos + ":" + cadSegundos);
+                                    if (segundos < 0) {
+                                        Thread.sleep(50);
+                                    }
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+                        });
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
 
     }
 }
