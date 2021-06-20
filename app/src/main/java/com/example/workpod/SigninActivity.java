@@ -211,8 +211,10 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             insert.postRun(() -> {
                                 Database<Usuario> select = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
                                 select.postRun(() -> {
+                                    InfoApp.USER = new Usuario();
                                     if (select.getError().code > -1)
                                         InfoApp.USER.set(select.getDato());
+                                    else InfoApp.USER = null;
                                 });
                                 select.start();
                             });
