@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -99,11 +100,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     //VARIABLES
     private int centesimas;
-    private int segundos;
-    private int minutos;
+    private long segundos;
+    private long minutos;
     private Thread crono;
     private Handler handler = new Handler();
     private LatLng posicion;
+    private List<Reserva> lstReservas = new ArrayList<>();
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -135,7 +137,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
         this.workpod = ubicacion.getWorkpods().get(0);
-        this.posicion=posicion;
+        this.posicion = posicion;
     }
 
 
@@ -191,16 +193,17 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             this.segundos = 60;
             this.minutos = 20;
 
+            //INICIALIZAMOS HILO
             crono = cronometro();
 
-           // Toast.makeText(getActivity(),String.valueOf(posicion.latitude)+","+String.valueOf(posicion.longitude),Toast.LENGTH_LONG).show();
+            // Toast.makeText(getActivity(),String.valueOf(posicion.latitude)+","+String.valueOf(posicion.longitude),Toast.LENGTH_LONG).show();
 
             //INICIALIZAMOS LA INSTANCIA DE RESERVA
             reserva = new Reserva();
 
             //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
-            if(InfoApp.USER!=null)
-            idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
+            if (InfoApp.USER != null)
+                idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
 
             //ESCALAMOS ELEMENTOS
             escalarElementos();
@@ -267,7 +270,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             onClickReservarWorkpod();
         } else if (v.getId() == R.id.iVComoLlegar) {
             onClickComoLlegar();
-        } else if(v.getId()==R.id.LLEstadoWorkpod){
+        } else if (v.getId() == R.id.LLEstadoWorkpod) {
             onClickReservarWorkpod();
         }
     }
@@ -288,8 +291,17 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
             btnAbrirAhora.setVisibility(View.VISIBLE);
-            //ECO DEL TIEMPO HASTA CADUCAR RESERVA
-            Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
+            //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
+            ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
+            //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
+            long resto = (20 * 60) - Method.subsDate(ZonedDateTime.now(), fechaReservaWorkpod);
+            //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
+            minutos = resto / 60;
+            segundos = resto % 60;
+            //ARRANCAMOS EL HILO
+            crono.start();
+            //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
+            Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -540,6 +552,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                //RESTAR LA FECHA CTUAL CON LA FECHA DE LA RESERVA Y ESO ME DARÁ EL TIEMPO CON METOHD.SUBDATE
+                //LA FECHA DE LA RESERVA ESTÁ EN LA BD Y EL NOW SE VA ACTUALIZANDO
+                // Method.subsDate(ZonedDateTime.now(),//fecha reserva ) me devuelve los segundos(parsearlo a minutos)
                 while (true) {
                     try {
                         centesimas -= 1;
