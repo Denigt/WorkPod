@@ -18,10 +18,12 @@ import android.widget.TextView;
 
 import com.example.workpod.R;
 import com.example.workpod.basic.Method;
+import com.example.workpod.basic.Shared;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -155,7 +157,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     public void onClick(View v) {
         //CIERRA EL CUADRO DE DIALOGO
       if(v.getId()==R.id.IVDialogUbication){
-          Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion());
+          Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
           fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");;
         }
     }

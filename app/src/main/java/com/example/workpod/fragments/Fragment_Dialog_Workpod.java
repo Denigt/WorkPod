@@ -36,6 +36,7 @@ import com.example.workpod.WorkpodActivity;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
+import com.example.workpod.basic.Shared;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
@@ -104,7 +105,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private long minutos;
     private Thread crono;
     private Handler handler = new Handler();
-    private LatLng posicion;
+    private Shared<LatLng> posicion;
     private List<Reserva> lstReservas = new ArrayList<>();
 
 
@@ -121,9 +122,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * @param workpod   Workpod del que obtener la informacion
      * @param ubicacion Ubicacion en la que se encuentra el workpod
      */
-    public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion) {
+    public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion, Shared<LatLng> posicion) {
         this.workpod = workpod;
         this.ubicacion = ubicacion;
+        this.posicion = posicion;
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
@@ -134,7 +136,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      *
      * @param ubicacion Ubicacion en la que se encuentra el workpod
      */
-    public Fragment_Dialog_Workpod(Ubicacion ubicacion) {
+    public Fragment_Dialog_Workpod(Ubicacion ubicacion, Shared<LatLng> posicion) {
         this.ubicacion = ubicacion;
         this.workpod = ubicacion.getWorkpods().get(0);
         this.posicion = posicion;

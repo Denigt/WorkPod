@@ -18,9 +18,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.workpod.R;
 import com.example.workpod.adapters.Adaptador_LsV_Workpod;
+import com.example.workpod.basic.Shared;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZonedDateTime;
 
@@ -41,13 +43,15 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
     private ZonedDateTime ultUso;
     private ZonedDateTime ultLimpieza;
     private Reserva reserva;
+    Shared<LatLng> posicion;
 
     //VARIABLES PARA EL ESCALADO
     private DisplayMetrics metrics=new DisplayMetrics();
 
     //CONSTRUCTOR
-    public Fragment_Dialog_Cluster(Ubicacion ubicacion) {
+    public Fragment_Dialog_Cluster(Ubicacion ubicacion, Shared<LatLng> posicion) {
         this.ubicacion = ubicacion;
+        this.posicion = posicion;
     }
 
     public Fragment_Dialog_Cluster() {
@@ -107,7 +111,7 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
                 Workpod workpod = (Workpod) adaptadorLsVWorkpod.getItem(i);
                 for (int j = 0; j < ubicacion.getWorkpods().size(); j++) {
                     if (workpod == ubicacion.getWorkpods().get(j)) {
-                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion);
+                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion);
                         fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESA UBICACIÓN");
                         cerrarFragment();
                     }

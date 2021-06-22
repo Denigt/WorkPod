@@ -33,6 +33,7 @@ import com.example.workpod.adapters.Adaptador_Lsv_Search;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
+import com.example.workpod.basic.Shared;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.otherclass.MapSearchListener;
@@ -78,7 +79,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * Posicion del usuario
      * Cuidado al leerlo, puede ser null
      */
-    private LatLng posicion;
+    private Shared<LatLng> posicion = new Shared<>();
 
     // TAMANO DE LOS ICONOS Y MARCADORES DE MAPA
     private int TAM_ICON = 130;
@@ -244,10 +245,10 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
-                    fragmentCluster=new Fragment_Dialog_Cluster(ubicacion);
+                    fragmentCluster=new Fragment_Dialog_Cluster(ubicacion, posicion);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion);
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion, posicion);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
             } catch (Exception e) {
@@ -274,17 +275,17 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * @param v Control pulsado
      */
     private void btnCentrarOnClick(View v) {
-        if (v.getId() == btnCentrar.getId() && posicion != null) {
+        if (v.getId() == btnCentrar.getId() && posicion.resource != null) {
             // COMPROBAR SI LA CAMARA ESTA MAS O MENOS EN LA POSICION QUE LA DEJA POR DEFECTO EL BOTON CENTRAR
-            if (!((mMap.getCameraPosition().target.latitude < posicion.latitude + errorMedida) &&
-                    (mMap.getCameraPosition().target.latitude > posicion.latitude - errorMedida) &&
-                    (mMap.getCameraPosition().target.longitude < posicion.longitude + errorMedida) &&
-                    (mMap.getCameraPosition().target.longitude > posicion.longitude - errorMedida) &&
+            if (!((mMap.getCameraPosition().target.latitude < posicion.resource.latitude + errorMedida) &&
+                    (mMap.getCameraPosition().target.latitude > posicion.resource.latitude - errorMedida) &&
+                    (mMap.getCameraPosition().target.longitude < posicion.resource.longitude + errorMedida) &&
+                    (mMap.getCameraPosition().target.longitude > posicion.resource.longitude - errorMedida) &&
                     (mMap.getCameraPosition().zoom == defaultZoom)))
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, defaultZoom));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, defaultZoom));
                 // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
             else
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 19));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, 19));
         }
 
     }
@@ -315,7 +316,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                     }
                 }
                 if (!killHilos) {
-                    posicion = new LatLng(aux.getLatitude(), aux.getLongitude());
+                    posicion.resource = new LatLng(aux.getLatitude(), aux.getLongitude());
                     getActivity().runOnUiThread(this);
                 }
             }).start();
@@ -342,7 +343,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         @Override
         public void onLocationChanged(@NonNull Location location) {
-            posicion = new LatLng(location.getLatitude(), location.getLongitude());
+            posicion.resource = new LatLng(location.getLatitude(), location.getLongitude());
             if (!killHilos)
                 getActivity().runOnUiThread(this);
 
@@ -361,13 +362,13 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
          */
         public void run() {
             if (!compruebaGPS()) {
-                if (posicion != null) {
+                if (posicion.resource != null) {
                     if (markPosicion == null) {
-                        markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).title("Mi posición"));
+                        markPosicion = mMap.addMarker(new MarkerOptions().position(posicion.resource).title("Mi posición"));
                         markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.button_btn_centrar, TAM_ICON, TAM_ICON));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, defaultZoom));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, defaultZoom));
                     } else
-                        markPosicion.setPosition(posicion);
+                        markPosicion.setPosition(posicion.resource);
 
                 }
             }
@@ -424,7 +425,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         locationB.setLongitude(lstUbicacion.get(1).getLon());
 
         float distance = locationA.distanceTo(locationB);
-        Toast.makeText(getActivity(),String.valueOf(distance/1000),Toast.LENGTH_LONG).show();
     }
 
     /**
