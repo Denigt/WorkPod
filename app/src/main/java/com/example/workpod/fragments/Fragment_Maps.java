@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener {
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener, Fragment_Dialog_Workpod.ActualizarMapa{
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
@@ -290,6 +290,18 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     }
 
+    /**
+     * Reinicia el activity cuando hacemos una reserva y salimos del fragment de reservas para que así se vuelva a cargar los workpods
+     * en la app y aparezca que el usuario tiene una reserva. Si no se refresca, el usuario tiene que volver a loggearse para que
+     * aparezca su reserva. De esta forma evitamos tener que volver a hacer una consulta y utilizar otro hilo más
+     */
+    @Override
+    public void actualizarMapa() {
+        getActivity().finish();
+        startActivity(getActivity().getIntent());
+        getActivity().overridePendingTransition(0, 0);
+    }
+
 //=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================
 
     // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION
@@ -405,9 +417,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         for (Ubicacion ubicacion : lstUbicacion) {
             LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
-
-
-
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
             markPosicion.setTag(ubicacion);
             markPosicion.setIcon(VectortoBitmap(requireContext(), R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));

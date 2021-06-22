@@ -1,9 +1,11 @@
 package com.example.workpod.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -107,12 +109,23 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private Handler handler = new Handler();
     private Shared<LatLng> posicion;
     private List<Reserva> lstReservas = new ArrayList<>();
+    Location posicionWorkpod;
+    Location posicionUsuario;
+    private boolean reservado;
+    private boolean abrirAhora;
+    private boolean cambiarDistancia;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
     public Fragment_Dialog_Workpod() {
         ubicacion = new Ubicacion();
     }
+
+    interface ActualizarMapa{
+        public void actualizarMapa();
+    }
+
+    ActualizarMapa actualizarMapa;
 
     //CONSTRUCTOR CON INSTANCIA DE WORKPODS Y DIRECCION
 
@@ -126,6 +139,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.workpod = workpod;
         this.ubicacion = ubicacion;
         this.posicion = posicion;
+        this.reservado=false;
+        this.abrirAhora=false;
+        this.cambiarDistancia=false;
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
@@ -140,6 +156,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.ubicacion = ubicacion;
         this.workpod = ubicacion.getWorkpods().get(0);
         this.posicion = posicion;
+        this.reservado=false;
+        this.abrirAhora=false;
+        this.cambiarDistancia=false;
     }
 
 
@@ -207,9 +226,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             if (InfoApp.USER != null)
                 idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
 
-            //ESCALAMOS ELEMENTOS
-            escalarElementos();
-
             //VOLCAMOS DATOS DE LA BD
             volcarDatos();
 
@@ -228,8 +244,16 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 usuarioNoRegistrado();
             }*/
 
+            //GUARDAMOS EN UNA VARIABLE LA UBICACIÓN DEL WORKPOD
+            posicionWorkpod = new Location("Posición Workpod");
+            posicionWorkpod.setLatitude(ubicacion.getLat());
+            posicionWorkpod.setLongitude(ubicacion.getLon());
+
             //COMPROBAR SI ESTE WORKPOD ESTÁ RESERVADO POR EL USUARIO
             comprobarReserva();
+
+            //ESCALAMOS ELEMENTOS
+            escalarElementos();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -277,6 +301,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         }
     }
 
+
     //MÉTODOS
 
     /**
@@ -290,9 +315,14 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             btnReservarWorkpod.setText("Reservado");
             lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
             //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
-            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            lLEstadoWorkpod.getLayoutParams().width = 450;
+            lLAbrirAhora.getLayoutParams().width=380;
+
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
             btnAbrirAhora.setVisibility(View.VISIBLE);
+            //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
+
+           // lLEstadoWorkpod.getLayoutParams().width=450;
             //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
             ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
             //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
@@ -379,26 +409,28 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * donde solo hay un workpod, utilizaremos el objeto de la clase Workpod o el objeto de la clase Ubicacion
      */
     private void onClickBtnAbrirAhora() {
-        //SI WORKPOD==NULL ESTAMOS ACCEDIENDO MEDIANTE UN ITEM DEL LSV
-        if (workpod == null) {
-            //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-            Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(ubicacion);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
-            //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
-            WorkpodActivity.boolLoc = false;
-            WorkpodActivity.boolfolder = false;
-            //CERRAMOS EL DIALOGO EMERGENTE
-            dismiss();
-        }//SI WORPOD!=NULL, ACCEDEMOS DE UN MARCADOR DONDE HAY UN SOLO WORKPOD O DESDE EL FRAGMENT DE SESION DEL HISTÓRICO DE TRANSACCIONES
-        else {
-            //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-            Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(workpod, direccion);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
-            //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
-            WorkpodActivity.boolLoc = false;
-            WorkpodActivity.boolfolder = false;
-            //CERRAMOS EL DIALOGO EMERGENTE
-            dismiss();
+        if(abrirAhora){
+            //SI WORKPOD==NULL ESTAMOS ACCEDIENDO MEDIANTE UN ITEM DEL LSV
+            if (workpod == null) {
+                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
+                Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(ubicacion);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
+                //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
+                WorkpodActivity.boolLoc = false;
+                WorkpodActivity.boolfolder = false;
+                //CERRAMOS EL DIALOGO EMERGENTE
+                dismiss();
+            }//SI WORPOD!=NULL, ACCEDEMOS DE UN MARCADOR DONDE HAY UN SOLO WORKPOD O DESDE EL FRAGMENT DE SESION DEL HISTÓRICO DE TRANSACCIONES
+            else {
+                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
+                Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(workpod, direccion);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
+                //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
+                WorkpodActivity.boolLoc = false;
+                WorkpodActivity.boolfolder = false;
+                //CERRAMOS EL DIALOGO EMERGENTE
+                dismiss();
+            }
         }
     }
 
@@ -444,6 +476,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
                         lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                         btnAbrirAhora.setVisibility(View.VISIBLE);
+                        //CAMBIAMOS A TRUE EL BOOLEANO DE RESERVA
+                        reservado=true;
                         //EMPIEZA EL CRONOMETRO
                         distanciaTiempo();
                         //ECO DEL TIEMPO HASTA CADUCAR RESERVA
@@ -564,20 +598,42 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         if (centesimas <= 0) {
                             segundos--;
                             centesimas = 100;
+                          cambiarDistancia=true;
+
                         }
                         //LE QUITAMOS UNA UNIDAD AL MINUTO
                         if ((segundos <= 0) || (segundos == 60) && (minutos > 0)) {
                             minutos--;
                             segundos = 59;
                         }
-                        //Esto es lo que añadiremps a la interfaz
+                        //DEBE USARSE HANDLER.POST SIEMPRE QUE QUERAMOS REALIZAR UN SUBPROCESO EN LA INTERFAZ DE USUARIO
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 try {
+                                    if(cambiarDistancia){
+                                        //CALCULAMOS LA DISTANCIA ENTRE EL USUARIO Y LA CABINA DE WORKPOD
+                                        posicionUsuario = new Location("Posición Usuario");
+                                        posicionUsuario.setLatitude(posicion.resource.latitude);
+                                        posicionUsuario.setLongitude(posicion.resource.longitude);
+                                        //CALCULAMOS LA DISTANCIA ENTRE AMBAS POSICIONES
+                                        float distance = posicionUsuario.distanceTo(posicionWorkpod);
+                                        //HACEMOS ECO DE LA POSICIÓN EN EL BTN
+                                        if(distance>100000){
+                                            btnAbrirAhora.setText("Demasiado Lejos");
+                                        } else if (distance > 1000) {
+                                            btnAbrirAhora.setText(String.format("%.2f", (distance / 1000)) + "km");
+                                        } else if (distance < 1000 && distance > 50) {
+                                            btnAbrirAhora.setText((String.format("%.2f", (distance)) + "m"));
+                                        }else if(distance<50){
+                                            btnAbrirAhora.setText("Abrir Ahora");
+                                            //CAMBIAMOS VALOR BOOLEANO QUE CONTROLA IR AL FRAGMENT SESION FINALIZADA
+                                            abrirAhora=true;
+                                        }
+                                        cambiarDistancia=false;
+                                    }
                                     String cadMinutos = "", cadSegundos = "", cadCentesimas = "";
                                     //Añado 0´s delante para los milisegundos cuando corresponda
-
                                     if (segundos < 10) {
                                         cadSegundos = "0" + segundos;
                                     } else {
@@ -600,6 +656,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
 
                         });
+                        //SI SE ACABA EL TIEMPO, SE CIERRA EL FRAGMENT
+                        while(minutos<0){
+                            dismiss();
+                        }
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -608,7 +668,19 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
             }
         });
+    }
 
 
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        if(minutos<0){
+            //ECO DE RESERVA CANCELADA POR EL SISTEMA
+            Toast.makeText(getActivity(),"Tiempo agotado, reserva cancelada",Toast.LENGTH_LONG).show();
+        }
+
+        if(reservado=true){
+         //   actualizarMapa.actualizarMapa();
+        }
+        super.onDismiss(dialog);
     }
 }

@@ -125,10 +125,10 @@ public abstract class Method {
             //APLICAMOS EL WIDHT CORRESPONDIENTE
             if (btn.getWidth().trim().equalsIgnoreCase("Match_Parent")) {
                 btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
             } else if (btn.getWidth().trim().equalsIgnoreCase("Wrap_Content")) {
                 btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            }else{
+              //  btn.getButton().getLayoutParams().width = Integer.getInteger(btn.getWidth().trim());
             }
             //APLICAMOS EL ESTILO CORRESPONDIENTE
             if (btn.getStyle().trim().equalsIgnoreCase("bold")) {
