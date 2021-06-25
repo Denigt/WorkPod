@@ -72,7 +72,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private TextView tVCapacidad;
     private TextView tVPrecio;
     private TextView tVUltUso;
+    private TextView tVUltUsoDato;
     private TextView tVUltLimpieza;
+    private TextView tVUltLimpiezaDato;
     private TextView tVIlumincion;
     private TextView tVDescripcionWorkpod;
 
@@ -196,7 +198,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             tVDireccion = (TextView) view.findViewById(R.id.TVDireccion);
             tVCapacidad = (TextView) view.findViewById(R.id.TVCapacidad);
             tVUltUso = (TextView) view.findViewById(R.id.TVUltUso);
+            tVUltUsoDato=(TextView)view.findViewById(R.id.TVUltUsoDato);
             tVUltLimpieza = (TextView) view.findViewById(R.id.TVUltLimpieza);
+            tVUltLimpiezaDato=(TextView)view.findViewById(R.id.TVUltLimpiezaDato);
             tVIlumincion = (TextView) view.findViewById(R.id.TVIluminacion);
 
             iVComoLlegar = (ImageView) view.findViewById(R.id.iVComoLlegar);
@@ -313,16 +317,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
             //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
             btnReservarWorkpod.setText("Reservado");
+            btnReservarWorkpod.setTextSize(10);
             lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
             //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
-            lLEstadoWorkpod.getLayoutParams().width = 450;
-            lLAbrirAhora.getLayoutParams().width=380;
-
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
+            lLAbrirAhora.setVisibility(View.VISIBLE);
             btnAbrirAhora.setVisibility(View.VISIBLE);
             //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
 
-           // lLEstadoWorkpod.getLayoutParams().width=450;
+           lLEstadoWorkpod.getLayoutParams().width= 0;
             //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
             ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
             //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
@@ -360,16 +363,18 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 20, 25));
-        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 15, 20));
+        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 18, 24));
+        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18, 20));
 
         lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 55));
         lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 13, 25));
         lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20));
         lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15));
-        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "normal", 17, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "normal", 15, 17));
-        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "normal", 17, 17));
+        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14, 17));
+        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 15, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "wrap_content", "normal", 14, 17));
+        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 16, 17));
 
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
@@ -513,20 +518,22 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
         tVDireccion.setText(ubicacion.getDireccion().toLongString());
         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
+        tVUltUso.setText("Último uso ");
         //SI WORKPOD NO TIENE FECHA ULT USO
         if (workpod.getUltimoUso() == null) {
-            tVUltUso.setText("");
+            tVUltUsoDato.setText("");
             iVUltUso.setVisibility(View.GONE);
         } else {
-            tVUltUso.setText("Último uso " + String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+            tVUltUsoDato.setText(String.valueOf(workpod.getUltimoUso().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
 
         }
         //SI ESTE WORKPOD NO FECHA DE ULT LIMPIEZA
         if (workpod.getLimpieza() == null) {
-            tVUltLimpieza.setText("");
+            tVUltLimpiezaDato.setText("");
             iVUltLimpieza.setVisibility(View.GONE);
         } else {
-            tVUltLimpieza.setText("Última limpieza " + String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+            tVUltLimpieza.setText("Última limpieza ");
+            tVUltLimpiezaDato.setText(String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
         }
 
         //SI ESTE WORKPOD POSEE ILUMINACIÓN REGULABLE
@@ -620,7 +627,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                         float distance = posicionUsuario.distanceTo(posicionWorkpod);
                                         //HACEMOS ECO DE LA POSICIÓN EN EL BTN
                                         if(distance>100000){
-                                            btnAbrirAhora.setText("Demasiado Lejos");
+                                            btnAbrirAhora.setText("Lejos");
                                         } else if (distance > 1000) {
                                             btnAbrirAhora.setText(String.format("%.2f", (distance / 1000)) + "km");
                                         } else if (distance < 1000 && distance > 50) {

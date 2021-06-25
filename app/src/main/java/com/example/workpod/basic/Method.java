@@ -117,9 +117,9 @@ public abstract class Method {
 
         for (Scale_Buttons btn : lstBtns) {
             //DEFINIMOS TAMAÑO FUENTE
-            if ((width <= (1200 / metrics.density)) && (width > (550 / metrics.density))) {
+            if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
                 btn.getButton().setTextSize(btn.getSizeBig());
-            } else if (width <= (550 / metrics.density)) {
+            } else if (width <= (750 / metrics.density)) {
                 btn.getButton().setTextSize(btn.getSizeLittle());
             }
             //APLICAMOS EL WIDHT CORRESPONDIENTE
