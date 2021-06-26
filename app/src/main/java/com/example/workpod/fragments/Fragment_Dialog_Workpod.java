@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -262,6 +263,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
 
