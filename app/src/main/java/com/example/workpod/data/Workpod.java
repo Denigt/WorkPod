@@ -285,6 +285,11 @@ public class Workpod implements DataDb, Comparable<Workpod>{
     }
 
     @Override
+    public void setID(String id) {
+        this.id = Integer.parseInt(id);
+    }
+
+    @Override
     public int compareTo(Workpod workpod) {
         int ret = 0;
         if((reserva == null || reserva.isCancelada()) && ((workpod.reserva != null && !workpod.reserva.isCancelada()) || workpod.mantenimiento)){

@@ -42,4 +42,9 @@ public class Tarjeta implements DataDb{
     public String getID() {
         return String.valueOf(numero);
     }
+
+    @Override
+    public void setID(String id) {
+        this.numero = Integer.parseInt(id);
+    }
 }

@@ -182,4 +182,9 @@ public class Ubicacion implements DataDb{
     public String getID() {
         return String.valueOf(id);
     }
+
+    @Override
+    public void setID(String id) {
+        this.id = Integer.parseInt(id);
+    }
 }

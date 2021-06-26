@@ -132,7 +132,7 @@ public class Database<T extends DataDb> extends Thread {
                 lstSelect = selectUser(dato);
                 break;
             case INSERT:
-                insert(dato);
+                dato = insert(dato);
                 break;
             case UPDATE:
                 update(dato);
@@ -371,7 +371,7 @@ public class Database<T extends DataDb> extends Thread {
      * Inserta el objeto en la tabla que le corresponda
      * @param obj Objeto a insertar
      */
-    private void insert(T obj){
+    private T insert(T obj){
         boolean retorno = false;
         // PREPARAR LA CONEXION
         if (TABLAS.contains(obj.getTabla())) {
@@ -414,6 +414,10 @@ public class Database<T extends DataDb> extends Thread {
 
                     // OBTENER EL CODIGO DE ERROR
                     error = new ErrorMessage(json);
+
+                    // OBTENER EL ID DEL OBJETO
+                    if (json.has("id") && !json.isNull("id"))
+                        obj.setID(json.getString("id"));
                 }else{
                     error = new ErrorMessage(-respuesta, "Problema con el servidor");
                     Log.e("DATABASE INSERT", "No se ha podido conectar con el servidor");
@@ -429,6 +433,8 @@ public class Database<T extends DataDb> extends Thread {
                 Log.e("DATABASE INSERT", "Error obtener JSON");
             }
         }
+
+        return obj;
     }
 
     /**

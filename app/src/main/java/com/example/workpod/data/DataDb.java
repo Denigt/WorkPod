@@ -45,4 +45,12 @@ public interface DataDb {
      * @return ID de la clase
      */
     public String getID();
+
+
+
+    /**
+     * Establece el id del objeto
+     * @param id Id del objeto
+     */
+    public void setID(String id);
 }

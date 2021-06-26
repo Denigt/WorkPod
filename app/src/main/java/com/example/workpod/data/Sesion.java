@@ -205,4 +205,9 @@ public class Sesion implements DataDb {
         return String.valueOf(id);
     }
 
+    @Override
+    public void setID(String id) {
+        this.id = Integer.parseInt(id);
+    }
+
 }

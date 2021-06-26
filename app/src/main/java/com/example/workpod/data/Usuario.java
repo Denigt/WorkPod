@@ -264,4 +264,9 @@ public class Usuario implements DataDb{
     public String getID() {
         return String.valueOf(email);
     }
+
+    @Override
+    public void setID(String id) {
+        this.id = Integer.parseInt(id);
+    }
 }

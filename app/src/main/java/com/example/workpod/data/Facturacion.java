@@ -111,6 +111,11 @@ public class Facturacion implements DataDb{
 
     @Override
     public String getID() {
-        return "";
+        return String.valueOf(id);
+    }
+
+    @Override
+    public void setID(String id) {
+        this.id = Integer.parseInt(id);
     }
 }

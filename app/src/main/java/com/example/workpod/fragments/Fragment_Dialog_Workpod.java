@@ -228,7 +228,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             reserva = new Reserva();
 
             //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
-            if (InfoApp.USER != null)
+            if (InfoApp.USER != null && InfoApp.USER.getReserva() != null)
                 idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
 
             //VOLCAMOS DATOS DE LA BD
@@ -495,6 +495,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         for (Workpod item : ubicacion.getWorkpods())
                             if (item.getId() == workpod.getId())
                                 item.setReserva(reserva);
+                        // ESTABLECER LA RESERVA DEL USUARIO
+                        InfoApp.USER.setReserva(reserva);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
