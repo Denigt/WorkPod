@@ -234,8 +234,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Último uso  "
-                                    android:textColor="#11415E"
+                                    android:text="Último uso:  "
+                                    android:textColor="#FF58B1E3"
                                     android:textSize="17dp"
                                     android:textStyle="bold" />
 
@@ -279,10 +279,9 @@
                                     android:id="@+id/TVUltLimpieza"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-
                                     android:layout_gravity="center"
                                     android:text="Última limpieza:  "
-                                    android:textColor="#11415E"
+                                    android:textColor="#FF58B1E3"
                                     android:textSize="17dp"
                                     android:textStyle="bold" />
 
@@ -318,7 +317,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Iluminación regulable"
-                            android:textColor="#11415E"
+                            android:textColor="#FF58B1E3"
                             android:textSize="17dp"
                             android:textStyle="bold" />
                     </LinearLayout>

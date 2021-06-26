@@ -6,6 +6,7 @@ import com.example.workpod.scale.Scale_TextView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -22,6 +23,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class SigninActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, CompoundButton.OnCheckedChangeListener {
     // VARIABLES DE SIGNIN
@@ -59,6 +69,10 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     private ImageButton btnVolver;
     private CheckBox btnShowContrasena;
     private Spinner spnDNI;
+
+    private String correo;
+    private String password;
+    private Session sesion;
 
     //COLECCIONES
     List<Scale_TextView> lstTv;
@@ -177,8 +191,9 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             // VALIDAR DATOS DE LA SEGUNDA PANTALLA
             else {
                 boolean error = false;
-
+                correoVerificacion();
                 saveActivity();
+
                 if (email.equals(null) || email.equals("")) {
                     Method.showError(this, "Introduzca su email");
                     txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
@@ -220,6 +235,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             });
                             insert.postRunOnUI(this, () -> {
                                 if (insert.getError().code > -1) {
+                                    //CORREO CON TOKEN DE VERIFICACIÓN
+                                    correoVerificacion();
                                     // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
                                     Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                                     startActivity(activity);
@@ -228,6 +245,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                     Toast.makeText(this, "No se ha podido crear el usuario", Toast.LENGTH_LONG).show();
                             });
                             insert.start();
+
                         } else
                             Toast.makeText(this, "Ya existe un usuario con el mismo Email", Toast.LENGTH_LONG).show();
                     });
@@ -341,6 +359,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             contrasena = txtContrasena.getText().toString();
         }
     }
+
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml de Signin.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
@@ -348,12 +367,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementosSignin1() {
         //INICIALIZAMOS COLECCIONES
@@ -379,22 +397,21 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementosSignin2() {
-    //INICIALIZAMOS COLECCIONES
+        //INICIALIZAMOS COLECCIONES
         this.lstTv = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVActSignin2Contrasena ,"Match_Parent", "bold", 18, 18));
+        lstTv.add(new Scale_TextView(tVActSignin2Contrasena, "Match_Parent", "bold", 18, 18));
         lstTv.add(new Scale_TextView(tVActSignin2Email, "Match_Parent", "bold", 18, 18));
         lstTv.add(new Scale_TextView(tVActSignin2InstruccionesContrasena, "Match_Parent", "bold", 16, 16));
         lstTv.add(new Scale_TextView(tVActSignin2PregContrasena, "Match_Parent", "bold", 24, 24));
@@ -402,6 +419,65 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         lstTv.add(new Scale_TextView(tVActSignin2RepetirContrasena, "Match_Parent", "bold", 18, 18));
         lstTv.add(new Scale_TextView(tVActSignin2Titulo, "Match_Parent", "bold", 34, 34));
 
-        Method.scaleTv(metrics,lstTv);
+        Method.scaleTv(metrics, lstTv);
+    }
+
+    /**
+     * Método para enviar un token de verificación al usuario que se acaba de registrar
+     * Si el correo emisor es gmail o hotmail, las instrucciones a utilizar varían ligeramente.
+     */
+    private void correoVerificacion(){
+        //CORREO EMPRESA
+        correo = "workpodtfg@gmail.com";
+        password = "workpod2021";
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        //PROPIEDADES DEL SERVIDOR DE CORREO ELECTRONICO
+        Properties properties = new Properties();
+        //INDICAMOS EL NOMBRE DEL SERVIDOR DEL CORREO ELECTRÓNICO QUE VAMOS A USAR COMO EMISOR
+        properties.put("mail.smtp.host", "smtp.googlemail.com");
+        //SOCKET PARA RECIBIR RESPUESTA DEL SERVIDOR
+        properties.put("mail.smtp.socketFactory.port", "465");//EL PUERTO DEL SERVIDOR DE GMAIL ES 465 (NO ES UNO AL AZAR)
+        //ESPECIFICAMOS QUE EL PROTOCOLO DE SEGURIDAD PARA EL ENVÍO DE INFORMACIÓN SERÁ SSL
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        //PERMITE AL SERVIDOR LA AUTENTIFICACIÓN DEL CLIENTE
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", "465");
+
+        try {
+            //NECESITAMOS AUTENTIFICACIÓN PARA LA CONEXIÓN DE RED
+            sesion = Session.getDefaultInstance(properties, new Authenticator() {
+                /**
+                 * Autentificará la contraseña del correo emisor
+                 * @return
+                 */
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(correo, password);
+                }
+            });
+            //SI EL OBJETO SESIÓN APUNTA A NULO ES QUE LA AUTENTIFICACIÓN HA FALLADO
+            if (sesion != null) {
+                //CREAMOS UN OBJETO DE LA CLASE MESSAGE, LA CUAL NOS PERMITIRÁ MANDAR EL EMAIL
+                Message message = new MimeMessage(sesion);
+                //CORREO EMISOR
+                message.setFrom(new InternetAddress(correo));
+                //ASUNTO DEL CORREO
+                message.setSubject("Token de verificación de Workpod");
+                //CON TO ESPECIFICAMOS LOS DESTINATARIOS DEL MENSAJE
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+                //CONTENIDO DEL MENSAJE Y ESPECIFICACIÓN DE LA CODIFICACIÓN UNICODE
+                message.setContent("Tu token de verificación de Workpod es 1234AB#", "text/html; charset=utf-8");
+                //ENVIAMOS CORREO UTILIZANDO EL MÉTODO SEND DE LA CLASE TRANSPORT
+                Transport.send(message);
+
+                //ECO
+                Toast.makeText(this, "Se ha enviado un token de verificación al correo", Toast.LENGTH_LONG).show();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

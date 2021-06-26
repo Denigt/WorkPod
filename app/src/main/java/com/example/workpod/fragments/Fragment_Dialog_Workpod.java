@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.InetAddresses;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import android.os.Handler;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,7 +53,16 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Timer;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Use the {@link Fragment_Dialog_Workpod#newInstance} factory method to
@@ -117,6 +128,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private boolean reservado;
     private boolean abrirAhora;
     private boolean cambiarDistancia;
+    private String correo;
+    private String password;
+    private Session sesion;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -326,8 +340,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             lLAbrirAhora.setVisibility(View.VISIBLE);
             btnAbrirAhora.setVisibility(View.VISIBLE);
             //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
-
-           lLEstadoWorkpod.getLayoutParams().width= 0;
+            lLEstadoWorkpod.getLayoutParams().width = 0;
             //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
             ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
             //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
@@ -484,7 +497,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
                         //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
                         lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
                         btnAbrirAhora.setVisibility(View.VISIBLE);
+                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
+                        lLAbrirAhora.setVisibility(View.VISIBLE);
+                        //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
+                        lLEstadoWorkpod.getLayoutParams().width = 0;
                         //CAMBIAMOS A TRUE EL BOOLEANO DE RESERVA
                         reservado=true;
                         //EMPIEZA EL CRONOMETRO
