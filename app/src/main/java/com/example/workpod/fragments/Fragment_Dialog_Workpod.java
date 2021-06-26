@@ -374,9 +374,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15));
         lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16, 17));
         lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14, 17));
-        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 15, 17));
+        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 14, 17));
         lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "wrap_content", "normal", 14, 17));
-        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 16, 17));
+        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14, 17));
 
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
@@ -397,6 +397,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      */
     private void onClickIVFlechas_Descripcion_Informacion() {
         lLInfoWorkpod.setVisibility(LinearLayout.VISIBLE);
+        iVFlechas_Informacion_Desripcion.setVisibility(View.VISIBLE);
         lLDescripcion.setVisibility(LinearLayout.GONE);
     }
 
@@ -406,6 +407,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      */
     private void onClickIVFlechas_Informacion_Descripcion() {
         lLInfoWorkpod.setVisibility(LinearLayout.GONE);
+        iVFlechas_Informacion_Desripcion.setVisibility(View.GONE);
         tVDescripcionWorkpod.setText(descripcion);
         lLDescripcion.setVisibility(View.VISIBLE);
     }

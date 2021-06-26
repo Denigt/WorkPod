@@ -184,25 +184,30 @@
 
             </LinearLayout>
 
-            <LinearLayout
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/LLInfoWorkpod"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="20dp"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="3"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -210,37 +215,41 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginRight="15dp"
+                            android:layout_marginLeft="20dp"
                             android:src="@drawable/empty_icon_clock" />
 
-                        <LinearLayout
+                        <HorizontalScrollView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal">
+                            android:layout_gravity="center">
 
-                            <TextView
-                                android:id="@+id/TVUltUso"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="300dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Último uso  "
-                                android:textColor="#11415E"
-                                android:textSize="17dp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/TVUltUsoDato"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="03/04/2021 11:25:14"
-                                android:textColor="@color/black"
-                                android:textSize="17dp" />
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/TVUltUso"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Último uso  "
+                                    android:textColor="#11415E"
+                                    android:textSize="17dp"
+                                    android:textStyle="bold" />
 
-
+                                <TextView
+                                    android:id="@+id/TVUltUsoDato"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="03/04/2021 11:25:14"
+                                    android:textColor="@color/black"
+                                    android:textSize="17dp" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -252,41 +261,47 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginRight="15dp"
+                            android:layout_marginLeft="20dp"
                             android:src="@drawable/empty_icon_limpiar" />
 
-                        <LinearLayout
+                        <HorizontalScrollView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal">
+                            android:layout_gravity="center">
 
-                            <TextView
-                                android:id="@+id/TVUltLimpieza"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:text="Última limpieza:  "
-                                android:textColor="#11415E"
-                                android:textSize="17dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/TVUltLimpiezaDato"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="03/04/2021 17:05:26"
-                                android:textColor="@color/black"
-                                android:textSize="17dp" />
-                        </LinearLayout>
+                                android:orientation="horizontal">
 
+                                <TextView
+                                    android:id="@+id/TVUltLimpieza"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
 
+                                    android:layout_gravity="center"
+                                    android:text="Última limpieza:  "
+                                    android:textColor="#11415E"
+                                    android:textSize="17dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/TVUltLimpiezaDato"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:text="03/04/2021 17:05:26"
+                                    android:textColor="@color/black"
+                                    android:textSize="17dp" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
                     </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:orientation="horizontal">
 
                         <ImageView
@@ -294,6 +309,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginRight="15dp"
+                            android:layout_marginLeft="20dp"
                             android:src="@drawable/empty_icon_bombilla" />
 
                         <TextView
@@ -308,23 +324,18 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
 
-                    android:orientation="horizontal"
-                    android:layout_gravity="top"
-                    android:layout_marginTop="20dp">
+                <ImageView
+                    android:id="@+id/IVFlechas_Informacion_Descripcion"
+                    android:layout_width="38dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/flechas_informacion_descripcion"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/IVFlechas_Informacion_Descripcion"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/flechas_informacion_descripcion" />
-                </LinearLayout>
-
-            </LinearLayout>
-
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/LLDescripcion"
@@ -382,7 +393,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="10"
                 android:gravity="center"
@@ -401,15 +412,15 @@
                     android:background="@drawable/rounded_back_button"
                     android:gravity="center"
                     android:padding="2dp">
-                    
+
                     <ImageButton
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="10dp"
-                        android:src="@drawable/button_btn_cancelar"
-                        android:scaleType="centerCrop"
                         android:background="?android:selectableItemBackgroundBorderless"
-                        android:visibility="gone"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/button_btn_cancelar"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/BtnReservarWorkpod"
