@@ -130,9 +130,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private boolean reservado;
     private boolean abrirAhora;
     private boolean cambiarDistancia;
-    private String correo;
-    private String password;
-    private Session sesion;
+    private boolean visibleBtnCancelar;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -161,6 +159,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.reservado=false;
         this.abrirAhora=false;
         this.cambiarDistancia=false;
+        this.visibleBtnCancelar=false;
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
@@ -178,6 +177,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.reservado=false;
         this.abrirAhora=false;
         this.cambiarDistancia=false;
+        this.visibleBtnCancelar=false;
     }
 
 
@@ -345,7 +345,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
             lLAbrirAhora.setVisibility(View.VISIBLE);
             btnAbrirAhora.setVisibility(View.VISIBLE);
-            btnCancelarReserva.setVisibility(View.VISIBLE);
+            //btnCancelarReserva.setVisibility(View.VISIBLE);
             //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
             lLEstadoWorkpod.getLayoutParams().width = 0;
             //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
@@ -508,7 +508,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         btnAbrirAhora.setVisibility(View.VISIBLE);
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
                         lLAbrirAhora.setVisibility(View.VISIBLE);
-                        btnCancelarReserva.setVisibility(View.VISIBLE);
+                        //btnCancelarReserva.setVisibility(View.VISIBLE);
                         //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
                         lLEstadoWorkpod.getLayoutParams().width = 0;
                         //CAMBIAMOS A TRUE EL BOOLEANO DE RESERVA
@@ -643,10 +643,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     private void distanciaTiempo() throws InterruptedException {
-        //TIEMPO HASTA EMPIECE CRONOMETRO
-
-        //INTANCIA TIMER
-        Timer timer = new Timer();
         crono.start();
     }
 
@@ -657,6 +653,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             public void run() {
                 try {
                     Thread.sleep(TIEMPO_EMPIECE_CRONO);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -683,6 +680,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                             @Override
                             public void run() {
                                 try {
+                                    if(!visibleBtnCancelar){
+                                        btnCancelarReserva.setVisibility(View.VISIBLE);
+                                        visibleBtnCancelar=true;
+                                    }
                                     if(cambiarDistancia){
                                         //CALCULAMOS LA DISTANCIA ENTRE EL USUARIO Y LA CABINA DE WORKPOD
                                         posicionUsuario = new Location("Posición Usuario");
