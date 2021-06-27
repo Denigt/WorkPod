@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -97,6 +98,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private ImageView iVUltLimpieza;
 
     private Button btnReservarWorkpod;
+    private ImageButton btnCancelarReserva;
     private Button btnAbrirAhora;
 
     private LinearLayout lLInfoWorkpod;
@@ -227,6 +229,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
             btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
             btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
+            btnCancelarReserva = view.findViewById(R.id.btnCancelarReserva);
 
             //INICIALIZAMOS OTRAS VARIABLES
             this.centesimas = 100;
@@ -251,6 +254,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //LISTENERS
             btnReservarWorkpod.setOnClickListener(this);
             btnAbrirAhora.setOnClickListener(this);
+            btnCancelarReserva.setOnClickListener(this);
             iVFlechas_Informacion_Desripcion.setOnClickListener(this);
             iVFlechas_Descripcion_Informacion.setOnClickListener(this);
             iVComoLlegar.setOnClickListener(this);
@@ -318,6 +322,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             onClickComoLlegar();
         } else if (v.getId() == R.id.LLEstadoWorkpod) {
             onClickReservarWorkpod();
+        } else if (v.getId() == R.id.btnCancelarReserva) {
+            onClickCancelarReserva();
         }
     }
 
@@ -335,10 +341,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             btnReservarWorkpod.setText("Reservado");
             btnReservarWorkpod.setTextSize(10);
             lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
             lLAbrirAhora.setVisibility(View.VISIBLE);
             btnAbrirAhora.setVisibility(View.VISIBLE);
+            btnCancelarReserva.setVisibility(View.VISIBLE);
             //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
             lLEstadoWorkpod.getLayoutParams().width = 0;
             //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
@@ -497,10 +504,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
                         //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
                         lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
                         btnAbrirAhora.setVisibility(View.VISIBLE);
                         lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
                         lLAbrirAhora.setVisibility(View.VISIBLE);
+                        btnCancelarReserva.setVisibility(View.VISIBLE);
                         //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
                         lLEstadoWorkpod.getLayoutParams().width = 0;
                         //CAMBIAMOS A TRUE EL BOOLEANO DE RESERVA
@@ -524,6 +532,39 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             insert.start();
         }
 
+    }
+
+    public void onClickCancelarReserva(){
+        if (reserva == null)
+            reserva = new Reserva();
+        reserva.set(workpod.getReserva());
+        //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
+        reserva.setEstado("CANCELADA");
+        Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
+        update.postRunOnUI(requireActivity(), () -> {
+            if (update.getError().code > -1) {
+                //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                btnReservarWorkpod.setText("Reservar");
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
+                lLEstadoWorkpod.getLayoutParams().width = 0;
+                //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
+                btnAbrirAhora.setVisibility(View.GONE);
+                lLAbrirAhora.setVisibility(View.GONE);
+                btnCancelarReserva.setVisibility(View.GONE);
+                //CAMBIAMOS A TRUE EL BOOLEANO DE RESERVA
+                reservado=false;
+                //ECO DEL TIEMPO HASTA CADUCAR RESERVA
+                Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
+                // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                for (Workpod item : ubicacion.getWorkpods())
+                    if (item.getId() == workpod.getId())
+                        item.setReserva(reserva);
+                // ESTABLECER LA RESERVA DEL USUARIO
+                InfoApp.USER.setReserva(reserva);
+            } else
+                Toast.makeText(getContext(), update.getError().message, Toast.LENGTH_SHORT).show();
+        });
+        update.start();
     }
 
     /**

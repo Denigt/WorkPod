@@ -413,6 +413,7 @@
                     android:padding="2dp">
 
                     <ImageButton
+                        android:id="@+id/btnCancelarReserva"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="10dp"

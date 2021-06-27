@@ -25,6 +25,14 @@ public class Reserva implements DataDb{
     private String estado;
     private ZonedDateTime fecha;
 
+    public void set(Reserva reserva) {
+        id = reserva.getId();
+        usuario = reserva.getUsuario();
+        workpod = reserva.getWorkpod();
+        estado = reserva.getEstado();
+        fecha = reserva.getFecha();
+    }
+
     public int getId() {
         return id;
     }
@@ -97,7 +105,7 @@ public class Reserva implements DataDb{
         JSONObject json = new JSONObject();
         try {
             json.put("id", id);
-            json.put("fecha", Method.dateToString(fecha, ZoneId.systemDefault()));
+            json.put("fecha", Method.dateToString(fecha, ZoneId.of("UCT")));
             json.put("usuario", usuario);
             json.put("workpod", workpod);
             json.put("estado", estado);
@@ -151,7 +159,7 @@ public class Reserva implements DataDb{
                 if (reservaJSON.has("id") && !reservaJSON.isNull("id"))
                     reserva.setId(reservaJSON.getInt("id"));
                 if (reservaJSON.has("fecha") && !reservaJSON.isNull("fecha"))
-                    reserva.setFecha(Method.stringToDate(reservaJSON.getString("fecha"), ZoneId.systemDefault()));
+                    reserva.setFecha(Method.stringToDate(reservaJSON.getString("fecha"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
                 if (reservaJSON.has("usuario") && !reservaJSON.isNull("usuario"))
                     reserva.setUsuario(reservaJSON.getInt("usuario"));
                 if (reservaJSON.has("workpod") && !reservaJSON.isNull("workpod"))

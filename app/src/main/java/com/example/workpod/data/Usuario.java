@@ -189,8 +189,9 @@ public class Usuario implements DataDb{
             if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                 usuario.setReserva((Reserva)new Reserva().JSONaData(usuarioJSON));
             else usuario.setReserva(null);
-
-            usuario.setDirFacturacion(new Facturacion().JSONaList(usuarioJSON));
+            if (usuarioJSON.has("facturacion") && !usuarioJSON.isNull("facturacion"))
+                usuario.setDirFacturacion(new Facturacion().JSONaList(usuarioJSON));
+            else usuario.setDirFacturacion(null);
         }catch(Exception e){
             Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
@@ -243,9 +244,10 @@ public class Usuario implements DataDb{
                 if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                     usuario.setReserva((Reserva)new Reserva().JSONaData(usuarioJSON));
                 else usuario.setReserva(null);
-                //if (usuario.getReserva().getFecha().)
 
-                usuario.setDirFacturacion(new Facturacion().JSONaList(usuarioJSON));
+                if (usuarioJSON.has("facturacion") && !usuarioJSON.isNull("facturacion"))
+                    usuario.setDirFacturacion(new Facturacion().JSONaList(usuarioJSON));
+                else usuario.setDirFacturacion(null);
                 lstUsuarios.add(usuario);
             }
         }catch(Exception e){

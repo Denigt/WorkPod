@@ -61,12 +61,30 @@ public class Sesion implements DataDb {
         this.entrada = Method.stringToDate(entrada, ZoneId.systemDefault());
     }
 
+    /**
+     * Transforma la hora a la zona horaria del sistema desde la zona horaria que se le pase como argumento
+     * @param entrada Hora de entrada
+     * @param zona Zona horaria de la String
+     */
+    public void setEntrada(String entrada, ZoneId zona) {
+        this.entrada = Method.stringToDate(entrada, zona).withZoneSameInstant(ZoneId.systemDefault());
+    }
+
     public ZonedDateTime getSalida() {
         return salida;
     }
 
     public void setSalida(ZonedDateTime salida) {
         this.salida = salida;
+    }
+
+    /**
+     * Transforma la hora a la zona horaria del sistema desde la zona horaria que se le pase como argumento
+     * @param salida Hora de salida
+     * @param zona Zona horaria de la String
+     */
+    public void setSalida(String salida, ZoneId zona) {
+        this.salida = Method.stringToDate(salida, zona).withZoneSameInstant(ZoneId.systemDefault());
     }
 
     public void setSalida(String salida) {
@@ -147,8 +165,8 @@ public class Sesion implements DataDb {
         JSONObject json = new JSONObject();
         try {
             json.put("id", id);
-            json.put("entrada", Method.dateToString(entrada, ZoneId.systemDefault()));
-            json.put("salida", Method.dateToString(salida, ZoneId.systemDefault()));
+            json.put("entrada", Method.dateToString(entrada, ZoneId.of("UCT")));
+            json.put("salida", Method.dateToString(salida, ZoneId.of("UCT")));
             json.put("tiempo", tiempo);
             json.put("precio", precio);
             json.put("descuento", descuento);
@@ -171,9 +189,9 @@ public class Sesion implements DataDb {
                 if (sesionJSON.has("id") && !sesionJSON.isNull("id"))
                     sesion.setId(sesionJSON.getInt("id"));
                 if (sesionJSON.has("entrada") && !sesionJSON.isNull("entrada"))
-                    sesion.setEntrada(sesionJSON.getString("entrada"));
+                    sesion.setEntrada(sesionJSON.getString("entrada"), ZoneId.of("UCT"));
                 if (sesionJSON.has("salida") && !sesionJSON.isNull("salida"))
-                    sesion.setSalida(sesionJSON.getString("salida"));
+                    sesion.setSalida(sesionJSON.getString("salida"), ZoneId.of("UCT"));
                 if (sesionJSON.has("precio") && !sesionJSON.isNull("precio"))
                     sesion.setPrecio(sesionJSON.getDouble("precio"));
                 if (sesionJSON.has("tiempo") && !sesionJSON.isNull("tiempo"))
