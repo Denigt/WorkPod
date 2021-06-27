@@ -130,7 +130,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private boolean reservado;
     private boolean abrirAhora;
     private boolean cambiarDistancia;
-    private boolean visibleBtnCancelar;
+
+    // VARIABLE PARA ORDENAR LA DETENCION DE LOS HILOS
+    private boolean finish = false;
 
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACIÓN
@@ -159,7 +161,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.reservado=false;
         this.abrirAhora=false;
         this.cambiarDistancia=false;
-        this.visibleBtnCancelar=false;
     }
 
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
@@ -177,7 +178,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.reservado=false;
         this.abrirAhora=false;
         this.cambiarDistancia=false;
-        this.visibleBtnCancelar=false;
     }
 
 
@@ -235,9 +235,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             this.centesimas = 100;
             this.segundos = 60;
             this.minutos = 20;
-
-            //INICIALIZAMOS HILO
-            crono = cronometro();
 
             // Toast.makeText(getActivity(),String.valueOf(posicion.latitude)+","+String.valueOf(posicion.longitude),Toast.LENGTH_LONG).show();
 
@@ -345,7 +342,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
             lLAbrirAhora.setVisibility(View.VISIBLE);
             btnAbrirAhora.setVisibility(View.VISIBLE);
-            //btnCancelarReserva.setVisibility(View.VISIBLE);
             //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
             lLEstadoWorkpod.getLayoutParams().width = 0;
             //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
@@ -355,10 +351,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
             minutos = resto / 60;
             segundos = resto % 60;
-            //ARRANCAMOS EL HILO
+            //INICIALIZAMOS Y ARRANCAMOS EL HILO
+            crono = cronometro();
             crono.start();
             //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
-            Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -515,8 +512,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         reservado=true;
                         //EMPIEZA EL CRONOMETRO
                         distanciaTiempo();
-                        //ECO DEL TIEMPO HASTA CADUCAR RESERVA
-                        Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                         for (Workpod item : ubicacion.getWorkpods())
                             if (item.getId() == workpod.getId())
@@ -543,8 +538,13 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
             if (update.getError().code > -1) {
+                finish = true;
+                try {
+                    Thread.sleep(1000);
+                }catch(Exception e){
+
+                }btnReservarWorkpod.setText("Reservar");
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                btnReservarWorkpod.setText("Reservar");
                 lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
                 lLEstadoWorkpod.getLayoutParams().width = 0;
                 //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
@@ -554,7 +554,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 //CAMBIAMOS A TRUE EL BOOLEANO DE RESERVA
                 reservado=false;
                 //ECO DEL TIEMPO HASTA CADUCAR RESERVA
-                Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "Tienes 20 min para llegar", Toast.LENGTH_LONG).show();
                 // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                 for (Workpod item : ubicacion.getWorkpods())
                     if (item.getId() == workpod.getId())
@@ -643,12 +643,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     private void distanciaTiempo() throws InterruptedException {
+        //INICIALIZAMOS Y ARRANCAMOS HILO
+        crono = cronometro();
         crono.start();
     }
 
     public Thread cronometro() throws InterruptedException {
         //PROGRAMAMOS LOS HILOS
         return new Thread(new Runnable() {
+            private boolean visibleBtnCancelar = false;
             @Override
             public void run() {
                 try {
@@ -660,7 +663,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 //RESTAR LA FECHA CTUAL CON LA FECHA DE LA RESERVA Y ESO ME DARÁ EL TIEMPO CON METOHD.SUBDATE
                 //LA FECHA DE LA RESERVA ESTÁ EN LA BD Y EL NOW SE VA ACTUALIZANDO
                 // Method.subsDate(ZonedDateTime.now(),//fecha reserva ) me devuelve los segundos(parsearlo a minutos)
-                while (true) {
+                while (!finish) {
                     try {
                         centesimas -= 1;
                         //LE QUITAMOS UNA UNIDAD AL SEGUNDO
@@ -722,6 +725,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                     if (segundos < 0) {
                                         Thread.sleep(50);
                                     }
+
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -738,7 +742,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         e.printStackTrace();
                     }
                 }
-
+                finish = false;
             }
         });
     }
@@ -754,6 +758,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         if(reservado=true){
          //   actualizarMapa.actualizarMapa();
         }
+
+        finish = true;
         super.onDismiss(dialog);
     }
 }
