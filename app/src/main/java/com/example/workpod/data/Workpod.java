@@ -292,16 +292,19 @@ public class Workpod implements DataDb, Comparable<Workpod>{
     @Override
     public int compareTo(Workpod workpod) {
         int ret = 0;
-        if((reserva == null || reserva.isCancelada()) && ((workpod.reserva != null && !workpod.reserva.isCancelada()) || workpod.mantenimiento)){
-            ret = -1;
-        }else if ((reserva != null && !reserva.isCancelada()) && (workpod.reserva == null || workpod.reserva.isCancelada() || workpod.mantenimiento)){
-            ret = 1;
-        }else{
-            if(mantenimiento != workpod.mantenimiento){
-                ret = mantenimiento? 1:-1;
-            }else ret = nombre.compareTo(workpod.nombre);
-        }
-
+        //if ((reserva != null && !reserva.isCancelada()) && (InfoApp.USER != null && !InfoApp.USER.getReserva().isCancelada()) && (reserva.getId() == InfoApp.USER.getReserva().getId())) {
+        //    ret = -2;
+        //} else {
+            if ((reserva == null || reserva.isCancelada()) && ((workpod.reserva != null && !workpod.reserva.isCancelada()) || workpod.mantenimiento)) {
+                ret = -1;
+            } else if ((reserva != null && !reserva.isCancelada()) && (workpod.reserva == null || workpod.reserva.isCancelada() || workpod.mantenimiento)) {
+                ret = 1;
+            } else {
+                if (mantenimiento != workpod.mantenimiento) {
+                    ret = mantenimiento ? 1 : -1;
+                } else ret = nombre.compareTo(workpod.nombre);
+        //}
+    }
         return ret;
     }
 

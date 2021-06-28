@@ -44,14 +44,16 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
     private ZonedDateTime ultLimpieza;
     private Reserva reserva;
     Shared<LatLng> posicion;
+    private Fragment_Maps map;
 
     //VARIABLES PARA EL ESCALADO
     private DisplayMetrics metrics=new DisplayMetrics();
 
     //CONSTRUCTOR
-    public Fragment_Dialog_Cluster(Ubicacion ubicacion, Shared<LatLng> posicion) {
+    public Fragment_Dialog_Cluster(Ubicacion ubicacion, Shared<LatLng> posicion, Fragment_Maps map) {
         this.ubicacion = ubicacion;
         this.posicion = posicion;
+        this.map = map;
     }
 
     public Fragment_Dialog_Cluster() {
@@ -111,7 +113,7 @@ public class Fragment_Dialog_Cluster extends Fragment implements View.OnClickLis
                 Workpod workpod = (Workpod) adaptadorLsVWorkpod.getItem(i);
                 for (int j = 0; j < ubicacion.getWorkpods().size(); j++) {
                     if (workpod == ubicacion.getWorkpods().get(j)) {
-                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion);
+                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, map);
                         fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESA UBICACIÓN");
                         cerrarFragment();
                     }

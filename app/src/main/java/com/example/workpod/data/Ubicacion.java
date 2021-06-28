@@ -83,6 +83,14 @@ public class Ubicacion implements DataDb{
         this.direccion = direccion;
     }
 
+    public boolean allResevados(){
+        for (Workpod workpod : workpods){
+            if (workpod.getReserva() == null || workpod.getReserva().isCancelada())
+                return false;
+        }
+        return true;
+    }
+
     public Ubicacion() {
         this.id = 0;
         this.lat = 0;

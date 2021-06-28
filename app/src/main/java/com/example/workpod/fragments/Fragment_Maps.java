@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -52,7 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener, Fragment_Dialog_Workpod.ActualizarMapa{
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener{
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
@@ -245,10 +247,10 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if(ubicacion.getWorkpods().size()>1){
                     //ABRIMOS EL DIALOGO EMERGENTE
-                    fragmentCluster=new Fragment_Dialog_Cluster(ubicacion, posicion);
+                    fragmentCluster=new Fragment_Dialog_Cluster(ubicacion, posicion, this);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
                 }else{
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion, posicion);
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion, posicion, this);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
             } catch (Exception e) {
@@ -295,11 +297,15 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * en la app y aparezca que el usuario tiene una reserva. Si no se refresca, el usuario tiene que volver a loggearse para que
      * aparezca su reserva. De esta forma evitamos tener que volver a hacer una consulta y utilizar otro hilo más
      */
-    @Override
     public void actualizarMapa() {
-        getActivity().finish();
+        /*getActivity().finish();
         startActivity(getActivity().getIntent());
-        getActivity().overridePendingTransition(0, 0);
+        getActivity().overridePendingTransition(0, 0);*/
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(this).attach(this).commit();
     }
 
 //=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================
@@ -419,7 +425,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
             markPosicion.setTag(ubicacion);
-            markPosicion.setIcon(VectortoBitmap(requireContext(), R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, R.color.blue));
+
+            boolean allReservados = ubicacion.allResevados();
+            markPosicion.setIcon(VectortoBitmap(requireContext(), allReservados?R.drawable.markers_cluster_red:R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, allReservados?R.color.red:R.color.blue));
         }
 
         //CALCULAR DISTANCIA ENTRE 2 COORDENADAS

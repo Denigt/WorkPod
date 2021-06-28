@@ -130,6 +130,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private boolean reservado;
     private boolean abrirAhora;
     private boolean cambiarDistancia;
+    Fragment_Maps map;
 
     // VARIABLE PARA ORDENAR LA DETENCION DE LOS HILOS
     private boolean finish = false;
@@ -139,12 +140,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     public Fragment_Dialog_Workpod() {
         ubicacion = new Ubicacion();
     }
-
-    interface ActualizarMapa{
-        public void actualizarMapa();
-    }
-
-    ActualizarMapa actualizarMapa;
 
     //CONSTRUCTOR CON INSTANCIA DE WORKPODS Y DIRECCION
 
@@ -163,6 +158,22 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.cambiarDistancia=false;
     }
 
+    /**
+     * Crea un fragment con la informacion del workpod que hay en la ubicacion
+     *
+     * @param workpod   Workpod del que obtener la informacion
+     * @param ubicacion Ubicacion en la que se encuentra el workpod
+     */
+    public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion, Shared<LatLng> posicion, Fragment_Maps map) {
+        this.workpod = workpod;
+        this.ubicacion = ubicacion;
+        this.posicion = posicion;
+        this.reservado=false;
+        this.abrirAhora=false;
+        this.cambiarDistancia=false;
+        this.map = map;
+    }
+
     //CONSTRUCTOR CON INSTANCIA DE UBICACION
 
     /**
@@ -178,6 +189,22 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.reservado=false;
         this.abrirAhora=false;
         this.cambiarDistancia=false;
+    }
+
+    /**
+     * Crea un fragment con la informacion del workpod que hay en la ubicacion
+     * Solo usar si la ubicacion tiene un solo workpod
+     *
+     * @param ubicacion Ubicacion en la que se encuentra el workpod
+     */
+    public Fragment_Dialog_Workpod(Ubicacion ubicacion, Shared<LatLng> posicion, Fragment_Maps map) {
+        this.ubicacion = ubicacion;
+        this.workpod = ubicacion.getWorkpods().get(0);
+        this.posicion = posicion;
+        this.reservado=false;
+        this.abrirAhora=false;
+        this.cambiarDistancia=false;
+        this.map = map;
     }
 
 
@@ -754,10 +781,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //ECO DE RESERVA CANCELADA POR EL SISTEMA
             Toast.makeText(getActivity(),"Tiempo agotado, reserva cancelada",Toast.LENGTH_LONG).show();
         }
-
-        if(reservado=true){
-         //   actualizarMapa.actualizarMapa();
-        }
+        if (map != null)
+            map.actualizarMapa();
 
         finish = true;
         super.onDismiss(dialog);
