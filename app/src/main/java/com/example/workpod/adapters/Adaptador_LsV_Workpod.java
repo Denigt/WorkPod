@@ -115,9 +115,10 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
                 //SI EL USUARIO NO HA RESERVADO NINGÚN WORKPOD DEL CLUSTER, LE APARECERÁ LA PALABRA RESERVADO EN ROJO
                 txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
                 //SI EL USUARIO HA RESERVADO ALGUN WORKPOD, LE SALDRÁ LA PALABRA RESERVADO EN VERDE
-                if (idWorkpodUsuario == lstWorkpods.get(i).getId())
+                if (idWorkpodUsuario == lstWorkpods.get(i).getId()){
                     txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
-
+                    txtEstado.setText("Tu reserva");
+                }
             }
         } catch (NullPointerException e) {
 
