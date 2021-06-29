@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.example.workpod.R;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
@@ -39,6 +40,7 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
     TextView txtNumPersonas;
     TextView txtUso;
     TextView txtLimpieza;
+    private int idWorkpodUsuario;
 
     //COLECCIONES
     private List<Scale_TextView> lstTv;
@@ -53,6 +55,7 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         this.context = context;
         this.lstWorkpods = lstWorkpods;
         this.metrics = metrics;
+        this.idWorkpodUsuario = 0;
 
     }
 
@@ -103,15 +106,18 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
               /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
                 else*/
-                txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
+                txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button));
             } else {
                 txtEstado.setText("Reservado");
-                //APIS SUPERIORES A LA 21
-             /*   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
-                //API 21
-                else*/
+                //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
+                if (InfoApp.USER != null && InfoApp.USER.getReserva() != null)
+                    idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
+                //SI EL USUARIO NO HA RESERVADO NINGÚN WORKPOD DEL CLUSTER, LE APARECERÁ LA PALABRA RESERVADO EN ROJO
                 txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
+                //SI EL USUARIO HA RESERVADO ALGUN WORKPOD, LE SALDRÁ LA PALABRA RESERVADO EN VERDE
+                if (idWorkpodUsuario == lstWorkpods.get(i).getId())
+                    txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
+
             }
         } catch (NullPointerException e) {
 
@@ -161,8 +167,8 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(txtEstado, "match_parent", "bold",18 , 18));
-        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "normal", 16, 16));
+        lstTv.add(new Scale_TextView(txtEstado, "match_parent", "bold", 18, 18));
+        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "bold", 16, 16));
         lstTv.add(new Scale_TextView(txtNombre, "match_parent", "bold", 35, 40));
         lstTv.add(new Scale_TextView(txtNumPersonas, "", "normal", 15, 15));
         Method.scaleTv(metrics, lstTv);

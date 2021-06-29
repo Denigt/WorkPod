@@ -108,6 +108,7 @@
                     android:textColor="@color/textgray"
                     android:textSize="16dp"
                     android:text="04/05/2021 16:45"
+                    android:textStyle="bold"
                     android:gravity="center"/>
             </LinearLayout>
 
@@ -135,6 +136,7 @@
                     android:textColor="@color/textgray"
                     android:textSize="16dp"
                     android:text="14/05/2021 18:30"
+                    android:textStyle="bold"
                     android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
