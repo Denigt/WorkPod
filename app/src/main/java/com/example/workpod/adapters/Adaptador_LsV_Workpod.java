@@ -169,7 +169,8 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
 
         //LLENAMOS COLECCIONES
         lstTv.add(new Scale_TextView(txtEstado, "match_parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "bold", 16, 16));
+        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "bold", 15, 16));
+        lstTv.add(new Scale_TextView(txtUso,"wrap_content","bold",15,16));
         lstTv.add(new Scale_TextView(txtNombre, "match_parent", "bold", 35, 40));
         lstTv.add(new Scale_TextView(txtNumPersonas, "", "normal", 15, 15));
         Method.scaleTv(metrics, lstTv);

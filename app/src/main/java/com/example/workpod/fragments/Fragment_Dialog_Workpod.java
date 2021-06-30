@@ -515,6 +515,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
                         lLEstadoWorkpod.getLayoutParams().width = 0;
                         visibleBtnCancelar=false;
+
                         //EMPIEZA EL CRONOMETRO
                         arrancarCronometro();
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
