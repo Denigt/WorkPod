@@ -85,7 +85,7 @@ public class Ubicacion implements DataDb{
 
     public boolean allResevados(){
         for (Workpod workpod : workpods){
-            if (workpod.getReserva() == null || workpod.getReserva().isCancelada())
+            if ((workpod.getReserva() == null || workpod.getReserva().isCancelada()) && !workpod.isMantenimiento())
                 return false;
         }
         return true;
