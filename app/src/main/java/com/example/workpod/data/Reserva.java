@@ -126,7 +126,7 @@ public class Reserva implements DataDb{
                 if (reservaJSON.has("id") && !reservaJSON.isNull("id"))
                     reserva.setId(reservaJSON.getInt("id"));
                 if (reservaJSON.has("fecha") && !reservaJSON.isNull("fecha"))
-                    reserva.setFecha(Method.stringToDate(reservaJSON.getString("fecha"), ZoneId.systemDefault()));
+                    reserva.setFecha(Method.stringToDate(reservaJSON.getString("fecha"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
                 if (reservaJSON.has("usuario") && !reservaJSON.isNull("usuario"))
                     reserva.setUsuario(reservaJSON.getInt("usuario"));
                 if (reservaJSON.has("workpod") && !reservaJSON.isNull("workpod"))
