@@ -160,22 +160,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.map = map;
     }
 
-    //CONSTRUCTOR CON INSTANCIA DE UBICACION
-
-    /**
-     * Crea un fragment con la informacion del workpod que hay en la ubicacion
-     * Solo usar si la ubicacion tiene un solo workpod
-     *
-     * @param ubicacion Ubicacion en la que se encuentra el workpod
-     */
-    public Fragment_Dialog_Workpod(Ubicacion ubicacion, Shared<LatLng> posicion) {
-        this.ubicacion = ubicacion;
-        this.workpod = ubicacion.getWorkpods().get(0);
-        this.posicion = posicion;
-        this.abrirAhora = false;
-        this.cambiarDistancia = false;
-    }
-
     /**
      * Crea un fragment con la informacion del workpod que hay en la ubicacion
      * Solo usar si la ubicacion tiene un solo workpod

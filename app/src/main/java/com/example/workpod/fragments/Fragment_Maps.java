@@ -429,19 +429,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             boolean allReservados = ubicacion.allResevados();
             markPosicion.setIcon(VectortoBitmap(requireContext(), allReservados?R.drawable.markers_cluster_red:R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, allReservados?R.color.red:R.color.blue));
         }
-
-        //CALCULAR DISTANCIA ENTRE 2 COORDENADAS
-        Ubicacion ubicacion=new Ubicacion();
-        Location locationA = new Location("punto A");
-        locationA.setLatitude(lstUbicacion.get(0).getLat());
-        locationA.setLongitude(lstUbicacion.get(0).getLon());
-
-        Location locationB = new Location("punto B");
-
-        locationB.setLatitude(lstUbicacion.get(1).getLat());
-        locationB.setLongitude(lstUbicacion.get(1).getLon());
-
-        float distance = locationA.distanceTo(locationB);
     }
 
     /**
