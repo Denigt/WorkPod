@@ -118,6 +118,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private boolean visibleBtnCancelar = false;
     Fragment_Maps map;
     DisplayMetrics metrics;
+    float width;
 
     // VARIABLE PARA ORDENAR LA DETENCION DE LOS HILOS
     private boolean finish = false;
@@ -286,6 +287,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //ESCALAMOS ELEMENTOS
             metrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            width = metrics.widthPixels / metrics.density;
             escalarElementos(metrics);
 
         } catch (InterruptedException e) {
@@ -409,6 +411,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
+
+        if(width<=320){
+            lLInfoWorkpod.getLayoutParams().width=390;
+        }
     }
 
     /**
@@ -791,7 +797,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     private void escaladoParticular(DisplayMetrics metrics, int n) {
-        float width = metrics.widthPixels / metrics.density;
         if (width <= (750 / metrics.density)) {
             if (btnReservarWorkpod.getText().equals("Reservado")){
                 btnReservarWorkpod.setTextSize(19);
@@ -801,6 +806,5 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 btnReservarWorkpod.setTextSize(16);
             }
         }
-
     }
 }
