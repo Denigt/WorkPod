@@ -689,25 +689,29 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                         visibleBtnCancelar = true;
                                     }
                                     if (cambiarDistancia) {
-                                        //CALCULAMOS LA DISTANCIA ENTRE EL USUARIO Y LA CABINA DE WORKPOD
-                                        posicionUsuario = new Location("Posición Usuario");
-                                        posicionUsuario.setLatitude(posicion.resource.latitude);
-                                        posicionUsuario.setLongitude(posicion.resource.longitude);
-                                        //CALCULAMOS LA DISTANCIA ENTRE AMBAS POSICIONES
-                                        float distance = posicionUsuario.distanceTo(posicionWorkpod);
-                                        //HACEMOS ECO DE LA POSICIÓN EN EL BTN
-                                        if (distance > 100000) {
+                                        if(posicion.resource!=null){
+                                            //CALCULAMOS LA DISTANCIA ENTRE EL USUARIO Y LA CABINA DE WORKPOD
+                                            posicionUsuario = new Location("Posición Usuario");
+                                            posicionUsuario.setLatitude(posicion.resource.latitude);
+                                            posicionUsuario.setLongitude(posicion.resource.longitude);
+                                            //CALCULAMOS LA DISTANCIA ENTRE AMBAS POSICIONES
+                                            float distance = posicionUsuario.distanceTo(posicionWorkpod);
+                                            //HACEMOS ECO DE LA POSICIÓN EN EL BTN
+                                            if (distance > 100000) {
+                                                btnAbrirAhora.setText("Lejos");
+                                            } else if (distance > 1000) {
+                                                btnAbrirAhora.setText(String.format("%.2f", (distance / 1000)) + "km");
+                                            } else if (distance < 1000 && distance > 50) {
+                                                btnAbrirAhora.setText((String.format("%.2f", (distance)) + "m"));
+                                            } else if (distance < 50) {
+                                                btnAbrirAhora.setText("Abrir Ahora");
+                                                //CAMBIAMOS VALOR BOOLEANO QUE CONTROLA IR AL FRAGMENT SESION FINALIZADA
+                                                abrirAhora = true;
+                                            }
+                                            cambiarDistancia = false;
+                                        }else{
                                             btnAbrirAhora.setText("Lejos");
-                                        } else if (distance > 1000) {
-                                            btnAbrirAhora.setText(String.format("%.2f", (distance / 1000)) + "km");
-                                        } else if (distance < 1000 && distance > 50) {
-                                            btnAbrirAhora.setText((String.format("%.2f", (distance)) + "m"));
-                                        } else if (distance < 50) {
-                                            btnAbrirAhora.setText("Abrir Ahora");
-                                            //CAMBIAMOS VALOR BOOLEANO QUE CONTROLA IR AL FRAGMENT SESION FINALIZADA
-                                            abrirAhora = true;
                                         }
-                                        cambiarDistancia = false;
                                     }
 
                                     if (!finish) {
