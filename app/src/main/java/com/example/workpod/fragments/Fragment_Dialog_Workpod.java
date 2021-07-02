@@ -75,6 +75,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private TextView tVUltLimpiezaDato;
     private TextView tVIlumincion;
     private TextView tVDescripcionWorkpod;
+    private TextView tVComoLlegar;
 
     private ImageView iVComoLlegar;
     private ImageView iVFlechas_Informacion_Desripcion;
@@ -116,6 +117,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private boolean cambiarDistancia;
     private boolean visibleBtnCancelar = false;
     Fragment_Maps map;
+    DisplayMetrics metrics;
 
     // VARIABLE PARA ORDENAR LA DETENCION DE LOS HILOS
     private boolean finish = false;
@@ -227,6 +229,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             tVUltLimpieza = (TextView) view.findViewById(R.id.TVUltLimpieza);
             tVUltLimpiezaDato = (TextView) view.findViewById(R.id.TVUltLimpiezaDato);
             tVIlumincion = (TextView) view.findViewById(R.id.TVIluminacion);
+            tVComoLlegar = (TextView) view.findViewById(R.id.tVComoLlegar);
 
             iVComoLlegar = (ImageView) view.findViewById(R.id.iVComoLlegar);
             tVDescripcionWorkpod = (TextView) view.findViewById(R.id.TVDescripcionWorkpod);
@@ -281,7 +284,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             comprobarReserva();
 
             //ESCALAMOS ELEMENTOS
-            escalarElementos();
+            metrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            escalarElementos(metrics);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -379,28 +384,28 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     * @param metrics
      */
-    private void escalarElementos() {
+    private void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
         this.lstBtn = new ArrayList<>();
         this.lstTv = new ArrayList<>();
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 16, 24));
+        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24));
         lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18, 20));
 
         lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 55));
-        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 13, 25));
+        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18, 25));
         lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20));
         lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15));
         lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16, 17));
         lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14, 17));
-        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 14, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "wrap_content", "normal", 14, 17));
+        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 13, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "100", "normal", 13, 17));
         lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14, 17));
+        lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15, 18));
 
         Method.scaleButtons(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
@@ -514,8 +519,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLAbrirAhora.setVisibility(View.VISIBLE);
                         //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
                         lLEstadoWorkpod.getLayoutParams().width = 0;
-                        visibleBtnCancelar=false;
-
+                        visibleBtnCancelar = false;
+                        //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORPOD
+                        escaladoParticular(metrics,0);
                         //EMPIEZA EL CRONOMETRO
                         arrancarCronometro();
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
@@ -550,6 +556,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
                 lLEstadoWorkpod.getLayoutParams().width = 0;
                 btnReservarWorkpod.setText("Reservar");
+                escaladoParticular(metrics,0);
                 //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
                 btnAbrirAhora.setVisibility(View.GONE);
                 lLAbrirAhora.setVisibility(View.GONE);
@@ -585,7 +592,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
         tVDireccion.setText(ubicacion.getDireccion().toLongString());
         tVPrecio.setText(String.valueOf(String.format("%.2f", workpod.getPrecio())) + "€/min");
-        tVUltUso.setText("Último uso ");
+        tVUltUso.setText("Último uso: ");
         //SI WORKPOD NO TIENE FECHA ULT USO
         if (workpod.getUltimoUso() == null) {
             tVUltUsoDato.setText("");
@@ -599,7 +606,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             tVUltLimpiezaDato.setText("");
             iVUltLimpieza.setVisibility(View.GONE);
         } else {
-            tVUltLimpieza.setText("Última limpieza ");
+            tVUltLimpieza.setText("Última limpieza: ");
             tVUltLimpiezaDato.setText(String.valueOf(workpod.getLimpieza().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
         }
 
@@ -657,6 +664,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             @Override
             public void run() {
                 try {
+                    escaladoParticular(metrics,0);
                     Thread.sleep(TIEMPO_EMPIECE_CRONO);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -686,6 +694,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                 try {
                                     if (!visibleBtnCancelar) {
                                         btnCancelarReserva.setVisibility(View.VISIBLE);
+                                        //VOLVEMOS A ESCALAR EL BTN PARA QUE QUEPA TANTO EL BTN DE CANCELAR COMO EL CRONOMETRO
+                                        escaladoParticular(metrics,1);
                                         visibleBtnCancelar = true;
                                     }
                                     if (cambiarDistancia) {
@@ -710,7 +720,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                         cambiarDistancia = false;
                                     }
 
-                                    if(!finish){
+                                    if (!finish) {
                                         String cadMinutos = "", cadSegundos = "", cadCentesimas = "";
                                         //Añado 0´s delante para los milisegundos cuando corresponda
                                         if (segundos < 10) {
@@ -728,7 +738,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                         if (segundos < 0) {
                                             Thread.sleep(50);
                                         }
-                                    }else{
+                                    } else {
                                         btnReservarWorkpod.setText("Reservar");
                                     }
                                 } catch (InterruptedException e) {
@@ -778,5 +788,19 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
         finish = true;
         super.onDismiss(dialog);
+    }
+
+    private void escaladoParticular(DisplayMetrics metrics, int n) {
+        float width = metrics.widthPixels / metrics.density;
+        if (width <= (750 / metrics.density)) {
+            if (btnReservarWorkpod.getText().equals("Reservado")){
+                btnReservarWorkpod.setTextSize(19);
+            } else if(btnReservarWorkpod.getText().equals("Reservar"))
+                btnReservarWorkpod.setTextSize(24);
+           if (n==1) {
+                btnReservarWorkpod.setTextSize(16);
+            }
+        }
+
     }
 }

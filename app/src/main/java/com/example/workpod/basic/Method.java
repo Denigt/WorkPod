@@ -157,17 +157,15 @@ public abstract class Method {
 
           for (Scale_TextView tv : lstTv) {
             //DEFINIMOS TAMAÑO FUENTE
-            if ((width <= (1200 / metrics.density)) && (width > (550 / metrics.density))) {
+            if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
                 tv.getTextView().setTextSize(tv.getSizeBig());
-            } else if (width <= (550 / metrics.density)) {
+            } else if (width <= (750 / metrics.density)) {
                 tv.getTextView().setTextSize(tv.getSizeLittle());
             }
             //APLICAMOS EL WIDHT CORRESPONDIENTE
             if (tv.getWidht().trim().equalsIgnoreCase("Match_Parent")) {
                 tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
             } else if (tv.getWidht().trim().equalsIgnoreCase("Wrap_Content")) {
-                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
             }
             //APLICAMOS EL ESTILO CORRESPONDIENTE
