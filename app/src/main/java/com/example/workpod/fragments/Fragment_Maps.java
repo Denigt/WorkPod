@@ -54,7 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener{
+public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener, GoogleMap.OnMapClickListener {
 
     // CODIGOS PARA LA SOLICITUD DE PERMISOS
     private final int LOCATION_PERMISSION_CODE = 1003;
@@ -109,7 +109,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     public Fragment_Maps() {
         lstUbicacion = new ArrayList<>();
     }
-
 
 
     //SOBREESCRITURAS
@@ -215,7 +214,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     @Override
     public void onClick(View v) {
         btnCentrarOnClick(v);
-        if (fragmentCluster != null && v.getId() != fragmentCluster.getId()){
+        if (fragmentCluster != null && v.getId() != fragmentCluster.getId()) {
             getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentCluster).commit();
             fragmentCluster = null;
         }
@@ -227,7 +226,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * Detecta los clicks en el mapa y cierra el fragment de la lista de workpods
      */
     public void onMapClick(LatLng latLng) {
-        if (fragmentCluster != null){
+        if (fragmentCluster != null) {
             getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentCluster).commit();
             fragmentCluster = null;
         }
@@ -245,13 +244,13 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 // Ubicacion a la que referencia el marcador (desde ella se pueden ver la lista de workpods del marcador)
                 Ubicacion ubicacion = (Ubicacion) marker.getTag();
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
-                if(ubicacion.getWorkpods().size()>1){
+                if (ubicacion.getWorkpods().size() > 1) {
                     //ABRIMOS EL DIALOGO EMERGENTE
-                    fragmentCluster=new Fragment_Dialog_Cluster(ubicacion, posicion, this);
+                    fragmentCluster = new Fragment_Dialog_Cluster(ubicacion, posicion, this);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.RLMaps, fragmentCluster).commit();
-                }else{
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(ubicacion, posicion, this);
-                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORKPOD EN ESTA UBICACIÓN");
+                } else {
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(ubicacion, posicion, this);
+                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
             } catch (Exception e) {
                 Log.e("ERROR ONMARKERCLICK", e.getMessage());
@@ -271,6 +270,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     }
 
     // ONCLICK LISTENERS
+
     /**
      * Centra el mapa sobre la posicion del usuario
      *
@@ -419,15 +419,18 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * Dibuja las ubicaciones de los workpods en el mapa
      */
     private void dibujaWorkpods() {
-        Marker markPosicion;
+        try {
+            Marker markPosicion;
+            for (Ubicacion ubicacion : lstUbicacion) {
+                LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
+                markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
+                markPosicion.setTag(ubicacion);
 
-        for (Ubicacion ubicacion : lstUbicacion) {
-            LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
-            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
-            markPosicion.setTag(ubicacion);
-
-            boolean allReservados = ubicacion.allResevados();
-            markPosicion.setIcon(VectortoBitmap(requireContext(), allReservados?R.drawable.markers_cluster_red:R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, allReservados?R.color.red:R.color.blue));
+                boolean allReservados = ubicacion.allResevados();
+                markPosicion.setIcon(VectortoBitmap(requireContext(), allReservados ? R.drawable.markers_cluster_red : R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf(ubicacion.getWorkpods().size()), 60, allReservados ? R.color.red : R.color.blue));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -494,7 +497,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     public void onDestroy() {
         killHilos = true;
         locationService.removeUpdates(new UbicacionListener());
-
         super.onDestroy();
     }
 }

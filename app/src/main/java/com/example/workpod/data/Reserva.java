@@ -15,7 +15,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reserva implements DataDb{
+public class Reserva implements DataDb {
     // Caducidad de la reserva expresada en minutos
     public static final int CADUCIDAD = 20;
 
@@ -25,12 +25,16 @@ public class Reserva implements DataDb{
     private String estado;
     private ZonedDateTime fecha;
 
-    public void set(Reserva reserva) {
-        id = reserva.getId();
-        usuario = reserva.getUsuario();
-        workpod = reserva.getWorkpod();
-        estado = reserva.getEstado();
-        fecha = reserva.getFecha();
+    public void set(Reserva reserva)  {
+        try{
+            id = reserva.getId();
+            usuario = reserva.getUsuario();
+            workpod = reserva.getWorkpod();
+            estado = reserva.getEstado();
+            fecha = reserva.getFecha();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     public int getId() {
@@ -91,11 +95,12 @@ public class Reserva implements DataDb{
 
     /**
      * Indica si una reserva esta caducada, cancelada o finalizada
+     *
      * @return true si la reserva esta caducada/cancelada/finalizada, false en caso contrario
      */
-    public boolean isCancelada(){
+    public boolean isCancelada() {
         if (fecha == null || (estado.toUpperCase().equals("CANCELADA") || estado.toUpperCase().equals("CADUCADA") || estado.toUpperCase().equals("FINALIZADA")
-         || Method.subsDate(ZonedDateTime.now(), fecha)/60. >= Reserva.CADUCIDAD))
+                || Method.subsDate(ZonedDateTime.now(), fecha) / 60. >= Reserva.CADUCIDAD))
             return true;
         return false;
     }
@@ -109,7 +114,7 @@ public class Reserva implements DataDb{
             json.put("usuario", usuario);
             json.put("workpod", workpod);
             json.put("estado", estado);
-        }catch(JSONException e){
+        } catch (JSONException e) {
             Log.e("ERROR RESERVA_JSON", e.getMessage());
         }
 
@@ -133,14 +138,14 @@ public class Reserva implements DataDb{
                     reserva.setWorkpod(reservaJSON.getInt("workpod"));
                 if (reservaJSON.has("estado") && !reservaJSON.isNull("estado"))
                     reserva.setEstado(reservaJSON.getString("estado"));
-            }catch (DateTimeException e){
+            } catch (DateTimeException e) {
                 if (reservaJSON.has("usuario") && !reservaJSON.isNull("usuario"))
                     reserva.setUsuario(reservaJSON.getInt("usuario"));
                 if (reservaJSON.has("workpod") && !reservaJSON.isNull("workpod"))
                     reserva.setWorkpod(reservaJSON.getInt("workpod"));
                 reserva.setEstado("CADUCADA");
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("ERROR JSON_RESERVA", e.getMessage());
         }
 
