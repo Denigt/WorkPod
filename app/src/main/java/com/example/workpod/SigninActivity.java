@@ -381,11 +381,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVActSigninApellidos, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActSigninNombre, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActSigninPregNIFNIE, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActSigninPregNombre, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActSigninTitulo, "Match_Parent", "bold", 34, 34));
+        lstTv.add(new Scale_TextView(tVActSigninApellidos, "Match_Parent", "bold", 18,18, 18));
+        lstTv.add(new Scale_TextView(tVActSigninNombre, "Match_Parent", "bold", 18,18, 18));
+        lstTv.add(new Scale_TextView(tVActSigninPregNIFNIE, "Match_Parent", "bold", 24,24, 24));
+        lstTv.add(new Scale_TextView(tVActSigninPregNombre, "Match_Parent", "bold", 24,24, 24));
+        lstTv.add(new Scale_TextView(tVActSigninTitulo, "Match_Parent", "bold", 34,34, 34));
 
         Method.scaleTv(metrics, lstTv);
     }
@@ -411,13 +411,13 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVActSignin2Contrasena, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActSignin2Email, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActSignin2InstruccionesContrasena, "Match_Parent", "bold", 16, 16));
-        lstTv.add(new Scale_TextView(tVActSignin2PregContrasena, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActSignin2PregEmail, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActSignin2RepetirContrasena, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActSignin2Titulo, "Match_Parent", "bold", 34, 34));
+        lstTv.add(new Scale_TextView(tVActSignin2Contrasena, "Match_Parent", "bold", 18, 18,18));
+        lstTv.add(new Scale_TextView(tVActSignin2Email, "Match_Parent", "bold", 18, 18,18));
+        lstTv.add(new Scale_TextView(tVActSignin2InstruccionesContrasena, "Match_Parent", "bold", 16, 16,16));
+        lstTv.add(new Scale_TextView(tVActSignin2PregContrasena, "Match_Parent", "bold", 24, 24,24));
+        lstTv.add(new Scale_TextView(tVActSignin2PregEmail, "Match_Parent", "bold", 24,24, 24));
+        lstTv.add(new Scale_TextView(tVActSignin2RepetirContrasena, "Match_Parent", "bold", 18, 18,18));
+        lstTv.add(new Scale_TextView(tVActSignin2Titulo, "Match_Parent", "bold", 34,34, 34));
 
         Method.scaleTv(metrics, lstTv);
     }

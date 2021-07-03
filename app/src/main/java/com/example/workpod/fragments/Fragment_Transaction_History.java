@@ -302,8 +302,8 @@ public class Fragment_Transaction_History extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones,"","bold",35,35));
-        lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio,"wrap_content","bold",23,23));
+        lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones,"","bold",35,35,35));
+        lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio,"wrap_content","bold",23,23,23));
 
         Method.scaleTv(metrics, lstTv);
     }

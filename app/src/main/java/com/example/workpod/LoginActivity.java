@@ -275,14 +275,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,15));
-        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",12,15));
+        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,12,15));
+        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",12,12,15));
 
-        lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,24));
-        lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34));
-        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",18,18));
-        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",18,18));
-        lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",24,24));
+        lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,20,24));
+        lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34,34));
+        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",18,18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",18,18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",24,24,24));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

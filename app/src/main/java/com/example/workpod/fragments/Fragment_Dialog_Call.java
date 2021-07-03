@@ -151,7 +151,7 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVFgmDialogCallTlfn,"wrap_content","bold",35,35));
+        lstTv.add(new Scale_TextView(tVFgmDialogCallTlfn,"wrap_content","bold",35,35,35));
 
         Method.scaleTv(metrics, lstTv);
     }

@@ -222,17 +222,17 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnShowInfo,"match_parent","bold",14,14));
-        lstBtn.add(new Scale_Buttons(btnPassword,"match_parent","bold",14,14));
+        lstBtn.add(new Scale_Buttons(btnShowInfo,"match_parent","bold",14,14,14));
+        lstBtn.add(new Scale_Buttons(btnPassword,"match_parent","bold",14,14,14));
 
-        lstTv.add(new Scale_TextView(tVPerfil,"match_parent","bold",40,40));
-        lstTv.add(new Scale_TextView(txtNombre,"match_parent","normal",15,15));
-        lstTv.add(new Scale_TextView(txtEmail,"match_parent","bold",16,16));
-        lstTv.add(new Scale_TextView(tVTituloDNI,"match_parent","bold",18,18));
-        lstTv.add(new Scale_TextView(txtDNI,"match_parent","bold",16,16));
-        lstTv.add(new Scale_TextView(tVTituloTlfn,"match_parent","bold",18,18));
-        lstTv.add(new Scale_TextView(txtTelefono,"match_parent","bold",16,16));
-        lstTv.add(new Scale_TextView(tVDirFacturacion,"match_parent","bold",18,18));
+        lstTv.add(new Scale_TextView(tVPerfil,"match_parent","bold",40,40,40));
+        lstTv.add(new Scale_TextView(txtNombre,"match_parent","normal",15,15,15));
+        lstTv.add(new Scale_TextView(txtEmail,"match_parent","bold",16,16,16));
+        lstTv.add(new Scale_TextView(tVTituloDNI,"match_parent","bold",18,18,18));
+        lstTv.add(new Scale_TextView(txtDNI,"match_parent","bold",16,16,16));
+        lstTv.add(new Scale_TextView(tVTituloTlfn,"match_parent","bold",18,18,18));
+        lstTv.add(new Scale_TextView(txtTelefono,"match_parent","bold",16,16,16));
+        lstTv.add(new Scale_TextView(tVDirFacturacion,"match_parent","bold",18,18,18));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

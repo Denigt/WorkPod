@@ -148,13 +148,13 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVActModPerfilApellidos, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActModPerfilEmail, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActModPerfilNIFNIE, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActModPerfilNombre, "Match_Parent", "bold", 18, 18));
-        lstTv.add(new Scale_TextView(tVActModPerfilPregEmail, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActModPerfilPregNombre, "Match_Parent", "bold", 24, 24));
-        lstTv.add(new Scale_TextView(tVActModPerfilTitulo, "Match_Parent", "bold", 30, 34));
+        lstTv.add(new Scale_TextView(tVActModPerfilApellidos, "Match_Parent", "bold", 18,18, 18));
+        lstTv.add(new Scale_TextView(tVActModPerfilEmail, "Match_Parent", "bold", 18, 18,18));
+        lstTv.add(new Scale_TextView(tVActModPerfilNIFNIE, "Match_Parent", "bold", 24,24, 24));
+        lstTv.add(new Scale_TextView(tVActModPerfilNombre, "Match_Parent", "bold", 18, 18,18));
+        lstTv.add(new Scale_TextView(tVActModPerfilPregEmail, "Match_Parent", "bold", 24,24, 24));
+        lstTv.add(new Scale_TextView(tVActModPerfilPregNombre, "Match_Parent", "bold", 24,24, 24));
+        lstTv.add(new Scale_TextView(tVActModPerfilTitulo, "Match_Parent", "bold", 30, 30,34));
 
         Method.scaleTv(metrics, lstTv);
 

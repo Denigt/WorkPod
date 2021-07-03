@@ -120,17 +120,36 @@ public abstract class Method {
             //DEFINIMOS TAMAÑO FUENTE
             if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
                 btn.getButton().setTextSize(btn.getSizeBig());
-            } else if (width <= (750 / metrics.density)) {
+                //DEFINIMOS ANCHO DEL BTN
+                if (btn.getWidth().trim().equalsIgnoreCase("MATCH_PARENT") && btn.getWidhtBig() == 0) {
+                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (btn.getWidth().trim().equalsIgnoreCase("WRAP_CONTENT") && btn.getWidhtBig() == 0) {
+                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    btn.getButton().getLayoutParams().width = btn.getWidhtBig();
+                }
+            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+                btn.getButton().setTextSize(btn.getSizeMiddle());
+                //DEFINIMOS ANCHO DEL BTN
+                if (btn.getWidth().trim().equalsIgnoreCase("MATCH_PARENT") && btn.getWidhtMiddle() == 0) {
+                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (btn.getWidth().trim().equalsIgnoreCase("WRAP_CONTENT") && btn.getWidhtMiddle() == 0) {
+                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    btn.getButton().getLayoutParams().width = btn.getWidhtMiddle();
+                }
+            } else if (width <= (550 / metrics.density)) {
                 btn.getButton().setTextSize(btn.getSizeLittle());
+                //DEFINIMOS ANCHO DEL BTN
+                if (btn.getWidth().trim().equalsIgnoreCase("MATCH_PARENT") && btn.getWidhtLittle() == 0) {
+                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (btn.getWidth().trim().equalsIgnoreCase("WRAP_CONTENT") && btn.getWidhtLittle() == 0) {
+                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    btn.getButton().getLayoutParams().width = btn.getWidhtLittle();
+                }
             }
-            //APLICAMOS EL WIDHT CORRESPONDIENTE
-            if (btn.getWidth().trim().equalsIgnoreCase("Match_Parent")) {
-                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-            } else if (btn.getWidth().trim().equalsIgnoreCase("Wrap_Content")) {
-                btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            } else {
-                //  btn.getButton().getLayoutParams().width = Integer.getInteger(btn.getWidth().trim());
-            }
+
             //APLICAMOS EL ESTILO CORRESPONDIENTE
             if (btn.getStyle().trim().equalsIgnoreCase("bold")) {
                 btn.getButton().setTypeface(null, Typeface.BOLD);
@@ -160,15 +179,39 @@ public abstract class Method {
             //DEFINIMOS TAMAÑO FUENTE
             if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
                 tv.getTextView().setTextSize(tv.getSizeBig());
-            } else if (width <= (750 / metrics.density)) {
+                //DEFINIMOS ANCHO DEL TXT
+                if (tv.getWidht().trim().equalsIgnoreCase("MATCH_PARENT") && tv.getWidhtBig() == 0) {
+                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (tv.getWidht().trim().equalsIgnoreCase("WRAP_CONTENT") && tv.getWidhtBig() == 0) {
+                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else if (tv.getWidht().trim().equalsIgnoreCase("N")) {
+                    tv.getTextView().getLayoutParams().width = tv.getWidhtBig();
+                    tv.getTextView().getLayoutParams().height = tv.getHeightBig();
+                }
+            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+                tv.getTextView().setTextSize(tv.getSizeMiddle());
+                //DEFINIMOS ANCHO DEL TXT
+                if (tv.getWidht().trim().equalsIgnoreCase("MATCH_PARENT") && tv.getWidhtMiddle() == 0) {
+                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (tv.getWidht().trim().equalsIgnoreCase("WRAP_CONTENT") && tv.getWidhtMiddle() == 0) {
+                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else if (tv.getWidht().trim().equalsIgnoreCase("N")) {
+                    tv.getTextView().getLayoutParams().width = tv.getWidhtMiddle();
+                    tv.getTextView().getLayoutParams().height = tv.getHeightMiddle();
+                }
+            } else if (width <= (550 / metrics.density)) {
                 tv.getTextView().setTextSize(tv.getSizeLittle());
+                //DEFINIMOS ANCHO DEL TXT
+                if (tv.getWidht().trim().equalsIgnoreCase("MATCH_PARENT") && tv.getWidhtLittle() == 0) {
+                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (tv.getWidht().trim().equalsIgnoreCase("WRAP_CONTENT") && tv.getWidhtLittle() == 0) {
+                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else if (tv.getWidht().trim().equalsIgnoreCase("N")) {
+                    tv.getTextView().getLayoutParams().width = tv.getWidhtLittle();
+                    tv.getTextView().getLayoutParams().height = tv.getHeightLittle();
+                }
             }
-            //APLICAMOS EL WIDHT CORRESPONDIENTE
-            if (tv.getWidht().trim().equalsIgnoreCase("Match_Parent")) {
-                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-            } else if (tv.getWidht().trim().equalsIgnoreCase("Wrap_Content")) {
-                tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            }
+
             //APLICAMOS EL ESTILO CORRESPONDIENTE
             if (tv.getStyle().trim().equalsIgnoreCase("bold")) {
                 tv.getTextView().setTypeface(null, Typeface.BOLD);
@@ -188,7 +231,6 @@ public abstract class Method {
         //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
         float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
         for (Scale_Image_View iV : lstIv) {
-
             if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
                 //DEFINIMOS ANCHO DEL IV
                 if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtBig() == 0) {
@@ -200,7 +242,7 @@ public abstract class Method {
                 }
                 //DEFINIMOS ALTURA DEL IV
                 if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightBig() == 0) {
-                    iV.getiV().getLayoutParams().height= LinearLayout.LayoutParams.MATCH_PARENT;
+                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
                 } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightBig() == 0) {
                     iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 } else {
@@ -209,9 +251,9 @@ public abstract class Method {
 
             } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
                 //DEFINIMOS ANCHO DEL IV
-                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT")&& iV.getWidhtMiddle() == 0) {
+                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtMiddle() == 0) {
                     iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getWidhtMiddle() == 0) {
+                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getWidhtMiddle() == 0) {
                     iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 } else {
                     iV.getiV().getLayoutParams().width = iV.getWidhtMiddle();
@@ -220,24 +262,24 @@ public abstract class Method {
 
                 if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightMiddle() == 0) {
                     iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getHeightMiddle() == 0) {
-                    iV.getiV().getLayoutParams().height= LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightMiddle() == 0) {
+                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 } else {
                     iV.getiV().getLayoutParams().height = iV.getHeightMiddle();
                 }
             } else if (width <= (550 / metrics.density)) {
                 //DEFINIMOS ANCHO DEL IV
-                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT")&& iV.getWidhtLittle()== 0) {
+                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtLittle() == 0) {
                     iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getWidhtLittle() == 0) {
+                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getWidhtLittle() == 0) {
                     iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 } else {
                     iV.getiV().getLayoutParams().width = iV.getWidhtLittle();
                 }
                 //DEFINIMOS ALTURA DEL IV
-                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT")&& iV.getHeightLittle() == 0) {
+                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightLittle() == 0) {
                     iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getHeightLittle() == 0) {
+                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightLittle() == 0) {
                     iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 } else {
                     iV.getiV().getLayoutParams().height = iV.getHeightLittle();

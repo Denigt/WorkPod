@@ -188,13 +188,13 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnCerrarWorPod,"","normal",20,20));
-        lstBtn.add(new Scale_Buttons(btnContactarSoporte,"","normal",20,20));
+        lstBtn.add(new Scale_Buttons(btnCerrarWorPod,"","normal",20,20,20));
+        lstBtn.add(new Scale_Buttons(btnContactarSoporte,"","normal",20,20,20));
 
-        lstTv.add(new Scale_TextView(tVWifi,"wrap_content","bold",18,18));
-        lstTv.add(new Scale_TextView(tVSesionCapacidad,"wrap_content","bold",18,18));
-        lstTv.add(new Scale_TextView(tVSesionDireccion,"wrap_content","bold",18,18));
-        lstTv.add(new Scale_TextView(tVTiempoTranscurrido,"wrap_content","bold",55,55));
+        lstTv.add(new Scale_TextView(tVWifi,"wrap_content","bold",18,18,18));
+        lstTv.add(new Scale_TextView(tVSesionCapacidad,"wrap_content","bold",18,18,18));
+        lstTv.add(new Scale_TextView(tVSesionDireccion,"wrap_content","bold",18,18,18));
+        lstTv.add(new Scale_TextView(tVTiempoTranscurrido,"wrap_content","bold",55,55,55));
 
         Method.scaleTv(metrics, lstTv);
     }

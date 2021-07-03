@@ -96,7 +96,7 @@ public class Adaptador_LsV_Support extends BaseAdapter {
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVIcono, "match_parent", "normal",18 , 25));
+        lstTv.add(new Scale_TextView(tVIcono, "match_parent", "normal",18 , 18,25));
         Method.scaleTv(metrics, lstTv);
     }
 }

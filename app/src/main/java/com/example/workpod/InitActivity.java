@@ -231,12 +231,12 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnConectar,"Match_Parent","bold",11,15));
-        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,15));
-        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",25,25));
+        lstBtn.add(new Scale_Buttons(btnConectar,"Match_Parent","bold",11,11,15));
+        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,12,15));
+        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",25,25,25));
 
-        lstTv.add(new Scale_TextView(tvTituloInitActivity,"Match_Parent","bold",29,29));
-        lstTv.add(new Scale_TextView(tVTerminosServicio,"Match_Parent","normal",15,15));
+        lstTv.add(new Scale_TextView(tvTituloInitActivity,"Match_Parent","bold",29,29,29));
+        lstTv.add(new Scale_TextView(tVTerminosServicio,"Match_Parent","normal",15,15,15));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

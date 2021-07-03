@@ -137,7 +137,7 @@ public class fragment_support extends Fragment {
         this.lstTv=new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVFgmSupportTitulo,"","normal",30,30));
+        lstTv.add(new Scale_TextView(tVFgmSupportTitulo,"","normal",30,30,30));
 
         Method.scaleTv(metrics, lstTv);
     }

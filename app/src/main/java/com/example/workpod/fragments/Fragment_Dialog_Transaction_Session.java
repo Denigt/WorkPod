@@ -283,11 +283,11 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVDialogUbication,"match_parent","bold",20,20));
-        lstTv.add(new Scale_TextView(tVDialogDateHour,"match_parent","bold",20,20));
-        lstTv.add(new Scale_TextView(tVDialogSessionTime,"match_parent","bold",20,20));
-        lstTv.add(new Scale_TextView(tVDialogOffers,"match_parent","bold",20,20));
-        lstTv.add(new Scale_TextView(tVDialogPrice,"match_parent","bold",20,20));
+        lstTv.add(new Scale_TextView(tVDialogUbication,"match_parent","bold",20,20,20));
+        lstTv.add(new Scale_TextView(tVDialogDateHour,"match_parent","bold",20,20,20));
+        lstTv.add(new Scale_TextView(tVDialogSessionTime,"match_parent","bold",20,20,20));
+        lstTv.add(new Scale_TextView(tVDialogOffers,"match_parent","bold",20,20,20));
+        lstTv.add(new Scale_TextView(tVDialogPrice,"match_parent","bold",20,20,20));
 
         Method.scaleTv(metrics, lstTv);
     }

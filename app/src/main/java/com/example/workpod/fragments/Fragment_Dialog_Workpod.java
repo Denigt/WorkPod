@@ -386,19 +386,21 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         this.lstIv=new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24));
-        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18, 20));
+        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24,24));
+        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18,18, 20));
 
-        lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 55));
-        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18, 25));
-        lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20));
-        lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15));
-        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14, 17));
-        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 13, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "100", "normal", 13, 17));
-        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14, 17));
-        lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15, 18));
+        lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40,40, 55));
+        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18,18, 25));
+        lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20,20));
+        lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15,15));
+        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16,16, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14,15, 17));
+        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 13,15, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "100", "normal", 13,15, 17));
+        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14,15, 17));
+        lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15,15, 18));
+        lstTv.add(new Scale_TextView(tVCapacidad,"n","bold",20,25,25,75,50,
+                110,65,150,100));
 
         lstIv.add(new Scale_Image_View(iVFlechas_Informacion_Desripcion,40,42,70,72,88,90,"",""));
         lstIv.add(new Scale_Image_View(iVFlechas_Descripcion_Informacion,40,42,70,72,88,90,"",""));
