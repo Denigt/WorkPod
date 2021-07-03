@@ -3,32 +3,25 @@ package com.example.workpod.fragments;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.workpod.ModPerfilActivity;
 import com.example.workpod.R;
-import com.example.workpod.adapters.Adaptador_LsV_Transaction_History;
 import com.example.workpod.adapters.Adaptador_Lsv_dirfacturacion;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
-import com.example.workpod.otherclass.LsV_Transaction_History;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
 
@@ -241,7 +234,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         lstTv.add(new Scale_TextView(txtTelefono,"match_parent","bold",16,16));
         lstTv.add(new Scale_TextView(tVDirFacturacion,"match_parent","bold",18,18));
 
-        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
     }
 }

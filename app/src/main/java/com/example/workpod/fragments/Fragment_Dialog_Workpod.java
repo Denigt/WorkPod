@@ -42,6 +42,7 @@ import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_Image_View;
 import com.example.workpod.scale.Scale_TextView;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -82,6 +83,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private ImageView iVFlechas_Descripcion_Informacion;
     private ImageView iVUltUso;
     private ImageView iVUltLimpieza;
+    private ImageView iVIluminacion;
+    private ImageView iV_Icon_Capacidad;
 
     private Button btnReservarWorkpod;
     private ImageButton btnCancelarReserva;
@@ -102,6 +105,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
+    List<Scale_Image_View>lstIv;
 
     //VARIABLES
     private int centesimas;
@@ -222,6 +226,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
             iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
             iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
+            iVIluminacion=(ImageView)view.findViewById(R.id.IVIluminacion);
+            iV_Icon_Capacidad=(ImageView)view.findViewById(R.id.IV_Icon_Capacidad);
 
             btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
             btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
@@ -377,6 +383,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         //INICIALIZAMOS COLECCIONES
         this.lstBtn = new ArrayList<>();
         this.lstTv = new ArrayList<>();
+        this.lstIv=new ArrayList<>();
 
         //LLENAMOS COLECCIONES
         lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24));
@@ -393,8 +400,18 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14, 17));
         lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15, 18));
 
-        Method.scaleButtons(metrics, lstBtn);
+        lstIv.add(new Scale_Image_View(iVFlechas_Informacion_Desripcion,40,42,70,72,88,90,"",""));
+        lstIv.add(new Scale_Image_View(iVFlechas_Descripcion_Informacion,40,42,70,72,88,90,"",""));
+        lstIv.add(new Scale_Image_View(iVUltLimpieza,45,45,60,60,85,85,"",""));
+        lstIv.add(new Scale_Image_View(iVUltUso,45,45,60,60,85,85,"",""));
+        lstIv.add(new Scale_Image_View(iVIluminacion,45,45,60,60,85,85,"",""));
+        lstIv.add(new Scale_Image_View(iVIluminacion,45,45,60,60,85,85,"",""));
+        lstIv.add(new Scale_Image_View(iV_Icon_Capacidad,70,70,100,0,150,0,"","match_parent"));
+
+
+        Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
+        Method.scaleIv(metrics,lstIv);
 
         if(width<=320){
             lLInfoWorkpod.getLayoutParams().width=390;
@@ -790,7 +807,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 btnReservarWorkpod.setTextSize(19);
             } else if(btnReservarWorkpod.getText().equals("Reservar"))
                 btnReservarWorkpod.setTextSize(24);
-           if (n==1) {
+            if (n==1) {
                 btnReservarWorkpod.setTextSize(16);
             }
         }

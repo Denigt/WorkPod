@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_Image_View;
 import com.example.workpod.scale.Scale_TextView;
 
 import java.time.ZoneId;
@@ -107,9 +108,9 @@ public abstract class Method {
      * Esclaremos los btns del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
      * absolutos, sino los reales.
      *
-     * @param metrics      objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
+     * @param metrics objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
      */
-    public static void scaleButtons(DisplayMetrics metrics, List<Scale_Buttons> lstBtns) {
+    public static void scaleBtns(DisplayMetrics metrics, List<Scale_Buttons> lstBtns) {
         //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
         //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
         float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
@@ -127,8 +128,8 @@ public abstract class Method {
                 btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
             } else if (btn.getWidth().trim().equalsIgnoreCase("Wrap_Content")) {
                 btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            }else{
-              //  btn.getButton().getLayoutParams().width = Integer.getInteger(btn.getWidth().trim());
+            } else {
+                //  btn.getButton().getLayoutParams().width = Integer.getInteger(btn.getWidth().trim());
             }
             //APLICAMOS EL ESTILO CORRESPONDIENTE
             if (btn.getStyle().trim().equalsIgnoreCase("bold")) {
@@ -147,7 +148,7 @@ public abstract class Method {
      * escalaremos los tv del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
      * absolutos, sino los reales.
      *
-     * @param metrics     objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
+     * @param metrics objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
      */
     public static void scaleTv(DisplayMetrics metrics, List<Scale_TextView> lstTv) {
         //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
@@ -155,7 +156,7 @@ public abstract class Method {
         float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
         float height = metrics.heightPixels / metrics.density; // alto absoluto en pixels
 
-          for (Scale_TextView tv : lstTv) {
+        for (Scale_TextView tv : lstTv) {
             //DEFINIMOS TAMAÑO FUENTE
             if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
                 tv.getTextView().setTextSize(tv.getSizeBig());
@@ -180,6 +181,69 @@ public abstract class Method {
             }
         }
 
+    }
+
+    public static void scaleIv(DisplayMetrics metrics, List<Scale_Image_View> lstIv) {
+        //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
+        //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
+        float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
+        for (Scale_Image_View iV : lstIv) {
+
+            if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
+                //DEFINIMOS ANCHO DEL IV
+                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtBig() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getWidhtBig() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    iV.getiV().getLayoutParams().width = iV.getWidhtBig();
+                }
+                //DEFINIMOS ALTURA DEL IV
+                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightBig() == 0) {
+                    iV.getiV().getLayoutParams().height= LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightBig() == 0) {
+                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    iV.getiV().getLayoutParams().height = iV.getHeightBig();
+                }
+
+            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+                //DEFINIMOS ANCHO DEL IV
+                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT")&& iV.getWidhtMiddle() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getWidhtMiddle() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    iV.getiV().getLayoutParams().width = iV.getWidhtMiddle();
+                }
+                //DEFINIMOS ALTURA DEL IV
+
+                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightMiddle() == 0) {
+                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getHeightMiddle() == 0) {
+                    iV.getiV().getLayoutParams().height= LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    iV.getiV().getLayoutParams().height = iV.getHeightMiddle();
+                }
+            } else if (width <= (550 / metrics.density)) {
+                //DEFINIMOS ANCHO DEL IV
+                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT")&& iV.getWidhtLittle()== 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getWidhtLittle() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    iV.getiV().getLayoutParams().width = iV.getWidhtLittle();
+                }
+                //DEFINIMOS ALTURA DEL IV
+                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT")&& iV.getHeightLittle() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT")&& iV.getHeightLittle() == 0) {
+                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                } else {
+                    iV.getiV().getLayoutParams().height = iV.getHeightLittle();
+                }
+            }
+        }
     }
 
     /**

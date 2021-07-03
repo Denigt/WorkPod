@@ -238,7 +238,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         lstTv.add(new Scale_TextView(tvTituloInitActivity,"Match_Parent","bold",29,29));
         lstTv.add(new Scale_TextView(tVTerminosServicio,"Match_Parent","normal",15,15));
 
-        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
     }
 }

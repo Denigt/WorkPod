@@ -284,11 +284,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",18,18));
         lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",24,24));
 
-        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
 
         //LLENAMOS COLECCIONES
-        Method.scaleButtons(metrics, lstBtn);
+        Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics,lstTv);
     }
 }
