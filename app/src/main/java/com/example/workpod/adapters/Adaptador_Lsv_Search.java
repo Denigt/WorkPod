@@ -59,6 +59,7 @@ public class Adaptador_Lsv_Search extends BaseAdapter implements Filterable {
     }
 
     public void addAll(List<Ubicacion> collection) {
+        lstUbicacion.clear();
         lstUbicacion = collection;
     }
 

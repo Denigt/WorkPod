@@ -197,6 +197,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         }*/
         Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
         dbUbicacion.postRun(() -> {
+            lstUbicacion = new ArrayList<>();
             if (!dbUbicacion.getError().get())
                 lstUbicacion.addAll(dbUbicacion.getLstSelect());
         });
@@ -288,6 +289,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                 // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
             else
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, 19));
+            etxtBusqueda.setQuery("", false);
         }
 
     }
