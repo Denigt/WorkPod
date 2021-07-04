@@ -292,19 +292,29 @@ public class Workpod implements DataDb, Comparable<Workpod>{
     @Override
     public int compareTo(Workpod workpod) {
         int ret = 0;
-        //if ((reserva != null && !reserva.isCancelada()) && (InfoApp.USER != null && !InfoApp.USER.getReserva().isCancelada()) && (reserva.getId() == InfoApp.USER.getReserva().getId())) {
-        //    ret = -2;
-        //} else {
-            if ((reserva == null || reserva.isCancelada()) && ((workpod.reserva != null && !workpod.reserva.isCancelada()) || workpod.mantenimiento)) {
-                ret = -1;
-            } else if ((reserva != null && !reserva.isCancelada()) && (workpod.reserva == null || workpod.reserva.isCancelada() || workpod.mantenimiento)) {
-                ret = 1;
-            } else {
-                if (mantenimiento != workpod.mantenimiento) {
-                    ret = mantenimiento ? 1 : -1;
-                } else ret = nombre.compareTo(workpod.nombre);
-        //}
-    }
+
+        // SI EL USUARIO TIENE ALGUNA RESERVA
+        if (InfoApp.USER != null && InfoApp.USER.getReserva() != null){
+            // SI LAS RESERVAS COINCIDEN
+            if ((reserva != null && workpod.reserva != null) && reserva.getId() == workpod.reserva.getId())
+                return 0;
+            // SI reserva ES LA RESERVA DEL USUARIO
+            if (reserva != null && !reserva.isCancelada() && (!InfoApp.USER.getReserva().isCancelada()) && (reserva.getId() == InfoApp.USER.getReserva().getId()))
+                return -2;
+            // SI workpod.reserva ES LA RESERVA DEL USUARIO
+            if (workpod.reserva != null && !workpod.reserva.isCancelada() && (!InfoApp.USER.getReserva().isCancelada()) && (workpod.reserva.getId() == InfoApp.USER.getReserva().getId()))
+                return 2;
+        }
+
+        if ((reserva == null || reserva.isCancelada()) && ((workpod.reserva != null && !workpod.reserva.isCancelada()) || workpod.mantenimiento)) {
+            ret = -1;
+        } else if ((reserva != null && !reserva.isCancelada()) && (workpod.reserva == null || workpod.reserva.isCancelada() || workpod.mantenimiento)) {
+            ret = 1;
+        } else {
+            if (mantenimiento != workpod.mantenimiento) {
+                ret = mantenimiento ? 1 : -1;
+            } else ret = nombre.compareTo(workpod.nombre);
+        }
         return ret;
     }
 

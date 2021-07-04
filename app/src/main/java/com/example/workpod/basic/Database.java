@@ -49,6 +49,7 @@ public class Database<T extends DataDb> extends Thread {
     public static final int UPDATE = 3;
     public static final int DELETE = 4;
     public static final int SELECTUSER = 5;
+    public static final int VERIFICACION = 6;
 //-------------------------------------------
     /**
      * Consulta que se va a realizar
@@ -136,6 +137,11 @@ public class Database<T extends DataDb> extends Thread {
                 break;
             case UPDATE:
                 update(dato);
+                break;
+            case VERIFICACION:
+                if(dato instanceof Usuario)
+                    verificar_user((Usuario)dato);
+                else error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
                 break;
         }
         // INDICAR FINALIZACION DE LA CONSULTA
@@ -526,6 +532,63 @@ public class Database<T extends DataDb> extends Thread {
     }
 
     /**
+     * Envia un correo de verificacion al usuario indicado
+     * @param obj Usuario al que mandar el correo
+     */
+    private void verificar_user(Usuario obj){
+
+        // PREPARAR LA CONEXION
+        if (TABLAS.contains(obj.getTabla())) {
+            String urlString = String.format("%s/php/%s.php", URL_SERVIDOR, "correo_verificacion");
+
+            try {
+                // Establecemos los parametros necesarios para el metodo SelectID
+                urlString += "?destinatario=" + obj.getID();
+
+                URL url = new URL(urlString);
+                // ABRIMOS CONEXIÓN
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                int respuesta = connection.getResponseCode();
+
+                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
+                if (respuesta == HttpURLConnection.HTTP_OK) {
+                    // PREPARAMOS LA CADENA DE ENTRADA
+                    String result = new String();
+                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+
+                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
+                    BufferedReader reader = new BufferedReader(in);
+
+                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+                    connection.disconnect();
+
+                    // TRANSFORMAR STRING A JSON
+                    JSONObject json = new JSONObject(result);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
+                }else{
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE VERIFICACION", "No se ha podido conectar con el servidor");
+                }
+            }catch (MalformedURLException e) {
+                error = new ErrorMessage(-404, "URL invalida");
+                Log.e("DATABASE VERIFICACION", "URL invalida");
+            }catch (IOException e) {
+                error = new ErrorMessage(-404, "No hay conexion a internet");
+                Log.e("DATABASE VERIFICACION", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON");
+                Log.e("DATABASE VERIFICACION", "Error obtener JSON");
+            }
+        }
+    }
+
+    /**
      * Inicia una conexion que permite el envio y la recepcion de datos como JSON
      * @param url URL a la que conectarse
      * @throws IOException En caso de que no se pueda abrir la conexion
@@ -550,7 +613,7 @@ public class Database<T extends DataDb> extends Thread {
     }
 //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
-        if (tipoConsulta < 0  || tipoConsulta > 6)
+        if (tipoConsulta < 0  || tipoConsulta > 7)
             tipoConsulta = -1;
 
         this.tipoConsulta = tipoConsulta;

@@ -191,7 +191,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             // VALIDAR DATOS DE LA SEGUNDA PANTALLA
             else {
                 boolean error = false;
-                correoVerificacion();
                 saveActivity();
 
                 if (email.equals(null) || email.equals("")) {
@@ -227,16 +226,18 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                 Database<Usuario> select = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
                                 select.postRun(() -> {
                                     InfoApp.USER = new Usuario();
-                                    if (select.getError().code > -1)
+                                    if (select.getError().code > -1) {
                                         InfoApp.USER.set(select.getDato());
-                                    else InfoApp.USER = null;
+
+                                        // ENVIAR CORREO DE VERIFICACION
+                                        Database<Usuario> verificacion = new Database<>(Database.VERIFICACION, InfoApp.USER);
+                                        verificacion.start();
+                                    }else InfoApp.USER = null;
                                 });
                                 select.start();
                             });
                             insert.postRunOnUI(this, () -> {
                                 if (insert.getError().code > -1) {
-                                    //CORREO CON TOKEN DE VERIFICACIÓN
-                                    correoVerificacion();
                                     // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
                                     Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                                     startActivity(activity);

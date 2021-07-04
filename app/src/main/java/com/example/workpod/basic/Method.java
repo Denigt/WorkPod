@@ -3,6 +3,7 @@ package com.example.workpod.basic;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -10,6 +11,9 @@ import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_Image_View;
 import com.example.workpod.scale.Scale_TextView;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -314,5 +318,29 @@ public abstract class Method {
         long seg1 = fecha1.toEpochSecond();
         long seg2 = fecha2.toEpochSecond();
         return seg1 - seg2;
+    }
+
+    /**
+     * Cifra la cadena pasada como parametro en MD5
+     * @param input Cadena a crifrar
+     * @return Cadena cifrada
+     */
+    public static String md5(String input) {
+        String hashtext = "";
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            hashtext = number.toString(16);
+
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+        }
+        catch (NoSuchAlgorithmException e) {
+            Log.e("CIFRADO MD5", "Nose ha encontrado el algoritmo de cifrado");
+        }
+
+        return hashtext;
     }
 }
