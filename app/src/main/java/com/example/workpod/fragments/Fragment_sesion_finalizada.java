@@ -41,10 +41,11 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     private TextView tVSesionCapacidad;
     private TextView tVSesionDireccion;
     private TextView tVTiempoTranscurrido;
+    private TextView tVSesionDireccionTitulo;
 
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
-    List<Scale_TextView>lstTv;
+    List<Scale_TextView> lstTv;
 
     //BD
     Ubicacion ubicacion;
@@ -89,12 +90,13 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
 
         View view = inflater.inflate(R.layout.fragment_sesion_finalizada, container, false);
         //INICIALIZAMOS ELEMENTOS DEL XML
-        btnCerrarWorPod = (Button) view.findViewById(R.id.BtnCerrarWorPod);
-        btnContactarSoporte = (Button) view.findViewById(R.id.BtnContactarSoporte);
-        tVSesionCapacidad = (TextView) view.findViewById(R.id.TVSesionCapacidad);
-        tVSesionDireccion = (TextView) view.findViewById(R.id.TVSesionDireccion);
-        tVTiempoTranscurrido = (TextView) view.findViewById(R.id.TVTiempoTranscurrido);
-        tVWifi = (TextView) view.findViewById(R.id.TVWifi);
+        btnCerrarWorPod = view.findViewById(R.id.BtnCerrarWorPod);
+        btnContactarSoporte = view.findViewById(R.id.BtnContactarSoporte);
+        tVSesionCapacidad = view.findViewById(R.id.TVSesionCapacidad);
+        tVSesionDireccion = view.findViewById(R.id.TVSesionDireccion);
+        tVTiempoTranscurrido = view.findViewById(R.id.TVTiempoTranscurrido);
+        tVWifi = view.findViewById(R.id.TVWifi);
+        tVSesionDireccionTitulo = view.findViewById(R.id.TVSesionDireccionTitulo);
 
         //CAMBIAMOS DE COLOR A LOS BOTONES (POR LA API 21)
         btnCerrarWorPod.setBackgroundColor(Color.parseColor("#DA4B4B"));
@@ -134,32 +136,25 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
      */
     private void valoresWorkpod() {
         if (workpod == null) {
+            tVSesionDireccion.setText(ubicacion.getDireccion().toLongString());
+            tVWifi.setText(ubicacion.getWorkpods().get(0).getNombre());
+            tVTiempoTranscurrido.setText("00:00");
             //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
             if (ubicacion.getWorkpods().get(0).getNumUsuarios() == 1) {
                 tVSesionCapacidad.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
-                tVSesionDireccion.setText(ubicacion.getDireccion().toLongString());
-                tVWifi.setText(ubicacion.getWorkpods().get(0).getNombre());
-                tVTiempoTranscurrido.setText("00:00");
             } else {
                 tVSesionCapacidad.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
-                tVSesionDireccion.setText(ubicacion.getDireccion().toLongString());
-                tVWifi.setText(ubicacion.getWorkpods().get(0).getNombre());
-                tVTiempoTranscurrido.setText("00:00");
             }
 
         } else {
+            tVSesionDireccion.setText(direccion);
+            tVWifi.setText(workpod.getNombre());
+            tVTiempoTranscurrido.setText("00:00");
             //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
-            if(workpod.getNumUsuarios()==1){
+            if (workpod.getNumUsuarios() == 1) {
                 tVSesionCapacidad.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " persona");
-                tVSesionDireccion.setText(direccion);
-                tVWifi.setText(workpod.getNombre());
-                tVTiempoTranscurrido.setText("00:00");
-
-            }else{
+            } else {
                 tVSesionCapacidad.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " personas");
-                tVSesionDireccion.setText(direccion);
-                tVWifi.setText(workpod.getNombre());
-                tVTiempoTranscurrido.setText("00:00");
             }
 
         }
@@ -172,29 +167,29 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv=new ArrayList<>();
-        this.lstBtn=new ArrayList<>();
+        this.lstTv = new ArrayList<>();
+        this.lstBtn = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnCerrarWorPod,"","normal",20,20,20));
-        lstBtn.add(new Scale_Buttons(btnContactarSoporte,"","normal",20,20,20));
+        lstBtn.add(new Scale_Buttons(btnCerrarWorPod, "", "normal", 20, 20, 20));
+        lstBtn.add(new Scale_Buttons(btnContactarSoporte, "", "normal", 20, 20, 20));
 
-        lstTv.add(new Scale_TextView(tVWifi,"wrap_content","bold",18,18,18));
-        lstTv.add(new Scale_TextView(tVSesionCapacidad,"wrap_content","bold",18,18,18));
-        lstTv.add(new Scale_TextView(tVSesionDireccion,"wrap_content","bold",18,18,18));
-        lstTv.add(new Scale_TextView(tVTiempoTranscurrido,"wrap_content","bold",55,55,55));
+        lstTv.add(new Scale_TextView(tVWifi, "wrap_content", "bold", 18, 18, 18));
+        lstTv.add(new Scale_TextView(tVSesionCapacidad, "wrap_content", "bold", 18, 18, 18));
+        lstTv.add(new Scale_TextView(tVSesionDireccionTitulo, "wrap_content", "bold", 18, 18, 18));
+        lstTv.add(new Scale_TextView(tVSesionDireccion, "wrap_content", "bold", 18, 18, 18));
+        lstTv.add(new Scale_TextView(tVTiempoTranscurrido, "wrap_content", "bold", 55, 55, 55));
 
         Method.scaleTv(metrics, lstTv);
     }

@@ -105,7 +105,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
-    List<Scale_Image_View>lstIv;
+    List<Scale_Image_View> lstIv;
 
     //VARIABLES
     private int centesimas;
@@ -226,8 +226,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             iVFlechas_Descripcion_Informacion = (ImageView) view.findViewById(R.id.IVFlechas_Descripcion_Informacion);
             iVUltUso = (ImageView) view.findViewById(R.id.IVUltUso);
             iVUltLimpieza = (ImageView) view.findViewById(R.id.IVUltLimpieza);
-            iVIluminacion=(ImageView)view.findViewById(R.id.IVIluminacion);
-            iV_Icon_Capacidad=(ImageView)view.findViewById(R.id.IV_Icon_Capacidad);
+            iVIluminacion = (ImageView) view.findViewById(R.id.IVIluminacion);
+            iV_Icon_Capacidad = (ImageView) view.findViewById(R.id.IV_Icon_Capacidad);
 
             btnAbrirAhora = (Button) view.findViewById(R.id.BtnAbrirAhora);
             btnReservarWorkpod = (Button) view.findViewById(R.id.BtnReservarWorkpod);
@@ -383,40 +383,40 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         //INICIALIZAMOS COLECCIONES
         this.lstBtn = new ArrayList<>();
         this.lstTv = new ArrayList<>();
-        this.lstIv=new ArrayList<>();
+        this.lstIv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24,24));
-        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18,18, 20));
+        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24, 24));
+        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18, 18, 20));
 
-        lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40,40, 55));
-        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18,18, 25));
-        lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20,20));
-        lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15,15));
-        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16,16, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14,15, 17));
-        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 13,15, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "100", "normal", 13,15, 17));
-        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14,15, 17));
-        lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15,15, 18));
-        lstTv.add(new Scale_TextView(tVCapacidad,"n","bold",20,25,25,75,50,
-                110,65,150,100));
+        lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 40, 55));
+        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18, 18, 25));
+        lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20, 20));
+        lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15, 15));
+        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 16, 16, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 14, 15, 17));
+        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 13, 15, 17));
+        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "100", "normal", 13, 15, 17));
+        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 14, 15, 17));
+        lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15, 15, 18));
+        lstTv.add(new Scale_TextView(tVCapacidad, "n", "bold", 20, 25, 25, 75, 50,
+                110, 65, 150, 100));
 
-        lstIv.add(new Scale_Image_View(iVFlechas_Informacion_Desripcion,40,42,70,72,88,90,"",""));
-        lstIv.add(new Scale_Image_View(iVFlechas_Descripcion_Informacion,40,42,70,72,88,90,"",""));
-        lstIv.add(new Scale_Image_View(iVUltLimpieza,45,45,60,60,85,85,"",""));
-        lstIv.add(new Scale_Image_View(iVUltUso,45,45,60,60,85,85,"",""));
-        lstIv.add(new Scale_Image_View(iVIluminacion,45,45,60,60,85,85,"",""));
-        lstIv.add(new Scale_Image_View(iVIluminacion,45,45,60,60,85,85,"",""));
-        lstIv.add(new Scale_Image_View(iV_Icon_Capacidad,70,70,100,0,150,0,"","match_parent"));
+        lstIv.add(new Scale_Image_View(iVFlechas_Informacion_Desripcion, 40, 42, 70, 72, 88, 90, "", ""));
+        lstIv.add(new Scale_Image_View(iVFlechas_Descripcion_Informacion, 40, 42, 70, 72, 88, 90, "", ""));
+        lstIv.add(new Scale_Image_View(iVUltLimpieza, 45, 45, 60, 60, 85, 85, "", ""));
+        lstIv.add(new Scale_Image_View(iVUltUso, 45, 45, 60, 60, 85, 85, "", ""));
+        lstIv.add(new Scale_Image_View(iVIluminacion, 45, 45, 60, 60, 85, 85, "", ""));
+        lstIv.add(new Scale_Image_View(iVIluminacion, 45, 45, 60, 60, 85, 85, "", ""));
+        lstIv.add(new Scale_Image_View(iV_Icon_Capacidad, 70, 70, 100, 0, 150, 0, "", "match_parent"));
 
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
-        Method.scaleIv(metrics,lstIv);
+        Method.scaleIv(metrics, lstIv);
 
-        if(width<=320){
-            lLInfoWorkpod.getLayoutParams().width=390;
+        if (width <= 320) {
+            lLInfoWorkpod.getLayoutParams().width = 390;
         }
     }
 
@@ -457,27 +457,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      */
     private void onClickBtnAbrirAhora() {
         if (abrirAhora) {
-            //SI WORKPOD==NULL ESTAMOS ACCEDIENDO MEDIANTE UN ITEM DEL LSV
-            if (workpod == null) {
-                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-                Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(ubicacion);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
-                //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
-                WorkpodActivity.boolLoc = false;
-                WorkpodActivity.boolfolder = false;
-                //CERRAMOS EL DIALOGO EMERGENTE
-                dismiss();
-            }//SI WORPOD!=NULL, ACCEDEMOS DE UN MARCADOR DONDE HAY UN SOLO WORKPOD O DESDE EL FRAGMENT DE SESION DEL HISTÓRICO DE TRANSACCIONES
-            else {
-                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-                Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(workpod, direccion);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
-                //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
-                WorkpodActivity.boolLoc = false;
-                WorkpodActivity.boolfolder = false;
-                //CERRAMOS EL DIALOGO EMERGENTE
-                dismiss();
-            }
+            direccion = ubicacion.getDireccion().toLongString();
+            //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
+            Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(workpod, direccion);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
+            //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
+            WorkpodActivity.boolLoc = false;
+            WorkpodActivity.boolfolder = false;
+            //CERRAMOS EL DIALOGO EMERGENTE
+            dismiss();
         }
     }
 
@@ -530,7 +518,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         lLEstadoWorkpod.getLayoutParams().width = 0;
                         visibleBtnCancelar = false;
                         //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORPOD
-                        escaladoParticular(metrics,0);
+                        escaladoParticular(metrics, 0);
                         //EMPIEZA EL CRONOMETRO
                         arrancarCronometro();
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
@@ -565,7 +553,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
                 lLEstadoWorkpod.getLayoutParams().width = 0;
                 btnReservarWorkpod.setText("Reservar");
-                escaladoParticular(metrics,0);
+                escaladoParticular(metrics, 0);
                 //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
                 btnAbrirAhora.setVisibility(View.GONE);
                 lLAbrirAhora.setVisibility(View.GONE);
@@ -673,7 +661,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             @Override
             public void run() {
                 try {
-                    escaladoParticular(metrics,0);
+                    escaladoParticular(metrics, 0);
                     Thread.sleep(TIEMPO_EMPIECE_CRONO);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -704,11 +692,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                     if (!visibleBtnCancelar) {
                                         btnCancelarReserva.setVisibility(View.VISIBLE);
                                         //VOLVEMOS A ESCALAR EL BTN PARA QUE QUEPA TANTO EL BTN DE CANCELAR COMO EL CRONOMETRO
-                                        escaladoParticular(metrics,1);
+                                        escaladoParticular(metrics, 1);
                                         visibleBtnCancelar = true;
                                     }
                                     if (cambiarDistancia) {
-                                        if(posicion.resource!=null){
+                                        if (posicion.resource != null) {
                                             //CALCULAMOS LA DISTANCIA ENTRE EL USUARIO Y LA CABINA DE WORKPOD
                                             posicionUsuario = new Location("Posición Usuario");
                                             posicionUsuario.setLatitude(posicion.resource.latitude);
@@ -723,12 +711,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                             } else if (distance < 1000 && distance > 50) {
                                                 btnAbrirAhora.setText((String.format("%.2f", (distance)) + "m"));
                                             } else if (distance < 50) {
-                                                btnAbrirAhora.setText("Abrir Ahora");
+                                                btnAbrirAhora.setText("¡Abrir Ahora!");
                                                 //CAMBIAMOS VALOR BOOLEANO QUE CONTROLA IR AL FRAGMENT SESION FINALIZADA
                                                 abrirAhora = true;
                                             }
                                             cambiarDistancia = false;
-                                        }else{
+                                        } else {
                                             btnAbrirAhora.setText("Lejos");
                                         }
                                     }
@@ -805,11 +793,11 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     private void escaladoParticular(DisplayMetrics metrics, int n) {
         if (width <= (750 / metrics.density)) {
-            if (btnReservarWorkpod.getText().equals("Reservado")){
+            if (btnReservarWorkpod.getText().equals("Reservado")) {
                 btnReservarWorkpod.setTextSize(19);
-            } else if(btnReservarWorkpod.getText().equals("Reservar"))
+            } else if (btnReservarWorkpod.getText().equals("Reservar"))
                 btnReservarWorkpod.setTextSize(24);
-            if (n==1) {
+            if (n == 1) {
                 btnReservarWorkpod.setTextSize(16);
             }
         }
