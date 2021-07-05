@@ -17,10 +17,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.workpod.Fragment_Dialog_Cerrar_Workpod;
 import com.example.workpod.R;
 import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.basic.Method;
+import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
@@ -52,6 +54,7 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     //BD
     Ubicacion ubicacion;
     Workpod workpod;
+    Sesion sesion;
     String direccion;
 
     //VARIABLES CRONOMETRO
@@ -61,7 +64,7 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     private Thread crono;
     private Handler handler = new Handler();
 
-    private boolean cerrarWorkpod;
+    public static boolean cerrarWorkpod;
     private double precio;
 
     public Fragment_sesion_finalizada() {
@@ -130,6 +133,15 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
 
         valoresWorkpod();
 
+        sesion=new Sesion();
+        try{
+           if(sesion.getEntrada()==null){
+               Toast.makeText(getActivity(),"Empieza el show",Toast.LENGTH_LONG).show();
+           }
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+
         //LISTENERS
         btnCerrarWorPod.setOnClickListener(this);
         btnContactarSoporte.setOnClickListener(this);
@@ -157,25 +169,14 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         WorkpodActivity.boolLoc = false;
     }
 
+    /**
+     * Abre el Dialog emergente para cerrar el workpod o que continue la seseión si el usuario se ha equivocado al pulsar dicho btn.
+     */
     private void onClickCerrarWorkpod() {
-        //PARAMOS EL HILO
-        cerrarWorkpod=true;
-        //CALCULAMOS EL PRECIO DE LA SESIÓN
-        precioSesion();
-        //REINICIAMOS LAS VARIABLES DEL CRONÓMETRO
-        this.centesimas=0;
-        this.segundos=0;
-        this.minutos=0;
-        //HACEMOS EL INSERT DE SESIÓN
+        //ABRIMOS DIALOG EMERGENTE PARA QUE EL USUARIO DECIDA SI SALIR
+        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod,minutos,segundos);
+        fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(),"Dialog Cerrar Workpod");
 
-        Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
-        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(activity);
-    }
-
-    private void precioSesion() {
-        precio=minutos*(workpod.getPrecio())+(segundos*workpod.getPrecio())/60;
-        Toast.makeText(getActivity(),"Precio: "+String.format("%.2f",precio)+"€",Toast.LENGTH_LONG).show();
     }
 
     //MÉTODOS
