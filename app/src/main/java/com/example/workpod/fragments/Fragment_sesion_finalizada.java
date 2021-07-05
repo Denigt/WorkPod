@@ -2,10 +2,12 @@ package com.example.workpod.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +53,16 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     Ubicacion ubicacion;
     Workpod workpod;
     String direccion;
+
+    //VARIABLES CRONOMETRO
+    private int centesimas;
+    private long segundos;
+    private long minutos;
+    private Thread crono;
+    private Handler handler = new Handler();
+
+    private boolean cerrarWorkpod;
+    private double precio;
 
     public Fragment_sesion_finalizada() {
         // Required empty public constructor
@@ -98,6 +110,20 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         tVWifi = view.findViewById(R.id.TVWifi);
         tVSesionDireccionTitulo = view.findViewById(R.id.TVSesionDireccionTitulo);
 
+        //INICIALIZAMOS VARIABLES CRONOMETRO
+        this.centesimas=0;
+        this.segundos=0;
+        this.minutos=0;
+
+        this.cerrarWorkpod=false;
+        this.precio=0.0;
+        try {
+            crono=cronometro();
+            crono.start();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //CAMBIAMOS DE COLOR A LOS BOTONES (POR LA API 21)
         btnCerrarWorPod.setBackgroundColor(Color.parseColor("#DA4B4B"));
         btnContactarSoporte.setBackgroundColor(Color.parseColor("#C3A240"));
@@ -117,16 +143,39 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.BtnCerrarWorPod) {
-            Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
-            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(activity);
+            onClickCerrarWorkpod();
         } else if (v.getId() == R.id.BtnContactarSoporte) {
-            fragment_support fragmentSupport = new fragment_support();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
-            //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
-            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
-            WorkpodActivity.boolLoc = false;
+            onClickContactarSoporte();
         }
+    }
+
+    private void onClickContactarSoporte() {
+        fragment_support fragmentSupport = new fragment_support();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
+        //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
+        WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
+        WorkpodActivity.boolLoc = false;
+    }
+
+    private void onClickCerrarWorkpod() {
+        //PARAMOS EL HILO
+        cerrarWorkpod=true;
+        //CALCULAMOS EL PRECIO DE LA SESIÓN
+        precioSesion();
+        //REINICIAMOS LAS VARIABLES DEL CRONÓMETRO
+        this.centesimas=0;
+        this.segundos=0;
+        this.minutos=0;
+        //HACEMOS EL INSERT DE SESIÓN
+
+        Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
+        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(activity);
+    }
+
+    private void precioSesion() {
+        precio=minutos*(workpod.getPrecio())+(segundos*workpod.getPrecio())/60;
+        Toast.makeText(getActivity(),"Precio: "+String.format("%.2f",precio)+"€",Toast.LENGTH_LONG).show();
     }
 
     //MÉTODOS
@@ -192,5 +241,69 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
         lstTv.add(new Scale_TextView(tVTiempoTranscurrido, "wrap_content", "bold", 55, 55, 55));
 
         Method.scaleTv(metrics, lstTv);
+    }
+
+    public Thread cronometro() throws InterruptedException {
+        //PROGRAMAMOS LOS HILOS
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (!cerrarWorkpod) {
+                    try {
+                        centesimas ++;
+                        //LE QUITAMOS UNA UNIDAD AL SEGUNDO
+                        if (centesimas >= 99) {
+                            segundos++;
+                            centesimas = 00;
+                        }
+                        //LE QUITAMOS UNA UNIDAD AL MINUTO
+                        if (segundos>=60) {
+                            minutos++;
+                            segundos = 0;
+                        }
+                        //DEBE USARSE HANDLER.POST SIEMPRE QUE QUERAMOS REALIZAR UN SUBPROCESO EN LA INTERFAZ DE USUARIO
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    String cadMinutos = "", cadSegundos = "", cadCentesimas = "";
+                                    //Añado 0´s delante para los milisegundos cuando corresponda
+                                    if (segundos < 10) {
+                                        cadSegundos = "0" + segundos;
+                                    } else {
+                                        cadSegundos = "" + segundos;
+                                    }
+                                    if (minutos < 10) {
+                                        cadMinutos = "0" + minutos;
+                                    } else {
+                                        cadMinutos = "" + minutos;
+                                    }
+                                    //Incorporo las cadenas en el campo de texto
+                                    tVTiempoTranscurrido.setText(cadMinutos + ":" + cadSegundos);
+                                    if (segundos < 0) {
+                                        Thread.sleep(50);
+                                    }
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+                        });
+
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //reinicioReserva();
+            }
+        });
     }
 }
