@@ -133,14 +133,14 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
 
         valoresWorkpod();
 
-        sesion=new Sesion();
+       /* sesion=new Sesion();
         try{
            if(sesion.getEntrada()==null){
-               Toast.makeText(getActivity(),"Empieza el show",Toast.LENGTH_LONG).show();
+               Toast.makeText(getActivity(),"1",Toast.LENGTH_LONG).show();
            }
         }catch(NullPointerException e){
             e.printStackTrace();
-        }
+        }*/
 
         //LISTENERS
         btnCerrarWorPod.setOnClickListener(this);
