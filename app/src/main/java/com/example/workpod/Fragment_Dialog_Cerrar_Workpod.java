@@ -82,7 +82,6 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         btnNo = view.findViewById(R.id.BtnNo);
         btnSi = view.findViewById(R.id.BtnSi);
         iVFDCerrarWorkpodSalir = view.findViewById(R.id.IVFDCerrarWorkpodSalir);
-
         //INICIALIZAMOS VARIABLES
         this.precio=0.0;
 
@@ -118,7 +117,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             reserva = new Reserva();
         reserva.set(workpod.getReserva());
         //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
-        reserva.setEstado("CANCELADA");
+        reserva.setEstado("FINALIZADA");
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
             if (update.getError().code > -1) {

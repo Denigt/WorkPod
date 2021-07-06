@@ -41,6 +41,7 @@ import com.example.workpod.basic.Shared;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Ubicacion;
+import com.example.workpod.data.Usuario;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_Image_View;
@@ -282,7 +283,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
-
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
 
@@ -332,6 +332,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     /**
      * Es el OnBackPressed de un DialogFragment
+     *
      * @param dialog
      */
     @Override
@@ -340,6 +341,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //ECO DE RESERVA CANCELADA POR EL SISTEMA
             Toast.makeText(getActivity(), "Tiempo agotado, reserva cancelada", Toast.LENGTH_LONG).show();
         }
+        //PARO EL HILO
         finish = true;
         super.onDismiss(dialog);
     }
@@ -597,6 +599,14 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * ubicacion, se machaca y solo salen los datos del primer item independientemente de el item que pulse.
      */
     private void volcarDatos() {
+      Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
+        consulta.postRunOnUI(getActivity(), ()->{
+            if (consulta.getError().code > -1) {
+                InfoApp.USER = consulta.getDato();
+            }else if (consulta.getError().code > -3) Toast.makeText(getActivity(), "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+            else Toast.makeText(getActivity(), "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
+        });
+        consulta.start();
         //CAMPOS QUE NUNCA VARÍAN
         tVNombreWorkpod.setText(workpod.getNombre());
         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
@@ -635,66 +645,71 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         } else {
             descripcion = workpod.getDescripcion();
         }
-
-        //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
-        if (workpod.isMantenimiento()) {
-            btnReservarWorkpod.setText("Mantenimiento");
-            //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-            //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
-            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-            //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-            lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-            //OCULTAMOS EL BOTÓN ABRIR AHORA
-            btnAbrirAhora.setVisibility(View.GONE);
-        }//SI EL WORKPOD ESTÁ RESERVADO
-        else if (workpod.getReserva() != null && (idWorkpodUsuario != workpod.getId())) {
-            btnReservarWorkpod.setText("Reservado");
-            //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-            //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
-            //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-            lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-            //OCULTAMOS EL BOTÓN ABRIR AHORA
-            btnAbrirAhora.setVisibility(View.GONE);
-        } /*else if(workpod.getReserva()!=null){
-            btnReservarWorkpod.setText("En Uso");
-            //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
-            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-            //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
-            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
-            //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
-            lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
-            //OCULTAMOS EL BOTÓN ABRIR AHORA
-            btnAbrirAhora.setVisibility(View.GONE);
-        }*/ else if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
-            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-            btnReservarWorkpod.setText("Reservado");
-            btnReservarWorkpod.setTextSize(10);
-            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
-            lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
-            lLAbrirAhora.setVisibility(View.VISIBLE);
-            btnAbrirAhora.setVisibility(View.VISIBLE);
-            //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
-            lLEstadoWorkpod.getLayoutParams().width = 0;
-            //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
-            ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
-            //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
-            long resto = (20 * 60) - Method.subsDate(ZonedDateTime.now(), fechaReservaWorkpod);
-            //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
-            minutos = resto / 60;
-            segundos = resto % 60;
-            //INICIALIZAMOS Y ARRANCAMOS EL HILO
-            try {
-                arrancarCronometro();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            //SI EL WORKPOD ESTÁ EN MANETENIMIENTO
+            if (workpod.isMantenimiento()) {
+                btnReservarWorkpod.setText("Mantenimiento");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A NARANJA
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_orange));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            }//SI EL WORKPOD ESTÁ RESERVADO
+            else if (workpod.getReserva() != null && (idWorkpodUsuario != workpod.getId())) {
+                btnReservarWorkpod.setText("Reservado");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            } else if ((workpod.getReserva() != null) && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") &&
+                    (idWorkpodUsuario != workpod.getId())) {
+                btnReservarWorkpod.setText("En Uso");
+                //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+                //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                //OCULTAMOS EL BOTÓN ABRIR AHORA
+                btnAbrirAhora.setVisibility(View.GONE);
+            } else if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
+                //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                btnReservarWorkpod.setText("Reservado");
+                btnReservarWorkpod.setTextSize(10);
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
+                lLAbrirAhora.setVisibility(View.VISIBLE);
+                btnAbrirAhora.setVisibility(View.VISIBLE);
+                //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
+                lLEstadoWorkpod.getLayoutParams().width = 0;
+                //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
+                ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
+                //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
+                long resto = (20 * 60) - Method.subsDate(ZonedDateTime.now(), fechaReservaWorkpod);
+                //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
+                minutos = resto / 60;
+                segundos = resto % 60;
+                //INICIALIZAMOS Y ARRANCAMOS EL HILO
+                try {
+                    arrancarCronometro();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
+                Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
             }
-            //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
-            Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
+        } catch (NullPointerException e) {
+
         }
+
     }
 
     private void arrancarCronometro() throws InterruptedException {
@@ -795,8 +810,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                     e.printStackTrace();
                                 }
                             }
-
-
                         });
                         //SI SE ACABA EL TIEMPO, SE CIERRA EL FRAGMENT
                         if (minutos < 0) {
@@ -814,17 +827,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     e.printStackTrace();
                 }
                 finish = false;
-                reinicioReserva();
             }
         });
     }
 
-    private void reinicioReserva() {
-        minutos = 20;
-        segundos = 0;
-        centesimas = 0;
-        // btnReservarWorkpod.setText("Reservar");
-    }
 
     private void escaladoParticular(DisplayMetrics metrics, int n) {
         try {
