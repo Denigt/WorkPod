@@ -1,4 +1,4 @@
-package com.example.workpod;
+package com.example.workpod.fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.workpod.R;
+import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.data.Reserva;

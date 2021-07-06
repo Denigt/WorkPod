@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".Fragment_Dialog_Cerrar_Workpod">
+    tools:context=".fragments.Fragment_Dialog_Cerrar_Workpod">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -13,11 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.workpod.Fragment_Dialog_Cerrar_Workpod;
 import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
-import com.example.workpod.basic.Database;
-import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Sesion;

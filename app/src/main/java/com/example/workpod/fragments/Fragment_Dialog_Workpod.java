@@ -249,7 +249,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         sesion = new Sesion();
 
         //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
-        if (InfoApp.USER != null && InfoApp.USER.getReserva() != null)
+        if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada())
             idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
 
         //VOLCAMOS DATOS DE LA BD
@@ -599,14 +599,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * ubicacion, se machaca y solo salen los datos del primer item independientemente de el item que pulse.
      */
     private void volcarDatos() {
-      Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
-        consulta.postRunOnUI(getActivity(), ()->{
-            if (consulta.getError().code > -1) {
-                InfoApp.USER = consulta.getDato();
-            }else if (consulta.getError().code > -3) Toast.makeText(getActivity(), "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
-            else Toast.makeText(getActivity(), "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
-        });
-        consulta.start();
         //CAMPOS QUE NUNCA VARÍAN
         tVNombreWorkpod.setText(workpod.getNombre());
         tVCapacidad.setText(String.valueOf(workpod.getNumUsuarios()));
@@ -658,7 +650,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 //OCULTAMOS EL BOTÓN ABRIR AHORA
                 btnAbrirAhora.setVisibility(View.GONE);
             }//SI EL WORKPOD ESTÁ RESERVADO
-            else if (workpod.getReserva() != null && (idWorkpodUsuario != workpod.getId())) {
+            else if (workpod.getReserva() != null && (idWorkpodUsuario != workpod.getId()) && !workpod.getReserva().isCancelada()) {
                 btnReservarWorkpod.setText("Reservado");
                 //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
                 lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -668,8 +660,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                 //OCULTAMOS EL BOTÓN ABRIR AHORA
                 btnAbrirAhora.setVisibility(View.GONE);
-            } else if ((workpod.getReserva() != null) && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") &&
-                    (idWorkpodUsuario != workpod.getId())) {
+            }//SI WORKPOD ESTÁ EN USO
+            else if ((workpod.getReserva() != null) && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") &&
+                    reserva.getUsuario()!=InfoApp.USER.getId()) {
                 btnReservarWorkpod.setText("En Uso");
                 //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
                 lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -679,7 +672,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                 //OCULTAMOS EL BOTÓN ABRIR AHORA
                 btnAbrirAhora.setVisibility(View.GONE);
-            } else if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
+            }//SI WORKPOD ESTÁ RESERVADO
+            else if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())&& !workpod.getReserva().isCancelada()) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
                 btnReservarWorkpod.setTextSize(10);
@@ -707,7 +701,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
             }
         } catch (NullPointerException e) {
-
+           e.printStackTrace();
         }
 
     }
