@@ -39,6 +39,7 @@ import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.basic.Shared;
 import com.example.workpod.data.Reserva;
+import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
@@ -64,6 +65,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     Ubicacion ubicacion;
     Workpod workpod;
     Reserva reserva;
+    Sesion sesion;
 
     //XML
     private TextView tVNombreWorkpod;
@@ -123,6 +125,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     Fragment_Maps map;
     DisplayMetrics metrics;
     float width;
+    private int usuarioSesion;
 
     // VARIABLE PARA ORDENAR LA DETENCION DE LOS HILOS
     private boolean finish = false;
@@ -242,6 +245,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
             //INICIALIZAMOS LA INSTANCIA DE RESERVA
             reserva = new Reserva();
+            //INICIALIZAMOS LA INSTANCIA DE SESION
+            sesion=new Sesion();
 
             //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
             if (InfoApp.USER != null && InfoApp.USER.getReserva() != null)
@@ -337,7 +342,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * Este Método modificará la interfaz del Fragment a reservado
      */
     private void comprobarReserva() throws InterruptedException {
-        //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORPOD RESERVADO POR EL USUARIO
+        //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
         if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId())) {
             //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
             btnReservarWorkpod.setText("Reservado");
@@ -359,8 +364,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //INICIALIZAMOS Y ARRANCAMOS EL HILO
             arrancarCronometro();
             //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
-            //Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -458,8 +462,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private void onClickBtnAbrirAhora() {
         if (abrirAhora) {
             direccion = ubicacion.getDireccion().toLongString();
+            //HACEMOS EL INSERT DE SESION
+            sesion.setEntrada(ZonedDateTime.now());
+            sesion.setUsuario(usuarioSesion);
+            sesion.setWorkpod(workpod);
             //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-            Fragment_sesion_finalizada fragmentSesionFinalizada = new Fragment_sesion_finalizada(workpod, direccion);
+            Fragment_sesion fragmentSesionFinalizada = new Fragment_sesion(workpod, direccion);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesionFinalizada).commit();
             //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
             WorkpodActivity.boolLoc = false;
@@ -496,6 +504,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             reserva.setFecha(ZonedDateTime.now());
             //COGEMOS EL ID DEL USUARIO
             reserva.setUsuario(InfoApp.USER.getId());
+            //COJO DICHO USUARIO PARA EL FUTURO INSERT EN SESIÓN
+            usuarioSesion=InfoApp.USER.getId();
             //COGEMOS EL ID DEL WORKPOD
             reserva.setWorkpod(workpod.getId());
             //ESTABLECEMOS EL ESTADO DE LA RESERVA
@@ -784,22 +794,23 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //ECO DE RESERVA CANCELADA POR EL SISTEMA
             Toast.makeText(getActivity(), "Tiempo agotado, reserva cancelada", Toast.LENGTH_LONG).show();
         }
-        if (map != null)
-            map.actualizarMapa();
-
         finish = true;
         super.onDismiss(dialog);
     }
 
-    private void escaladoParticular(DisplayMetrics metrics, int n) {
-        if (width <= (750 / metrics.density)) {
-            if (btnReservarWorkpod.getText().equals("Reservado")) {
-                btnReservarWorkpod.setTextSize(19);
-            } else if (btnReservarWorkpod.getText().equals("Reservar"))
-                btnReservarWorkpod.setTextSize(24);
-            if (n == 1) {
-                btnReservarWorkpod.setTextSize(16);
+    private void escaladoParticular(DisplayMetrics metrics, int n){
+        try{
+            if (width <= (750 / metrics.density)) {
+                if (btnReservarWorkpod.getText().equals("Reservado")) {
+                    btnReservarWorkpod.setTextSize(19);
+                } else if (btnReservarWorkpod.getText().equals("Reservar"))
+                    btnReservarWorkpod.setTextSize(24);
+                if (n == 1) {
+                    btnReservarWorkpod.setTextSize(16);
+                }
             }
+        }catch(NullPointerException e){
+            e.printStackTrace();
         }
     }
 }

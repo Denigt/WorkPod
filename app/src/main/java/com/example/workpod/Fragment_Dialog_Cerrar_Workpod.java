@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.workpod.data.Workpod;
-import com.example.workpod.fragments.Fragment_sesion_finalizada;
+import com.example.workpod.fragments.Fragment_sesion;
 
 public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements View.OnClickListener {
 
@@ -104,7 +104,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
      */
     private void onClickBtnSi() {
         //PARAMOS EL HILO
-        Fragment_sesion_finalizada.cerrarWorkpod=true;
+        Fragment_sesion.cerrarWorkpod=true;
         //HACEMOS EL INSERT DE SESION
         insertSesion();
         Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);

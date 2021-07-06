@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Application;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.workpod.fragments.Fragment_Dialog_Call;
-import com.example.workpod.fragments.Fragment_sesion_finalizada;
+import com.example.workpod.fragments.Fragment_sesion;
 import com.example.workpod.testUsuario.Informacion_Usuario;
-import com.example.workpod.testUsuario.Informacion_Usuario2;
 
 public class Valoracion_Workpod_Final extends AppCompatActivity implements View.OnClickListener {
     //XML
@@ -25,7 +21,7 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
     private FragmentTransaction fTransaction;
 
     //INSTANCIA DEL FRAGMENT INICIAL
-    Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();
+    Fragment_sesion sesion_finalizada = new Fragment_sesion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

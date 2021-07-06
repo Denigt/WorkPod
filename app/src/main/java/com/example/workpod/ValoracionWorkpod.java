@@ -123,4 +123,13 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
             startActivity(activity);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+        //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
+        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(activity);
+    }
 }

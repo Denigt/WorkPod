@@ -1,25 +1,20 @@
 package com.example.workpod.fragments;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workpod.Fragment_Dialog_Cerrar_Workpod;
 import com.example.workpod.R;
-import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Sesion;
@@ -33,10 +28,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_sesion_finalizada#newInstance} factory method to
+ * Use the {@link Fragment_sesion#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_sesion_finalizada extends Fragment implements View.OnClickListener {
+public class Fragment_sesion extends Fragment implements View.OnClickListener {
 
     //XML
     private Button btnCerrarWorPod;
@@ -67,24 +62,24 @@ public class Fragment_sesion_finalizada extends Fragment implements View.OnClick
     public static boolean cerrarWorkpod;
     private double precio;
 
-    public Fragment_sesion_finalizada() {
+    public Fragment_sesion() {
         // Required empty public constructor
     }
 
     //CONSTRUCTOR CON UBICACION
-    public Fragment_sesion_finalizada(Ubicacion ubicacion) {
+    public Fragment_sesion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
     }
 
     //CONSTRUCTOR CON WORKPOD
-    public Fragment_sesion_finalizada(Workpod workpod, String direccion) {
+    public Fragment_sesion(Workpod workpod, String direccion) {
         this.workpod = workpod;
         this.direccion = direccion;
     }
 
 
-    public static Fragment_sesion_finalizada newInstance(String param1, String param2) {
-        Fragment_sesion_finalizada fragment = new Fragment_sesion_finalizada();
+    public static Fragment_sesion newInstance(String param1, String param2) {
+        Fragment_sesion fragment = new Fragment_sesion();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
