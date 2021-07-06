@@ -16,7 +16,10 @@ import android.widget.TextView;
 import com.example.workpod.Fragment_Dialog_Cerrar_Workpod;
 import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
+import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
@@ -50,6 +53,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     Ubicacion ubicacion;
     Workpod workpod;
     Sesion sesion;
+    Reserva reserva;
     String direccion;
 
     //VARIABLES CRONOMETRO
@@ -72,8 +76,10 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     }
 
     //CONSTRUCTOR CON WORKPOD
-    public Fragment_sesion(Workpod workpod, String direccion) {
+    public Fragment_sesion(Workpod workpod, Ubicacion ubicacion,Reserva reserva, String direccion) {
         this.workpod = workpod;
+        this.ubicacion=ubicacion;
+        this.reserva=reserva;
         this.direccion = direccion;
     }
 
@@ -169,7 +175,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      */
     private void onClickCerrarWorkpod() {
         //ABRIMOS DIALOG EMERGENTE PARA QUE EL USUARIO DECIDA SI SALIR
-        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod,minutos,segundos);
+        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod,reserva,ubicacion,minutos,segundos);
         fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(),"Dialog Cerrar Workpod");
 
     }
@@ -244,7 +250,6 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         return new Thread(new Runnable() {
             @Override
             public void run() {
-
                 while (!cerrarWorkpod) {
                     try {
                         centesimas ++;

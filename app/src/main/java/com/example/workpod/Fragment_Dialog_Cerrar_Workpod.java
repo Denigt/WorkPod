@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
+import com.example.workpod.data.Reserva;
+import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.fragments.Fragment_sesion;
 
@@ -34,11 +38,15 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
 
     //BD
     Workpod workpod;
+    Ubicacion ubicacion;
+    Reserva reserva;
 
     private ImageView iVFDCerrarWorkpodSalir;
 
-    public Fragment_Dialog_Cerrar_Workpod(Workpod workpod, long minutos, long segundos) {
+    public Fragment_Dialog_Cerrar_Workpod(Workpod workpod, Reserva reserva,Ubicacion ubicacion, long minutos, long segundos) {
         this.workpod=workpod;
+        this.reserva=reserva;
+        this.ubicacion=ubicacion;
         this.minutos=minutos;
         this.segundos=segundos;
     }
@@ -105,6 +113,24 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     private void onClickBtnSi() {
         //PARAMOS EL HILO
         Fragment_sesion.cerrarWorkpod=true;
+        //UPDATE A LA TABLA RESERVA
+        if (reserva == null)
+            reserva = new Reserva();
+        reserva.set(workpod.getReserva());
+        //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
+        reserva.setEstado("CANCELADA");
+        Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
+        update.postRunOnUI(requireActivity(), () -> {
+            if (update.getError().code > -1) {
+                // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                for (Workpod item : ubicacion.getWorkpods())
+                    if (item.getId() == workpod.getId())
+                        item.setReserva(reserva);
+                // ESTABLECER LA RESERVA DEL USUARIO
+                InfoApp.USER.setReserva(reserva);
+            }
+        });
+        update.start();
         //HACEMOS EL INSERT DE SESION
         insertSesion();
         Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
