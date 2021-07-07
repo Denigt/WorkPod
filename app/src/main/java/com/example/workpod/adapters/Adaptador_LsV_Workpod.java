@@ -107,21 +107,32 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
                     txtEstado.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
                 else*/
                 txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button));
-            } else {
+            } else if (lstWorkpods.get(i).getReserva() != null &&
+                    lstWorkpods.get(i).getReserva().getEstado().equalsIgnoreCase("Reservada")
+                    && !lstWorkpods.get(i).getReserva().isCancelada()) {
                 txtEstado.setText("Reservado");
                 //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
                 if (InfoApp.USER != null && InfoApp.USER.getReserva() != null)
                     idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
                 //SI EL USUARIO NO HA RESERVADO NINGÚN WORKPOD DEL CLUSTER, LE APARECERÁ LA PALABRA RESERVADO EN ROJO
                 txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
+
                 //SI EL USUARIO HA RESERVADO ALGUN WORKPOD, LE SALDRÁ LA PALABRA RESERVADO EN VERDE
-                if (idWorkpodUsuario == lstWorkpods.get(i).getId()){
+                if (idWorkpodUsuario == lstWorkpods.get(i).getId()) {
                     txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
                     txtEstado.setText("Tu reserva");
                 }
+            } else if (lstWorkpods.get(i).getReserva() != null && lstWorkpods.get(i).getReserva().getEstado().equalsIgnoreCase("en uso")
+                    && !lstWorkpods.get(i).getReserva().isCancelada()) {
+                txtEstado.setText("En uso");
+                //OBTENEMOS EL ID DEL WORKPOD QUE HA RESERVADO EL USUARIO
+                if (InfoApp.USER != null && InfoApp.USER.getReserva() != null)
+                    idWorkpodUsuario = InfoApp.USER.getReserva().getWorkpod();
+                //SI EL USUARIO NO HA RESERVADO NINGÚN WORKPOD DEL CLUSTER, LE APARECERÁ LA PALABRA RESERVADO EN ROJO
+                txtEstado.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
             }
         } catch (NullPointerException e) {
-
+            e.printStackTrace();
         }
         txtNumPersonas.setText(String.valueOf(lstWorkpods.get(i).getNumUsuarios()));
         txtNombre.setText(lstWorkpods.get(i).getNombre());
@@ -168,11 +179,11 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(txtEstado, "match_parent", "bold", 18, 18,18));
-        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "bold", 15, 15,16));
-        lstTv.add(new Scale_TextView(txtUso,"wrap_content","bold",15,15,16));
-        lstTv.add(new Scale_TextView(txtNombre, "match_parent", "bold", 35, 35,40));
-        lstTv.add(new Scale_TextView(txtNumPersonas, "", "normal", 15, 15,15));
+        lstTv.add(new Scale_TextView(txtEstado, "match_parent", "bold", 18, 18, 18));
+        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "bold", 15, 15, 16));
+        lstTv.add(new Scale_TextView(txtUso, "wrap_content", "bold", 15, 15, 16));
+        lstTv.add(new Scale_TextView(txtNombre, "match_parent", "bold", 35, 35, 40));
+        lstTv.add(new Scale_TextView(txtNumPersonas, "", "normal", 15, 15, 15));
         Method.scaleTv(metrics, lstTv);
     }
 

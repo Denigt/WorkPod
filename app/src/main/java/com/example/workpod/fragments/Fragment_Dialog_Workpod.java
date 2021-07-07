@@ -256,6 +256,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         volcarDatos();
         try {
             comprobarReserva();
+         /*   workpod.getReserva().getId();
+            InfoApp.USER.getReserva().getId();
+            workpod.getReserva().getEstado();*/
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -357,30 +361,35 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * Este Método modificará la interfaz del Fragment a reservado
      */
     private void comprobarReserva() throws InterruptedException {
-        //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
-        if ((workpod.getReserva() != null) && (idWorkpodUsuario == workpod.getId()) && !workpod.getReserva().isCancelada()) {
-            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-            btnReservarWorkpod.setText("Reservado");
-            btnReservarWorkpod.setTextSize(10);
-            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
-            lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
-            lLAbrirAhora.setVisibility(View.VISIBLE);
-            btnAbrirAhora.setVisibility(View.VISIBLE);
-            //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
-            lLEstadoWorkpod.getLayoutParams().width = 0;
-            //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
-            ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
-            //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
-            long resto = (20 * 60) - Method.subsDate(ZonedDateTime.now(), fechaReservaWorkpod);
-            //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
-            minutos = resto / 60;
-            segundos = resto % 60;
-            //INICIALIZAMOS Y ARRANCAMOS EL HILO
-            arrancarCronometro();
-            //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
-            Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
+        try{
+            //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
+            if ((workpod.getReserva() != null) && (workpod.getReserva().getId()== InfoApp.USER.getReserva().getId())) {
+                //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                btnReservarWorkpod.setText("Reservado");
+                btnReservarWorkpod.setTextSize(10);
+                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
+                lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
+                lLAbrirAhora.setVisibility(View.VISIBLE);
+                btnAbrirAhora.setVisibility(View.VISIBLE);
+                //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
+                lLEstadoWorkpod.getLayoutParams().width = 0;
+                //GUARDAMOS EN ESTA VARIABLE LA FECHA EN LA QUE SE HIZO LA RESERVA
+                ZonedDateTime fechaReservaWorkpod = workpod.getReserva().getFecha();
+                //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
+                long resto = (20 * 60) - Method.subsDate(ZonedDateTime.now(), fechaReservaWorkpod);
+                //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
+                minutos = resto / 60;
+                segundos = resto % 60;
+                //INICIALIZAMOS Y ARRANCAMOS EL HILO
+                arrancarCronometro();
+                //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
+                Toast.makeText(getActivity(), "Tienes " + (resto / 60) + "min y " + (resto % 60) + "seg para llegar", Toast.LENGTH_LONG).show();
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
+
     }
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
@@ -682,8 +691,18 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //OCULTAMOS EL BOTÓN ABRIR AHORA
             btnAbrirAhora.setVisibility(View.GONE);
         }//SI EL WORKPOD ESTÁ RESERVADO
-        else if (workpod.getReserva() != null && !workpod.getReserva().isCancelada())  {
+        else if (workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("Reservada"))  {
             btnReservarWorkpod.setText("Reservado");
+            //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+            //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+            lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+            //OCULTAMOS EL BOTÓN ABRIR AHORA
+            btnAbrirAhora.setVisibility(View.GONE);
+        }else if(workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("en uso")){
+            btnReservarWorkpod.setText("Workpod en uso");
             //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
             lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
             //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
