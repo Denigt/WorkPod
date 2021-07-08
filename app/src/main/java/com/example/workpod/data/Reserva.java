@@ -100,7 +100,8 @@ public class Reserva implements DataDb {
      */
     public boolean isCancelada() {
         if (fecha == null || (estado.toUpperCase().equals("CANCELADA") || estado.toUpperCase().equals("CADUCADA") || estado.toUpperCase().equals("FINALIZADA")
-                || Method.subsDate(ZonedDateTime.now(), fecha) / 60. >= Reserva.CADUCIDAD))
+                || Method.subsDate(ZonedDateTime.now(), fecha) / 60. >= Reserva.CADUCIDAD)
+                && !estado.equalsIgnoreCase("en uso"))
             return true;
         return false;
     }

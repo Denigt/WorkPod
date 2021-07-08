@@ -691,7 +691,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //OCULTAMOS EL BOTÓN ABRIR AHORA
             btnAbrirAhora.setVisibility(View.GONE);
         }//SI EL WORKPOD ESTÁ RESERVADO
-        else if (workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("Reservada"))  {
+        else if (workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("Reservada")
+        && !workpod.getReserva().isCancelada())  {
             btnReservarWorkpod.setText("Reservado");
             //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
             lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -701,7 +702,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
             //OCULTAMOS EL BOTÓN ABRIR AHORA
             btnAbrirAhora.setVisibility(View.GONE);
-        }else if(workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("en uso")){
+        }else if(workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("en uso")
+                && !workpod.getReserva().isCancelada()){
             btnReservarWorkpod.setText("Workpod en uso");
             //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
             lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;

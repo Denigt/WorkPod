@@ -23,6 +23,7 @@ import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,12 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     private Handler handler = new Handler();
 
     public static boolean cerrarWorkpod;
+
+
+    //VARIABLES SESION
+    ZonedDateTime fechaEntrada;
     private double precio;
+    private long tiempoSesion;
 
     public Fragment_sesion() {
         // Required empty public constructor
@@ -73,10 +79,10 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     }
 
     //CONSTRUCTOR CON WORKPOD
-    public Fragment_sesion(Workpod workpod, Ubicacion ubicacion,Reserva reserva, String direccion) {
+    public Fragment_sesion(Workpod workpod, Ubicacion ubicacion, Reserva reserva, String direccion) {
         this.workpod = workpod;
-        this.ubicacion=ubicacion;
-        this.reserva=reserva;
+        this.ubicacion = ubicacion;
+        this.reserva = reserva;
         this.direccion = direccion;
     }
 
@@ -111,15 +117,17 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         tVWifi = view.findViewById(R.id.TVWifi);
         tVSesionDireccionTitulo = view.findViewById(R.id.TVSesionDireccionTitulo);
 
-        //INICIALIZAMOS VARIABLES CRONOMETRO
-        this.centesimas=0;
-        this.segundos=0;
-        this.minutos=0;
-
-        this.cerrarWorkpod=false;
-        this.precio=0.0;
+        this.cerrarWorkpod = false;
+        this.precio = 0.0;
         try {
-            crono=cronometro();
+            //CALCULAMOS TIEMPO SESION
+            fechaEntrada = workpod.getReserva().getFecha();
+            tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
+            //INICIALIZAMOS CRONOMETRO
+            this.centesimas = 0;
+            segundos = tiempoSesion % 60;
+            minutos = tiempoSesion / 60;
+            crono = cronometro();
             crono.start();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -147,6 +155,9 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         //ESCALAMOS ELEMENTOS
         escalarElementos();
 
+        //CONTROLAMOS QUE UNA VEZ ENTRADA EN LA SESIÓN, AL DARLE PARA ATRÁS NO VUELVAS AL MAPA
+        WorkpodActivity.boolLoc = true;
+
         return view;
     }
 
@@ -172,8 +183,8 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      */
     private void onClickCerrarWorkpod() {
         //ABRIMOS DIALOG EMERGENTE PARA QUE EL USUARIO DECIDA SI SALIR
-        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod,reserva,ubicacion,minutos,segundos);
-        fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(),"Dialog Cerrar Workpod");
+        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod, reserva, ubicacion, minutos, segundos);
+        fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(), "Dialog Cerrar Workpod");
 
     }
 
@@ -249,14 +260,14 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
             public void run() {
                 while (!cerrarWorkpod) {
                     try {
-                        centesimas ++;
+                        centesimas++;
                         //LE QUITAMOS UNA UNIDAD AL SEGUNDO
                         if (centesimas >= 99) {
                             segundos++;
                             centesimas = 00;
                         }
                         //LE QUITAMOS UNA UNIDAD AL MINUTO
-                        if (segundos>=60) {
+                        if (segundos >= 60) {
                             minutos++;
                             segundos = 0;
                         }
@@ -303,5 +314,10 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                 //reinicioReserva();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
