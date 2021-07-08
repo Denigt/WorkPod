@@ -484,7 +484,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      */
     private void onClickBtnAbrirAhora() {
         try {
-            abrirAhora=true;
             if (abrirAhora) {
                 direccion = ubicacion.getDireccion().toLongString();
                 //HACEMOS EL INSERT DE SESION

@@ -126,12 +126,17 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
             if (update.getError().code > -1) {
-                // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                for (Workpod item : ubicacion.getWorkpods())
-                    if (item.getId() == workpod.getId())
-                        item.setReserva(reserva);
-                // ESTABLECER LA RESERVA DEL USUARIO
-                InfoApp.USER.setReserva(reserva);
+                try{
+                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                    for (Workpod item : ubicacion.getWorkpods())
+                        if (item.getId() == workpod.getId())
+                            item.setReserva(reserva);
+                    // ESTABLECER LA RESERVA DEL USUARIO
+                    InfoApp.USER.setReserva(reserva);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
             }
         });
         update.start();
