@@ -23,7 +23,6 @@ import com.example.workpod.basic.InfoApp;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
-import com.example.workpod.fragments.Fragment_sesion;
 
 public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements View.OnClickListener {
 
@@ -32,7 +31,9 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     private Button btnNo;
 
     //VARIABLES SESION
-    private double precio;
+    private double precioSesion;
+    private double precioWorkpod;
+    private long tiempoSesion;
 
     //VARIABLES CRONÓMETRO
     private long segundos;
@@ -45,12 +46,13 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
 
     private ImageView iVFDCerrarWorkpodSalir;
 
-    public Fragment_Dialog_Cerrar_Workpod(Workpod workpod, Reserva reserva,Ubicacion ubicacion, long minutos, long segundos) {
-        this.workpod=workpod;
-        this.reserva=reserva;
-        this.ubicacion=ubicacion;
-        this.minutos=minutos;
-        this.segundos=segundos;
+    public Fragment_Dialog_Cerrar_Workpod(Workpod workpod, Reserva reserva, Ubicacion ubicacion, long tiempoSesion) {
+        this.workpod = workpod;
+        this.reserva = reserva;
+        this.ubicacion = ubicacion;
+        this.tiempoSesion = tiempoSesion;
+        this.minutos = tiempoSesion / 60;
+        this.segundos = tiempoSesion % 60;
     }
 
     @Override
@@ -85,7 +87,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         btnSi = view.findViewById(R.id.BtnSi);
         iVFDCerrarWorkpodSalir = view.findViewById(R.id.IVFDCerrarWorkpodSalir);
         //INICIALIZAMOS VARIABLES
-        this.precio=0.0;
+        this.precioSesion = 0.0;
 
         //EVENTOS DE LOS CONTROLES
         btnNo.setOnClickListener(this);
@@ -113,11 +115,12 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
      */
     private void onClickBtnSi() {
         //PARAMOS EL HILO
-        Fragment_sesion.cerrarWorkpod=true;
+        Fragment_sesion.cerrarWorkpod = true;
         //UPDATE A LA TABLA RESERVA
         if (reserva == null)
             reserva = new Reserva();
-        reserva.set(workpod.getReserva());
+
+        reserva.set(InfoApp.USER.getReserva());
         //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
         reserva.setEstado("FINALIZADA");
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
@@ -161,7 +164,6 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     }
 
     private void precioSesion() {
-        precio=minutos*(workpod.getPrecio())+(segundos*workpod.getPrecio())/60;
-        Toast.makeText(getActivity(),"Precio: "+String.format("%.2f",precio)+"€",Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Precio: " + String.format("%.2f", precioSesion) + "€", Toast.LENGTH_LONG).show();
     }
 }

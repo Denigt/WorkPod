@@ -484,15 +484,13 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      */
     private void onClickBtnAbrirAhora() {
         try {
+            abrirAhora=true;
             if (abrirAhora) {
                 direccion = ubicacion.getDireccion().toLongString();
                 //HACEMOS EL INSERT DE SESION
                 //UPDATE EN RESERVA, EN USO (LO CONSIDERA IGUAL QUE EN RESERVADO) "EN USO" Y CUANDO SE CIERRA "FINALIZADA"
                 //CUANDO INICIAS SESION CON TU USUARIO, TE DESCARGA LA RESERVA, PUEDES COMPROBAR SI SU RESERVA ESTÁ EN USO PARA Q EL MAPA LE META EN
                 //LA CABINA ABIERTA SIN USAR EL MAPA
-                sesion.setEntrada(ZonedDateTime.now());
-                sesion.setUsuario(usuarioSesion);
-                sesion.setWorkpod(workpod);
                 //UPDATE DE RESERVA
                 if (reserva == null)
                     reserva = new Reserva();

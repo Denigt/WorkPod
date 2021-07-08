@@ -12,9 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Sesion;
@@ -53,11 +56,13 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     Sesion sesion;
     Reserva reserva;
     String direccion;
+    //CREE SESION, INSERT FECHA ENTRADA, WORKPOD, USUARIO,
 
     //VARIABLES CRONOMETRO
     private int centesimas;
-    private long segundos;
-    private long minutos;
+    private int segundos;
+    private int minutos;
+    private int horas;
     private Thread crono;
     private Handler handler = new Handler();
 
@@ -125,12 +130,33 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
             tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
             //INICIALIZAMOS CRONOMETRO
             this.centesimas = 0;
-            segundos = tiempoSesion % 60;
-            minutos = tiempoSesion / 60;
+            horas= Math.round(tiempoSesion/3600);
+            minutos = Math.round ((tiempoSesion-(3600*horas))/60);
+            segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
+            //INICIALIZAMOS EL HILO Y LO ARRANCAMOS
             crono = cronometro();
             crono.start();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            //PARO CRONOMETRO (PARA QUE NO SE DUPLIQUEN)
+            //   cerrarWorkpod=true;
+            //VUELVO A INICIALIZAR LA FECHA DE ENTRADA
+            fechaEntrada = InfoApp.USER.getReserva().getFecha();
+            tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
+            //INICIALIZAMOS CRONOMETRO
+            this.centesimas = 0;
+            horas= Math.round(tiempoSesion/3600);
+            minutos = Math.round ((tiempoSesion-(3600*horas))/60);
+            segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
+            //ARRANCAMOS CRONOMETRO
+            try {
+                //   cerrarWorkpod=false;
+                crono = cronometro();
+                crono.start();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
         }
 
         //CAMBIAMOS DE COLOR A LOS BOTONES (POR LA API 21)
@@ -138,15 +164,6 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         btnContactarSoporte.setBackgroundColor(Color.parseColor("#C3A240"));
 
         valoresWorkpod();
-
-       /* sesion=new Sesion();
-        try{
-           if(sesion.getEntrada()==null){
-               Toast.makeText(getActivity(),"1",Toast.LENGTH_LONG).show();
-           }
-        }catch(NullPointerException e){
-            e.printStackTrace();
-        }*/
 
         //LISTENERS
         btnCerrarWorPod.setOnClickListener(this);
@@ -157,6 +174,28 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
 
         //CONTROLAMOS QUE UNA VEZ ENTRADA EN LA SESIÓN, AL DARLE PARA ATRÁS NO VUELVAS AL MAPA
         WorkpodActivity.boolLoc = true;
+        WorkpodActivity.boolSession = true;
+
+       /* try{
+            sesion.setEntrada(ZonedDateTime.now());
+            sesion.setUsuario(InfoApp.USER.getId());
+            sesion.setWorkpod(workpod);
+            sesion.setSalida(null);
+            sesion.setPrecio(0);
+            sesion.setDescuento(0);
+            sesion.setTiempo(0);
+
+            Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
+            insert.postRunOnUI(requireActivity(), () -> {
+                if (insert.getError().code > -1) {
+                    Toast.makeText(getActivity(),"Insert exitoso",Toast.LENGTH_LONG).show();
+                }
+            });
+            insert.start();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }*/
+
 
         return view;
     }
@@ -183,7 +222,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      */
     private void onClickCerrarWorkpod() {
         //ABRIMOS DIALOG EMERGENTE PARA QUE EL USUARIO DECIDA SI SALIR
-        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod, reserva, ubicacion, minutos, segundos);
+        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod, reserva, ubicacion, tiempoSesion);
         fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(), "Dialog Cerrar Workpod");
 
     }
@@ -194,28 +233,31 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      * Metodo donde asignaremos el valor del workpod a los elementos del xml
      */
     private void valoresWorkpod() {
-        if (workpod == null) {
-            tVSesionDireccion.setText(ubicacion.getDireccion().toLongString());
-            tVWifi.setText(ubicacion.getWorkpods().get(0).getNombre());
-            tVTiempoTranscurrido.setText("00:00");
-            //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
-            if (ubicacion.getWorkpods().get(0).getNumUsuarios() == 1) {
-                tVSesionCapacidad.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
-            } else {
-                tVSesionCapacidad.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
-            }
+        try {
+            if (workpod == null) {
+                tVSesionDireccion.setText(ubicacion.getDireccion().toLongString());
+                tVWifi.setText(ubicacion.getWorkpods().get(0).getNombre());
+                tVTiempoTranscurrido.setText("00:00");
+                //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
+                if (ubicacion.getWorkpods().get(0).getNumUsuarios() == 1) {
+                    tVSesionCapacidad.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " persona");
+                } else {
+                    tVSesionCapacidad.setText("Capacidad: " + String.valueOf(ubicacion.getWorkpods().get(0).getNumUsuarios()) + " personas");
+                }
 
-        } else {
-            tVSesionDireccion.setText(direccion);
-            tVWifi.setText(workpod.getNombre());
-            tVTiempoTranscurrido.setText("00:00");
-            //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
-            if (workpod.getNumUsuarios() == 1) {
-                tVSesionCapacidad.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " persona");
             } else {
-                tVSesionCapacidad.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " personas");
+                tVSesionDireccion.setText(direccion);
+                tVWifi.setText(workpod.getNombre());
+                tVTiempoTranscurrido.setText("00:00");
+                //ESTOS IF SON ESTETICOS, ES PARA QUE PONGA PERSONA O PERSONAS
+                if (workpod.getNumUsuarios() == 1) {
+                    tVSesionCapacidad.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " persona");
+                } else {
+                    tVSesionCapacidad.setText("Capacidad: " + String.valueOf(workpod.getNumUsuarios()) + " personas");
+                }
             }
-
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
@@ -271,12 +313,18 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                             minutos++;
                             segundos = 0;
                         }
+
+                       if(minutos>=60){
+                            horas++;
+                            minutos=0;
+                            segundos=0;
+                        }
                         //DEBE USARSE HANDLER.POST SIEMPRE QUE QUERAMOS REALIZAR UN SUBPROCESO EN LA INTERFAZ DE USUARIO
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    String cadMinutos = "", cadSegundos = "", cadCentesimas = "";
+                                    String  cadHoras = "", cadMinutos = "", cadSegundos = "";
                                     //Añado 0´s delante para los milisegundos cuando corresponda
                                     if (segundos < 10) {
                                         cadSegundos = "0" + segundos;
@@ -288,8 +336,18 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                                     } else {
                                         cadMinutos = "" + minutos;
                                     }
+                                    if (horas < 10) {
+                                        cadHoras = "0" + horas;
+                                    } else {
+                                        cadHoras = "" + horas;
+                                    }
                                     //Incorporo las cadenas en el campo de texto
-                                    tVTiempoTranscurrido.setText(cadMinutos + ":" + cadSegundos);
+                                    if(horas!=0){
+                                        tVTiempoTranscurrido.setText(cadHoras+":"+cadMinutos + ":" + cadSegundos);
+                                    }else{
+                                        tVTiempoTranscurrido.setText(cadMinutos + ":" + cadSegundos);
+                                    }
+
                                     if (segundos < 0) {
                                         Thread.sleep(50);
                                     }
@@ -318,6 +376,8 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
+        //EVITA QUE SE DUPLIQUEN LOS HILOS
+        cerrarWorkpod=true;
         super.onDestroy();
     }
 }
