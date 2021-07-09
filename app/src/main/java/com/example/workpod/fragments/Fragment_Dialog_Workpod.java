@@ -483,7 +483,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * donde solo hay un workpod, utilizaremos el objeto de la clase Workpod o el objeto de la clase Ubicacion
      */
     private void onClickBtnAbrirAhora() {
-        try {
+       // try {
+        abrirAhora=true;
             if (abrirAhora) {
                 direccion = ubicacion.getDireccion().toLongString();
                 //HACEMOS EL INSERT DE SESION
@@ -498,7 +499,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 reserva.setEstado("EN USO");
                 Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
                 update.postRun(() -> {
-                    try {
                         sesion = new Sesion();
                         sesion.setEntrada(ZonedDateTime.now());
                         sesion.setUsuario(InfoApp.USER.getId());
@@ -514,9 +514,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                             }
                         });
                         insert.start();
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
                 });
                 update.postRunOnUI(requireActivity(), () -> {
                     if (update.getError().code > -1) {
@@ -538,9 +535,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 //CERRAMOS EL DIALOGO EMERGENTE
                 dismiss();
             }
-        } catch (NullPointerException e) {
+     /*   } catch (NullPointerException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
