@@ -497,6 +497,27 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
                 reserva.setEstado("EN USO");
                 Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
+                update.postRun(() -> {
+                    try {
+                        sesion = new Sesion();
+                        sesion.setEntrada(ZonedDateTime.now());
+                        sesion.setUsuario(InfoApp.USER.getId());
+                        sesion.setWorkpod(workpod);
+                        sesion.setPrecio(0);
+                        sesion.setDescuento(0);
+                        sesion.setTiempo(0);
+
+                        Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
+                        insert.postRunOnUI(requireActivity(), () -> {
+                            if (insert.getError().code > -1) {
+                                Toast.makeText(getActivity(), "Insert exitoso", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        insert.start();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                });
                 update.postRunOnUI(requireActivity(), () -> {
                     if (update.getError().code > -1) {
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS

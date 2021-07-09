@@ -53,7 +53,6 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     //BD
     Ubicacion ubicacion;
     Workpod workpod;
-    Sesion sesion;
     Reserva reserva;
     String direccion;
     //CREE SESION, INSERT FECHA ENTRADA, WORKPOD, USUARIO,
@@ -175,27 +174,6 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         //CONTROLAMOS QUE UNA VEZ ENTRADA EN LA SESIÓN, AL DARLE PARA ATRÁS NO VUELVAS AL MAPA
         WorkpodActivity.boolLoc = true;
         WorkpodActivity.boolSession = true;
-
-       /* try{
-            sesion.setEntrada(ZonedDateTime.now());
-            sesion.setUsuario(InfoApp.USER.getId());
-            sesion.setWorkpod(workpod);
-            sesion.setSalida(null);
-            sesion.setPrecio(0);
-            sesion.setDescuento(0);
-            sesion.setTiempo(0);
-
-            Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
-            insert.postRunOnUI(requireActivity(), () -> {
-                if (insert.getError().code > -1) {
-                    Toast.makeText(getActivity(),"Insert exitoso",Toast.LENGTH_LONG).show();
-                }
-            });
-            insert.start();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }*/
-
 
         return view;
     }
