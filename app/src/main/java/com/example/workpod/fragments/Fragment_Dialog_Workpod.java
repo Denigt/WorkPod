@@ -483,58 +483,58 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * donde solo hay un workpod, utilizaremos el objeto de la clase Workpod o el objeto de la clase Ubicacion
      */
     private void onClickBtnAbrirAhora() {
-       // try {
+        // try {
         abrirAhora=true;
-            if (abrirAhora) {
-                direccion = ubicacion.getDireccion().toLongString();
-                //HACEMOS EL INSERT DE SESION
-                //UPDATE EN RESERVA, EN USO (LO CONSIDERA IGUAL QUE EN RESERVADO) "EN USO" Y CUANDO SE CIERRA "FINALIZADA"
-                //CUANDO INICIAS SESION CON TU USUARIO, TE DESCARGA LA RESERVA, PUEDES COMPROBAR SI SU RESERVA ESTÁ EN USO PARA Q EL MAPA LE META EN
-                //LA CABINA ABIERTA SIN USAR EL MAPA
-                //UPDATE DE RESERVA
-                if (reserva == null)
-                    reserva = new Reserva();
-                reserva.set(workpod.getReserva());
-                //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
-                reserva.setEstado("EN USO");
-                Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
-                update.postRun(() -> {
-                        sesion = new Sesion();
-                        sesion.setEntrada(ZonedDateTime.now());
-                        sesion.setUsuario(InfoApp.USER.getId());
-                        sesion.setWorkpod(workpod);
-                        sesion.setPrecio(0);
-                        sesion.setDescuento(0);
-                        sesion.setTiempo(0);
+        if (abrirAhora) {
+            direccion = ubicacion.getDireccion().toLongString();
+            //HACEMOS EL INSERT DE SESION
+            //UPDATE EN RESERVA, EN USO (LO CONSIDERA IGUAL QUE EN RESERVADO) "EN USO" Y CUANDO SE CIERRA "FINALIZADA"
+            //CUANDO INICIAS SESION CON TU USUARIO, TE DESCARGA LA RESERVA, PUEDES COMPROBAR SI SU RESERVA ESTÁ EN USO PARA Q EL MAPA LE META EN
+            //LA CABINA ABIERTA SIN USAR EL MAPA
+            //UPDATE DE RESERVA
+            if (reserva == null)
+                reserva = new Reserva();
+            reserva.set(workpod.getReserva());
+            //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
+            reserva.setEstado("EN USO");
+            Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
+            update.postRun(() -> {
+                sesion = new Sesion();
+                sesion.setEntrada(ZonedDateTime.now());
+                sesion.setUsuario(InfoApp.USER.getId());
+                sesion.setWorkpod(workpod);
+                sesion.setPrecio(0);
+                sesion.setDescuento(0);
+                sesion.setTiempo(0);
 
-                        Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
-                        insert.postRunOnUI(requireActivity(), () -> {
-                            if (insert.getError().code > -1) {
-                                Toast.makeText(getActivity(), "Insert exitoso", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        insert.start();
-                });
-                update.postRunOnUI(requireActivity(), () -> {
-                    if (update.getError().code > -1) {
-                        // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                        for (Workpod item : ubicacion.getWorkpods())
-                            if (item.getId() == workpod.getId())
-                                item.setReserva(reserva);
-                        // ESTABLECER LA RESERVA DEL USUARIO
-                        InfoApp.USER.setReserva(reserva);
+                Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
+                insert.postRunOnUI(requireActivity(), () -> {
+                    if (insert.getError().code > -1) {
+                        Toast.makeText(getActivity(), "Insert exitoso", Toast.LENGTH_LONG).show();
                     }
                 });
-                update.start();
-                //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-                Fragment_sesion fragmentSesion = new Fragment_sesion(workpod, ubicacion, reserva, direccion);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
-                //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
-                WorkpodActivity.boolLoc = false;
-                WorkpodActivity.boolfolder = false;
-                //CERRAMOS EL DIALOGO EMERGENTE
-                dismiss();
-            }
+                insert.start();
+            });
+            update.postRunOnUI(requireActivity(), () -> {
+                if (update.getError().code > -1) {
+                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                    for (Workpod item : ubicacion.getWorkpods())
+                        if (item.getId() == workpod.getId())
+                            item.setReserva(reserva);
+                    // ESTABLECER LA RESERVA DEL USUARIO
+                    InfoApp.USER.setReserva(reserva);
+                }
+            });
+            update.start();
+            //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
+            Fragment_sesion fragmentSesion = new Fragment_sesion(workpod, ubicacion, reserva, direccion);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
+            //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
+            WorkpodActivity.boolLoc = false;
+            WorkpodActivity.boolfolder = false;
+            //CERRAMOS EL DIALOGO EMERGENTE
+            dismiss();
+        }
      /*   } catch (NullPointerException e) {
             e.printStackTrace();
         }*/
@@ -707,7 +707,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             btnAbrirAhora.setVisibility(View.GONE);
         }//SI EL WORKPOD ESTÁ RESERVADO
         else if (workpod.getReserva() != null && workpod.getReserva().getEstado().equalsIgnoreCase("Reservada")
-        && !workpod.getReserva().isCancelada())  {
+                && !workpod.getReserva().isCancelada())  {
             btnReservarWorkpod.setText("Reservado");
             //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
             lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
