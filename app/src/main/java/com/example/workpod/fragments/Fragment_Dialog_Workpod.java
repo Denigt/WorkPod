@@ -484,9 +484,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * donde solo hay un workpod, utilizaremos el objeto de la clase Workpod o el objeto de la clase Ubicacion
      */
     private void onClickBtnAbrirAhora() {
-        // try {
-        abrirAhora=true;
+
         if (abrirAhora) {
+            try {
             direccion = ubicacion.getDireccion().toLongString();
             //HACEMOS EL INSERT DE SESION
             //UPDATE EN RESERVA, EN USO (LO CONSIDERA IGUAL QUE EN RESERVADO) "EN USO" Y CUANDO SE CIERRA "FINALIZADA"
@@ -523,8 +523,19 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     Log.i("INSERT SESION", "Se ha insertado la sesion correctamente");
                 });
                 insert.start();
+                try {
+                    insert.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             });
             update.start();
+
+                update.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            dBSession();
             //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
             Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
@@ -863,6 +874,27 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 }
             }
         } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Realiza la consulta a la BD para que si el usuario tiene una sesión no le salga el mapa y le salga su sesión
+     */
+    private void dBSession() {
+        try {
+            Database<Sesion> consultaSesion = new Database<>(Database.SELECTUSER, new Sesion());
+            consultaSesion.postRun(() -> {
+                for (Sesion session : consultaSesion.getLstSelect()) {
+                    sesion = session;
+                }
+                InfoApp.sesion = sesion;
+            });
+            consultaSesion.start();
+            //ESPERAMOS A QUE LA CONSULTA TERMINE PARA QUE NO SE ABRA EL FRAGMENT DE SESIÓN SIN QUE SE HAYA HECHO LA CONSULTA
+            consultaSesion.join();
+            InfoApp.sesion=sesion;
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

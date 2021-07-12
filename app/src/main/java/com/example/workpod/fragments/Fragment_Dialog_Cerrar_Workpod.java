@@ -20,9 +20,13 @@ import com.example.workpod.R;
 import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
+import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
+import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
+
+import java.time.ZonedDateTime;
 
 public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements View.OnClickListener {
 
@@ -32,27 +36,39 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
 
     //VARIABLES SESION
     private double precioSesion;
+    ZonedDateTime salida;
     private double precioWorkpod;
     private long tiempoSesion;
+    private double tiempo;
+
 
     //VARIABLES CRONÓMETRO
-    private long segundos;
-    private long minutos;
+    private int centesimas;
+    private double segundos;
+    private double minutos;
+    private double horas;
 
     //BD
     Workpod workpod;
-    Ubicacion ubicacion;
     Reserva reserva;
+    Ubicacion ubicacion;
+    Sesion sesion;
+
+
 
     private ImageView iVFDCerrarWorkpodSalir;
 
-    public Fragment_Dialog_Cerrar_Workpod(Workpod workpod, Reserva reserva, Ubicacion ubicacion, long tiempoSesion) {
-        this.workpod = workpod;
-        this.reserva = reserva;
-        this.ubicacion = ubicacion;
-        this.tiempoSesion = tiempoSesion;
-        this.minutos = tiempoSesion / 60;
-        this.segundos = tiempoSesion % 60;
+    public Fragment_Dialog_Cerrar_Workpod(Sesion sesion, Reserva reserva, Ubicacion ubicacion) {
+        this.sesion=sesion;
+        this.workpod = sesion.getWorkpod();
+        this.ubicacion=ubicacion;
+        this.reserva=reserva;
+        this.centesimas=0;
+        this.segundos=0;
+        this.minutos=0;
+        this.horas=0;
+        this.tiempo=0.0;
+
     }
 
     @Override
@@ -126,14 +142,14 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
             if (update.getError().code > -1) {
-                try{
+                try {
                     // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                     for (Workpod item : ubicacion.getWorkpods())
                         if (item.getId() == workpod.getId())
                             item.setReserva(reserva);
                     // ESTABLECER LA RESERVA DEL USUARIO
                     InfoApp.USER.setReserva(reserva);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
@@ -141,14 +157,38 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         });
         update.start();
         //HACEMOS EL INSERT DE SESION
-        insertSesion();
+        finiquitarSesion();
         Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
         activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(activity);
     }
 
-    private void insertSesion() {
-        precioSesion();
+    private void finiquitarSesion()  {
+
+        try{
+            //INICIALIZAR LA SALIDA
+            sesion.setSalida(ZonedDateTime.now());
+            //CALCULAMOS PRECIO
+            tiempoSesion = Method.subsDate(sesion.getSalida(), sesion.getEntrada());
+            //INICIALIZAMOS CRONOMETRO
+            this.centesimas = 0;
+            horas= Math.round(tiempoSesion/3600);
+            minutos = Math.round ((tiempoSesion-(3600*horas))/60);
+            segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
+            //CALCULAMOS PRECIO DE LA SESION
+            this.precioSesion=(minutos*sesion.getWorkpod().getPrecio())+ ((segundos*sesion.getWorkpod().getPrecio())/60);
+            //SE LO PASAMOS AL OBJETO SESION
+            sesion.setPrecio(precioSesion);
+            this.tiempo=horas + (minutos/60);
+            sesion.setTiempo(tiempo);
+
+            //ACTUALIZAMOS SESION
+            Database<Sesion> update = new Database<>(Database.UPDATE, sesion);
+            update.start();
+            update.join();
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -169,6 +209,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     }
 
     private void precioSesion() {
+
         Toast.makeText(getActivity(), "Precio: " + String.format("%.2f", precioSesion) + "€", Toast.LENGTH_LONG).show();
     }
 }

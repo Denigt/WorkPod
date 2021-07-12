@@ -42,7 +42,7 @@ public class WorkpodActivity extends FragmentActivity {
     Fragment_Maps fragment_maps = new Fragment_Maps();
     //INSTANCIA DEL FRAGMENT DEL HISTÓRICO DE TRANSACCIONES
     Fragment_Transaction_History fragment_transaction_history = new Fragment_Transaction_History();
-    Fragment_sesion fragment_sesion = new Fragment_sesion();
+    Fragment_sesion fragment_sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +61,10 @@ public class WorkpodActivity extends FragmentActivity {
         });
         dBSession();
 
-
+        if(InfoApp.sesion!=null){
+            fragment_sesion=new Fragment_sesion(InfoApp.sesion);
+        }
         if (InfoApp.USER.getReserva() != null) {
-
             if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
                 Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
                 this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
@@ -202,6 +203,7 @@ public class WorkpodActivity extends FragmentActivity {
     }
 
     private void volverAlFragmentSession() {
+        fragment_sesion=new Fragment_sesion(InfoApp.sesion);
         //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
         FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
         //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO

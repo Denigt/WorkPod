@@ -78,18 +78,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    //CONSTRUCTOR CON UBICACION
-    public Fragment_sesion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
     //CONSTRUCTOR CON WORKPOD
-    public Fragment_sesion(Workpod workpod, Ubicacion ubicacion, Reserva reserva, String direccion) {
-        this.workpod = workpod;
-        this.ubicacion = ubicacion;
-        this.reserva = reserva;
-        this.direccion = direccion;
-    }
     public Fragment_sesion(Sesion sesion) {
         this.sesion=sesion;
         this.workpod = sesion.getWorkpod();
@@ -130,24 +119,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         this.cerrarWorkpod = false;
         this.precio = 0.0;
         try {
-            //CALCULAMOS TIEMPO SESION
-            fechaEntrada = workpod.getReserva().getFecha();
-            tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
-            //INICIALIZAMOS CRONOMETRO
-            this.centesimas = 0;
-            horas= Math.round(tiempoSesion/3600);
-            minutos = Math.round ((tiempoSesion-(3600*horas))/60);
-            segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
-            //INICIALIZAMOS EL HILO Y LO ARRANCAMOS
-            crono = cronometro();
-            crono.start();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            //PARO CRONOMETRO (PARA QUE NO SE DUPLIQUEN)
-            //   cerrarWorkpod=true;
-            //VUELVO A INICIALIZAR LA FECHA DE ENTRADA
-            fechaEntrada = InfoApp.USER.getReserva().getFecha();
+            fechaEntrada = sesion.getEntrada();
             tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
             //INICIALIZAMOS CRONOMETRO
             this.centesimas = 0;
@@ -155,14 +127,16 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
             minutos = Math.round ((tiempoSesion-(3600*horas))/60);
             segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
             //ARRANCAMOS CRONOMETRO
-            try {
+
                 tVSesionCapacidad.setText(String.valueOf(sesion.getWorkpod().getNumUsuarios()));
                 tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
                 crono = cronometro();
                 crono.start();
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         //CAMBIAMOS DE COLOR A LOS BOTONES (POR LA API 21)
@@ -207,7 +181,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      */
     private void onClickCerrarWorkpod() {
         //ABRIMOS DIALOG EMERGENTE PARA QUE EL USUARIO DECIDA SI SALIR
-        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(workpod, reserva, ubicacion, tiempoSesion);
+        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(sesion, reserva, ubicacion);
         fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(), "Dialog Cerrar Workpod");
 
     }
