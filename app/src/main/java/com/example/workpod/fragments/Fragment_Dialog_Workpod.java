@@ -147,8 +147,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * @param ubicacion Ubicacion en la que se encuentra el workpod
      */
     public Fragment_Dialog_Workpod(Workpod workpod, Ubicacion ubicacion, Shared<LatLng> posicion) {
-        this.workpod = workpod;
         this.ubicacion = ubicacion;
+        this.workpod = workpod;
         this.posicion = posicion;
         this.abrirAhora = false;
         this.cambiarDistancia = false;
@@ -365,7 +365,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private void comprobarReserva() throws InterruptedException {
         try {
             //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
-            if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())) {
+            if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())
+             && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA") ) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
                 btnReservarWorkpod.setTextSize(10);
