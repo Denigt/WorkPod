@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -499,6 +500,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             reserva.setEstado("EN USO");
             Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
             update.postRun(() -> {
+                if (update.getError().code > -1) {
+                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                    for (Workpod item : ubicacion.getWorkpods())
+                        if (item.getId() == workpod.getId())
+                            item.setReserva(reserva);
+                    // ESTABLECER LA RESERVA DEL USUARIO
+                    InfoApp.USER.setReserva(reserva);
+                }
+
                 sesion = new Sesion();
                 sesion.setEntrada(ZonedDateTime.now());
                 sesion.setUsuario(InfoApp.USER.getId());
@@ -508,22 +518,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 sesion.setTiempo(0);
 
                 Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
-                insert.postRunOnUI(requireActivity(), () -> {
-                    if (insert.getError().code > -1) {
-                        Toast.makeText(getActivity(), "Insert exitoso", Toast.LENGTH_LONG).show();
-                    }
+                insert.postRun(() -> {
+                    Log.i("INSERT SESION", "Se ha insertado la sesion correctamente");
                 });
                 insert.start();
-            });
-            update.postRunOnUI(requireActivity(), () -> {
-                if (update.getError().code > -1) {
-                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                    for (Workpod item : ubicacion.getWorkpods())
-                        if (item.getId() == workpod.getId())
-                            item.setReserva(reserva);
-                    // ESTABLECER LA RESERVA DEL USUARIO
-                    InfoApp.USER.setReserva(reserva);
-                }
             });
             update.start();
             //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA

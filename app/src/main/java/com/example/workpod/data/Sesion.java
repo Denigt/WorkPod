@@ -165,13 +165,15 @@ public class Sesion implements DataDb {
         JSONObject json = new JSONObject();
         try {
             json.put("id", id);
-            json.put("entrada", Method.dateToString(entrada, ZoneId.of("UCT")));
-            json.put("salida", Method.dateToString(salida, ZoneId.of("UCT")));
+            if (entrada != null)
+                json.put("entrada", Method.dateToString(entrada, ZoneId.of("UCT")));
+            if (salida != null)
+                json.put("salida", Method.dateToString(salida, ZoneId.of("UCT")));
             json.put("precio", precio);
             json.put("tiempo", tiempo);
             json.put("descuento", descuento);
             json.put("usuario", usuario);
-            json.put("workpod", workpod);
+            json.put("workpod", workpod.getId());
         }catch(JSONException e){
             Log.e("ERROR SESION_JSON", e.getMessage());
         }

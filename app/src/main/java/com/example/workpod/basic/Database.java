@@ -627,6 +627,10 @@ public class Database<T extends DataDb> extends Thread {
         return tipoConsulta;
     }
 
+    public Activity getActivity() {
+        return activity;
+    }
+
     public T getDato() {
         return dato;
     }
