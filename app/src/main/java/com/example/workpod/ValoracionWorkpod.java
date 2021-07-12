@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
+import com.example.workpod.data.Usuario;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.testUsuario.Informacion_Usuario;
 
@@ -43,7 +47,29 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
         btnNoParticiparTest.setOnClickListener(this);
         btnParticiparTest.setOnClickListener(this);
 
+        //VOLCAMOS DE NUEVO LA INFORMACIÓN ESTO ES SI QUEREMOS Q AL VOLVER NO TENGAMOS Q VOLVER A LOGGEARNOS
+        dbUsuario();
 
+    }
+
+    /**
+     * Método para actualizar el usuario, sin tener que pasar por el loggeo de nuevo. Permitirá que se actualice el estado del workpod
+     * al finalizar la sesión
+     */
+    private void dbUsuario() {
+        try {
+            Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
+            consulta.postRunOnUI(this, ()->{
+                if (consulta.getError().code > -1) {
+                    InfoApp.USER = consulta.getDato();
+                }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+                else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
+            });
+            consulta.start();
+            consulta.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //MÉTODOS SOBREESCRITOS
@@ -127,12 +153,13 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onBackPressed() {
-        Intent activity = new Intent(getApplicationContext(), InitActivity.class);
+        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
         //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
         activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
         WorkpodActivity.boolSession=false;
         WorkpodActivity.boolLoc=false;
+
         startActivity(activity);
     }
 }

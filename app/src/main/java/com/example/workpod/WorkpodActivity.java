@@ -61,8 +61,8 @@ public class WorkpodActivity extends FragmentActivity {
         });
         dBSession();
 
-        if(InfoApp.sesion!=null){
-            fragment_sesion=new Fragment_sesion(InfoApp.sesion);
+        if (InfoApp.sesion != null) {
+            fragment_sesion = new Fragment_sesion(InfoApp.sesion);
         }
         if (InfoApp.USER.getReserva() != null) {
             if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
@@ -116,28 +116,33 @@ public class WorkpodActivity extends FragmentActivity {
      * @param menuitem parámetro relacionado con el icono del navigation view
      */
     private void btnNVonNavigationItemSelected(MenuItem menuitem) {
-
         if (menuitem.getItemId() == R.id.inv_location) {
-            //HAY QUE BORRAR TODOS LOS ELEMENTOS DEL LAYOUT SI QUEREMOS QUE APAREZCA EL FRAGMENT SELECCIONADO
-            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
-            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
-            fTransaction = fragmentManager.beginTransaction();
+            //EVITAMOS QUE SI EL USUARIO ESTÁ EN UNA SESIÓN Y LA DA AL BTN DEL MAPA, LE LLEVE AL MAPA
+            if (boolSession) {
+                volverAlFragmentSession();
+            } else {
+                //HAY QUE BORRAR TODOS LOS ELEMENTOS DEL LAYOUT SI QUEREMOS QUE APAREZCA EL FRAGMENT SELECCIONADO
+                FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+                //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+                fTransaction = fragmentManager.beginTransaction();
 
-            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
-            InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.MAPA;
-            // FRAGMENT DEL MAPA
-            Fragment_Maps maps = new Fragment_Maps();
-            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
-            fTransaction.replace(R.id.LLFragment, maps);
-            fTransaction.commit();
-            boolLoc = true;
-            // FRAGMENT DE SESION FINALIZADA
+                // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+                InfoFragment.anterior = InfoFragment.actual;
+                InfoFragment.actual = InfoFragment.MAPA;
+                // FRAGMENT DEL MAPA
+                Fragment_Maps maps = new Fragment_Maps();
+                //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+                fTransaction.replace(R.id.LLFragment, maps);
+                fTransaction.commit();
+                boolLoc = true;
+                // FRAGMENT DE SESION FINALIZADA
             /*Fragment_sesion_finalizada sesion_finalizada = new Fragment_sesion_finalizada();
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, sesion_finalizada);
             fTransaction.commit();
             boolLoc = true;*/
+            }
+
         } else if (menuitem.getItemId() == R.id.inv_support) {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
@@ -203,7 +208,7 @@ public class WorkpodActivity extends FragmentActivity {
     }
 
     private void volverAlFragmentSession() {
-        fragment_sesion=new Fragment_sesion(InfoApp.sesion);
+        fragment_sesion = new Fragment_sesion(InfoApp.sesion);
         //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
         FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
         //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO

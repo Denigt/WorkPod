@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
+import com.example.workpod.data.Usuario;
 import com.example.workpod.fragments.Fragment_sesion;
 import com.example.workpod.testUsuario.Informacion_Usuario;
 
@@ -20,8 +24,6 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
     private Button btnLikedin;
     private FragmentTransaction fTransaction;
 
-    //INSTANCIA DEL FRAGMENT INICIAL
-    Fragment_sesion sesion_finalizada = new Fragment_sesion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +46,24 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
         iVStar5.setOnClickListener(this);
         btnLikedin.setOnClickListener(this);
 
+        //VOLCAMOS DE NUEVO LA INFORMACIÓN ESTO ES SI QUEREMOS Q AL VOLVER NO TENGAMOS Q VOLVER A LOGGEARNOS
+        dbUsuario();
+
         resultadovaloracionUsuario();
-        resultadoTestUsuario();
+       // resultadoTestUsuario();
     }
 
     //MÉTODOS SOBREESCRITOS
     @Override
     public void onBackPressed() {
-        //MÉTODO QUE CIERRA COMPLETAMENTE LA APP
-        //finishAffinity();
-        volverAlFragmentInicial();
+        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+        //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
+        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
+        WorkpodActivity.boolSession = false;
+        WorkpodActivity.boolLoc = false;
+
+        startActivity(activity);
     }
 
     @Override
@@ -153,17 +163,21 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
             iVStar5.setColorFilter(Color.parseColor("#FFEB3B"));
         }
     }
+
     /**
-     * Método que permite volver al fragment inicial (el de localización)
-     * cuando el usuario le da al botón de volver atrás del móvil
+     * Método para actualizar el usuario, sin tener que pasar por el loggeo de nuevo. Permitirá que se actualice el estado del workpod
+     * al finalizar la sesión
      */
-    private void volverAlFragmentInicial() {
-        //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
-        FragmentManager fragmentManager = Valoracion_Workpod_Final.this.getSupportFragmentManager();
-        //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
-        fTransaction = fragmentManager.beginTransaction();
-        //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
-        fTransaction.replace(R.id.LLFragment, sesion_finalizada).commit();
-        //boolLoc = true;
+    private void dbUsuario() {
+        Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
+        consulta.postRunOnUI(this, () -> {
+            if (consulta.getError().code > -1) {
+                InfoApp.USER = consulta.getDato();
+            } else if (consulta.getError().code > -3)
+                Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
+        });
+        consulta.start();
     }
 }

@@ -139,6 +139,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         reserva.set(InfoApp.USER.getReserva());
         //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
         reserva.setEstado("FINALIZADA");
+        InfoApp.RESERVA=reserva;
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
             if (update.getError().code > -1) {
@@ -156,6 +157,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             }
         });
         update.start();
+
         //HACEMOS EL INSERT DE SESION
         finiquitarSesion();
         Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
