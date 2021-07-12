@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.workpod.data.Workpod;
 import com.example.workpod.testUsuario.Informacion_Usuario;
 
 public class ValoracionWorkpod extends AppCompatActivity implements View.OnClickListener {
@@ -126,10 +127,12 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+        Intent activity = new Intent(getApplicationContext(), InitActivity.class);
         //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
         activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
+        WorkpodActivity.boolSession=false;
+        WorkpodActivity.boolLoc=false;
         startActivity(activity);
     }
 }

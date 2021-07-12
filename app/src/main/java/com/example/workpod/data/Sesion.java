@@ -115,6 +115,10 @@ public class Sesion implements DataDb {
         this.descuento = descuento;
     }
 
+    public int getIdUsuario(){
+        return  usuario;
+    }
+
     public Usuario getUsuario() {
         Usuario retorno = new Usuario();
 

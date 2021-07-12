@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
+import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.fragments.Fragment_Maps;
 import com.example.workpod.fragments.Fragment_Menu_Usuario;
@@ -28,18 +30,19 @@ public class WorkpodActivity extends FragmentActivity {
 
     //BD
     Workpod workpod;
+    Sesion sesion;
 
     //BOOLEANO PARA CONTROLAR LA NAVEGACIÓN POR LOS FRAGMENTS
     public static Boolean boolLoc = false;
     public static Boolean boolfolder = false;
-    public static Boolean boolSession=false;
-    private Boolean boolOther=false;
+    public static Boolean boolSession = false;
+    private Boolean boolOther = false;
 
     //INSTANCIA DEL FRAGMENT INICIAL
     Fragment_Maps fragment_maps = new Fragment_Maps();
     //INSTANCIA DEL FRAGMENT DEL HISTÓRICO DE TRANSACCIONES
-    Fragment_Transaction_History fragment_transaction_history=new Fragment_Transaction_History();
-    Fragment_sesion fragment_sesion=new Fragment_sesion();
+    Fragment_Transaction_History fragment_transaction_history = new Fragment_Transaction_History();
+    Fragment_sesion fragment_sesion = new Fragment_sesion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,22 +59,54 @@ public class WorkpodActivity extends FragmentActivity {
                 return true;
             }
         });
+        dBSession();
 
-      //  if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")){
-          /*  Fragment_sesion fragmentSesion = new Fragment_sesion();
-            this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();*/
-       // }else{
+
+        if (InfoApp.USER.getReserva() != null) {
+
+            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
+                Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
+                this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
+            } else {
+                //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
+                FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+                fTransaction = fragmentManager.beginTransaction();
+                fTransaction.add(R.id.LLFragment, fragment_maps).commit();
+                boolLoc = true;
+            }
+        } else {
             //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             fTransaction = fragmentManager.beginTransaction();
             fTransaction.add(R.id.LLFragment, fragment_maps).commit();
             boolLoc = true;
-       // }
+        }
 
 
         //INICIALIZAMOS EL WORKPOD
-       // workpod= InfoApp.USER.ge
+        // workpod= InfoApp.USER.ge
     }
+
+    /**
+     * Realiza la consulta a la BD para que si el usuario tiene una sesión no le salga el mapa y le salga su sesión
+     */
+    private void dBSession() {
+        try {
+            Database<Sesion> consultaSesion = new Database<>(Database.SELECTUSER, new Sesion());
+            consultaSesion.postRun(() -> {
+                for (Sesion session : consultaSesion.getLstSelect()) {
+                    sesion = session;
+                }
+                InfoApp.sesion = sesion;
+            });
+            consultaSesion.start();
+            //ESPERAMOS A QUE LA CONSULTA TERMINE PARA QUE NO SE ABRA EL FRAGMENT DE SESIÓN SIN QUE SE HAYA HECHO LA CONSULTA
+            consultaSesion.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Método para que al pulsar en un icono del navigation view,
@@ -111,7 +146,7 @@ public class WorkpodActivity extends FragmentActivity {
             fTransaction.replace(R.id.LLFragment, soporte);
             fTransaction.commit();
             boolLoc = false;
-            boolOther=true;
+            boolOther = true;
         } else if (menuitem.getItemId() == R.id.inv_folder) {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
@@ -120,9 +155,9 @@ public class WorkpodActivity extends FragmentActivity {
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, transaction_history);
             fTransaction.commit();
-            boolLoc=false;
-            boolOther=true;
-         //
+            boolLoc = false;
+            boolOther = true;
+            //
         } else if (menuitem.getItemId() == R.id.inv_menu_user) {
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
@@ -133,7 +168,7 @@ public class WorkpodActivity extends FragmentActivity {
             fTransaction.replace(R.id.LLFragment, menuUsuario);
             fTransaction.commit();
             boolLoc = false;
-            boolOther=true;
+            boolOther = true;
         }
     }
 
@@ -161,37 +196,37 @@ public class WorkpodActivity extends FragmentActivity {
         //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
         fTransaction.replace(R.id.LLFragment, fragment_transaction_history).commit();
         boolLoc = false;
-        boolfolder=false;
+        boolfolder = false;
         //CAMBIAMOS LA SELECCIÓN DEL NV AL ICONO DE LOCATION
         btnNV.setSelectedItemId(R.id.inv_folder);
     }
 
-    private void volverAlFragmentSession(){
+    private void volverAlFragmentSession() {
         //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
         FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
         //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
         fTransaction = fragmentManager.beginTransaction();
         //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
-        fTransaction.replace(R.id.LLFragment, fragment_sesion,fragment_sesion.getClass().getName()).commit();
-        boolSession=false;
+        fTransaction.replace(R.id.LLFragment, fragment_sesion, fragment_sesion.getClass().getName()).commit();
+        boolSession = false;
         btnNV.setSelectedItemId(0);
         //PERMITIRÁ QUE AL DARLE ATRÁS TE SALGAS DE LA SESIÓN
-        boolOther=false;
+        boolOther = false;
 
     }
 
     //LISTENERS
     @Override
     public void onBackPressed() {
-        if ((boolfolder)&&(boolLoc)) {
+        if ((boolfolder) && (boolLoc)) {
             volverAlFragmentTransactionHistory();
-        } else if(!boolLoc && !boolSession) {
+        } else if (!boolLoc && !boolSession) {
             volverAlFragmentInicial();
-        }else if(boolSession && boolOther){
+        } else if (boolSession && boolOther) {
             volverAlFragmentSession();
-        } else if(boolLoc){
-            boolSession=false;
-           super.onBackPressed();
+        } else if (boolLoc) {
+            boolSession = false;
+            super.onBackPressed();
         }
     }
 

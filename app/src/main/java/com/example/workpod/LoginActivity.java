@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
+import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Usuario;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView tVActvityLoginEmail;
     private TextView tVActvityLoginContrasena;
     private TextView tVActvityLoginAunNoLogin;
+    private Sesion sesion;
 
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
@@ -204,7 +206,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initActivity(){
         // ESTABLECER LAYOUT DE LA ACTIVIDAD
         setContentView(R.layout.activity_login);
-
         // BUSCAR LOS CONTROLES DEL XML
         txtEmail = findViewById(R.id.txtEmail);
         txtEmail.setText(email);

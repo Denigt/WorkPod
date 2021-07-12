@@ -53,6 +53,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     //BD
     Ubicacion ubicacion;
     Workpod workpod;
+    Sesion sesion;
     Reserva reserva;
     String direccion;
     //CREE SESION, INSERT FECHA ENTRADA, WORKPOD, USUARIO,
@@ -88,6 +89,11 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         this.ubicacion = ubicacion;
         this.reserva = reserva;
         this.direccion = direccion;
+    }
+    public Fragment_sesion(Sesion sesion) {
+        this.sesion=sesion;
+        this.workpod = sesion.getWorkpod();
+        this.direccion = sesion.getDireccion().toLongString();
     }
 
 
@@ -150,7 +156,8 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
             segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
             //ARRANCAMOS CRONOMETRO
             try {
-                //   cerrarWorkpod=false;
+                tVSesionCapacidad.setText(String.valueOf(sesion.getWorkpod().getNumUsuarios()));
+                tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
                 crono = cronometro();
                 crono.start();
             } catch (InterruptedException interruptedException) {

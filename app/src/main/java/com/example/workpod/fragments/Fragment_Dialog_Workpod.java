@@ -516,6 +516,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 sesion.setPrecio(0);
                 sesion.setDescuento(0);
                 sesion.setTiempo(0);
+                InfoApp.sesion=sesion;
 
                 Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
                 insert.postRun(() -> {
@@ -525,7 +526,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             });
             update.start();
             //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-            Fragment_sesion fragmentSesion = new Fragment_sesion(workpod, ubicacion, reserva, direccion);
+            Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
             //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
             WorkpodActivity.boolLoc = false;
