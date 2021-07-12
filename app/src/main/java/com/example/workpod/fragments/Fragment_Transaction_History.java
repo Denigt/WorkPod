@@ -419,7 +419,14 @@ public class Fragment_Transaction_History extends Fragment {
             calcularTiempoSesion(sesion.getEntrada(), sesion.getSalida(), hour, min
                     , seg);
             tVFecha.setText(String.valueOf(sesion.getEntrada().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
-            tVTiempo.setText(hour + "h:" + min + "min");
+            //ESTÉTICA DEL TIEMPO DE SESIÓN
+            if(hour==0 && min!=0){
+                tVTiempo.setText(min + "min");
+            }else if(hour==0 && min==0){
+                tVTiempo.setText(seg + "seg");
+            }else{
+                tVTiempo.setText(hour + "h:" + min + "min");
+            }
             tVUbicacion.setText(sesion.getDireccion().toString());
             //CREAMOS LA CONDICIÓN DE QUE AL TOCAR EN UN ITEM DEL ELSV SE ABRA EL CUADRO DE DIALOGO CON TODA LA INFORMACIÓN DE LA SESIÓN
 
@@ -471,6 +478,7 @@ public class Fragment_Transaction_History extends Fragment {
             //LE PASAMOS LOS VALORES CALCULADOS A LAS VARIABLES QUE USAMOS FUERA DEL METODO
             this.hour = hour;
             this.min = min;
+            this.seg=seg;
             //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
 
         }
