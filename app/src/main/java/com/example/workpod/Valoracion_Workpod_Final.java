@@ -169,15 +169,21 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
      * al finalizar la sesión
      */
     private void dbUsuario() {
-        Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
-        consulta.postRunOnUI(this, () -> {
-            if (consulta.getError().code > -1) {
-                InfoApp.USER = consulta.getDato();
-            } else if (consulta.getError().code > -3)
-                Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
-        });
-        consulta.start();
+         try {
+             Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
+             consulta.postRunOnUI(this, () -> {
+                 if (consulta.getError().code > -1) {
+                     InfoApp.USER = consulta.getDato();
+                 } else if (consulta.getError().code > -3)
+                     Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+                 else
+                     Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
+             });
+             consulta.start();
+             //ESPERAR HASTA QUE TERMINE EL HILO, SI NO, AL DARLE ATRÁS, HAY VECES EN LAS QUE NO TERMINA DICHO HILO Y TE DEVUELVE A LA SESIÓN EN VEZ DE AL MAPA
+             consulta.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

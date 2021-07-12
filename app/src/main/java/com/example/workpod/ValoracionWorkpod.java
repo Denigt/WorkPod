@@ -66,6 +66,7 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
                 else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
             });
             consulta.start();
+            //ESPERAR HASTA QUE TERMINE EL HILO, SI NO, AL DARLE ATRÁS, HAY VECES EN LAS QUE NO TERMINA DICHO HILO Y TE DEVUELVE A LA SESIÓN EN VEZ DE AL MAPA
             consulta.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
