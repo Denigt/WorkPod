@@ -59,15 +59,38 @@ public class WorkpodActivity extends FragmentActivity {
                 return true;
             }
         });
-        dBSession();
 
-        if (InfoApp.sesion != null) {
-            fragment_sesion = new Fragment_sesion(InfoApp.sesion);
-        }
-        if (InfoApp.USER.getReserva() != null) {
-            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
-                Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
-                this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
+        //REFRESCAMOS LA SESIÓN
+        dBSession();
+        //ACCEDER A LA APP
+        accederApp();
+
+
+        //INICIALIZAMOS EL WORKPOD
+        // workpod= InfoApp.USER.ge
+    }
+
+    /**
+     * Si el usuaurio no se ha loggeado, accede al mapa
+     * Si el usuario no está en una sesión, accede al mapa
+     * Si el usuario tiene una sesión, accede a la sesión sin pasar por el mapa
+     */
+    private void accederApp() {
+        try {
+            if (InfoApp.sesion != null) {
+                fragment_sesion = new Fragment_sesion(InfoApp.sesion);
+            }
+            if (InfoApp.USER.getReserva() != null) {
+                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
+                    Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
+                    this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
+                } else {
+                    //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
+                    FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+                    fTransaction = fragmentManager.beginTransaction();
+                    fTransaction.add(R.id.LLFragment, fragment_maps).commit();
+                    boolLoc = true;
+                }
             } else {
                 //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
                 FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
@@ -75,17 +98,13 @@ public class WorkpodActivity extends FragmentActivity {
                 fTransaction.add(R.id.LLFragment, fragment_maps).commit();
                 boolLoc = true;
             }
-        } else {
-            //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
+        } catch (NullPointerException e) {
+            //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO SE HA LOGGEADO
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             fTransaction = fragmentManager.beginTransaction();
             fTransaction.add(R.id.LLFragment, fragment_maps).commit();
             boolLoc = true;
         }
-
-
-        //INICIALIZAMOS EL WORKPOD
-        // workpod= InfoApp.USER.ge
     }
 
     /**
@@ -219,6 +238,7 @@ public class WorkpodActivity extends FragmentActivity {
         btnNV.setSelectedItemId(0);
         //PERMITIRÁ QUE AL DARLE ATRÁS TE SALGAS DE LA SESIÓN
         boolOther = false;
+        boolLoc=true;
 
     }
 

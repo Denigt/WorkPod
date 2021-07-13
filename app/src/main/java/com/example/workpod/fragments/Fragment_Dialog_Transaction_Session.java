@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.workpod.R;
+import com.example.workpod.WorkpodActivity;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
@@ -218,8 +219,16 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         //LE PASAMOS LOS VALORES CALCULADOS A LAS VARIABLES QUE USAMOS FUERA DEL METODO
         this.hour = hour;
         this.min = min;
+        this.seg=seg;
         //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
-        tVDialogSessionTime.setText(String.valueOf(hour) + "h " + String.valueOf(min) + "min");
+        //ESTÉTICA DEL TIEMPO DE SESIÓN
+        if(hour==0 && min!=0){
+            tVDialogSessionTime.setText(min + "min "+seg+"seg");
+        }else if(hour==0 && min==0){
+            tVDialogSessionTime.setText(seg + "seg");
+        }else{
+            tVDialogSessionTime.setText(hour + "h:" + min + "min");
+        }
 
     }
 
@@ -234,7 +243,6 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
      * @param precioFinal es el precio de los minutos que ha estado el usuario usando el workpod aplicándole el descuento
      */
     private void calcularPrecio(Double precioFinal, Double precio, int hour, int min, String ofertas) {
-        precio = (Double.parseDouble(String.valueOf(hour)) * 60 + Double.parseDouble(String.valueOf(min))) * 0.2;
         //SI HAY OFERTAS
         if (!ofertas.equals(SIN_OFERTAS)) {
             precioFinal = precio - (precio * (Double.parseDouble(ofertas)) / 100);
@@ -323,5 +331,4 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
 
         Method.scaleTv(metrics, lstTv);
     }
-
 }

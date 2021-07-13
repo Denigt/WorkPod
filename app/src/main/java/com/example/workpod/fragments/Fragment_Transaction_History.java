@@ -27,6 +27,7 @@ import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_Spinner;
 import com.example.workpod.basic.Database;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.otherclass.Spinner_Years_Transaction_History;
@@ -482,5 +483,21 @@ public class Fragment_Transaction_History extends Fragment {
             //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if(InfoApp.USER!=null){
+            try{
+                if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")){
+                    WorkpodActivity.boolfolder=false;
+                    WorkpodActivity.boolSession=true;
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
+        }
+        super.onDestroy();
     }
 }

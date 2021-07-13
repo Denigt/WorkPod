@@ -174,11 +174,15 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             tiempoSesion = Method.subsDate(sesion.getSalida(), sesion.getEntrada());
             //INICIALIZAMOS CRONOMETRO
             this.centesimas = 0;
-            horas= Math.round(tiempoSesion/3600);
-            minutos = Math.round ((tiempoSesion-(3600*horas))/60);
-            segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
+            horas= Math.floor(tiempoSesion/3600) ;
+            minutos = Math.floor(((tiempoSesion-(3600*horas))/60));
+            segundos = Math.floor(tiempoSesion%60);
             //CALCULAMOS PRECIO DE LA SESION
-            this.precioSesion=(minutos*sesion.getWorkpod().getPrecio())+ ((segundos*sesion.getWorkpod().getPrecio())/60);
+            if(horas==0){
+                this.precioSesion=(minutos*sesion.getWorkpod().getPrecio())+ ((segundos*sesion.getWorkpod().getPrecio())/60);
+            }else{
+                this.precioSesion=(horas*60*sesion.getWorkpod().getPrecio()+ minutos*sesion.getWorkpod().getPrecio())+ ((segundos*sesion.getWorkpod().getPrecio())/60);
+            }
             //SE LO PASAMOS AL OBJETO SESION
             sesion.setPrecio(precioSesion);
             this.tiempo=horas + (minutos/60);
