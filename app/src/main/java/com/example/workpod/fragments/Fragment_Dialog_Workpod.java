@@ -350,6 +350,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //ECO DE RESERVA CANCELADA POR EL SISTEMA
             Toast.makeText(getActivity(), "Tiempo agotado, reserva cancelada", Toast.LENGTH_LONG).show();
         }
+
+        if (map != null)
+            map.actualizarMapa();
         //PARO EL HILO
         finish = true;
         super.onDismiss(dialog);

@@ -25,6 +25,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -91,6 +93,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     private ImageButton btnCentrar;
     private SearchView etxtBusqueda;
     private ListView lsvBusqueda;
+    private Button btnMiReserva;
+    private FrameLayout FLMiReserva;
 
     // ALMACENAMIENTO DE DATOS
     private List<Ubicacion> lstUbicacion;
@@ -147,6 +151,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         btnCentrar = view.findViewById(R.id.btnCentrar);
         etxtBusqueda = view.findViewById(R.id.etxtBusqueda);
         lsvBusqueda = view.findViewById(R.id.lsvBusqueda);
+        btnMiReserva =view.findViewById(R.id.btnMiReserva);
+        FLMiReserva =view.findViewById(R.id.FLMiReserva);
 
         // Adaptador para la lsvBusqueda y el etxtBusqueda
         adpBusqueda = new Adaptador_Lsv_Search(getContext(), R.layout.item_lsv_search);
@@ -154,6 +160,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         // Establecer listeners de los controles
         btnCentrar.setOnClickListener(this);
+        btnMiReserva.setOnClickListener(this);
         lsvBusqueda.setOnItemClickListener(this);
         etxtBusqueda.setOnClickListener(this);
         etxtBusqueda.setOnQueryTextListener(new MapSearchListener(etxtBusqueda, lsvBusqueda));
@@ -205,6 +212,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             if (!dbUbicacion.getError().get()) {
                 dibujaWorkpods();
                 adpBusqueda.addAll(lstUbicacion);
+                if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada())
+                    FLMiReserva.setVisibility(View.VISIBLE);
             } else if (dbUbicacion.getError().code == -404)
                 Toast.makeText(getContext(), "No hay conexión a Internet", Toast.LENGTH_LONG).show();
         });
@@ -215,6 +224,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     @Override
     public void onClick(View v) {
         btnCentrarOnClick(v);
+        btnMiReservaOnClick(v);
         if (fragmentCluster != null && v.getId() != fragmentCluster.getId()) {
             getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentCluster).commit();
             fragmentCluster = null;
@@ -292,6 +302,32 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             etxtBusqueda.setQuery("", false);
         }
 
+    }
+
+    private void btnMiReservaOnClick(View v){
+        if (v.getId() == btnMiReserva.getId()){
+            if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()){
+                Workpod workpod = null;
+                Ubicacion ubicacion = null;
+                for (Ubicacion u : lstUbicacion){
+                    for (Workpod w : u.getWorkpods()){
+                        if (w.getId() == InfoApp.USER.getReserva().getWorkpod()){
+                            workpod = w;
+                            ubicacion = u;
+                            break;
+                        }
+                    }
+                    if (workpod != null) break;
+                }
+                if (workpod != null) {
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, this);
+                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
+                }
+            }else {
+                FLMiReserva.setVisibility(View.GONE);
+                Toast.makeText(requireContext(), "Tu reserva a caducado", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
