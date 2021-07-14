@@ -2,16 +2,23 @@ package com.example.workpod.data;
 
 import android.util.Log;
 
+import com.example.workpod.basic.Method;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Usuario implements DataDb{
     private int id;
+    private String verificar;
+    private ZonedDateTime fVerificacion;
+    private ZonedDateTime fRegistro;
     private String email;
     private String nombre;
     private String apellidos;
@@ -43,6 +50,33 @@ public class Usuario implements DataDb{
         tarjeta = user.getTarjeta();
         sesiones = user.getSesiones();
         dirFacturacion = user.getDirFacturacion();
+        verificar = user.getVerificar();
+        fRegistro = user.getfRegistro();
+        fVerificacion = user.getfVerificacion();
+    }
+
+    public String getVerificar() {
+        return verificar;
+    }
+
+    public void setVerificar(String verificar) {
+        this.verificar = verificar;
+    }
+
+    public ZonedDateTime getfVerificacion() {
+        return fVerificacion;
+    }
+
+    public void setfVerificacion(ZonedDateTime fVerificacion) {
+        this.fVerificacion = fVerificacion;
+    }
+
+    public ZonedDateTime getfRegistro() {
+        return fRegistro;
+    }
+
+    public void setfRegistro(ZonedDateTime fRegistro) {
+        this.fRegistro = fRegistro;
     }
 
     public String getEmail() {
@@ -176,6 +210,12 @@ public class Usuario implements DataDb{
 
             if (usuarioJSON.has("id") && !usuarioJSON.isNull("id"))
                 usuario.setId(usuarioJSON.getInt("id"));
+            if (usuarioJSON.has("verificar") && !usuarioJSON.isNull("verificar"))
+                usuario.setVerificar(usuarioJSON.getString("verificar"));
+            if (usuarioJSON.has("fRegistro") && !usuarioJSON.isNull("fRegistro"))
+                usuario.setfRegistro(Method.stringToDate(usuarioJSON.getString("fRegistro"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
+            if (usuarioJSON.has("fVerificacion") && !usuarioJSON.isNull("fVerificacion"))
+                usuario.setfVerificacion(Method.stringToDate(usuarioJSON.getString("fVerificacion"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
             if (usuarioJSON.has("email") && !usuarioJSON.isNull("email"))
                 usuario.setEmail(usuarioJSON.getString("email"));
             if (usuarioJSON.has("nombre") && !usuarioJSON.isNull("nombre"))
@@ -204,6 +244,9 @@ public class Usuario implements DataDb{
         JSONObject json = new JSONObject();
         try {
             json.put("id", id);
+            json.put("verificar", email);
+            json.put("fRegistro", Method.dateToString(fRegistro, ZoneId.of("UCT")));
+            json.put("fVerificacion", Method.dateToString(fVerificacion, ZoneId.of("UCT")));
             json.put("email", email);
             json.put("nombre", nombre);
             json.put("contrasena", password);
