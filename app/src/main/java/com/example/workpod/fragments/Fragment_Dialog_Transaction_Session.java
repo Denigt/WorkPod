@@ -165,52 +165,51 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.IVDialogUbication) {
-            try {
-                Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
-                dbUbicacion.postRun(() -> {
-                    if (!dbUbicacion.getError().get()){
-                        lstUbicacion.removeAll(lstUbicacion);
-                        lstUbicacion.addAll(dbUbicacion.getLstSelect());
-                        refrescardB=true;
-                    }
+            onClickIVDialogUbication();
+        }
+    }
 
-                });
-                dbUbicacion.start();
-                while(!refrescardB){
-                    Thread.sleep(10);
+
+
+    //MÉTODOS
+
+    /**
+     * Si el usuario accede al workpod en el que está haciendo la sesión le retornará a su sesión
+     * Si el usuario accede a un workpod con el que no está realizando una sesión en este momento, le llevará al Fragment_Dialog_Workpod
+     * donde podrá ver el estado del workpod e interactuar con él.
+     */
+    private void onClickIVDialogUbication() {
+        try {
+            //REFRESCAMOS LOS WORKPODS
+            Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
+            dbUbicacion.postRun(() -> {
+                if (!dbUbicacion.getError().get()){
+                    lstUbicacion.removeAll(lstUbicacion);
+                    lstUbicacion.addAll(dbUbicacion.getLstSelect());
+                    //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
+                    refrescardB=true;
                 }
-                refrescardB=false;
 
-                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.sesion != null
-                        && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
-                    WorkpodActivity.boolfolder=false;
-                    sesionHistorico=true;
-                    getActivity().onBackPressed();
+            });
+            dbUbicacion.start();
+            //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
+            while(!refrescardB){
+                Thread.sleep(10);
+            }
+            refrescardB=false;
 
-                } else {
-                    for (int i=0;i<lstUbicacion.size();i++) {
-                        if (lstUbicacion.get(i).getWorkpods().size() > 1) {
-                            lstWorkpods=lstUbicacion.get(i).getWorkpods();
-                            for (int j = 0; j < lstWorkpods.size(); j++) {
-                                if (workpod.getId() == lstWorkpods.get(j).getId()) {
-                                    workpod = lstWorkpods.get(j);
-                                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
-                                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-                                    break;
-                                }
-                            }
-                        } else {
-                            if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
-                                workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
-                                Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
-                                fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-                                break;
-                            }
-                        }
-                    }
-                }
-            } catch (NullPointerException e) {
+            //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
+            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.sesion != null
+                    && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
+                WorkpodActivity.boolfolder=false;
+                sesionHistorico=true;
+                getActivity().onBackPressed();
+
+            }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
+            else {
+                //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
                 for (int i=0;i<lstUbicacion.size();i++) {
+                    //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
                     if (lstUbicacion.get(i).getWorkpods().size() > 1) {
                         lstWorkpods=lstUbicacion.get(i).getWorkpods();
                         for (int j = 0; j < lstWorkpods.size(); j++) {
@@ -218,27 +217,54 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
                                 workpod = lstWorkpods.get(j);
                                 Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                                //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
                                 break;
                             }
                         }
-                    } else {
+                    }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD
+                    else {
                         if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
-                            workpod = lstUbicacion.get(i).getWorkpods().get(0);
+                            workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
                             Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                             fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                            //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
                             break;
                         }
                     }
                 }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch (NullPointerException e) {
+            //CONTROLAMOS QUE SI USER.GETRESERVA() APUNTA A NULO, EL USUARIO PUEDA ABRIR EL WORKPOD QUE QUIERA CONSULTAR
+            //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
+            for (int i=0;i<lstUbicacion.size();i++) {
+                //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
+                if (lstUbicacion.get(i).getWorkpods().size() > 1) {
+                    lstWorkpods=lstUbicacion.get(i).getWorkpods();
+                    for (int j = 0; j < lstWorkpods.size(); j++) {
+                        if (workpod.getId() == lstWorkpods.get(j).getId()) {
+                            workpod = lstWorkpods.get(j);
+                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                            fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                            //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
+                            break;
+                        }
+                    }
+                }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD  
+                else {
+                    if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
+                        workpod = lstUbicacion.get(i).getWorkpods().get(0);
+                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                        fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                        //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
+                        break;
+                    }
+                }
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
-
-    //MÉTODOS
-
     /**
      * Método para calcular la diferencia entre 2 fechas.
      * La clase ZoneDateTime no posee el método getTime() el cual permite calcular los milisegundos entre dos fechas,
