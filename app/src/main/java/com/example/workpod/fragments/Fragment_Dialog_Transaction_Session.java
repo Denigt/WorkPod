@@ -212,6 +212,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
             } catch (NullPointerException e) {
                 for (int i=0;i<lstUbicacion.size();i++) {
                     if (lstUbicacion.get(i).getWorkpods().size() > 1) {
+                        lstWorkpods=lstUbicacion.get(i).getWorkpods();
                         for (int j = 0; j < lstWorkpods.size(); j++) {
                             if (workpod.getId() == lstWorkpods.get(j).getId()) {
                                 workpod = lstWorkpods.get(j);
