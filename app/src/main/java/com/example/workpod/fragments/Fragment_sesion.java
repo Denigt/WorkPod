@@ -80,9 +80,13 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
 
     //CONSTRUCTOR CON WORKPOD
     public Fragment_sesion(Sesion sesion) {
-        this.sesion=sesion;
-        this.workpod = sesion.getWorkpod();
-        this.direccion = sesion.getDireccion().toLongString();
+        try {
+            this.sesion = sesion;
+            this.workpod = sesion.getWorkpod();
+            this.direccion = sesion.getDireccion().toLongString();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -107,6 +111,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_sesion_finalizada, container, false);
+
         //INICIALIZAMOS ELEMENTOS DEL XML
         btnCerrarWorPod = view.findViewById(R.id.BtnCerrarWorPod);
         btnContactarSoporte = view.findViewById(R.id.BtnContactarSoporte);
@@ -115,7 +120,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         tVTiempoTranscurrido = view.findViewById(R.id.TVTiempoTranscurrido);
         tVWifi = view.findViewById(R.id.TVWifi);
         tVSesionDireccionTitulo = view.findViewById(R.id.TVSesionDireccionTitulo);
-
+        //PARO CRONÓMETRO PARA QUE NO SE DUPLIQUE
         this.cerrarWorkpod = false;
         this.precio = 0.0;
         try {
@@ -123,15 +128,15 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
             tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
             //INICIALIZAMOS CRONOMETRO
             this.centesimas = 0;
-            horas= Math.round(tiempoSesion/3600);
-            minutos = Math.round ((tiempoSesion-(3600*horas))/60);
-            segundos = Math.round (tiempoSesion-((horas*3600)+(minutos*60)));
+            horas = Math.round(tiempoSesion / 3600);
+            minutos = Math.round((tiempoSesion - (3600 * horas)) / 60);
+            segundos = Math.round(tiempoSesion - ((horas * 3600) + (minutos * 60)));
             //ARRANCAMOS CRONOMETRO
 
-                tVSesionCapacidad.setText(String.valueOf(sesion.getWorkpod().getNumUsuarios()));
-                tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
-                crono = cronometro();
-                crono.start();
+            tVSesionCapacidad.setText(String.valueOf(sesion.getWorkpod().getNumUsuarios()));
+            tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
+            crono = cronometro();
+            crono.start();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -273,17 +278,17 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                             segundos = 0;
                         }
 
-                       if(minutos>=60){
+                        if (minutos >= 60) {
                             horas++;
-                            minutos=0;
-                            segundos=0;
+                            minutos = 0;
+                            segundos = 0;
                         }
                         //DEBE USARSE HANDLER.POST SIEMPRE QUE QUERAMOS REALIZAR UN SUBPROCESO EN LA INTERFAZ DE USUARIO
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    String  cadHoras = "", cadMinutos = "", cadSegundos = "";
+                                    String cadHoras = "", cadMinutos = "", cadSegundos = "";
                                     //Añado 0´s delante para los milisegundos cuando corresponda
                                     if (segundos < 10) {
                                         cadSegundos = "0" + segundos;
@@ -301,9 +306,9 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                                         cadHoras = "" + horas;
                                     }
                                     //Incorporo las cadenas en el campo de texto
-                                    if(horas!=0){
-                                        tVTiempoTranscurrido.setText(cadHoras+":"+cadMinutos + ":" + cadSegundos);
-                                    }else{
+                                    if (horas != 0) {
+                                        tVTiempoTranscurrido.setText(cadHoras + ":" + cadMinutos + ":" + cadSegundos);
+                                    } else {
                                         tVTiempoTranscurrido.setText(cadMinutos + ":" + cadSegundos);
                                     }
 
@@ -336,7 +341,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         //EVITA QUE SE DUPLIQUEN LOS HILOS
-        cerrarWorkpod=true;
+        cerrarWorkpod = true;
         super.onDestroy();
     }
 }

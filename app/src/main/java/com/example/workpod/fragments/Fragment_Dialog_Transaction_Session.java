@@ -77,9 +77,10 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     private String[] alfabeto;
     private String[] matrizSignos;
     private List<Ubicacion> lstUbicacion = new ArrayList<>();
+    public static Boolean sesionHistorico=false;
 
     //COLECCIONES
-    List<Scale_TextView>lstTv;
+    List<Scale_TextView> lstTv;
 
     //CONSTRUCTOR
     public Fragment_Dialog_Transaction_Session(Sesion sesion) {
@@ -88,7 +89,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         this.fechaSalida = sesion.getSalida();
         this.ofertas = String.valueOf(sesion.getDescuento());
         this.precio = sesion.getPrecio();
-        this.workpod=sesion.getWorkpod();
+        this.workpod = sesion.getWorkpod();
 
         //INICIALIZAMOS EL RESTO DE ELEMENTOS
         precioFinal = 0.0;
@@ -125,21 +126,21 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         View view = inflater.inflate(R.layout.fragment_transaction_session, container, false);
         //PARA QUE FUNCIONEN LOS ELEMENTOS DEL XML (BTN, IV...) EN UN DIALOG, LAS INSTANCIAS HAN DE ESTAR
         // EN EL MÉTODO onCreateDialog
-       // iVSalirDialogSession = (ImageView) view.findViewById(R.id.IVSalirDialogSession);
+        // iVSalirDialogSession = (ImageView) view.findViewById(R.id.IVSalirDialogSession);
         tVDialogUbication = (TextView) view.findViewById(R.id.TVDialogUbication);
         tVDialogDateHour = (TextView) view.findViewById(R.id.TVDialogDateHour);
         tVDialogOffers = (TextView) view.findViewById(R.id.TVDialogOffers);
         tVDialogPrice = (TextView) view.findViewById(R.id.TVDialogPrice);
         tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
-        iVDialogUbication=(ImageView)view.findViewById(R.id.IVDialogUbication);
+        iVDialogUbication = (ImageView) view.findViewById(R.id.IVDialogUbication);
 
         try {
-        Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
-        dbUbicacion.postRun(() -> {
-            if (!dbUbicacion.getError().get())
-                lstUbicacion.addAll(dbUbicacion.getLstSelect());
-        });
-        dbUbicacion.start();
+            Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
+            dbUbicacion.postRun(() -> {
+                if (!dbUbicacion.getError().get())
+                    lstUbicacion.addAll(dbUbicacion.getLstSelect());
+            });
+            dbUbicacion.start();
 
             dbUbicacion.join();
         } catch (InterruptedException e) {
@@ -172,25 +173,53 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
 
     @Override
     public void onClick(View v) {
-        //CIERRA EL CUADRO DE DIALOGO
-      if(v.getId()==R.id.IVDialogUbication){
-          for (Ubicacion ubicacion:lstUbicacion) {
-              if (ubicacion.getWorkpods().size() > 1) {
-                  for(int i=0;i<ubicacion.getWorkpods().size();i++){
-                      if (workpod.getId() == ubicacion.getWorkpods().get(i).getId()){
-                          workpod=ubicacion.getWorkpods().get(i);
-                          Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
-                          fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");
-                      }
-                  }
-              }else{
-                  if(workpod.getId()== ubicacion.getWorkpods().get(0).getId()){
-                      workpod=ubicacion.getWorkpods().get(0);
-                      Fragment_Dialog_Workpod fragmentDialogWorkpod=new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
-                      fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(),"UN SOLO WORPOD EN ESA UBICACIÓN");
-                  }
-              }
-          }
+        if (v.getId() == R.id.IVDialogUbication) {
+            try {
+                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.sesion != null
+                        && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
+                    WorkpodActivity.boolfolder=false;
+                    sesionHistorico=true;
+                    getActivity().onBackPressed();
+
+                } else {
+                    for (Ubicacion ubicacion : lstUbicacion) {
+                        if (ubicacion.getWorkpods().size() > 1) {
+                            for (int i = 0; i < ubicacion.getWorkpods().size(); i++) {
+                                if (workpod.getId() == ubicacion.getWorkpods().get(i).getId()) {
+                                    workpod = ubicacion.getWorkpods().get(i);
+                                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                                }
+                            }
+                        } else {
+                            if (workpod.getId() == ubicacion.getWorkpods().get(0).getId()) {
+                                workpod = ubicacion.getWorkpods().get(0);
+                                Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                                fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                            }
+                        }
+                    }
+                }
+            } catch (NullPointerException e) {
+                for (Ubicacion ubicacion : lstUbicacion) {
+                    if (ubicacion.getWorkpods().size() > 1) {
+                        for (int i = 0; i < ubicacion.getWorkpods().size(); i++) {
+                            if (workpod.getId() == ubicacion.getWorkpods().get(i).getId()) {
+                                workpod = ubicacion.getWorkpods().get(i);
+                                Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                                fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                            }
+                        }
+                    } else {
+                        if (workpod.getId() == ubicacion.getWorkpods().get(0).getId()) {
+                            workpod = ubicacion.getWorkpods().get(0);
+                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                            fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                        }
+                    }
+                }
+
+            }
 
         }
     }
@@ -219,14 +248,14 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         //LE PASAMOS LOS VALORES CALCULADOS A LAS VARIABLES QUE USAMOS FUERA DEL METODO
         this.hour = hour;
         this.min = min;
-        this.seg=seg;
+        this.seg = seg;
         //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
         //ESTÉTICA DEL TIEMPO DE SESIÓN
-        if(hour==0 && min!=0){
-            tVDialogSessionTime.setText(min + "min "+seg+"seg");
-        }else if(hour==0 && min==0){
+        if (hour == 0 && min != 0) {
+            tVDialogSessionTime.setText(min + "min " + seg + "seg");
+        } else if (hour == 0 && min == 0) {
             tVDialogSessionTime.setText(seg + "seg");
-        }else{
+        } else {
             tVDialogSessionTime.setText(hour + "h:" + min + "min");
         }
 
@@ -258,9 +287,10 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     /**
      * Método que sirve para crear una clave compuesta de 6 dígitos cuyos 2 primeros dígitos es un nº aleatorio del 10 al 99, los otros 4 están compuestos
      * por 2 letras y 2 signos aleatorios
-     * @param nAleatorio número aleatorio
-     * @param letra contiene todo el alfabeto con mayusculas y minusculas separadas por comas
-     * @param signo contiene todos los signos que vamos a usar separados por comas
+     *
+     * @param nAleatorio      número aleatorio
+     * @param letra           contiene todo el alfabeto con mayusculas y minusculas separadas por comas
+     * @param signo           contiene todos los signos que vamos a usar separados por comas
      * @param letraAleatoria1 nº aleatorio que será la posición de la matriz donde esxtraigamos la letra
      * @param letraAleatoria2 nº aleatorio que será la posición de la matriz donde esxtraigamos la letra
      * @param signoAleatorio1 nº aleatorio que será la posición de la matriz donde esxtraigamos el signo
@@ -296,11 +326,12 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
 
         //GUARDAMOS EL ID EN UNA VARIABLE
         String idSesionWorkpod;
-        idSesionWorkpod=String.valueOf(nAleatorio) + matrizSignos[signoAleatorio1] + alfabeto[letraAleatoria1] +
+        idSesionWorkpod = String.valueOf(nAleatorio) + matrizSignos[signoAleatorio1] + alfabeto[letraAleatoria1] +
                 matrizSignos[signoAleatorio2] + alfabeto[letraAleatoria2];
         //MOSTRAMOS EL RESULTADO PARA VER SI SE HA FORMADO UN ID ALEATORIO CORRECTO
         //Toast.makeText(getActivity(),idSesionWorkpod,Toast.LENGTH_LONG).show();
     }
+
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
@@ -308,26 +339,25 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementos() {
-       //INICIALIZAMOS COLECCIONES
-        this.lstTv=new ArrayList<>();
+        //INICIALIZAMOS COLECCIONES
+        this.lstTv = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVDialogUbication,"match_parent","bold",20,20,20));
-        lstTv.add(new Scale_TextView(tVDialogDateHour,"match_parent","bold",20,20,20));
-        lstTv.add(new Scale_TextView(tVDialogSessionTime,"match_parent","bold",20,20,20));
-        lstTv.add(new Scale_TextView(tVDialogOffers,"match_parent","bold",20,20,20));
-        lstTv.add(new Scale_TextView(tVDialogPrice,"match_parent","bold",20,20,20));
+        lstTv.add(new Scale_TextView(tVDialogUbication, "match_parent", "bold", 20, 20, 20));
+        lstTv.add(new Scale_TextView(tVDialogDateHour, "match_parent", "bold", 20, 20, 20));
+        lstTv.add(new Scale_TextView(tVDialogSessionTime, "match_parent", "bold", 20, 20, 20));
+        lstTv.add(new Scale_TextView(tVDialogOffers, "match_parent", "bold", 20, 20, 20));
+        lstTv.add(new Scale_TextView(tVDialogPrice, "match_parent", "bold", 20, 20, 20));
 
         Method.scaleTv(metrics, lstTv);
     }

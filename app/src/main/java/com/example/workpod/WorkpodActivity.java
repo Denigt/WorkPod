@@ -90,6 +90,7 @@ public class WorkpodActivity extends FragmentActivity {
                     fTransaction = fragmentManager.beginTransaction();
                     fTransaction.add(R.id.LLFragment, fragment_maps).commit();
                     boolLoc = true;
+                    boolSession = false;
                 }
             } else {
                 //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
@@ -97,6 +98,7 @@ public class WorkpodActivity extends FragmentActivity {
                 fTransaction = fragmentManager.beginTransaction();
                 fTransaction.add(R.id.LLFragment, fragment_maps).commit();
                 boolLoc = true;
+                boolSession = false;
             }
         } catch (NullPointerException e) {
             //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO SE HA LOGGEADO
@@ -104,6 +106,7 @@ public class WorkpodActivity extends FragmentActivity {
             fTransaction = fragmentManager.beginTransaction();
             fTransaction.add(R.id.LLFragment, fragment_maps).commit();
             boolLoc = true;
+            boolSession = false;
         }
     }
 
@@ -226,20 +229,24 @@ public class WorkpodActivity extends FragmentActivity {
         btnNV.setSelectedItemId(R.id.inv_folder);
     }
 
-    private void volverAlFragmentSession() {
-        fragment_sesion = new Fragment_sesion(InfoApp.sesion);
-        //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
-        FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
-        //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
-        fTransaction = fragmentManager.beginTransaction();
-        //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
-        fTransaction.replace(R.id.LLFragment, fragment_sesion, fragment_sesion.getClass().getName()).commit();
-        boolSession = false;
-        btnNV.setSelectedItemId(0);
-        //PERMITIRÁ QUE AL DARLE ATRÁS TE SALGAS DE LA SESIÓN
-        boolOther = false;
-        boolLoc=true;
-
+    public void volverAlFragmentSession() {
+        try{
+            fragment_sesion = new Fragment_sesion(InfoApp.sesion);
+            //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
+            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+            fTransaction = fragmentManager.beginTransaction();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, fragment_sesion, fragment_sesion.getClass().getName()).commit();
+            boolSession = false;
+            btnNV.setSelectedItemId(0);
+            //PERMITIRÁ QUE AL DARLE ATRÁS TE SALGAS DE LA SESIÓN
+            boolOther = false;
+            boolLoc=true;
+        }catch(NullPointerException e){
+            e.printStackTrace();
+            boolLoc=true;
+        }
     }
 
     //LISTENERS
@@ -249,7 +256,7 @@ public class WorkpodActivity extends FragmentActivity {
             volverAlFragmentTransactionHistory();
         } else if (!boolLoc && !boolSession) {
             volverAlFragmentInicial();
-        } else if (boolSession && boolOther) {
+        } else if (boolSession && boolOther && InfoApp.USER.getReserva()!=null) {
             volverAlFragmentSession();
         } else if (boolLoc) {
             boolSession = false;

@@ -385,16 +385,20 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         @Override
         public void onProviderDisabled(@NonNull String provider) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (markPosicion != null) {
-                        markPosicion.remove();
-                        markPosicion = null;
+            try{
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (markPosicion != null) {
+                            markPosicion.remove();
+                            markPosicion = null;
+                        }
+                        Toast.makeText(getContext(), "Habilite el GPS", Toast.LENGTH_LONG).show();
                     }
-                    Toast.makeText(getContext(), "Habilite el GPS", Toast.LENGTH_LONG).show();
-                }
-            });
+                });
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
         }
 
         @Override
