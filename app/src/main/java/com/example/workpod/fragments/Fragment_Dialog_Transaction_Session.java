@@ -77,7 +77,9 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     private String[] alfabeto;
     private String[] matrizSignos;
     private List<Ubicacion> lstUbicacion = new ArrayList<>();
+    private List<Workpod>lstWorkpods=new ArrayList<>();
     public static Boolean sesionHistorico=false;
+    private boolean refrescardB=false;
 
     //COLECCIONES
     List<Scale_TextView> lstTv;
@@ -134,18 +136,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
         iVDialogUbication = (ImageView) view.findViewById(R.id.IVDialogUbication);
 
-        try {
-            Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
-            dbUbicacion.postRun(() -> {
-                if (!dbUbicacion.getError().get())
-                    lstUbicacion.addAll(dbUbicacion.getLstSelect());
-            });
-            dbUbicacion.start();
 
-            dbUbicacion.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         //AÑADIMOS AL XML LOS DATOS DE LA SESIÓN DE WORPOD DEL USUARIO
         tVDialogUbication.setText(ubication);
@@ -175,6 +166,21 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     public void onClick(View v) {
         if (v.getId() == R.id.IVDialogUbication) {
             try {
+                Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
+                dbUbicacion.postRun(() -> {
+                    if (!dbUbicacion.getError().get()){
+                        lstUbicacion.removeAll(lstUbicacion);
+                        lstUbicacion.addAll(dbUbicacion.getLstSelect());
+                        refrescardB=true;
+                    }
+
+                });
+                dbUbicacion.start();
+                while(!refrescardB){
+                    Thread.sleep(10);
+                }
+                refrescardB=false;
+
                 if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.sesion != null
                         && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
                     WorkpodActivity.boolfolder=false;
@@ -182,45 +188,51 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
                     getActivity().onBackPressed();
 
                 } else {
-                    for (Ubicacion ubicacion : lstUbicacion) {
-                        if (ubicacion.getWorkpods().size() > 1) {
-                            for (int i = 0; i < ubicacion.getWorkpods().size(); i++) {
-                                if (workpod.getId() == ubicacion.getWorkpods().get(i).getId()) {
-                                    workpod = ubicacion.getWorkpods().get(i);
+                    for (int i=0;i<lstUbicacion.size();i++) {
+                        if (lstUbicacion.get(i).getWorkpods().size() > 1) {
+                            lstWorkpods=lstUbicacion.get(i).getWorkpods();
+                            for (int j = 0; j < lstWorkpods.size(); j++) {
+                                if (workpod.getId() == lstWorkpods.get(j).getId()) {
+                                    workpod = lstWorkpods.get(j);
                                     Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                                    break;
                                 }
                             }
                         } else {
-                            if (workpod.getId() == ubicacion.getWorkpods().get(0).getId()) {
-                                workpod = ubicacion.getWorkpods().get(0);
+                            if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
+                                workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
                                 Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                                break;
                             }
                         }
                     }
                 }
             } catch (NullPointerException e) {
-                for (Ubicacion ubicacion : lstUbicacion) {
-                    if (ubicacion.getWorkpods().size() > 1) {
-                        for (int i = 0; i < ubicacion.getWorkpods().size(); i++) {
-                            if (workpod.getId() == ubicacion.getWorkpods().get(i).getId()) {
-                                workpod = ubicacion.getWorkpods().get(i);
+                for (int i=0;i<lstUbicacion.size();i++) {
+                    if (lstUbicacion.get(i).getWorkpods().size() > 1) {
+                        for (int j = 0; j < lstWorkpods.size(); j++) {
+                            if (workpod.getId() == lstWorkpods.get(j).getId()) {
+                                workpod = lstWorkpods.get(j);
                                 Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                                break;
                             }
                         }
                     } else {
-                        if (workpod.getId() == ubicacion.getWorkpods().get(0).getId()) {
-                            workpod = ubicacion.getWorkpods().get(0);
+                        if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
+                            workpod = lstUbicacion.get(i).getWorkpods().get(0);
                             Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                             fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                            break;
                         }
                     }
                 }
 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-
         }
     }
 
