@@ -449,6 +449,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         Method.scaleTv(metrics, lstTv);
         Method.scaleIv(metrics, lstIv);
 
+        escaladoParticular(metrics, 0);
+
         if (width <= 320) {
             lLInfoWorkpod.getLayoutParams().width = 390;
         }
@@ -870,7 +872,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     private void escaladoParticular(DisplayMetrics metrics, int n) {
         try {
-            if (width <= (750 / metrics.density)) {
+            if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+                if (btnReservarWorkpod.getText().equals("Reservado")) {
+                    btnReservarWorkpod.setTextSize(19);
+                } else if (btnReservarWorkpod.getText().equals("Reservar"))
+                    btnReservarWorkpod.setTextSize(24);
+                if (n == 1) {
+                    btnReservarWorkpod.setTextSize(18);
+                }
+            }else if(width <= (550 / metrics.density)){
                 if (btnReservarWorkpod.getText().equals("Reservado")) {
                     btnReservarWorkpod.setTextSize(19);
                 } else if (btnReservarWorkpod.getText().equals("Reservar"))

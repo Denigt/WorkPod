@@ -12,13 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
-import com.example.workpod.basic.Database;
-import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Sesion;
@@ -111,7 +108,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_sesion_finalizada, container, false);
+        View view = inflater.inflate(R.layout.fragment_sesion, container, false);
 
         //INICIALIZAMOS ELEMENTOS DEL XML
         btnCerrarWorPod = view.findViewById(R.id.BtnCerrarWorPod);

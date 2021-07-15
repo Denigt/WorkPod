@@ -9,11 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
@@ -25,14 +27,20 @@ import com.example.workpod.data.Reserva;
 import com.example.workpod.data.Sesion;
 import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
+import com.example.workpod.scale.Scale_Buttons;
+import com.example.workpod.scale.Scale_Image_View;
+import com.example.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements View.OnClickListener {
 
     //XML
     private Button btnSi;
     private Button btnNo;
+    private TextView tVFragDiagCerrarWorkpodPregunta;
 
     //VARIABLES SESION
     private double precioSesion;
@@ -40,6 +48,12 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     private double precioWorkpod;
     private long tiempoSesion;
     private double tiempo;
+
+    //VARIABLES PARA ESCALADO
+    private List<Scale_Buttons>lstBtn;
+    private List<Scale_TextView>lstTv;
+    DisplayMetrics metrics;
+    float width;
 
 
     //VARIABLES CRONÓMETRO
@@ -103,6 +117,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         //INSTANCIAMOS ELEMENTOS DEL XML
         btnNo = view.findViewById(R.id.BtnNo);
         btnSi = view.findViewById(R.id.BtnSi);
+        tVFragDiagCerrarWorkpodPregunta=view.findViewById(R.id.TVFragDiagCerrarWorkpodPregunta);
         iVFDCerrarWorkpodSalir = view.findViewById(R.id.IVFDCerrarWorkpodSalir);
         //INICIALIZAMOS VARIABLES
         this.precioSesion = 0.0;
@@ -111,6 +126,12 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         btnNo.setOnClickListener(this);
         btnSi.setOnClickListener(this);
         iVFDCerrarWorkpodSalir.setOnClickListener(this);
+
+        //ESCALAMOS ELEMENTOS
+        metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels / metrics.density;
+        escalarElementos(metrics);
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -224,8 +245,33 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         dismiss();
     }
 
-    private void precioSesion() {
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     * <p>
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     * <p>
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     * @param metrics
+     */
+    private void escalarElementos(DisplayMetrics metrics) {
+        //INICIALIZAMOS COLECCIONES
+        this.lstBtn = new ArrayList<>();
+        this.lstTv = new ArrayList<>();
 
-        Toast.makeText(getActivity(), "Precio: " + String.format("%.2f", precioSesion) + "€", Toast.LENGTH_LONG).show();
+        //LLENAMOS COLECCIONES
+        lstBtn.add(new Scale_Buttons(btnSi, "wrap_content", "normal", 20, 20, 20));
+        lstBtn.add(new Scale_Buttons(btnNo, "wrap_content", "normal", 20, 20, 20));
+
+        lstTv.add(new Scale_TextView(tVFragDiagCerrarWorkpodPregunta, "wrap_content", "bold", 15, 17, 18));
+
+        Method.scaleBtns(metrics, lstBtn);
+        Method.scaleTv(metrics, lstTv);
     }
 }
