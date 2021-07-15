@@ -62,7 +62,6 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
         //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
         WorkpodActivity.boolSession = false;
         WorkpodActivity.boolLoc = false;
-
         startActivity(activity);
     }
 

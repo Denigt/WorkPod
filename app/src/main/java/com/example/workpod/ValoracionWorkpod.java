@@ -20,6 +20,8 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
     //XML
     private ImageView iVStar1, iVStar2, iVStar3, iVStar4, iVStar5;
     private Button btnNoParticiparTest, btnParticiparTest;
+    public static boolean boolReservaFinalizada=false;
+
 
     //GUARDAR INFORMACIÓN TEST
     public static int resultado_valoracion=0;
@@ -57,20 +59,15 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
      * al finalizar la sesión
      */
     private void dbUsuario() {
-        try {
             Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
-            consulta.postRunOnUI(this, ()->{
+            consulta.postRun(()->{
                 if (consulta.getError().code > -1) {
                     InfoApp.USER = consulta.getDato();
+                    boolReservaFinalizada=true;
                 }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                 else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
             });
             consulta.start();
-            //ESPERAR HASTA QUE TERMINE EL HILO, SI NO, AL DARLE ATRÁS, HAY VECES EN LAS QUE NO TERMINA DICHO HILO Y TE DEVUELVE A LA SESIÓN EN VEZ DE AL MAPA
-            consulta.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     //MÉTODOS SOBREESCRITOS
@@ -154,13 +151,18 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onBackPressed() {
-        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
-        //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
-        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
-        WorkpodActivity.boolSession=false;
-        WorkpodActivity.boolLoc=false;
-
-        startActivity(activity);
+        try{
+            while(!boolReservaFinalizada){
+                Thread.sleep(10);
+            }
+            //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
+            Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+            //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
+
 }

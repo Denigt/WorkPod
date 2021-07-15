@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.basic.Database;
 import com.example.workpod.basic.InfoApp;
@@ -131,12 +132,14 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
             horas = Math.round(tiempoSesion / 3600);
             minutos = Math.round((tiempoSesion - (3600 * horas)) / 60);
             segundos = Math.round(tiempoSesion - ((horas * 3600) + (minutos * 60)));
-            //ARRANCAMOS CRONOMETRO
 
+            //ARRANCAMOS CRONOMETRO
             tVSesionCapacidad.setText(String.valueOf(sesion.getWorkpod().getNumUsuarios()));
             tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
             crono = cronometro();
             crono.start();
+
+            ValoracionWorkpod.boolReservaFinalizada=false;
 
         } catch (InterruptedException e) {
             e.printStackTrace();

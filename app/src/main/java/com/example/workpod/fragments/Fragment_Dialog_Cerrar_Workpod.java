@@ -54,6 +54,8 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     Ubicacion ubicacion;
     Sesion sesion;
 
+    private boolean controlador;
+
 
 
     private ImageView iVFDCerrarWorkpodSalir;
@@ -104,7 +106,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         iVFDCerrarWorkpodSalir = view.findViewById(R.id.IVFDCerrarWorkpodSalir);
         //INICIALIZAMOS VARIABLES
         this.precioSesion = 0.0;
-
+        this.controlador=false;
         //EVENTOS DE LOS CONTROLES
         btnNo.setOnClickListener(this);
         btnSi.setOnClickListener(this);
@@ -130,39 +132,47 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
      * Al darle al btn Si, nos vamos a la parte del cuestionario.
      */
     private void onClickBtnSi() {
-        //PARAMOS EL HILO
-        Fragment_sesion.cerrarWorkpod = true;
-        //UPDATE A LA TABLA RESERVA
-        if (reserva == null)
-            reserva = new Reserva();
+        try{
+            //PARAMOS EL HILO
+            Fragment_sesion.cerrarWorkpod = true;
+            //UPDATE A LA TABLA RESERVA
+            if (reserva == null)
+                reserva = new Reserva();
 
-        reserva.set(InfoApp.USER.getReserva());
-        //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
-        reserva.setEstado("FINALIZADA");
-        InfoApp.RESERVA=reserva;
-        Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
-        update.postRunOnUI(requireActivity(), () -> {
-            if (update.getError().code > -1) {
-                try {
-                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                    for (Workpod item : ubicacion.getWorkpods())
-                        if (item.getId() == workpod.getId())
-                            item.setReserva(reserva);
-                    // ESTABLECER LA RESERVA DEL USUARIO
-                    InfoApp.USER.setReserva(reserva);
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+            reserva.set(InfoApp.USER.getReserva());
+            //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
+            reserva.setEstado("FINALIZADA");
+            InfoApp.RESERVA=reserva;
+            // ESTABLECER LA RESERVA DEL USUARIO
+            InfoApp.USER.setReserva(reserva);
+            Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
+            update.postRun( () -> {
+                if (update.getError().code > -1) {
+                    try {
+                        // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                        for (Workpod item : ubicacion.getWorkpods())
+                            if (item.getId() == workpod.getId())
+                                item.setReserva(reserva);
+
+                        //CONTROLAMOS QUE NO SE VA A PASAR DE ACTIVITY HASTA QUE SE HAYA ACTUALIZADO LA RESERVA DEL USURIO
+                        controlador=true;
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
                 }
+            });
+            update.start();
+            //HACEMOS EL INSERT DE SESION
+            finiquitarSesion();
+            //CONTROLAMOS QUE NO SE VA A PASAR DE ACTIVITY HASTA QUE SE HAYA ACTUALIZADO LA RESERVA DEL USURIO
+            Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
+            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(activity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-            }
-        });
-        update.start();
-
-        //HACEMOS EL INSERT DE SESION
-        finiquitarSesion();
-        Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
-        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(activity);
     }
 
     private void finiquitarSesion()  {

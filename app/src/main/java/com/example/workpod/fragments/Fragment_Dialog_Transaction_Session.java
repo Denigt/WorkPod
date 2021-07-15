@@ -249,7 +249,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
                             break;
                         }
                     }
-                }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD  
+                }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD
                 else {
                     if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
                         workpod = lstUbicacion.get(i).getWorkpods().get(0);
