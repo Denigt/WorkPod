@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/inv_location"
+        android:icon="@drawable/empty_icon_mapa"
+        android:title="" />
+
+    <item
+        android:id="@+id/inv_support"
+        android:icon="@drawable/empty_icon_support"
+        android:iconTint="@color/Fondos"
+        android:title="" />
+</menu>

@@ -106,7 +106,7 @@ public class WorkpodActivity extends FragmentActivity {
                     boolSession = false;
                     ValoracionWorkpod.boolReservaFinalizada=false;
                 }
-            } else {
+            } else  {
                 //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
                 FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
                 fTransaction = fragmentManager.beginTransaction();
@@ -116,12 +116,19 @@ public class WorkpodActivity extends FragmentActivity {
                 ValoracionWorkpod.boolReservaFinalizada=false;
             }
         } catch (NullPointerException e) {
+            //SI USER APUNTA A NULL ES QUE EL USUARIO NO SE HA LOGGEADO
+            if(InfoApp.USER==null){
+                //OCULTAMOS LAS PARTES DEL NV A LA QUE NO PUEDE ACCEDER EL USUARIO NO REGISTRADO
+                btnNV.getMenu().clear();
+                btnNV.inflateMenu(R.menu.bottom_nav_menu_usuario_no_registrado);
+            }
             //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO SE HA LOGGEADO
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             fTransaction = fragmentManager.beginTransaction();
             fTransaction.add(R.id.LLFragment, fragment_maps).commit();
             boolLoc = true;
             boolSession = false;
+
           //  ValoracionWorkpod.boolReservaFinalizada=false;
         }
     }
