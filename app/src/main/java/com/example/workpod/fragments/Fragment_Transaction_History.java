@@ -493,7 +493,6 @@ public class Fragment_Transaction_History extends Fragment {
                 if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")){
                     WorkpodActivity.boolfolder=false;
                     WorkpodActivity.boolSession=true;
-                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(false);
                     WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
                 }
             }catch (NullPointerException e){

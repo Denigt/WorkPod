@@ -168,7 +168,6 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         try {
             if (InfoApp.USER.getReserva() != null) {
                 if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
-                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(false);
                     WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
                 }
             }
