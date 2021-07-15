@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.otherclass.LsV_Menu_Usuario;
 import com.example.workpod.R;
 
@@ -158,9 +160,21 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     private void onClickInvita(int index){
         if (index == InfoFragment.INVITA) {
+        }
+    }
 
-
-
+    @Override
+    public void onDestroy() {
+        try {
+            if (InfoApp.USER.getReserva() != null) {
+                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(false);
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
+                }
+            }
+            super.onDestroy();
+        } catch (NullPointerException e) {
+            super.onDestroy();
         }
     }
 }

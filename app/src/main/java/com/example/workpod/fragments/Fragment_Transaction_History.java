@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_Spinner;
 import com.example.workpod.basic.Database;
@@ -492,11 +493,12 @@ public class Fragment_Transaction_History extends Fragment {
                 if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")){
                     WorkpodActivity.boolfolder=false;
                     WorkpodActivity.boolSession=true;
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(false);
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
                 }
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
-
         }
         super.onDestroy();
     }

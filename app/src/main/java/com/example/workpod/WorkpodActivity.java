@@ -90,7 +90,6 @@ public class WorkpodActivity extends FragmentActivity {
                 } else if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (ValoracionWorkpod.boolReservaFinalizada)) {
                     InfoApp.USER.getReserva().setEstado("FINALIZADA");
                     InfoApp.RESERVA.setEstado("FINALIZADA");
-                    InfoApp.RESERVA.isCancelada();
                     //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
                     FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
                     fTransaction = fragmentManager.beginTransaction();

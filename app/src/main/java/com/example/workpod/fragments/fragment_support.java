@@ -3,7 +3,9 @@ package com.example.workpod.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,10 +28,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workpod.R;
+import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
 import com.example.workpod.adapters.Adaptador_LsV_Support;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
+import com.example.workpod.data.Workpod;
 import com.example.workpod.otherclass.LsV_Menu_Usuario;
 import com.example.workpod.otherclass.LsV_Support;
 import com.example.workpod.scale.Scale_Buttons;
@@ -77,7 +82,7 @@ public class fragment_support extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_support, container, false);
         lsV_Support = (ListView) view.findViewById(R.id.LsV_Support);
-        tVFgmSupportTitulo=view.findViewById(R.id.tVFgmSupportTitulo);
+        tVFgmSupportTitulo = view.findViewById(R.id.tVFgmSupportTitulo);
 
         //INICIALIZAMOS EL OBJETO DISPLAYMETRICS CON LOS PARÁMETROS DE NUESTRO DISPOSITIVO
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -125,20 +130,34 @@ public class fragment_support extends Fragment {
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv=new ArrayList<>();
+        this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVFgmSupportTitulo,"","normal",30,30,30));
+        lstTv.add(new Scale_TextView(tVFgmSupportTitulo, "", "normal", 30, 30, 30));
 
         Method.scaleTv(metrics, lstTv);
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            if (InfoApp.USER.getReserva() != null) {
+                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(false);
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
+                }
+            }
+            super.onDestroy();
+        } catch (NullPointerException e) {
+            super.onDestroy();
+        }
     }
 }
