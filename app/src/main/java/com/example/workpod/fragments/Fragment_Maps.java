@@ -114,6 +114,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         lstUbicacion = new ArrayList<>();
     }
 
+    //BOOLEANO QU CONTROLE QUE AL NO DETECTAR LA UBICACIÓN Y DARLE AL BTN CENTRAR NO FALLE EL SISTEMA
+    private boolean booLoc=false;
+
 
     //SOBREESCRITURAS
     @Override
@@ -153,7 +156,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         lsvBusqueda = view.findViewById(R.id.lsvBusqueda);
         btnMiReserva =view.findViewById(R.id.btnMiReserva);
         FLMiReserva =view.findViewById(R.id.FLMiReserva);
-
         // Adaptador para la lsvBusqueda y el etxtBusqueda
         adpBusqueda = new Adaptador_Lsv_Search(getContext(), R.layout.item_lsv_search);
         lsvBusqueda.setAdapter(adpBusqueda);
@@ -179,6 +181,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
+        booLoc=false;
         // Iniciar el hilo para solicitar la ubicacion
         try {
             locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
@@ -288,20 +291,22 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * @param v Control pulsado
      */
     private void btnCentrarOnClick(View v) {
-        if (v.getId() == btnCentrar.getId() && posicion.resource != null) {
-            // COMPROBAR SI LA CAMARA ESTA MAS O MENOS EN LA POSICION QUE LA DEJA POR DEFECTO EL BOTON CENTRAR
-            if (!((mMap.getCameraPosition().target.latitude < posicion.resource.latitude + errorMedida) &&
-                    (mMap.getCameraPosition().target.latitude > posicion.resource.latitude - errorMedida) &&
-                    (mMap.getCameraPosition().target.longitude < posicion.resource.longitude + errorMedida) &&
-                    (mMap.getCameraPosition().target.longitude > posicion.resource.longitude - errorMedida) &&
-                    (mMap.getCameraPosition().zoom == defaultZoom)))
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, defaultZoom));
-                // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
-            else
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, 19));
-            etxtBusqueda.setQuery("", false);
+        //SI NO HEMOS PERDIDO LA UBICACIÓN ESTE BTN CENTRARÁ TU POSCICIÓN EN EL MAPA
+        if(!booLoc){
+            if (v.getId() == btnCentrar.getId() && posicion.resource != null) {
+                // COMPROBAR SI LA CAMARA ESTA MAS O MENOS EN LA POSICION QUE LA DEJA POR DEFECTO EL BOTON CENTRAR
+                if (!((mMap.getCameraPosition().target.latitude < posicion.resource.latitude + errorMedida) &&
+                        (mMap.getCameraPosition().target.latitude > posicion.resource.latitude - errorMedida) &&
+                        (mMap.getCameraPosition().target.longitude < posicion.resource.longitude + errorMedida) &&
+                        (mMap.getCameraPosition().target.longitude > posicion.resource.longitude - errorMedida) &&
+                        (mMap.getCameraPosition().zoom == defaultZoom)))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, defaultZoom));
+                    // SI LA CAMARA NO ESTA DESPLAZADA ACERCAR ZOOM
+                else
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, 19));
+                etxtBusqueda.setQuery("", false);
+            }
         }
-
     }
 
     private void btnMiReservaOnClick(View v){
@@ -394,9 +399,11 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                             markPosicion = null;
                         }
                         Toast.makeText(getContext(), "Habilite el GPS", Toast.LENGTH_LONG).show();
+                        booLoc=true;
                     }
                 });
             }catch(NullPointerException e){
+                booLoc=true;
                 e.printStackTrace();
             }
         }
@@ -431,6 +438,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                         markPosicion.setPosition(posicion.resource);
 
                 }
+                //PERMITIMOS QUE VUELVA A FUNCIONAR EL ONCLICK DEL BTNCENTRAR
+                booLoc=false;
             }
         }
 

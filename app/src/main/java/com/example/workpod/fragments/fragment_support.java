@@ -93,6 +93,13 @@ public class fragment_support extends Fragment {
         //ESCALAMOS ELEMENTOS
         escalarElementos();
 
+        //REMARCAR EL ICONO DEL NV (SOLO PARA CUANDO EL USUARIO ESTÉ EN UNA SESIÓN)
+        if (InfoApp.USER.getReserva() != null) {
+            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
+                WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(true);
+            }
+        }
+
         return view;
     }
 

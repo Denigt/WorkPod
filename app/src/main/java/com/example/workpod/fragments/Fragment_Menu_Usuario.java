@@ -90,6 +90,14 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
         lsV_Menu_Usuario.setAdapter(aMU);
         lsV_Menu_Usuario.setOnItemClickListener(this);
+
+        //REMARCAR EL ICONO DEL NV (SOLO PARA CUANDO EL USUARIO ESTÉ EN UNA SESIÓN)
+        if (InfoApp.USER.getReserva() != null) {
+            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
+                WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
+            }
+        }
+
         return view;
     }
 

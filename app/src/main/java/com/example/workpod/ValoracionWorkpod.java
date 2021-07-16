@@ -20,11 +20,11 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
     //XML
     private ImageView iVStar1, iVStar2, iVStar3, iVStar4, iVStar5;
     private Button btnNoParticiparTest, btnParticiparTest;
-    public static boolean boolReservaFinalizada=false;
+    public static boolean boolReservaFinalizada = false;
 
 
     //GUARDAR INFORMACIÓN TEST
-    public static int resultado_valoracion=0;
+    public static int resultado_valoracion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +59,17 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
      * al finalizar la sesión
      */
     private void dbUsuario() {
-            Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
-            consulta.postRun(()->{
-                if (consulta.getError().code > -1) {
-                    InfoApp.USER = consulta.getDato();
-                    boolReservaFinalizada=true;
-                }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
-                else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
-            });
-            consulta.start();
+        Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
+        consulta.postRun(() -> {
+            if (consulta.getError().code > -1) {
+                InfoApp.USER = consulta.getDato();
+                boolReservaFinalizada = true;
+            } else if (consulta.getError().code > -3)
+                Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
+        });
+        consulta.start();
     }
 
     //MÉTODOS SOBREESCRITOS
@@ -94,38 +96,37 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
             iVStar3.setColorFilter(Color.parseColor("#D8D9DA"));
             iVStar4.setColorFilter(Color.parseColor("#D8D9DA"));
             iVStar5.setColorFilter(Color.parseColor("#D8D9DA"));
-            resultado_valoracion=1;
+            resultado_valoracion = 1;
         } else if (v.getId() == R.id.IVStar2) {
             iVStar1.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar2.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar3.setColorFilter(Color.parseColor("#D8D9DA"));
             iVStar4.setColorFilter(Color.parseColor("#D8D9DA"));
             iVStar5.setColorFilter(Color.parseColor("#D8D9DA"));
-            resultado_valoracion=2;
+            resultado_valoracion = 2;
         } else if (v.getId() == R.id.IVStar3) {
             iVStar1.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar2.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar3.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar4.setColorFilter(Color.parseColor("#D8D9DA"));
             iVStar5.setColorFilter(Color.parseColor("#D8D9DA"));
-            resultado_valoracion=3;
+            resultado_valoracion = 3;
         } else if (v.getId() == R.id.IVStar4) {
             iVStar1.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar2.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar3.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar4.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar5.setColorFilter(Color.parseColor("#D8D9DA"));
-            resultado_valoracion=4;
+            resultado_valoracion = 4;
         } else if (v.getId() == R.id.IVStar5) {
             iVStar1.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar2.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar3.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar4.setColorFilter(Color.parseColor("#FFEB3B"));
             iVStar5.setColorFilter(Color.parseColor("#FFEB3B"));
-            resultado_valoracion=5;
+            resultado_valoracion = 5;
         }
     }
-
 
 
     /**
@@ -143,16 +144,25 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(activity);
         } else if (v.getId() == R.id.BtnNoParticiparValoracion) {
-            Intent activity = new Intent(getApplicationContext(), InitActivity.class);
-            activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(activity);
+            try {
+                while (!boolReservaFinalizada) {
+                    Thread.sleep(10);
+                }
+                //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
+                Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
+                activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(activity);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void onBackPressed() {
-        try{
-            while(!boolReservaFinalizada){
+        try {
+            while (!boolReservaFinalizada) {
                 Thread.sleep(10);
             }
             //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
@@ -160,7 +170,7 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
             //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(activity);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
