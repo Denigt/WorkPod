@@ -23,7 +23,7 @@ public class Adaptador_Lsv_dirfacturacion extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return lstFacturacion.size();
+        return (lstFacturacion != null)? lstFacturacion.size() : 0;
     }
 
     @Override
@@ -58,37 +58,41 @@ public class Adaptador_Lsv_dirfacturacion extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Facturacion facturacion = (Facturacion) getGroup(groupPosition);
+        if (lstFacturacion != null) {
+            Facturacion facturacion = (Facturacion) getGroup(groupPosition);
 
-        if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-            convertView = layoutInflater.inflate(R.layout.group_lsv_dirfacturacion, null);
+            if (convertView == null) {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                convertView = layoutInflater.inflate(R.layout.group_lsv_dirfacturacion, null);
+            }
+            TextView txtNombre = convertView.findViewById(R.id.txtNombre);
+
+            txtNombre.setText(facturacion.getNombre());
         }
-        TextView txtNombre = convertView.findViewById(R.id.txtNombre);
-
-        txtNombre.setText(facturacion.getNombre());
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Facturacion facturacion = (Facturacion) getChild(groupPosition, childPosition);
+        if (lstFacturacion != null) {
+            Facturacion facturacion = (Facturacion) getChild(groupPosition, childPosition);
 
-        if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-            convertView = layoutInflater.inflate(R.layout.item_lsv_dirfacturacion, null);
+            if (convertView == null) {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                convertView = layoutInflater.inflate(R.layout.item_lsv_dirfacturacion, null);
+            }
+            TextView txtDireccion = convertView.findViewById(R.id.txtDireccion);
+            TextView txtPais = convertView.findViewById(R.id.txtPais);
+
+            TextView txtDireccionF = convertView.findViewById(R.id.txtDireccionF);
+            TextView txtPaisF = convertView.findViewById(R.id.txtPaisF);
+
+            txtDireccion.setText(facturacion.getPostal().getDireccion());
+            txtPais.setText(facturacion.getPostal().getPais() + " " + facturacion.getPostal().getCodPostal());
+
+            txtDireccionF.setText(facturacion.getFacturacion().getDireccion());
+            txtPaisF.setText(facturacion.getFacturacion().getPais() + " " + facturacion.getFacturacion().getCodPostal());
         }
-        TextView txtDireccion = convertView.findViewById(R.id.txtDireccion);
-        TextView txtPais = convertView.findViewById(R.id.txtPais);
-
-        TextView txtDireccionF = convertView.findViewById(R.id.txtDireccionF);
-        TextView txtPaisF = convertView.findViewById(R.id.txtPaisF);
-
-        txtDireccion.setText(facturacion.getPostal().getDireccion());
-        txtPais.setText(facturacion.getPostal().getPais() + " " + facturacion.getPostal().getCodPostal());
-
-        txtDireccionF.setText(facturacion.getFacturacion().getDireccion());
-        txtPaisF.setText(facturacion.getFacturacion().getPais() + " " + facturacion.getFacturacion().getCodPostal());
         return convertView;
     }
 

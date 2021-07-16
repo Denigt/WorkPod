@@ -234,6 +234,7 @@ public class Usuario implements DataDb{
             else usuario.setDirFacturacion(null);
         }catch(Exception e){
             Log.e("ERROR JSON_USUARIO", e.getMessage());
+            usuario = null;
         }
 
         return usuario;
@@ -244,7 +245,7 @@ public class Usuario implements DataDb{
         JSONObject json = new JSONObject();
         try {
             json.put("id", id);
-            json.put("verificar", email);
+            json.put("verificar", verificar);
             json.put("fRegistro", Method.dateToString(fRegistro, ZoneId.of("UCT")));
             json.put("fVerificacion", Method.dateToString(fVerificacion, ZoneId.of("UCT")));
             json.put("email", email);
@@ -274,6 +275,12 @@ public class Usuario implements DataDb{
 
                 if (usuarioJSON.has("id") && !usuarioJSON.isNull("id"))
                     usuario.setId(usuarioJSON.getInt("id"));
+                if (usuarioJSON.has("verificar") && !usuarioJSON.isNull("verificar"))
+                    usuario.setVerificar(usuarioJSON.getString("verificar"));
+                if (usuarioJSON.has("fRegistro") && !usuarioJSON.isNull("fRegistro"))
+                    usuario.setfRegistro(Method.stringToDate(usuarioJSON.getString("fRegistro"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
+                if (usuarioJSON.has("fVerificacion") && !usuarioJSON.isNull("fVerificacion"))
+                    usuario.setfVerificacion(Method.stringToDate(usuarioJSON.getString("fVerificacion"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
                 if (usuarioJSON.has("email") && !usuarioJSON.isNull("email"))
                     usuario.setEmail(usuarioJSON.getString("email"));
                 if (usuarioJSON.has("nombre") && !usuarioJSON.isNull("nombre"))

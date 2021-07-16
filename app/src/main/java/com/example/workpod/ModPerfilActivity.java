@@ -20,6 +20,7 @@ import com.example.workpod.data.Usuario;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,11 +104,14 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
             if (!txtApellido.getText().toString().equals(""))
                 modUser.setApellidos(txtApellido.getText().toString());
 
-            if (Method.checkEmail(txtEmail.getText().toString()))
-                modUser.setEmail(txtEmail.getText().toString());
+            if (Method.checkEmail(txtEmail.getText().toString())) {
+                modUser.setVerificar(txtEmail.getText().toString());
+                modUser.setfVerificacion(ZonedDateTime.now());
+                Toast.makeText(getApplicationContext(), "Recuerda verificar el nuevo Email para comenzar a usarlo", Toast.LENGTH_LONG).show();
+            }
 
             //if (Method.checkDNI(txtDNI.getText().toString()))
-            if (!txtEmail.getText().toString().equals(""))
+            if (!txtDNI.getText().toString().equals(""))
                 modUser.setDni(txtDNI.getText().toString());
 
             Database<Usuario> update = new Database<>(Database.UPDATE, modUser);
@@ -115,6 +119,13 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
                 if (update.getError().code > -1) {
                     Toast.makeText(this, "Datos modificados", Toast.LENGTH_SHORT).show();
                     InfoApp.USER.set(modUser);
+
+                    // ENVIAR CORREO DE VERIFICACION SI SE HA CAMBIADO EL CORREO
+                    if (!modUser.getVerificar().equals(true) && !modUser.getEmail().equals(modUser.getVerificar())) {
+                        modUser.setEmail(modUser.getVerificar());
+                        Database<Usuario> verificacion = new Database<>(Database.VERIFICACION, modUser);
+                        verificacion.start();
+                    }
                     finish();
                 } else {
                     Toast.makeText(this, "No se han podido modificar los datos", Toast.LENGTH_SHORT).show();

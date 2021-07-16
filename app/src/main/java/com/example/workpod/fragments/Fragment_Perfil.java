@@ -150,14 +150,19 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             txtEmail.setText(InfoApp.USER.getEmail());
             txtDNI.setText(InfoApp.USER.getDni());
 
-            Adaptador_Lsv_dirfacturacion adaptador = new Adaptador_Lsv_dirfacturacion(requireContext(), InfoApp.USER.getDirFacturacion());
-            elsvFacturacion.setAdapter(adaptador);
-            elsvFacturacion.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                @Override
-                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                    return false;
-                }
-            });
+            if (InfoApp.USER.getDirFacturacion() != null) {
+                Adaptador_Lsv_dirfacturacion adaptador = new Adaptador_Lsv_dirfacturacion(requireContext(), InfoApp.USER.getDirFacturacion());
+                elsvFacturacion.setAdapter(adaptador);
+                elsvFacturacion.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                    @Override
+                    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                        return false;
+                    }
+                });
+            }else {
+                elsvFacturacion.setVisibility(View.GONE);
+                tVDirFacturacion.setText("Sin direcciones de facturación");
+            }
 
             //txtDNI.setText(InfoApp.USER.getTelefono());
         }
@@ -226,7 +231,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         lstBtn.add(new Scale_Buttons(btnPassword,"match_parent","bold",14,14,14));
 
         lstTv.add(new Scale_TextView(tVPerfil,"match_parent","bold",40,40,40));
-        lstTv.add(new Scale_TextView(txtNombre,"match_parent","normal",15,15,15));
+        lstTv.add(new Scale_TextView(txtNombre,"match_parent","bold",16,18,18));
         lstTv.add(new Scale_TextView(txtEmail,"match_parent","bold",16,16,16));
         lstTv.add(new Scale_TextView(tVTituloDNI,"match_parent","bold",18,18,18));
         lstTv.add(new Scale_TextView(txtDNI,"match_parent","bold",16,16,16));

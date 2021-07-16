@@ -288,7 +288,9 @@ public class Database<T extends DataDb> extends Thread {
                     retorno = (T) obj.JSONaData(json);
 
                     // OBTENER EL CODIGO DE ERROR
-                    error = new ErrorMessage(json);
+                    if (retorno != null)
+                        error = new ErrorMessage(json);
+                    else error = new ErrorMessage(-12, "Problema al crear el objeto a partir de JSON");
                 }else{
                     error = new ErrorMessage(-respuesta, "Problema con el servidor");
                     Log.e("DATABASE SELECTID", "No se ha podido conectar con el servidor");
