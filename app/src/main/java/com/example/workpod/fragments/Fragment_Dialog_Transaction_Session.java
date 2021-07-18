@@ -193,9 +193,9 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
             });
             dbUbicacion.start();
             //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
-            while(!refrescardB){
-                Thread.sleep(10);
-            }
+            while(!refrescardB)
+                ;//HAGO ESTE BUCLE HASTA QUE CAMBIE LA VARIABLE
+
             refrescardB=false;
 
             //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
@@ -236,10 +236,10 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
         } catch (NullPointerException e) {
             //CONTROLAMOS QUE SI USER.GETRESERVA() APUNTA A NULO, EL USUARIO PUEDA ABRIR EL WORKPOD QUE QUIERA CONSULTAR
             //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
-            for (int i=0;i<lstUbicacion.size();i++) {
+            for (int i = 0; i < lstUbicacion.size(); i++) {
                 //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
                 if (lstUbicacion.get(i).getWorkpods().size() > 1) {
-                    lstWorkpods=lstUbicacion.get(i).getWorkpods();
+                    lstWorkpods = lstUbicacion.get(i).getWorkpods();
                     for (int j = 0; j < lstWorkpods.size(); j++) {
                         if (workpod.getId() == lstWorkpods.get(j).getId()) {
                             workpod = lstWorkpods.get(j);
@@ -260,9 +260,6 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
                     }
                 }
             }
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
     /**
