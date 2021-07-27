@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.Fragment_Dialog_Transaction_Session">
+    tools:context=".fragments.Fragment_Transaction_Session">
 
     <ScrollView
         android:layout_width="match_parent"

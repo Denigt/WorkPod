@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Random;
 
 //PARA CREAR UN DIALOGRESULT DEBEMOS HEREDAR DE LA CLASE DIALOGFRAGMENT
-public class Fragment_Dialog_Transaction_Session extends Fragment implements View.OnClickListener {
+public class Fragment_Transaction_Session extends Fragment implements View.OnClickListener {
 
     //CONSTANTES
     private static final String SIN_OFERTAS = "Sin ofertas";
@@ -80,12 +80,13 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
     private List<Workpod>lstWorkpods=new ArrayList<>();
     public static Boolean sesionHistorico=false;
     private boolean refrescardB=false;
+    public static boolean desactivarBtnReservar=false;
 
     //COLECCIONES
     List<Scale_TextView> lstTv;
 
     //CONSTRUCTOR
-    public Fragment_Dialog_Transaction_Session(Sesion sesion) {
+    public Fragment_Transaction_Session(Sesion sesion) {
         this.ubication = sesion.getDireccion().toLongString();
         this.fechaEntrada = sesion.getEntrada();
         this.fechaSalida = sesion.getSalida();
@@ -111,7 +112,7 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
 
 
     //CONSTRUCTOR POR DEFECTO
-    public Fragment_Dialog_Transaction_Session() {
+    public Fragment_Transaction_Session() {
     }
 
     //SOBREESCRITURAS
@@ -217,6 +218,8 @@ public class Fragment_Dialog_Transaction_Session extends Fragment implements Vie
                                 workpod = lstWorkpods.get(j);
                                 Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                                //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
+                                desactivarBtnReservar=true;
                                 //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
                                 break;
                             }

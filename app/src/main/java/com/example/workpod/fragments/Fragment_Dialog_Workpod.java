@@ -292,6 +292,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
+        desactivarBtnReservar();
+
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
 
@@ -355,6 +357,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             map.actualizarMapa();
         //PARO EL HILO
         finish = true;
+        //HABILITO EL BTN RESERVAR POR SI EL USUARIO HA ACCEDIDO DESDE EL HISTÓRICO
+        btnReservarWorkpod.setEnabled(true);
+        Fragment_Transaction_Session.desactivarBtnReservar = false;
         super.onDismiss(dialog);
     }
 
@@ -369,7 +374,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         try {
             //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
             if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())
-             && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA") ) {
+                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
                 btnReservarWorkpod.setTextSize(10);
@@ -880,7 +885,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 if (n == 1) {
                     btnReservarWorkpod.setTextSize(18);
                 }
-            }else if(width <= (550 / metrics.density)){
+            } else if (width <= (550 / metrics.density)) {
                 if (btnReservarWorkpod.getText().equals("Reservado")) {
                     btnReservarWorkpod.setTextSize(19);
                 } else if (btnReservarWorkpod.getText().equals("Reservar"))
@@ -913,5 +918,35 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Método que se utilizará cuando el usuario accede a la app desde el histórico. El btn de reservar estará desactivado y solo pondrá
+     * su estado
+     */
+    private void desactivarBtnReservar() {
+        try {
+            if (Fragment_Transaction_Session.desactivarBtnReservar) {
+                btnReservarWorkpod.setEnabled(false);
+                if (workpod.getReserva() == null) {
+                    btnReservarWorkpod.setText("Disponible");
+                } else if ((workpod.getReserva() != null) && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")) {
+                    btnReservarWorkpod.setText("Reservado");
+                    //HACEMOS QUE EL BOTÓN OCUPE TODO EL ESPACIO POSIBLE
+                    lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    //CAMBIAMOS EL COLOR DEL LAYOUT DEL BOTÓN DEL ESTADO DE WORKPOD A ROJO
+                    lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_red));
+                    //CAMBIAMOS EL COLOR DE ABRIR AHORA A BLANCO Y LO OCULTAMOS (SI NO LO CAMBIAMOS A BLANCO, APARECE UN PUNTO AZUL)
+                    lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
+                    //OCULTAMOS EL BOTÓN ABRIR AHORA
+                    btnAbrirAhora.setVisibility(View.GONE);
+                    finish=true;
+                    btnCancelarReserva.setVisibility(View.GONE);
+                }
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
     }
 }

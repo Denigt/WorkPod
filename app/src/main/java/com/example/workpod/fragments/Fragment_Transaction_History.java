@@ -488,7 +488,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                 public void onClick(View v) {
                     //CREAMOS UN OBJETO DEL FRAGMENT QUE HACE DE DIALOGO EMERGENTE Y EN SU CONSTRUCTOR A TRAVÉS DEL OBJETO LSV LE PASAMOS LOS
                     //VALORES DE LA SESIÓN SELECCIONADA
-                    Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(sesion);
+                    Fragment_Transaction_Session fragmentDialogTransactionSession = new Fragment_Transaction_Session(sesion);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.LLFragment, fragmentDialogTransactionSession).addToBackStack(null).commit();
                     //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE
