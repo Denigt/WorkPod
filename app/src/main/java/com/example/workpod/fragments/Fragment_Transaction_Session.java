@@ -171,7 +171,6 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     }
 
 
-
     //MÉTODOS
 
     /**
@@ -181,6 +180,8 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      */
     private void onClickIVDialogUbication() {
         try {
+            //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
+            desactivarBtnReservar=true;
             //REFRESCAMOS LOS WORKPODS
             Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
             dbUbicacion.postRun(() -> {
@@ -218,8 +219,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                                 workpod = lstWorkpods.get(j);
                                 Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-                                //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
-                                desactivarBtnReservar=true;
+
                                 //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
                                 break;
                             }
@@ -231,6 +231,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                             Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
                             fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                             //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
+
                             break;
                         }
                     }
@@ -238,6 +239,8 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             }
         } catch (NullPointerException e) {
             //CONTROLAMOS QUE SI USER.GETRESERVA() APUNTA A NULO, EL USUARIO PUEDA ABRIR EL WORKPOD QUE QUIERA CONSULTAR
+            //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
+            desactivarBtnReservar=true;
             //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
             for (int i = 0; i < lstUbicacion.size(); i++) {
                 //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
