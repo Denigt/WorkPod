@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,7 +47,7 @@ import java.util.List;
 import java.util.Locale;
 
 //EN ESTA CLASE VAMOS A MONTAR EL ELSV Y SU ADAPTADOR
-public class Fragment_Transaction_History extends Fragment {
+public class Fragment_Transaction_History extends Fragment implements View.OnClickListener {
 
     //XML
     //SPINNER Y SUS ELEMENTOS
@@ -56,7 +57,7 @@ public class Fragment_Transaction_History extends Fragment {
     List<Spinner_Years_Transaction_History> lstSpinner = new ArrayList<>();
 
     //COLECCIONES
-    List<Scale_TextView>lstTv;
+    List<Scale_TextView> lstTv;
     List<Sesion> lstSesiones = new ArrayList<>();//LAS SESIONES DE WORKPOD
 
     //ELSV Y SUS ELEMENTOS
@@ -74,10 +75,13 @@ public class Fragment_Transaction_History extends Fragment {
     ArrayList<String> monthList;//ALMACENAMOS EL MES (TITULOS DEL ELSV)
     HashMap<String, List<Sesion>> itemList;//ALMACENAMOS LA SESIÓN (ITEMS DEL ELSV)
 
-    //OTRAS VARIABLES
+    //XML
     private TextView tVfgmTransHistMisSesiones;
     private TextView tVfgmTransHistSelectAnio;
-
+    private LinearLayout lLSinSesiones;
+    private LinearLayout lLSeleccioneAnio;
+    private ImageView iVLocationInTransactionHistory;
+    private TextView tVNoSesion;
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Transaction_History() {
@@ -108,8 +112,12 @@ public class Fragment_Transaction_History extends Fragment {
         //INICIALIZAMOS LOS ELEMENTOS DEL XML
         eLsV = (ExpandableListView) view.findViewById(R.id.eLsV2);
         spinnerYears = (Spinner) view.findViewById(R.id.SpinnerYears2);
-        tVfgmTransHistMisSesiones=view.findViewById(R.id.tVfgmTransHistMisSesiones);
-        tVfgmTransHistSelectAnio=view.findViewById(R.id.tVfgmTransHistSelectAnio);
+        tVfgmTransHistMisSesiones = view.findViewById(R.id.tVfgmTransHistMisSesiones);
+        tVfgmTransHistSelectAnio = view.findViewById(R.id.tVfgmTransHistSelectAnio);
+        tVNoSesion=view.findViewById(R.id.TVNoSesion);
+        lLSinSesiones = view.findViewById(R.id.LLSinSesiones);
+        lLSeleccioneAnio = view.findViewById(R.id.LLSeleccioneAnio);
+        iVLocationInTransactionHistory = view.findViewById(R.id.IVLocationInTransactionHistory);
 
         //CONEXIÓN CON LA BD, VOLCADO DE LAS SESIONES EN LSTSESIONES
         conectarseBDSesion(view, getActivity());
@@ -127,6 +135,9 @@ public class Fragment_Transaction_History extends Fragment {
             }
         }
 
+        // ESTABLECER EVENTOS PARA LOS CONTROLES
+        iVLocationInTransactionHistory.setOnClickListener(this);
+
         return view;
     }
 
@@ -136,8 +147,9 @@ public class Fragment_Transaction_History extends Fragment {
     /**
      * Este método servirá para que si no estás conectado a internet, no se realice la conexión
      * con la BD, Si no estás conectado a internet, te salta el Toast, si lo estás,se realiza la conexión
+     *
      * @param context contexto de la app
-     * @param view instancia de la clase View
+     * @param view    instancia de la clase View
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void conectarseBDSesion(View view, Context context) {
@@ -150,15 +162,32 @@ public class Fragment_Transaction_History extends Fragment {
             try {
                 Database<Sesion> dbSesion = new Database<>(Database.SELECTUSER, new Sesion());
                 dbSesion.postRun(() -> {
-                    for (Sesion sesion :dbSesion.getLstSelect())
-                        if (sesion.getEntrada() != null && sesion.getSalida() != null){
-                            if(!lstSesiones.contains(sesion))
+                    for (Sesion sesion : dbSesion.getLstSelect())
+                        if (sesion.getEntrada() != null && sesion.getSalida() != null) {
+                            if (!lstSesiones.contains(sesion))
                                 lstSesiones.add(sesion);
                         }
 
                 });
                 dbSesion.postRunOnUI(getActivity(), () -> {
-                    montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
+                    if (lstSesiones.size() != 0) {
+                        //HACEMOS QUE APAREZCA LOS ELEMENTOS DE CUANDO EL USUARIO YA HA REALIZADO ALGUNA SESIÓN
+                        tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
+                        lLSeleccioneAnio.setVisibility(View.VISIBLE);
+                        eLsV.setVisibility(View.VISIBLE);
+                        //OCULTAMOS LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
+                        iVLocationInTransactionHistory.setVisibility(View.GONE);
+                        lLSinSesiones.setVisibility(View.GONE);
+                        montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
+                    } else {
+                        //OCULTAMOS EL SPINNER Y EL ELSV
+                        lLSeleccioneAnio.setVisibility(View.GONE);
+                        eLsV.setVisibility(View.GONE);
+                        //HACEMOS QUE APAREZCA LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
+                        tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
+                        iVLocationInTransactionHistory.setVisibility(View.VISIBLE);
+                        lLSinSesiones.setVisibility(View.VISIBLE);
+                    }
                 });
                 dbSesion.start();
             } catch (NullPointerException e) {
@@ -167,12 +196,6 @@ public class Fragment_Transaction_History extends Fragment {
         }
 
     }
-    /**
-     * EN ESTE MÉTODO CREAMOS UNA LISTA CON TODAS LAS SESIONES DEL USUARIO ALMACENADAS EN LA BD
-     * POR AHORA ES LOCAL PERO EN UNOS DÍAS SERÁ UN SELECTALL DE LA BD
-     *
-     * @return
-     */
 
     /**
      * EN ESTE MÉTODO, PRIMERO INTRODUCIMOS LOS AÑOS EN LOS QUE SE HAN REALIZADO LAS SESIONES DE WORKPOD EN UNA LIST, LUEGO
@@ -190,56 +213,66 @@ public class Fragment_Transaction_History extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void montandoSpinner(View view, List<Sesion> lstTransaction, int i, List<String> lstYears, List<Spinner_Years_Transaction_History> lstSpinner) {
-        //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
-        lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
-        //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
-        Collections.reverse(lstTransaction);
-        //RECORREMOS LAS SESIONES
-        for (Sesion transaction : lstTransaction) {
-            //SI LA LISTA DE AÑOS NO CONTIENE UN AÑO EN EL QUE SE HA REALIZADO UNA SESIÓN, QUE LO AÑADA A LA LISTA
-            if (!lstYears.contains(String.valueOf(transaction.getEntrada().getYear()))) {
-                //AÑADIMOS EL AÑOS A LA LSTYEAR
-                lstYears.add(String.valueOf(transaction.getEntrada().getYear()));
-                i++;
-                //AÑADIMOS EL CÓDIGO Y EL AÑO AL SPINNER
-                lstSpinner.add(new Spinner_Years_Transaction_History((i + 1), String.valueOf(transaction.getEntrada().getYear())));
+        try{
+            //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
+            lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
+            //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
+            Collections.reverse(lstTransaction);
+            //RECORREMOS LAS SESIONES
+            for (Sesion transaction : lstTransaction) {
+                //SI LA LISTA DE AÑOS NO CONTIENE UN AÑO EN EL QUE SE HA REALIZADO UNA SESIÓN, QUE LO AÑADA A LA LISTA
+                if (!lstYears.contains(String.valueOf(transaction.getEntrada().getYear()))) {
+                    //AÑADIMOS EL AÑOS A LA LSTYEAR
+                    lstYears.add(String.valueOf(transaction.getEntrada().getYear()));
+                    i++;
+                    //AÑADIMOS EL CÓDIGO Y EL AÑO AL SPINNER
+                    lstSpinner.add(new Spinner_Years_Transaction_History((i + 1), String.valueOf(transaction.getEntrada().getYear())));
+                }
             }
-        }
 
-        //UNA VEZ INTRODUCIDOS LOS AÑOS EN LA LIST, INSTANCIAMOS EL ADAPATADOR DEL SPINNER
-        adaptador_spinner = new Adaptador_Spinner(view.getContext(), lstSpinner);
-        //LE PASAMOS EL ADAPTADOR AL SPINNER
-        spinnerYears.setAdapter(adaptador_spinner);
-        //EVENTO QUE NOS PERMITIRÁ QUE AL SELECCIONAR UN AÑO DEL SPINNER, SE MUESTRE SUS SESIONES
-        spinnerYears.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
-                //CONECTAMOS UN OBJETO DE LA CLASE SPINNER CON EL ADAPTADOR
-                Spinner_Years_Transaction_History spinner = (Spinner_Years_Transaction_History) adaptador_spinner.getItem(i);
-                //RECORREMOS LA LISTA DE SESIONES
-                for (Sesion transaction : lstTransaction) {
-                    //SI EL AÑO DEL SPINNER APUNTA AL AÑO EN EL QUE SE HA REALIZADO LA SESIÓN
-                    if (spinner.getTitulo().equals(String.valueOf(transaction.getEntrada().getYear()))) {
-                        //LE PASAMOS DICHO AÑO AL ELSV
-                        construyendoELsV(transaction.getEntrada().getYear());
-                        //INICIALIZAMOS EL ADAPATADOR DEL ELSV
-                        adapter_eLsV = new Adapter_ELsV(view.getContext(), monthList, itemList);
-                        //LE PASAMOS EL ADAPTADOR AL ELSV
-                        eLsV.setAdapter(adapter_eLsV);
+            //UNA VEZ INTRODUCIDOS LOS AÑOS EN LA LIST, INSTANCIAMOS EL ADAPATADOR DEL SPINNER
+            adaptador_spinner = new Adaptador_Spinner(view.getContext(), lstSpinner);
+            //LE PASAMOS EL ADAPTADOR AL SPINNER
+            spinnerYears.setAdapter(adaptador_spinner);
+            //EVENTO QUE NOS PERMITIRÁ QUE AL SELECCIONAR UN AÑO DEL SPINNER, SE MUESTRE SUS SESIONES
+            spinnerYears.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                    //CONECTAMOS UN OBJETO DE LA CLASE SPINNER CON EL ADAPTADOR
+                    Spinner_Years_Transaction_History spinner = (Spinner_Years_Transaction_History) adaptador_spinner.getItem(i);
+                    //RECORREMOS LA LISTA DE SESIONES
+                    for (Sesion transaction : lstTransaction) {
+                        //SI EL AÑO DEL SPINNER APUNTA AL AÑO EN EL QUE SE HA REALIZADO LA SESIÓN
+                        if (spinner.getTitulo().equals(String.valueOf(transaction.getEntrada().getYear()))) {
+                            //LE PASAMOS DICHO AÑO AL ELSV
+                            construyendoELsV(transaction.getEntrada().getYear());
+                            //INICIALIZAMOS EL ADAPATADOR DEL ELSV
+                            adapter_eLsV = new Adapter_ELsV(view.getContext(), monthList, itemList);
+                            //LE PASAMOS EL ADAPTADOR AL ELSV
+                            eLsV.setAdapter(adapter_eLsV);
+                        }
                     }
+
                 }
 
-            }
+                //SOBREESCRITURA QUE SE USARÍA SI QUEREMOS QUE EL SPINNER HAGA ALGO CUANDO NO SE SELECCIONA NINGÚN ITEM
+                //NO SE PUEDE QUITAR DICHA SOBREESCRITURA
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            //SOBREESCRITURA QUE SE USARÍA SI QUEREMOS QUE EL SPINNER HAGA ALGO CUANDO NO SE SELECCIONA NINGÚN ITEM
-            //NO SE PUEDE QUITAR DICHA SOBREESCRITURA
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+                }
+            });
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.IVLocationInTransactionHistory) {
+            irAlMapa();
+        }
+    }
 
     /**
      * EN ESTE MÉTODO LE VAMOS A PASAR EL AÑO QUE SE SELECCIONA EN EL SPINNER AL ELSV, Y SE CONSTRUIRÁ
@@ -296,25 +329,33 @@ public class Fragment_Transaction_History extends Fragment {
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv=new ArrayList<>();
+        this.lstTv = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones,"","bold",35,35,35));
-        lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio,"wrap_content","bold",23,23,23));
+        lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones, "", "bold", 35, 35, 35));
+        lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio, "wrap_content", "bold", 23, 23, 23));
+        lstTv.add(new Scale_TextView(tVNoSesion,"match_parent","bold",15,18,22));
 
         Method.scaleTv(metrics, lstTv);
+    }
+
+    /**
+     * Al pulsar en el IV de location te lleva al mapa o a tu sesió si estás realizando una sesión
+     */
+    private void irAlMapa() {
+        //CERRAMOS EL FRAGMENT Y VOLVEMOS AL MAPA
+        getActivity().onBackPressed();
     }
 
     //CLASE DEL ADAPTADOR
@@ -429,11 +470,11 @@ public class Fragment_Transaction_History extends Fragment {
                     , seg);
             tVFecha.setText(String.valueOf(sesion.getEntrada().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
             //ESTÉTICA DEL TIEMPO DE SESIÓN
-            if(hour==0 && min!=0){
+            if (hour == 0 && min != 0) {
                 tVTiempo.setText(min + "min");
-            }else if(hour==0 && min==0){
+            } else if (hour == 0 && min == 0) {
                 tVTiempo.setText(seg + "seg");
-            }else{
+            } else {
                 tVTiempo.setText(hour + "h:" + min + "min");
             }
             tVUbicacion.setText(sesion.getDireccion().toString());
@@ -449,10 +490,10 @@ public class Fragment_Transaction_History extends Fragment {
                     //VALORES DE LA SESIÓN SELECCIONADA
                     Fragment_Dialog_Transaction_Session fragmentDialogTransactionSession = new Fragment_Dialog_Transaction_Session(sesion);
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.LLFragment,fragmentDialogTransactionSession).addToBackStack(null).commit();
+                            .replace(R.id.LLFragment, fragmentDialogTransactionSession).addToBackStack(null).commit();
                     //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE
-                    WorkpodActivity.boolfolder=true;
-                    WorkpodActivity.boolLoc=true;
+                    WorkpodActivity.boolfolder = true;
+                    WorkpodActivity.boolLoc = true;
                 }
             });
 
@@ -487,7 +528,7 @@ public class Fragment_Transaction_History extends Fragment {
             //LE PASAMOS LOS VALORES CALCULADOS A LAS VARIABLES QUE USAMOS FUERA DEL METODO
             this.hour = hour;
             this.min = min;
-            this.seg=seg;
+            this.seg = seg;
             //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
 
         }
@@ -495,14 +536,14 @@ public class Fragment_Transaction_History extends Fragment {
 
     @Override
     public void onDestroy() {
-        if(InfoApp.USER!=null){
-            try{
-                if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")){
-                    WorkpodActivity.boolfolder=false;
-                    WorkpodActivity.boolSession=true;
+        if (InfoApp.USER != null) {
+            try {
+                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
+                    WorkpodActivity.boolfolder = false;
+                    WorkpodActivity.boolSession = true;
                     WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
