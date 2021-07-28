@@ -195,8 +195,9 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             });
             dbUbicacion.start();
             //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
-            while(!refrescardB)
-                ;//HAGO ESTE BUCLE HASTA QUE CAMBIE LA VARIABLE
+            while(!refrescardB){
+                Thread.sleep(10);
+            }
 
             refrescardB=false;
 
@@ -266,6 +267,8 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                     }
                 }
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
     /**
