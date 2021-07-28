@@ -114,7 +114,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         spinnerYears = (Spinner) view.findViewById(R.id.SpinnerYears2);
         tVfgmTransHistMisSesiones = view.findViewById(R.id.tVfgmTransHistMisSesiones);
         tVfgmTransHistSelectAnio = view.findViewById(R.id.tVfgmTransHistSelectAnio);
-        tVNoSesion=view.findViewById(R.id.TVNoSesion);
+        tVNoSesion = view.findViewById(R.id.TVNoSesion);
         lLSinSesiones = view.findViewById(R.id.LLSinSesiones);
         lLSeleccioneAnio = view.findViewById(R.id.LLSeleccioneAnio);
         iVLocationInTransactionHistory = view.findViewById(R.id.IVLocationInTransactionHistory);
@@ -213,31 +213,32 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void montandoSpinner(View view, List<Sesion> lstTransaction, int i, List<String> lstYears, List<Spinner_Years_Transaction_History> lstSpinner) {
-        try{
-            //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
-            lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
-            //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
-            Collections.reverse(lstTransaction);
-            //RECORREMOS LAS SESIONES
-            for (Sesion transaction : lstTransaction) {
-                //SI LA LISTA DE AÑOS NO CONTIENE UN AÑO EN EL QUE SE HA REALIZADO UNA SESIÓN, QUE LO AÑADA A LA LISTA
-                if (!lstYears.contains(String.valueOf(transaction.getEntrada().getYear()))) {
-                    //AÑADIMOS EL AÑOS A LA LSTYEAR
-                    lstYears.add(String.valueOf(transaction.getEntrada().getYear()));
-                    i++;
-                    //AÑADIMOS EL CÓDIGO Y EL AÑO AL SPINNER
-                    lstSpinner.add(new Spinner_Years_Transaction_History((i + 1), String.valueOf(transaction.getEntrada().getYear())));
-                }
-            }
 
-            //UNA VEZ INTRODUCIDOS LOS AÑOS EN LA LIST, INSTANCIAMOS EL ADAPATADOR DEL SPINNER
-            adaptador_spinner = new Adaptador_Spinner(view.getContext(), lstSpinner);
-            //LE PASAMOS EL ADAPTADOR AL SPINNER
-            spinnerYears.setAdapter(adaptador_spinner);
-            //EVENTO QUE NOS PERMITIRÁ QUE AL SELECCIONAR UN AÑO DEL SPINNER, SE MUESTRE SUS SESIONES
-            spinnerYears.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
+        //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
+        lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
+        //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
+        Collections.reverse(lstTransaction);
+        //RECORREMOS LAS SESIONES
+        for (Sesion transaction : lstTransaction) {
+            //SI LA LISTA DE AÑOS NO CONTIENE UN AÑO EN EL QUE SE HA REALIZADO UNA SESIÓN, QUE LO AÑADA A LA LISTA
+            if (!lstYears.contains(String.valueOf(transaction.getEntrada().getYear()))) {
+                //AÑADIMOS EL AÑOS A LA LSTYEAR
+                lstYears.add(String.valueOf(transaction.getEntrada().getYear()));
+                i++;
+                //AÑADIMOS EL CÓDIGO Y EL AÑO AL SPINNER
+                lstSpinner.add(new Spinner_Years_Transaction_History((i + 1), String.valueOf(transaction.getEntrada().getYear())));
+            }
+        }
+
+        //UNA VEZ INTRODUCIDOS LOS AÑOS EN LA LIST, INSTANCIAMOS EL ADAPATADOR DEL SPINNER
+        adaptador_spinner = new Adaptador_Spinner(view.getContext(), lstSpinner);
+        //LE PASAMOS EL ADAPTADOR AL SPINNER
+        spinnerYears.setAdapter(adaptador_spinner);
+        //EVENTO QUE NOS PERMITIRÁ QUE AL SELECCIONAR UN AÑO DEL SPINNER, SE MUESTRE SUS SESIONES
+        spinnerYears.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
+                try {
                     //CONECTAMOS UN OBJETO DE LA CLASE SPINNER CON EL ADAPTADOR
                     Spinner_Years_Transaction_History spinner = (Spinner_Years_Transaction_History) adaptador_spinner.getItem(i);
                     //RECORREMOS LA LISTA DE SESIONES
@@ -252,19 +253,22 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                             eLsV.setAdapter(adapter_eLsV);
                         }
                     }
-
+                } catch (NullPointerException e) {
+                    //CONTROLA QUE NO CASQUE EL ADAPTADOR CUANDO APUNTA A NULO (LN 251) ESTO OCURRE CUANDO ESTAMOS EN UNA SESIÓN Y ACCEDEMOS
+                    //AL HISTÓRICO Y DESPUÉS ABANDONAMOS LA APP
+                    e.printStackTrace();
                 }
 
-                //SOBREESCRITURA QUE SE USARÍA SI QUEREMOS QUE EL SPINNER HAGA ALGO CUANDO NO SE SELECCIONA NINGÚN ITEM
-                //NO SE PUEDE QUITAR DICHA SOBREESCRITURA
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+            }
 
-                }
-            });
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+            //SOBREESCRITURA QUE SE USARÍA SI QUEREMOS QUE EL SPINNER HAGA ALGO CUANDO NO SE SELECCIONA NINGÚN ITEM
+            //NO SE PUEDE QUITAR DICHA SOBREESCRITURA
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     @Override
@@ -345,7 +349,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         //LLENAMOS COLECCIONES
         lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones, "", "bold", 35, 35, 35));
         lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio, "wrap_content", "bold", 23, 23, 23));
-        lstTv.add(new Scale_TextView(tVNoSesion,"match_parent","bold",15,18,22));
+        lstTv.add(new Scale_TextView(tVNoSesion, "match_parent", "bold", 15, 18, 22));
 
         Method.scaleTv(metrics, lstTv);
     }
