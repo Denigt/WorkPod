@@ -63,6 +63,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         // COMPROBAR SI HAY FICHERO DE AUTOLOGIN
         try {
             FileInputStream loginReader = openFileInput(RUTA);
@@ -92,6 +94,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         finish();
                     }else fileLogin.delete();
                 } else Toast.makeText(this, "No se ha podido realizar la autentificacion automática", Toast.LENGTH_LONG).show();
+
+                initActivity();
             });
             consulta.start();
         } catch (FileNotFoundException e) {
@@ -101,10 +105,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } catch (NullPointerException e) {
             Log.e("AUTOLOGIN", "Fichero invalido");
         }
-
-        super.onCreate(savedInstanceState);
-
-        initActivity();
     }
 
     @Override
@@ -223,10 +223,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Database<Usuario> update = new Database<>(Database.UPDATE, InfoApp.USER);
                         update.start();
 
-                    // Actualizacion de la instalacion del usuario en la base de datos
-                        /*Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                         startActivity(activity);
-                        finish();*/
+                        finish();
                     }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                     else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
                 });
