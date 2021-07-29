@@ -27,10 +27,12 @@ public abstract class InfoApp {
      */
     public static Workpod WORKPOD;
 
+    public static String INSTALLATION;
     static {
         USER = null;
         RESERVA = null;
         WORKPOD = null;
+        INSTALLATION = null;
     }
 
 }

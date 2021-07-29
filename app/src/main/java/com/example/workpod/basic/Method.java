@@ -12,11 +12,19 @@ import com.example.workpod.scale.Scale_Image_View;
 import com.example.workpod.scale.Scale_TextView;
 
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Incorpora metodos estaticos para funciones basicas
@@ -338,9 +346,74 @@ public abstract class Method {
             }
         }
         catch (NoSuchAlgorithmException e) {
-            Log.e("CIFRADO MD5", "Nose ha encontrado el algoritmo de cifrado");
+            Log.e("CIFRADO MD5", "No se ha encontrado el algoritmo de cifrado");
         }
 
         return hashtext;
+    }
+
+    /**
+     * Encripta la entrada usando como clave la key pasada como parametro
+     * @param input Texto a encriptar
+     * @param key Clave a usar
+     * @return Texto encriptado (En bytes)
+     */
+    public static byte[] encryptAES(String input, String key){
+        try{
+            // Creamos una clave de encriptado unica a traves de la pasada por el usuario
+            SecretKey pass = new SecretKeySpec(md5(key).getBytes(),  0, 32, "AES");
+
+            // Se obtiene un cifrador AES
+            Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+
+            // Se inicializa para encriptacion y se encripta el texto (Texto pasado a bytes)
+            aes.init(Cipher.ENCRYPT_MODE, pass);
+            byte[] encriptado = aes.doFinal(input.getBytes());
+
+            // Se iniciliza el cifrador para desencriptar, la clave debe ser la misma con la que se encripto
+            aes.init(Cipher.DECRYPT_MODE, pass);
+            byte[] desencriptado = aes.doFinal(encriptado);
+            return encriptado;
+        }catch (NoSuchAlgorithmException e){
+            Log.e("CIFRADO AES", "No se ha encontrado el algoritmo de cifrado");
+        }catch (NoSuchPaddingException | BadPaddingException e) {
+            Log.e("CIFRADO AES", "No tengo muy claro porque salta esta excepcion");
+        }catch (InvalidKeyException e) {
+            Log.e("CIFRADO AES", "La clave indicada no es valida");
+        }catch (IllegalBlockSizeException e) {
+            Log.e("CIFRADO AES", "Error con el tamano del texto a encriptar");
+        }
+        return null;
+    }
+
+    /**
+     * Desencripta la entrada usando como clave la key pasada como parametro
+     * @param input bytes a desencriptar
+     * @param key Clave a usar
+     * @return Texto desencriptado
+     */
+    public static String decryptAES(byte[] input, String key){
+        try{
+            // Creamos una clave de encriptado unica a traves de la pasada por el usuario
+            SecretKey pass = new SecretKeySpec(md5(key).getBytes(),  0, 32, "AES");
+
+            // Se obtiene un cifrador AES
+            Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+
+            // Se inicializa el cifrador para desencriptar, la clave debe ser la misma con la que se encripto
+            aes.init(Cipher.DECRYPT_MODE, pass);
+            byte[] desencriptado = aes.doFinal(input);
+
+            return new String(desencriptado);
+        }catch (NoSuchAlgorithmException e){
+            Log.e("CIFRADO AES", "No se ha encontrado el algoritmo de cifrado");
+        }catch (NoSuchPaddingException | BadPaddingException e) {
+            Log.e("CIFRADO AES", "No tengo muy claro porque salta esta excepcion");
+        }catch (InvalidKeyException e) {
+            Log.e("CIFRADO AES", "La clave indicada no es valida");
+        }catch (IllegalBlockSizeException e) {
+            Log.e("CIFRADO AES", "Error con el tamano del texto a encriptar");
+        }
+        return null;
     }
 }

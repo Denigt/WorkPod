@@ -27,6 +27,7 @@ public class Usuario implements DataDb{
     private double tiempo;
     private Reserva reserva;
     private Tarjeta tarjeta;
+    private String instalacion;
     private  List<Sesion> sesiones;
     private  List<Facturacion> dirFacturacion;
 
@@ -53,6 +54,15 @@ public class Usuario implements DataDb{
         verificar = user.getVerificar();
         fRegistro = user.getfRegistro();
         fVerificacion = user.getfVerificacion();
+        instalacion = user.getInstalacion();
+    }
+
+    public String getInstalacion() {
+        return instalacion;
+    }
+
+    public void setInstalacion(String instalacion) {
+        this.instalacion = instalacion;
     }
 
     public String getVerificar() {
@@ -168,6 +178,7 @@ public class Usuario implements DataDb{
         this.tiempo = 0;
         this.reserva = null;
         this.tarjeta = null;
+        instalacion = "";
         this.sesiones = new LinkedList<>();
         this.dirFacturacion = new LinkedList<>();
     }
@@ -226,6 +237,8 @@ public class Usuario implements DataDb{
                 usuario.setDni(usuarioJSON.getString("dni"));
             if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
                 usuario.setPassword(usuarioJSON.getString("contrasena"));
+            if (usuarioJSON.has("instalacion") && !usuarioJSON.isNull("instalacion"))
+                usuario.setInstalacion(usuarioJSON.getString("instalacion"));
             if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                 usuario.setReserva((Reserva)new Reserva().JSONaData(usuarioJSON));
             else usuario.setReserva(null);
@@ -253,6 +266,7 @@ public class Usuario implements DataDb{
             json.put("contrasena", password);
             json.put("apellidos", apellidos);
             json.put("dni", dni);
+            json.put("instalacion", instalacion);
             if (reserva != null)
                 json.put("reserva", reserva);
             if (tarjeta != null)
@@ -291,6 +305,8 @@ public class Usuario implements DataDb{
                     usuario.setDni(usuarioJSON.getString("dni"));
                 if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
                     usuario.setPassword(usuarioJSON.getString("contrasena"));
+                if (usuarioJSON.has("instalacion") && !usuarioJSON.isNull("instalacion"))
+                    usuario.setInstalacion(usuarioJSON.getString("instalacion"));
                 if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                     usuario.setReserva((Reserva)new Reserva().JSONaData(usuarioJSON));
                 else usuario.setReserva(null);

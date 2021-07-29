@@ -1,10 +1,12 @@
 package com.example.workpod;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,6 +27,12 @@ import com.example.workpod.data.Usuario;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // VARIABLES DE LOGIN
     String email;
     String contrasena;
+    private final String RUTA = "log.cfg";
 
     // CONTROLES DEL XML
     private EditText txtEmail;
@@ -54,6 +63,45 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // COMPROBAR SI HAY FICHERO DE AUTOLOGIN
+        try {
+            FileInputStream loginReader = openFileInput(RUTA);
+            File fileLogin = getFileStreamPath(RUTA);
+            /*
+            List<Byte> aux = new ArrayList<>();
+            int read = loginReader.read();
+            while (read != -1){
+                aux.add((byte) read);
+                read = loginReader.read();
+            }
+            byte[] output = new byte[aux.size()];
+            for (int i = 0; i<aux.size(); i++)
+                output[i] = aux.get(i);
+            */
+            byte[] output = new byte[(int) fileLogin.length()];
+            loginReader.read(output);
+            String[] data = Method.decryptAES(output, fileLogin.getAbsolutePath() + InfoApp.INSTALLATION).split("\n");
+
+            Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(data[0], data[1]));
+            consulta.postRunOnUI(this, ()->{
+                if (consulta.getError().code > -1) {
+                    InfoApp.USER = consulta.getDato();
+                    if (InfoApp.USER.getInstalacion().equals(InfoApp.INSTALLATION)) {
+                        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                        startActivity(activity);
+                        finish();
+                    }else fileLogin.delete();
+                } else Toast.makeText(this, "No se ha podido realizar la autentificacion automática", Toast.LENGTH_LONG).show();
+            });
+            consulta.start();
+        } catch (FileNotFoundException e) {
+            Log.e("AUTOLOGIN", "No se puede crear el fichero");
+        } catch (IOException e) {
+            Log.e("AUTOLOGIN", "No se puede escribir en el fichero");
+        } catch (NullPointerException e) {
+            Log.e("AUTOLOGIN", "Fichero invalido");
+        }
+
         super.onCreate(savedInstanceState);
 
         initActivity();
@@ -148,12 +196,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // SI NO HA HABIDO ERRORES COMPROBAR EMAIL Y CONTRASENA DEL USUARIO
             if(!error) {
                 Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
+                consulta.postRun(()->{
+                    if (consulta.getError().code > -1) {
+                        try {
+                            String input = String.format("%s\n%s", consulta.getDato().getEmail(), consulta.getDato().getPassword());
+
+                            File fileLogin = getFileStreamPath(RUTA);
+                            fileLogin.createNewFile();
+
+                            FileOutputStream loginWriter = openFileOutput(RUTA, Context.MODE_PRIVATE);
+                            loginWriter.write(Method.encryptAES(input, fileLogin.getAbsolutePath() + InfoApp.INSTALLATION));
+                            loginWriter.close();
+                        } catch (FileNotFoundException e) {
+                            Log.e("AUTOLOGIN", "No se puede crear el fichero");
+                        } catch (IOException e) {
+                            Log.e("AUTOLOGIN", "No se puede escribir en el fichero");
+                        }
+                    }
+                });
+
                 consulta.postRunOnUI(this, ()->{
                     if (consulta.getError().code > -1) {
                         InfoApp.USER = consulta.getDato();
-                        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                        InfoApp.USER.setInstalacion(InfoApp.INSTALLATION);
+                    // Actualizacion de la instalacion del usuario en la base de datos
+                        Database<Usuario> update = new Database<>(Database.UPDATE, InfoApp.USER);
+                        update.start();
+
+                    // Actualizacion de la instalacion del usuario en la base de datos
+                        /*Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                         startActivity(activity);
-                        finish();
+                        finish();*/
                     }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                     else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
                 });
