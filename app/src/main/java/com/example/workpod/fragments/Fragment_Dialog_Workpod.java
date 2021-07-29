@@ -374,7 +374,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         try {
             //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
             if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())
-                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")) {
+                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")
+                    && !Fragment_Transaction_Session.desactivarBtnReservar) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
                 btnReservarWorkpod.setTextSize(10);
@@ -613,7 +614,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                         //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
                         lLEstadoWorkpod.getLayoutParams().width = 0;
                         visibleBtnCancelar = false;
-                        //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORPOD
+                        //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORKPOD
                         escaladoParticular(metrics, 0);
                         //EMPIEZA EL CRONOMETRO
                         arrancarCronometro();
@@ -877,7 +878,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     private void escaladoParticular(DisplayMetrics metrics, int n) {
         try {
-            if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+            if ((width <= (1500 / metrics.density)) && (width > (750 / metrics.density))){
+                if (btnReservarWorkpod.getText().equals("Reservado")) {
+                    btnReservarWorkpod.setTextSize(21);
+                } else if (btnReservarWorkpod.getText().equals("Reservar"))
+                    btnReservarWorkpod.setTextSize(24);
+                if (n == 1) {
+                    btnReservarWorkpod.setTextSize(20);
+                }
+            }else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
                 if (btnReservarWorkpod.getText().equals("Reservado")) {
                     btnReservarWorkpod.setTextSize(19);
                 } else if (btnReservarWorkpod.getText().equals("Reservar"))
@@ -895,7 +904,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 }
             }
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            metrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            width = metrics.widthPixels / metrics.density;
         }
     }
 
@@ -940,7 +951,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     lLAbrirAhora.setBackground(getActivity().getDrawable(R.color.white));
                     //OCULTAMOS EL BOTÓN ABRIR AHORA
                     btnAbrirAhora.setVisibility(View.GONE);
-                    finish=true;
+                    finish = true;
                     btnCancelarReserva.setVisibility(View.GONE);
                 }
             }
