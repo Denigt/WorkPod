@@ -144,8 +144,6 @@ public class Database<T extends DataDb> extends Thread {
                 else error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
                 break;
         }
-        // INDICAR FINALIZACION DE LA CONSULTA
-        finish = true;
 
         // EJECUTAR CODIGO POSTCONSULTA
         try {
@@ -162,6 +160,8 @@ public class Database<T extends DataDb> extends Thread {
                     "com.example.workpod -> basic -> Database.class metodo run");
             e.printStackTrace();
         }
+        // INDICAR FINALIZACION DE LA CONSULTA
+        finish = true;
     }
 
     /**
@@ -288,9 +288,10 @@ public class Database<T extends DataDb> extends Thread {
                     retorno = (T) obj.JSONaData(json);
 
                     // OBTENER EL CODIGO DE ERROR
-                    if (retorno != null)
-                        error = new ErrorMessage(json);
-                    else error = new ErrorMessage(-12, "Problema al crear el objeto a partir de JSON");
+                    error = new ErrorMessage(json);
+
+                    if (error == null && retorno == null)
+                        error = new ErrorMessage(-12, "Problema al crear el objeto a partir de JSON");
                 }else{
                     error = new ErrorMessage(-respuesta, "Problema con el servidor");
                     Log.e("DATABASE SELECTID", "No se ha podido conectar con el servidor");

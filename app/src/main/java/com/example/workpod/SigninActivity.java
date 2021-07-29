@@ -4,11 +4,13 @@ import com.example.workpod.basic.*;
 import com.example.workpod.data.Usuario;
 import com.example.workpod.scale.Scale_TextView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.InputType;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -21,6 +23,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -224,9 +230,22 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             Database<Usuario> insert = new Database<>(Database.INSERT, new Usuario(email, nombre, apellido, dni, contrasena, 0, null, null, null));
                             insert.postRun(() -> {
                                 Database<Usuario> select = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
-                                select.postRun(() -> {
-                                    InfoApp.USER = new Usuario();
+                                select.postRun(()->{
                                     if (select.getError().code > -1) {
+                                        try {
+                                            String input = String.format("%s\n%s", select.getDato().getEmail(), select.getDato().getPassword());
+
+                                            File fileLogin = getFileStreamPath(InfoApp.LOGFILE);
+                                            fileLogin.createNewFile();
+
+                                            FileOutputStream loginWriter = openFileOutput(InfoApp.LOGFILE, Context.MODE_PRIVATE);
+                                            loginWriter.write(Method.encryptAES(input, fileLogin.getAbsolutePath() + InfoApp.INSTALLATION));
+                                            loginWriter.close();
+                                        } catch (FileNotFoundException e) {
+                                            Log.e("AUTOLOGIN", "No se puede crear el fichero");
+                                        } catch (IOException e) {
+                                            Log.e("AUTOLOGIN", "No se puede escribir en el fichero");
+                                        }
                                         InfoApp.USER.set(select.getDato());
 
                                         // ENVIAR CORREO DE VERIFICACION

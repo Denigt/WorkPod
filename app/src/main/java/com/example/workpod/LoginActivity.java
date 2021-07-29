@@ -63,47 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // COMPROBAR SI HAY FICHERO DE AUTOLOGIN
-        try {
-            FileInputStream loginReader = openFileInput(InfoApp.LOGFILE);
-            File fileLogin = getFileStreamPath(InfoApp.LOGFILE);
-            /*
-            List<Byte> aux = new ArrayList<>();
-            int read = loginReader.read();
-            while (read != -1){
-                aux.add((byte) read);
-                read = loginReader.read();
-            }
-            byte[] output = new byte[aux.size()];
-            for (int i = 0; i<aux.size(); i++)
-                output[i] = aux.get(i);
-            */
-            byte[] output = new byte[(int) fileLogin.length()];
-            loginReader.read(output);
-            String[] data = Method.decryptAES(output, fileLogin.getAbsolutePath() + InfoApp.INSTALLATION).split("\n");
-
-            Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(data[0], data[1]));
-            consulta.postRunOnUI(this, ()->{
-                if (consulta.getError().code > -1) {
-                    InfoApp.USER = consulta.getDato();
-                    if (InfoApp.USER.getInstalacion().equals(InfoApp.INSTALLATION)) {
-                        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
-                        startActivity(activity);
-                        finish();
-                    }else fileLogin.delete();
-                } else Toast.makeText(this, "No se ha podido realizar la autentificacion automática", Toast.LENGTH_LONG).show();
-
-                initActivity();
-            });
-            consulta.start();
-        } catch (FileNotFoundException e) {
-            Log.e("AUTOLOGIN", "No se puede crear el fichero");
-        } catch (IOException e) {
-            Log.e("AUTOLOGIN", "No se puede escribir en el fichero");
-        } catch (NullPointerException e) {
-            Log.e("AUTOLOGIN", "Fichero invalido");
-        }
+        initActivity();
     }
 
     @Override

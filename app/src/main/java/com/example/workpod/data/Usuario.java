@@ -259,8 +259,10 @@ public class Usuario implements DataDb{
         try {
             json.put("id", id);
             json.put("verificar", verificar);
-            json.put("fRegistro", Method.dateToString(fRegistro, ZoneId.of("UCT")));
-            json.put("fVerificacion", Method.dateToString(fVerificacion, ZoneId.of("UCT")));
+            if (fRegistro != null)
+                json.put("fRegistro", Method.dateToString(fRegistro, ZoneId.of("UCT")));
+            if (fVerificacion != null)
+                json.put("fVerificacion", Method.dateToString(fVerificacion, ZoneId.of("UCT")));
             json.put("email", email);
             json.put("nombre", nombre);
             json.put("contrasena", password);
