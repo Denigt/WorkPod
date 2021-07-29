@@ -268,7 +268,7 @@ public class Usuario implements DataDb{
             json.put("dni", dni);
             json.put("instalacion", instalacion);
             if (reserva != null)
-                json.put("reserva", reserva);
+                json.put("reserva", reserva.getID());
             if (tarjeta != null)
                 json.put("tarjeta", tarjeta.getID());
         }catch(JSONException e){
