@@ -42,14 +42,14 @@
         android:background="@color/blue"
         android:layout_margin="15dp"
         android:orientation="vertical"
-        android:visibility="gone">
+       android:visibility="gone" >
 
         <TextView
             android:id="@+id/TVNoSesion"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="7dp"
             android:text="No tienes ninguna sesión de workpod\n\nTe animamos
 a que pruebes esta experiencia!!!\n\nAcude al mapa y busca una cabina cerca de tí "
             android:textAlignment="center"

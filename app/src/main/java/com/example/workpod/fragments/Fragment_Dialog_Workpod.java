@@ -292,7 +292,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
-        desactivarBtnReservar();
+        //desactivarBtnReservar();
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -374,8 +374,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         try {
             //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
             if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())
-                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")
-                    && !Fragment_Transaction_Session.desactivarBtnReservar) {
+                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
                 btnReservarWorkpod.setTextSize(10);
@@ -936,7 +935,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      * su estado
      */
     private void desactivarBtnReservar() {
-        try {
+     /*   try {
             if (Fragment_Transaction_Session.desactivarBtnReservar) {
                 btnReservarWorkpod.setEnabled(false);
                 if (workpod.getReserva() == null) {
@@ -958,6 +957,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
+*/
     }
 }
