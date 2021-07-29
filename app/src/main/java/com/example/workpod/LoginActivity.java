@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // VARIABLES DE LOGIN
     String email;
     String contrasena;
-    private final String RUTA = "log.cfg";
 
     // CONTROLES DEL XML
     private EditText txtEmail;
@@ -67,8 +66,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // COMPROBAR SI HAY FICHERO DE AUTOLOGIN
         try {
-            FileInputStream loginReader = openFileInput(RUTA);
-            File fileLogin = getFileStreamPath(RUTA);
+            FileInputStream loginReader = openFileInput(InfoApp.LOGFILE);
+            File fileLogin = getFileStreamPath(InfoApp.LOGFILE);
             /*
             List<Byte> aux = new ArrayList<>();
             int read = loginReader.read();
@@ -201,10 +200,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         try {
                             String input = String.format("%s\n%s", consulta.getDato().getEmail(), consulta.getDato().getPassword());
 
-                            File fileLogin = getFileStreamPath(RUTA);
+                            File fileLogin = getFileStreamPath(InfoApp.LOGFILE);
                             fileLogin.createNewFile();
 
-                            FileOutputStream loginWriter = openFileOutput(RUTA, Context.MODE_PRIVATE);
+                            FileOutputStream loginWriter = openFileOutput(InfoApp.LOGFILE, Context.MODE_PRIVATE);
                             loginWriter.write(Method.encryptAES(input, fileLogin.getAbsolutePath() + InfoApp.INSTALLATION));
                             loginWriter.close();
                         } catch (FileNotFoundException e) {

@@ -27,6 +27,11 @@ public abstract class InfoApp {
      */
     public static Workpod WORKPOD;
 
+    /**
+     * Ruta del fichero para autologin
+     */
+    public static final String LOGFILE = "log.cfg";
+
     public static String INSTALLATION;
     static {
         USER = null;

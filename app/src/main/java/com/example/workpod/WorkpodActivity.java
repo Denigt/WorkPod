@@ -66,10 +66,6 @@ public class WorkpodActivity extends FragmentActivity {
         dBSession();
         //ACCEDER A LA APP
         accederApp();
-
-
-        //INICIALIZAMOS EL WORKPOD
-        // workpod= InfoApp.USER.ge
     }
 
     /**
@@ -287,4 +283,9 @@ public class WorkpodActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public void finish() {
+        InfoApp.USER = null;
+        super.finish();
+    }
 }

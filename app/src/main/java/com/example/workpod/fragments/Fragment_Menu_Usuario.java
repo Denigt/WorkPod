@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
@@ -18,6 +19,7 @@ import com.example.workpod.basic.InfoApp;
 import com.example.workpod.otherclass.LsV_Menu_Usuario;
 import com.example.workpod.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -175,7 +177,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     private void onClickCerrar(int index){
         if (index == InfoFragment.CERRAR) {
-
+            File fileLogin = getActivity().getFileStreamPath(InfoApp.LOGFILE);
+            if (fileLogin.delete()){
+                Toast.makeText(requireContext(), "Se ha cerrado la sesion", Toast.LENGTH_SHORT).show();
+                getActivity().finish();
+            }
         }
     }
 
