@@ -172,6 +172,12 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     private void onClickInvita(int index){
         if (index == InfoFragment.INVITA) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.INVITA;
+
+            Fragment_invita_Amigo fragmentInvitaAmigo = new Fragment_invita_Amigo();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentInvitaAmigo).commit();
         }
     }
 

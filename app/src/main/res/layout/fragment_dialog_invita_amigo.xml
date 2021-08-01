@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/blue"
+    tools:context=".fragments.Fragment_Dialog_Invita_Amigo">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        android:elevation="6dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:layout_gravity="center_vertical"
+            android:text="Comparte tu código amigo"
+            android:textStyle="bold"
+            android:textColor="#F3F3D8"
+            android:textSize="20dp"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:id="@+id/IVFDCerrarWorkpodSalir"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/fill_icon_salir" />
+    </LinearLayout>
+
+</LinearLayout>
