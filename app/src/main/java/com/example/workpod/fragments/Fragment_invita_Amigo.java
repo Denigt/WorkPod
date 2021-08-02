@@ -1,5 +1,6 @@
 package com.example.workpod.fragments;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.workpod.R;
 import com.example.workpod.basic.Method;
+import com.example.workpod.data.Usuario;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_Image_View;
 import com.example.workpod.scale.Scale_TextView;
@@ -49,6 +51,9 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     DisplayMetrics metrics;
     float width;
 
+    //BBDD
+    List<Usuario>lstUsuario;
+
     //OTRAS VARIABLES
     private boolean amigosUnidos; //TRUE desplegado FALSE contraido
     private boolean minutosGratis; //TRUE desplegado FALSE contraido
@@ -56,6 +61,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
 
     public Fragment_invita_Amigo() {
         this.amigosUnidos = false;
+        this.lstUsuario=new ArrayList<>();
     }
 
     public static Fragment_invita_Amigo newInstance(String param1, String param2) {
@@ -106,6 +112,31 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         return view;
     }
 
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.cLJoinFriend || v.getId() == R.id.BtnJoinFriends || v.getId() == R.id.IVFlecha_Amigos_Unidos) {
+            if (!amigosUnidos) {
+                desplegarAmigosUnidos();
+            } else {
+                contraerAmigos();
+            }
+        } else if (v.getId() == R.id.cLFreeMin || v.getId() == R.id.BtnFreeMin || v.getId() == R.id.IVFlecha_Minutos_Gratis) {
+            if (!minutosGratis) {
+                desplegarMinutosGratis();
+            } else {
+                contraerMinutosGratis();
+            }
+        }else if(v.getId()==R.id.BtnShareFriendCode){
+            compartirCodigo();
+
+        }
+
+    }
+
+    //MÉTODOS
+
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
@@ -144,22 +175,18 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         Method.scaleIv(metrics, lstIv);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.cLJoinFriend || v.getId() == R.id.BtnJoinFriends || v.getId() == R.id.IVFlecha_Amigos_Unidos) {
-            if (!amigosUnidos) {
-                desplegarAmigosUnidos();
-            } else {
-                contraerAmigos();
-            }
-        } else if (v.getId() == R.id.cLFreeMin || v.getId() == R.id.BtnFreeMin || v.getId() == R.id.IVFlecha_Minutos_Gratis) {
-            if (!minutosGratis) {
-                desplegarMinutosGratis();
-            } else {
-                contraerMinutosGratis();
-            }
-        }
+    /**
+     * A través de un intent, podrá enviar el usuario su código amigo a cualquier app q tenga instalada en su móvil que sirva para
+     * enviar datos como redes sociales, emails, mensajes...
+     */
+    private void compartirCodigo() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Aquí irá el código amigo");
+        sendIntent.setType("text/plain");
 
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
     private void contraerMinutosGratis() {
