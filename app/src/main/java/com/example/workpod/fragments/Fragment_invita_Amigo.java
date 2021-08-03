@@ -1,13 +1,17 @@
 package com.example.workpod.fragments;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.workpod.R;
+import com.example.workpod.basic.InfoApp;
 import com.example.workpod.basic.Method;
 import com.example.workpod.data.Usuario;
 import com.example.workpod.scale.Scale_Buttons;
@@ -31,6 +36,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     //XML
     private ConstraintLayout cLJoinFriends;
     private ConstraintLayout cLFreeMinutes;
+    private LinearLayout lLPrincipalAmigosUnidos;
     private LinearLayout lLAmigosUnidos;
     private LinearLayout lLFreeMin;
     private Button btnJoinFriends;
@@ -38,6 +44,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private Button btnShareFriendCode;
     private TextView tVInvitaAmigo;
     private TextView tVTituloInvitaAmigo;
+    private TextView tVMinGratis;
     private ImageView iVInvitaAmigo;
     private ImageView iVFlecha_Amigos_Unidos;
     private ImageView iVFlecha_Minutos_Gratis;
@@ -53,6 +60,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
 
     //BBDD
     List<Usuario>lstUsuario;
+    Usuario usuario;
 
     //OTRAS VARIABLES
     private boolean amigosUnidos; //TRUE desplegado FALSE contraido
@@ -78,6 +86,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,10 +97,12 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         btnJoinFriends = view.findViewById(R.id.BtnJoinFriends);
         cLFreeMinutes = view.findViewById(R.id.cLFreeMin);
         cLJoinFriends = view.findViewById(R.id.cLJoinFriend);
-        lLAmigosUnidos = view.findViewById(R.id.LLAmigosUnidos);
+        lLPrincipalAmigosUnidos = view.findViewById(R.id.LLPrincipalAmigosUnidos);
+        lLAmigosUnidos= view.findViewById(R.id.LLAmigosUnidos);
         lLFreeMin = view.findViewById(R.id.LLFreeMin);
         tVInvitaAmigo = view.findViewById(R.id.TVInvitaAmigo);
         tVTituloInvitaAmigo = view.findViewById(R.id.TVTituloInvitaAmigo);
+        tVMinGratis=view.findViewById(R.id.TVMinGratis);
         iVInvitaAmigo = view.findViewById(R.id.IVInvitaAmigo);
         iVFlecha_Amigos_Unidos = view.findViewById(R.id.IVFlecha_Amigos_Unidos);
         iVFlecha_Minutos_Gratis = view.findViewById(R.id.IVFlecha_Minutos_Gratis);
@@ -109,11 +120,34 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
+        //CREAMOS PROGRAMATICAMENTE EL USUARIO
+       /*
+        LinearLayout lLAmigo=new LinearLayout(getActivity());
+        lLAmigo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        lLAmigo.setOrientation(LinearLayout.VERTICAL);
+        ImageView iVAmigo=new ImageView(getActivity());
+        iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(250,250));
+        iVAmigo.setImageResource(R.drawable.fill_icon_user_gray);
+        iVAmigo.setForegroundGravity(Gravity.CENTER);
+        TextView tVAmigo=new TextView(getActivity());
+        tVAmigo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        tVAmigo.setForegroundGravity(Gravity.CENTER);
+        tVAmigo.setText("Ningún amigo");
+        tVAmigo.setTextColor(Color.parseColor("#C1BFBD"));
+        tVAmigo.setTextSize(15);
+        tVAmigo.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        lLAmigo.addView(iVAmigo);
+        lLAmigo.addView(tVAmigo);
+        lLAmigosUnidos.addView(lLAmigo);*/
+
+        usuario= InfoApp.USER;
+
         return view;
     }
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.cLJoinFriend || v.getId() == R.id.BtnJoinFriends || v.getId() == R.id.IVFlecha_Amigos_Unidos) {
@@ -182,7 +216,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private void compartirCodigo() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Aquí irá el código amigo");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "El código de tu amigo "+usuario.getNombre()+" para unirte a workpod es "+usuario.getCodamigo());
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -197,12 +231,13 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
 
     private void desplegarMinutosGratis() {
         lLFreeMin.setVisibility(View.VISIBLE);
+        tVMinGratis.setText(String.valueOf(usuario.getMinGratis())+" min");
         iVFlecha_Minutos_Gratis.setImageResource(R.drawable.fill_icon_desvanecer_minutos_obtenidos);
         minutosGratis=true;
     }
 
     private void contraerAmigos() {
-        lLAmigosUnidos.setVisibility(View.GONE);
+        lLPrincipalAmigosUnidos.setVisibility(View.GONE);
         iVFlecha_Amigos_Unidos.setImageResource(R.drawable.fill_icon_desplegar_amigos_invitados);
         amigosUnidos = false;
     }
@@ -211,8 +246,9 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
      * Al pulsar el btn o el layout de Amigos Unidos por ti, se verán los amigos que se han unido a workpod
      * a través de tu código amigo o en su defecto, te pondrá que no se ha unido ningún amigo.
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void desplegarAmigosUnidos() {
-        lLAmigosUnidos.setVisibility(View.VISIBLE);
+        lLPrincipalAmigosUnidos.setVisibility(View.VISIBLE);
         iVFlecha_Amigos_Unidos.setImageResource(R.drawable.fill_icon_desvanecer_amigos_invitados);
         amigosUnidos = true;
     }

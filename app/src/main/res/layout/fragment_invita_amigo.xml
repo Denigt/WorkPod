@@ -122,28 +122,20 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
-                    android:id="@+id/LLAmigosUnidos"
+                    android:id="@+id/LLPrincipalAmigosUnidos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/TVTituloAmigosUnidos"
+                    <HorizontalScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Amigos Unidos por ti"
-                        android:textColor="#C5A475"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:gravity="center_horizontal">
 
                         <LinearLayout
+                            android:id="@+id/LLAmigosUnidos"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -153,6 +145,7 @@
                                 android:id="@+id/LLIconosAmigosUnidos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:gravity="center"
                                 android:orientation="vertical">
 
                                 <ImageView
@@ -160,88 +153,18 @@
                                     android:layout_height="100dp"
                                     android:layout_gravity="center"
                                     android:layout_margin="10dp"
-                                    android:src="@drawable/fill_icon_user_orange" />
+                                    android:src="@drawable/fill_icon_user_gray" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="20dp"
-                                    android:text="Raúl Parra"
-                                    android:textColor="#C5A475"
-                                    android:textSize="15dp"
+                                    android:text="Ningún amigo en Workpod"
+                                    android:textColor="#C1BFBD"
+                                    android:textSize="20dp"
                                     android:textStyle="bold" />
                             </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:layout_width="100dp"
-                                    android:layout_height="100dp"
-                                    android:layout_gravity="center"
-                                    android:layout_margin="10dp"
-                                    android:src="@drawable/fill_icon_user_orange" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginBottom="20dp"
-                                    android:text="Juan Vicente"
-                                    android:textColor="#C5A475"
-                                    android:textSize="15dp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:layout_width="100dp"
-                                    android:layout_height="100dp"
-                                    android:layout_gravity="center"
-                                    android:layout_margin="10dp"
-                                    android:src="@drawable/fill_icon_user_orange" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginBottom="20dp"
-                                    android:text="Óliver Altares"
-                                    android:textColor="#C5A475"
-                                    android:textSize="15dp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:layout_width="100dp"
-                                    android:layout_height="100dp"
-                                    android:layout_gravity="center"
-                                    android:layout_margin="10dp"
-                                    android:src="@drawable/fill_icon_user_orange" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginBottom="20dp"
-                                    android:text="Óliver Altares"
-                                    android:textColor="#C5A475"
-                                    android:textSize="15dp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-
                         </LinearLayout>
                     </HorizontalScrollView>
                 </LinearLayout>
@@ -299,6 +222,7 @@
                     android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/TVTituloMinGratis"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -310,6 +234,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/TVMinGratis"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"

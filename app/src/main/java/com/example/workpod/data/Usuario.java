@@ -24,6 +24,8 @@ public class Usuario implements DataDb{
     private String apellidos;
     private String dni;
     private String password;
+    private String codamigo;
+    private int minGratis;
     private double tiempo;
     private Reserva reserva;
     private Tarjeta tarjeta;
@@ -46,6 +48,7 @@ public class Usuario implements DataDb{
         apellidos = user.getApellidos();
         dni = user.getDni();
         password = user.getPassword();
+        codamigo=user.getCodamigo();
         tiempo = user.getId();
         reserva = user.getReserva();
         tarjeta = user.getTarjeta();
@@ -121,6 +124,22 @@ public class Usuario implements DataDb{
         this.password = password;
     }
 
+    public String getCodamigo() {
+        return codamigo;
+    }
+
+    public void setCodamigo(String codamigo) {
+        this.codamigo = codamigo;
+    }
+
+    public int getMinGratis() {
+        return minGratis;
+    }
+
+    public void setMinGratis(int minGratis) {
+        this.minGratis = minGratis;
+    }
+
     public double getTiempo() {
         return tiempo;
     }
@@ -175,6 +194,8 @@ public class Usuario implements DataDb{
         this.apellidos = "";
         this.dni = "";
         this.password = "";
+        this.codamigo="";
+        this.minGratis=0;
         this.tiempo = 0;
         this.reserva = null;
         this.tarjeta = null;
@@ -237,6 +258,10 @@ public class Usuario implements DataDb{
                 usuario.setDni(usuarioJSON.getString("dni"));
             if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
                 usuario.setPassword(usuarioJSON.getString("contrasena"));
+            if (usuarioJSON.has("codamigo") && !usuarioJSON.isNull("codamigo"))
+                usuario.setCodamigo(usuarioJSON.getString("codamigo"));
+            if (usuarioJSON.has("mingratis") && !usuarioJSON.isNull("mingratis"))
+                usuario.setMinGratis(usuarioJSON.getInt("mingratis"));
             if (usuarioJSON.has("instalacion") && !usuarioJSON.isNull("instalacion"))
                 usuario.setInstalacion(usuarioJSON.getString("instalacion"));
             if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
@@ -266,6 +291,8 @@ public class Usuario implements DataDb{
             json.put("email", email);
             json.put("nombre", nombre);
             json.put("contrasena", password);
+            json.put("codamigo", codamigo);
+            json.put("mingratis", minGratis);
             json.put("apellidos", apellidos);
             json.put("dni", dni);
             json.put("instalacion", instalacion);
@@ -307,6 +334,10 @@ public class Usuario implements DataDb{
                     usuario.setDni(usuarioJSON.getString("dni"));
                 if (usuarioJSON.has("contrasena") && !usuarioJSON.isNull("contrasena"))
                     usuario.setPassword(usuarioJSON.getString("contrasena"));
+                if (usuarioJSON.has("codamigo") && !usuarioJSON.isNull("codamigo"))
+                    usuario.setCodamigo(usuarioJSON.getString("codamigo"));
+                if (usuarioJSON.has("mingratis") && !usuarioJSON.isNull("mingratis"))
+                    usuario.setMinGratis(usuarioJSON.getInt("mingratis"));
                 if (usuarioJSON.has("instalacion") && !usuarioJSON.isNull("instalacion"))
                     usuario.setInstalacion(usuarioJSON.getString("instalacion"));
                 if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
