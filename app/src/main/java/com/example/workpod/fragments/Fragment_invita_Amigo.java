@@ -39,6 +39,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private LinearLayout lLPrincipalAmigosUnidos;
     private LinearLayout lLAmigosUnidos;
     private LinearLayout lLFreeMin;
+    private LinearLayout lLShareFriend;
     private Button btnJoinFriends;
     private Button btnFreeMin;
     private Button btnShareFriendCode;
@@ -46,8 +47,11 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private TextView tVTituloInvitaAmigo;
     private TextView tVMinGratis;
     private ImageView iVInvitaAmigo;
+    private ImageView iVSinAmigos;
+    private TextView tVSinAmigos;
     private ImageView iVFlecha_Amigos_Unidos;
     private ImageView iVFlecha_Minutos_Gratis;
+    private float widht = 0;
 
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
@@ -59,7 +63,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     float width;
 
     //BBDD
-    List<Usuario>lstUsuario;
+    List<String> lstAmigos;
     Usuario usuario;
 
     //OTRAS VARIABLES
@@ -69,7 +73,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
 
     public Fragment_invita_Amigo() {
         this.amigosUnidos = false;
-        this.lstUsuario=new ArrayList<>();
+        this.lstAmigos = new ArrayList<>();
     }
 
     public static Fragment_invita_Amigo newInstance(String param1, String param2) {
@@ -98,11 +102,12 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         cLFreeMinutes = view.findViewById(R.id.cLFreeMin);
         cLJoinFriends = view.findViewById(R.id.cLJoinFriend);
         lLPrincipalAmigosUnidos = view.findViewById(R.id.LLPrincipalAmigosUnidos);
-        lLAmigosUnidos= view.findViewById(R.id.LLAmigosUnidos);
+        lLAmigosUnidos = view.findViewById(R.id.LLAmigosUnidos);
         lLFreeMin = view.findViewById(R.id.LLFreeMin);
+        lLShareFriend=view.findViewById(R.id.LLShareFriend);
         tVInvitaAmigo = view.findViewById(R.id.TVInvitaAmigo);
         tVTituloInvitaAmigo = view.findViewById(R.id.TVTituloInvitaAmigo);
-        tVMinGratis=view.findViewById(R.id.TVMinGratis);
+        tVMinGratis = view.findViewById(R.id.TVMinGratis);
         iVInvitaAmigo = view.findViewById(R.id.IVInvitaAmigo);
         iVFlecha_Amigos_Unidos = view.findViewById(R.id.IVFlecha_Amigos_Unidos);
         iVFlecha_Minutos_Gratis = view.findViewById(R.id.IVFlecha_Minutos_Gratis);
@@ -113,6 +118,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         btnJoinFriends.setOnClickListener(this);
         cLFreeMinutes.setOnClickListener(this);
         cLJoinFriends.setOnClickListener(this);
+        lLShareFriend.setOnClickListener(this);
 
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
@@ -120,31 +126,17 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
-        //CREAMOS PROGRAMATICAMENTE EL USUARIO
-       /*
-        LinearLayout lLAmigo=new LinearLayout(getActivity());
-        lLAmigo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        lLAmigo.setOrientation(LinearLayout.VERTICAL);
-        ImageView iVAmigo=new ImageView(getActivity());
-        iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(250,250));
-        iVAmigo.setImageResource(R.drawable.fill_icon_user_gray);
-        iVAmigo.setForegroundGravity(Gravity.CENTER);
-        TextView tVAmigo=new TextView(getActivity());
-        tVAmigo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        tVAmigo.setForegroundGravity(Gravity.CENTER);
-        tVAmigo.setText("Ningún amigo");
-        tVAmigo.setTextColor(Color.parseColor("#C1BFBD"));
-        tVAmigo.setTextSize(15);
-        tVAmigo.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        lLAmigo.addView(iVAmigo);
-        lLAmigo.addView(tVAmigo);
-        lLAmigosUnidos.addView(lLAmigo);*/
+        //RELLENAMOS LISTA DE AMIGOS UNIDOS POR EL USUARIO (PROVISIONAL)
+        lstAmigos.add("Juan Luis");
+        lstAmigos.add("Álvaro Pardo");
+        lstAmigos.add("Alexis Nicolas");
+        lstAmigos.add("Pablo García");
+        lstAmigos.add("Raúl Parra");
 
-        usuario= InfoApp.USER;
+        usuario = InfoApp.USER;
 
         return view;
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -162,7 +154,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
             } else {
                 contraerMinutosGratis();
             }
-        }else if(v.getId()==R.id.BtnShareFriendCode){
+        } else if (v.getId() == R.id.BtnShareFriendCode || v.getId()==R.id.LLShareFriend) {
             compartirCodigo();
 
         }
@@ -216,7 +208,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private void compartirCodigo() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "El código de tu amigo "+usuario.getNombre()+" para unirte a workpod es "+usuario.getCodamigo());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "El código de tu amigo " + usuario.getNombre() + " para unirte a workpod es " + usuario.getCodamigo());
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -226,14 +218,14 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private void contraerMinutosGratis() {
         lLFreeMin.setVisibility(View.GONE);
         iVFlecha_Minutos_Gratis.setImageResource(R.drawable.fill_icon_desplegar_minutos_obtenidos);
-        minutosGratis=false;
+        minutosGratis = false;
     }
 
     private void desplegarMinutosGratis() {
         lLFreeMin.setVisibility(View.VISIBLE);
-        tVMinGratis.setText(String.valueOf(usuario.getMinGratis())+" min");
+        tVMinGratis.setText(String.valueOf(usuario.getMinGratis()) + " min");
         iVFlecha_Minutos_Gratis.setImageResource(R.drawable.fill_icon_desvanecer_minutos_obtenidos);
-        minutosGratis=true;
+        minutosGratis = true;
     }
 
     private void contraerAmigos() {
@@ -246,10 +238,45 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
      * Al pulsar el btn o el layout de Amigos Unidos por ti, se verán los amigos que se han unido a workpod
      * a través de tu código amigo o en su defecto, te pondrá que no se ha unido ningún amigo.
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void desplegarAmigosUnidos() {
         lLPrincipalAmigosUnidos.setVisibility(View.VISIBLE);
         iVFlecha_Amigos_Unidos.setImageResource(R.drawable.fill_icon_desvanecer_amigos_invitados);
         amigosUnidos = true;
+        if (lstAmigos.size() != 0) {
+            //LIMPIAMOS EL LAYOUT PARA Q NO APAREZCA EL ICONO DE NO AMIGOS
+            lLAmigosUnidos.removeAllViews();
+            lstIv.removeAll(lstIv);
+            for (String amigos : lstAmigos) {
+                LinearLayout lLAmigo = new LinearLayout(getActivity());
+                lLAmigo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                lLAmigo.setOrientation(LinearLayout.VERTICAL);
+                lLAmigo.setGravity(Gravity.CENTER);
+                ImageView iVAmigo = new ImageView(getActivity());
+                //ESCALAMOS LOS ICONOS EN FUNCIÓN DEL TAMAÑO Y LA DENSIDAD MÉTRICA DE LA PANTALLA
+                width = metrics.widthPixels / metrics.density;
+                if (width > (1200 / metrics.density)) {
+                    iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(420, 420));
+                } else if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
+                    iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(320, 320));
+                } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+                    iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(215, 215));
+                } else if (width <= (550 / metrics.density)) {
+                    iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(140, 140));
+                }
+                iVAmigo.setImageResource(R.drawable.fill_icon_user_orange);
+                TextView tVAmigo = new TextView(getActivity());
+                tVAmigo.setGravity(Gravity.CENTER);
+                tVAmigo.setText(amigos);
+                tVAmigo.setTextColor(Color.parseColor("#C5A475"));
+                tVAmigo.setTextSize(15);
+                tVAmigo.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, 0, 0, 20);
+                tVAmigo.setLayoutParams(params);
+                lLAmigo.addView(iVAmigo);
+                lLAmigo.addView(tVAmigo);
+                lLAmigosUnidos.addView(lLAmigo);
+            }
+        }
     }
 }
