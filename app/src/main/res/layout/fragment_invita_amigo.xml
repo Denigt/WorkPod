@@ -50,7 +50,7 @@
                     android:id="@+id/IVInvitaAmigo"
                     android:layout_width="110dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/fill_icon_invita_amigo" />
+                    android:src="@drawable/ic_give_five" />
             </LinearLayout>
 
             <LinearLayout
