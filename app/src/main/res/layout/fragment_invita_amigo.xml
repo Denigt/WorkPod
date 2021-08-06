@@ -225,19 +225,19 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/TVTituloMinGratis"
+                        android:id="@+id/TVTituloMinGratisDisponibles"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="20dp"
-                        android:text="Tiempo Gratis"
+                        android:text="Tiempo Gratis Disponible"
                         android:textColor="#FB7CA7"
-                        android:textSize="25dp"
+                        android:textSize="20dp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/TVMinGratis"
+                        android:id="@+id/TVMinGratisDisponibles"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -245,12 +245,45 @@
                         android:layout_marginBottom="10dp"
                         android:text="20 min"
                         android:textColor="#FB7CA7"
-                        android:textSize="75dp"
+                        android:textSize="65dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TVTituloMinGratisTotales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:text="Tiempo Gratis Total Obtenido"
+                        android:textColor="#FB7CA7"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/TVMinGratisTotales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="20 min"
+                        android:textColor="#FB7CA7"
+                        android:textSize="65dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/TVMinGratisGastados"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:text="Has gastado 1h y 13 min"
+                        android:textColor="#ED081B"
+                        android:textSize="20dp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 
