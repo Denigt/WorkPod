@@ -78,7 +78,6 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
 
     public Fragment_invita_Amigo() {
         this.amigosUnidos = false;
-        this.nFriends=5;
         this.lstAmigos = new ArrayList<>();
     }
 
@@ -144,6 +143,9 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         lstAmigos.add("Raúl Parra");
 
         usuario = InfoApp.USER;
+
+        //INICIALIZAMOS EL Nº DE AMIGOS UNIDOS A LA APP POR EL USUARIO
+        nFriends=usuario.getnAmigos();
 
         return view;
     }

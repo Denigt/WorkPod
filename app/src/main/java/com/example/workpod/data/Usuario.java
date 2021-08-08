@@ -30,6 +30,7 @@ public class Usuario implements DataDb{
     private Reserva reserva;
     private Tarjeta tarjeta;
     private String instalacion;
+    private int nAmigos;
     private  List<Sesion> sesiones;
     private  List<Facturacion> dirFacturacion;
 
@@ -58,6 +59,7 @@ public class Usuario implements DataDb{
         fRegistro = user.getfRegistro();
         fVerificacion = user.getfVerificacion();
         instalacion = user.getInstalacion();
+        nAmigos=user.getnAmigos();
     }
 
     public String getInstalacion() {
@@ -184,8 +186,18 @@ public class Usuario implements DataDb{
         return dirFacturacion;
     }
 
+    public int getnAmigos() {
+        return nAmigos;
+    }
+
+    public void setnAmigos(int nAmigos) {
+        this.nAmigos = nAmigos;
+    }
+
     public void setDirFacturacion(List<Facturacion> dirFacturacion) {
         this.dirFacturacion = dirFacturacion;
+
+
     }
 
     public Usuario() {
@@ -200,6 +212,7 @@ public class Usuario implements DataDb{
         this.reserva = null;
         this.tarjeta = null;
         instalacion = "";
+        this.nAmigos=0;
         this.sesiones = new LinkedList<>();
         this.dirFacturacion = new LinkedList<>();
     }
@@ -264,6 +277,8 @@ public class Usuario implements DataDb{
                 usuario.setMinGratis(usuarioJSON.getInt("mingratis"));
             if (usuarioJSON.has("instalacion") && !usuarioJSON.isNull("instalacion"))
                 usuario.setInstalacion(usuarioJSON.getString("instalacion"));
+            if (usuarioJSON.has("invitado") && !usuarioJSON.isNull("invitado"))
+                usuario.setnAmigos(usuarioJSON.getInt("invitado"));
             if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                 usuario.setReserva((Reserva)new Reserva().JSONaData(usuarioJSON));
             else usuario.setReserva(null);
@@ -296,6 +311,7 @@ public class Usuario implements DataDb{
             json.put("apellidos", apellidos);
             json.put("dni", dni);
             json.put("instalacion", instalacion);
+            json.put("invitado", nAmigos);
             if (reserva != null)
                 json.put("reserva", reserva.getID());
             if (tarjeta != null)
@@ -340,6 +356,8 @@ public class Usuario implements DataDb{
                     usuario.setMinGratis(usuarioJSON.getInt("mingratis"));
                 if (usuarioJSON.has("instalacion") && !usuarioJSON.isNull("instalacion"))
                     usuario.setInstalacion(usuarioJSON.getString("instalacion"));
+                if (usuarioJSON.has("invitado") && !usuarioJSON.isNull("invitado"))
+                    usuario.setnAmigos(usuarioJSON.getInt("invitado"));
                 if (usuarioJSON.has("reserva") && !usuarioJSON.isNull("reserva"))
                     usuario.setReserva((Reserva)new Reserva().JSONaData(usuarioJSON));
                 else usuario.setReserva(null);
