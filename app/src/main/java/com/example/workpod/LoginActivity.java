@@ -183,6 +183,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         update.start();
 
                         Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                        finishAffinity();
                         startActivity(activity);
                         finish();
                     }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();

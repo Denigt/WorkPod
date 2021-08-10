@@ -246,6 +246,9 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                         } catch (IOException e) {
                                             Log.e("AUTOLOGIN", "No se puede escribir en el fichero");
                                         }
+                                        if (InfoApp.USER==null)
+                                            InfoApp.USER = new Usuario();
+
                                         InfoApp.USER.set(select.getDato());
 
                                         // ENVIAR CORREO DE VERIFICACION
@@ -259,6 +262,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                 if (insert.getError().code > -1) {
                                     // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
                                     Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                                    finishAffinity();
                                     startActivity(activity);
                                     finish();
                                 } else

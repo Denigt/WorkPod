@@ -39,12 +39,12 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
     // CONTROLES DEL XML
     private Button btnAcceder;
+    private Button btnAccederSR;
     private Button btnConectar;
     private Button btnRegistrar;
     private ImageSwitcher imgSwitcher;
     private TextSwitcher txtSwitcher;
     private TextView tvTituloInitActivity;
-    private TextView tVTerminosServicio;
     private ArrayList<ImageButton> btnSwither = new ArrayList<ImageButton>();
 
     //COLECCIONES
@@ -63,12 +63,12 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
         // BUSCAR LOS CONTROLES DEL XML
         btnAcceder = findViewById(R.id.btnAcceder);
+        btnAccederSR = findViewById(R.id.btnAccederSR);
         btnConectar = findViewById(R.id.btnConectar);
         btnRegistrar = findViewById(R.id.btnRegistrar);
         imgSwitcher = findViewById(R.id.imgSwitcher);
         txtSwitcher = findViewById(R.id.txtSwitcher);
         tvTituloInitActivity = findViewById(R.id.tvTituloInitActivity);
-        tVTerminosServicio = findViewById(R.id.TVTerminosServicio);
         btnSwither.add(findViewById(R.id.btnSwitcher0));
         btnSwither.add(findViewById(R.id.btnSwitcher1));
         btnSwither.add(findViewById(R.id.btnSwitcher2));
@@ -77,6 +77,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         btnAcceder.setOnClickListener(this);
+        btnAccederSR.setOnClickListener(this);
         btnConectar.setOnClickListener(this);
         btnRegistrar.setOnClickListener(this);
         imgSwitcher.setOnClickListener(this);
@@ -120,6 +121,9 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
             lyt = findViewById(R.id.lytForeground2);
             lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
+
+            lyt = findViewById(R.id.lytForeground3);
+            lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
         }
 
         //ESCALAMOS ELEMENTOS
@@ -129,6 +133,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         btnAccederOnClick(v);
+        btnAccederSROnClick(v);
         btnConectarOnClick(v);
         btnRegistrarOnClick(v);
         switcherOnClick(v);
@@ -140,6 +145,18 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == btnAcceder.getId()) {
             // PROVISIONAL PARA NO CAMBIAR EL MANIFIEST
             Intent activity = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(activity);
+        }
+    }
+
+
+    /**
+     * Lleva al usuario a la aplicacion principal como usuario no registrado
+     * @param v Vista clicada
+     */
+    private void btnAccederSROnClick(View v) {
+        if (v.getId() == btnAccederSR.getId()) {
+            Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
             startActivity(activity);
         }
     }
@@ -246,7 +263,6 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
         lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",25,25,25));
 
         lstTv.add(new Scale_TextView(tvTituloInitActivity,"Match_Parent","bold",29,29,29));
-        lstTv.add(new Scale_TextView(tVTerminosServicio,"Match_Parent","normal",15,15,15));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

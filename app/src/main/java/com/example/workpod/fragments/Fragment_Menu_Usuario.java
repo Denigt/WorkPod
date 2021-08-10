@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.workpod.InitActivity;
 import com.example.workpod.ValoracionWorkpod;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
@@ -186,6 +187,8 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
             File fileLogin = getActivity().getFileStreamPath(InfoApp.LOGFILE);
             if (fileLogin.delete()){
                 Toast.makeText(requireContext(), "Se ha cerrado la sesion", Toast.LENGTH_SHORT).show();
+                Intent activity = new Intent(requireContext(), InitActivity.class);
+                startActivity(activity);
                 getActivity().finish();
             }
         }
