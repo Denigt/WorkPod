@@ -2,9 +2,14 @@ package com.example.workpod.fragments;
 
 //IMPRESCINDIBLE PARA QUE FUNCIONE EN APIS INFERIORES A LA 23
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.WorkpodActivity;
@@ -27,7 +33,10 @@ import com.example.workpod.data.Ubicacion;
 import com.example.workpod.data.Workpod;
 import com.example.workpod.scale.Scale_Buttons;
 import com.example.workpod.scale.Scale_TextView;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -81,6 +90,19 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     public static Boolean sesionHistorico=false;
     private boolean refrescardB=false;
     public static boolean desactivarBtnReservar=false;
+
+    // VARIABLES NECESARIAS PARA LA GEOLOCALIZACION
+    private boolean havePermission = false;
+    /**
+     * Administrador de la geolocalizacion, maneja tambien el dibujado de la posicion del usuario
+     */
+    private LocationManager locationService;
+    /**
+     * Posicion del usuario
+     * Cuidado al leerlo, puede ser null
+     */
+    private Shared<LatLng> posicion = new Shared<>();
+    private boolean killHilos = false;
 
     //COLECCIONES
     List<Scale_TextView> lstTv;
@@ -139,6 +161,12 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
 
 
+        // Iniciar el hilo para solicitar la ubicacion
+        locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
+        } catch (SecurityException e) {
+        }
         //AÑADIMOS AL XML LOS DATOS DE LA SESIÓN DE WORPOD DEL USUARIO
         tVDialogUbication.setText(ubication);
         tVDialogDateHour.setText("Fecha: " + fechaEntrada.format(DateTimeFormatter.ofPattern("dd-MM-yy")) + "\nEntrada:" + fechaEntrada.format(DateTimeFormatter.ofPattern("HH:mm "))
@@ -218,7 +246,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                         for (int j = 0; j < lstWorkpods.size(); j++) {
                             if (workpod.getId() == lstWorkpods.get(j).getId()) {
                                 workpod = lstWorkpods.get(j);
-                                Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                                Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
 
                                 //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
@@ -229,7 +257,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                     else {
                         if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
                             workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
-                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                             fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                             //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
 
@@ -250,7 +278,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                     for (int j = 0; j < lstWorkpods.size(); j++) {
                         if (workpod.getId() == lstWorkpods.get(j).getId()) {
                             workpod = lstWorkpods.get(j);
-                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                             fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                             //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
                             break;
@@ -260,7 +288,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                 else {
                     if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
                         workpod = lstUbicacion.get(i).getWorkpods().get(0);
-                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), new Shared<LatLng>());
+                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                         fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                         //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
                         break;
@@ -405,5 +433,72 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         lstTv.add(new Scale_TextView(tVDialogPrice, "match_parent", "bold", 20, 20, 20));
 
         Method.scaleTv(metrics, lstTv);
+    }
+
+    // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION
+
+    /**
+     * Esta clase funciona como LocationListener, es decir se ejecuta en segundo plano solicitando y
+     * actualizando la posicion del usuario
+     */
+    public class UbicacionListener implements LocationListener {
+
+        public UbicacionListener() {
+            // SE COMPRUEBA SI SE TIENEN PERMISOS Y EN CASO DE TENERLOS SE SOLICITA LA ULTIMA UBICACION CONOCIDA PARA INICIAR EL MAPA EN ELLA
+            new Thread(() -> {
+                Location aux = null;
+                while ((!havePermission || aux == null) && !killHilos) {
+                    try {
+                        aux = locationService.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        havePermission = true;
+                    } catch (SecurityException e) {
+                        havePermission = false;
+                    }
+                }
+                if (!killHilos) {
+                    posicion.resource = new LatLng(aux.getLatitude(), aux.getLongitude());
+                }
+            }).start();
+        }
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {
+            try{
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        posicion.resource = null;
+                        Toast.makeText(getContext(), "Habilite el GPS", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            posicion.resource = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+    }
+
+    @Override
+    /**
+     * Ademas de funcionar como metodo onDestroy ordena a todos los hilos que se detengan y al ubicationListener que deje de solicitar la posicion
+     */
+    public void onDestroy() {
+        killHilos = true;
+        locationService.removeUpdates(new UbicacionListener());
+        super.onDestroy();
     }
 }

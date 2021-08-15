@@ -118,6 +118,24 @@
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
+            <FrameLayout
+                android:id="@+id/lytForeground1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/rounded_border_button"
+                >
+                <Button
+                    android:id="@+id/btnAcceder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Acceder"
+                    android:lines="1"
+                    android:background="?selectableItemBackground"/>
+            </FrameLayout>
+
             <TextView
                 android:id="@+id/tVActvityLoginAunNoLogin"
                 android:layout_width="match_parent"
@@ -136,24 +154,6 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="30dp"
                 android:orientation="horizontal">
-
-                <FrameLayout
-                    android:id="@+id/lytForeground1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/rounded_border_button"
-                    >
-                    <Button
-                        android:id="@+id/btnAcceder"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Acceder"
-                        android:lines="1"
-                        android:background="?selectableItemBackground"/>
-                </FrameLayout>
 
                 <FrameLayout
                     android:id="@+id/lytForeground2"

@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param v Vista clicada
      */
     private void btnSiguienteOnClick(View v){
-        if (v.getId() == btnSiguiente.getId()){
+        if (v.getId() == btnSiguiente.getId() || v.getId() == btnAcceder.getId()){
             // VALIDAR DATOS
             boolean error = false;
 
@@ -206,10 +206,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Lleva al usuario a la aplicacion principal como usuario no registrado
+     * Ahora mismo sin uso
      * @param v Vista clicada
      */
     private void btnAccederOnClick(View v) {
-        if (v.getId() == btnAcceder.getId()) {
+        if (false) {
             Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
             startActivity(activity);
             finish();
