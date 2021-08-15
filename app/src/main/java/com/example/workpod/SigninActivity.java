@@ -73,7 +73,10 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
 
     private ImageButton btnSiguiente;
     private ImageButton btnVolver;
+    private ImageButton btnVerTerminos;
     private CheckBox btnShowContrasena;
+    private CheckBox btnTerminos;
+    private CheckBox btnPromociones;
     private Spinner spnDNI;
 
     private String correo;
@@ -129,6 +132,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         btnShowContrasenaOnChecked(buttonView, isChecked);
+        /*btnTerminosOnChecked(buttonView, isChecked);
+        btnPromocionesOnChecked(buttonView, isChecked);*/
     }
 
     // OBTENER CHECK
@@ -207,8 +212,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     Method.showError(this, "Introduzca una dirección de email válida");
                     txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
-                }
-                if (contrasena.equals(null) || contrasena.equals("")) {
+                }if (btnTerminos.isChecked()) {
+                    Method.showError(this, "Debe aceptar los términos de uso");
+                    btnTerminos.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                } if (contrasena.equals(null) || contrasena.equals("")) {
                     Method.showError(this, "Introduzca una contraseña");
                     txtContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
@@ -339,6 +347,11 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             txtContrasena = findViewById(R.id.txtContrasena);
             txtContrasena.setText(contrasena);
             txtRContrasena = findViewById(R.id.txtRContrasena);
+            btnTerminos = findViewById(R.id.btnTerminos);
+            btnPromociones = findViewById(R.id.btnPromociones);
+            btnShowContrasena = findViewById(R.id.btnShowContrasena);
+            btnVerTerminos = findViewById(R.id.btnVerTerminos);
+
             tVActSignin2Contrasena = findViewById(R.id.tVActSignin2Contrasena);
             tVActSignin2Email = findViewById(R.id.tVActSignin2Email);
             tVActSignin2PregEmail = findViewById(R.id.tVActSignin2PregEmail);
@@ -346,7 +359,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             tVActSignin2PregContrasena = findViewById(R.id.tVActSignin2PregContrasena);
             tVActSignin2RepetirContrasena = findViewById(R.id.tVActSignin2RepetirContrasena);
             tVActSignin2Titulo = findViewById(R.id.tVActSignin2Titulo);
-            btnShowContrasena = findViewById(R.id.btnShowContrasena);
 
             //ESCALAMOS ELEMENTOS
             escalarElementosSignin2();
@@ -364,6 +376,9 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             txtContrasena.setOnFocusChangeListener(this);
             txtRContrasena.setOnFocusChangeListener(this);
             btnShowContrasena.setOnCheckedChangeListener(this);
+            btnTerminos.setOnCheckedChangeListener(this);
+            btnPromociones.setOnCheckedChangeListener(this);
+            btnVerTerminos.setOnClickListener(this);
         }
         btnSiguiente.setOnClickListener(this);
         btnVolver.setOnClickListener(this);
@@ -444,64 +459,5 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         lstTv.add(new Scale_TextView(tVActSignin2Titulo, "Match_Parent", "bold", 34,34, 34));
 
         Method.scaleTv(metrics, lstTv);
-    }
-
-    /**
-     * Método para enviar un token de verificación al usuario que se acaba de registrar
-     * Si el correo emisor es gmail o hotmail, las instrucciones a utilizar varían ligeramente.
-     */
-    private void correoVerificacion(){
-        //CORREO EMPRESA
-        correo = "workpodtfg@gmail.com";
-        password = "workpod2021";
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        //PROPIEDADES DEL SERVIDOR DE CORREO ELECTRONICO
-        Properties properties = new Properties();
-        //INDICAMOS EL NOMBRE DEL SERVIDOR DEL CORREO ELECTRÓNICO QUE VAMOS A USAR COMO EMISOR
-        properties.put("mail.smtp.host", "smtp.googlemail.com");
-        //SOCKET PARA RECIBIR RESPUESTA DEL SERVIDOR
-        properties.put("mail.smtp.socketFactory.port", "465");//EL PUERTO DEL SERVIDOR DE GMAIL ES 465 (NO ES UNO AL AZAR)
-        //ESPECIFICAMOS QUE EL PROTOCOLO DE SEGURIDAD PARA EL ENVÍO DE INFORMACIÓN SERÁ SSL
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        //PERMITE AL SERVIDOR LA AUTENTIFICACIÓN DEL CLIENTE
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-
-        try {
-            //NECESITAMOS AUTENTIFICACIÓN PARA LA CONEXIÓN DE RED
-            sesion = Session.getDefaultInstance(properties, new Authenticator() {
-                /**
-                 * Autentificará la contraseña del correo emisor
-                 * @return
-                 */
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(correo, password);
-                }
-            });
-            //SI EL OBJETO SESIÓN APUNTA A NULO ES QUE LA AUTENTIFICACIÓN HA FALLADO
-            if (sesion != null) {
-                //CREAMOS UN OBJETO DE LA CLASE MESSAGE, LA CUAL NOS PERMITIRÁ MANDAR EL EMAIL
-                Message message = new MimeMessage(sesion);
-                //CORREO EMISOR
-                message.setFrom(new InternetAddress(correo));
-                //ASUNTO DEL CORREO
-                message.setSubject("Token de verificación de Workpod");
-                //CON TO ESPECIFICAMOS LOS DESTINATARIOS DEL MENSAJE
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-                //CONTENIDO DEL MENSAJE Y ESPECIFICACIÓN DE LA CODIFICACIÓN UNICODE
-                message.setContent("Tu token de verificación de Workpod es 1234AB#", "text/html; charset=utf-8");
-                //ENVIAMOS CORREO UTILIZANDO EL MÉTODO SEND DE LA CLASE TRANSPORT
-                Transport.send(message);
-
-                //ECO
-                Toast.makeText(this, "Se ha enviado un token de verificación al correo", Toast.LENGTH_LONG).show();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

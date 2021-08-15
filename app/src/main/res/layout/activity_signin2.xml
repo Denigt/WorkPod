@@ -155,6 +155,43 @@
                 android:textStyle="bold"
                 android:layout_marginHorizontal="80dp"
                 android:gravity="center"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/btnTerminos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Acepto los términos de uso"
+                    android:textColor="@color/textgray"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="40dp"
+                    android:gravity="center"/>
+
+                <ImageButton
+                    android:id="@+id/btnVerTerminos"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignRight="@+id/btnTerminos"
+                    android:layout_centerInParent="true"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/button_btn_dudas" />
+            </RelativeLayout>
+
+            <CheckBox
+                android:id="@+id/btnPromociones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quiero recibir ofertas y promociones"
+                android:textColor="@color/textgray"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="40dp"
+                android:gravity="center"/>
         </LinearLayout>
     </ScrollView>
 
