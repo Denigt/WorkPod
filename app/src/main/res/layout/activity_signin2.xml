@@ -168,6 +168,7 @@
                     android:textSize="16dp"
                     android:textStyle="bold"
                     android:layout_marginHorizontal="40dp"
+                    android:paddingRight="35dp"
                     android:gravity="center"/>
 
                 <ImageButton

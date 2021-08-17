@@ -51,12 +51,13 @@
                 android:id="@+id/tVActvityLoginBienvenido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="¡Bienvenido!"
                 android:textColor="@color/blue"
-                android:textSize="34dp"
+                android:textSize="40dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -67,7 +68,8 @@
                 android:text="¿Iniciar sesión?"
                 android:textColor="@color/blue"
                 android:textSize="24dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/tVActvityLoginEmail"
@@ -88,16 +90,35 @@
                 android:layout_marginHorizontal="30dp"
                 android:inputType="textEmailAddress"/>
 
-            <TextView
-                android:id="@+id/tVActvityLoginContrasena"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
-                android:text="Contraseña"
-                android:textColor="@color/blue"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tVActvityLoginContrasena"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Contraseña"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/btnLostContrasena"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="¿Has olvidado tu contraseña?"
+                    android:textColor="@color/textgray"
+                    android:textSize="16dp"
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/txtContrasena"
@@ -123,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginTop="25dp"
                 android:background="@drawable/rounded_border_button"
                 >
                 <Button

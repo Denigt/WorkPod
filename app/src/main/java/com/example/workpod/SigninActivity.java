@@ -122,6 +122,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         btnSiguienteOnClick(v);
         btnVolverOnClick(v);
+        btnVerTerminosOnClick(v);
     }
 
     @Override
@@ -301,6 +302,20 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 pantalla = 0;
                 initActivity();
             }
+        }
+    }
+
+    /**
+     * Abre un web view que muestre una pagina con los terminos de uso
+     *
+     * @param v Vista clicada
+     */
+    private void btnVerTerminosOnClick(View v) {
+        if (pantalla == 1 && v.getId() == btnVerTerminos.getId()) {
+            saveActivity();
+            Intent terminos = new Intent(getApplicationContext(), WebActivity.class);
+            terminos.putExtra("web", "https://dev.workpod.app/web/Verificacion.php?email=guerrero.raulparra@gmail.com&token=47fa5496213d2758b74a3449428b3fe91626404305");
+            startActivity(terminos);
         }
     }
 
