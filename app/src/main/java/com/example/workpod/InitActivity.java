@@ -121,9 +121,6 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
             lyt = findViewById(R.id.lytForeground2);
             lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
-
-            lyt = findViewById(R.id.lytForeground3);
-            lyt.setForeground(getDrawable(R.drawable.rounded_border_button));
         }
 
         //ESCALAMOS ELEMENTOS

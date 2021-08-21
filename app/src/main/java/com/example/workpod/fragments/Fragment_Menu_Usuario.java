@@ -90,7 +90,7 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_settings, "Configuración"));
         aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_phone, "Soporte"));
         aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Invita a un amigo"));
-        aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.fill_icon_historial, "Cerrar sesión"));
+        aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.empty_icon_lock, "Cerrar sesión"));
         aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
         lsV_Menu_Usuario.setAdapter(aMU);
         lsV_Menu_Usuario.setOnItemClickListener(this);

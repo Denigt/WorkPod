@@ -314,7 +314,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         if (pantalla == 1 && v.getId() == btnVerTerminos.getId()) {
             saveActivity();
             Intent terminos = new Intent(getApplicationContext(), WebActivity.class);
-            terminos.putExtra("web", "https://dev.workpod.app/web/Verificacion.php?email=guerrero.raulparra@gmail.com&token=47fa5496213d2758b74a3449428b3fe91626404305");
+            terminos.putExtra("web", "https://dev.workpod.app/web/terminos_condiciones.html");
             startActivity(terminos);
         }
     }
