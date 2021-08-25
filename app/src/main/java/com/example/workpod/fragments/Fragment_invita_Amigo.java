@@ -225,7 +225,9 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private void compartirCodigo() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "El código de tu amigo " + usuario.getNombre() + " para unirte a workpod es " + usuario.getCodamigo());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola\n ¡Te regalo 15 minutos gratis en la sesión de Workpod que quieras " +
+                "canjearlos! Para conseguirlo: descárgate la app de Workpod, introduce una tarjeta de pago y canjea mi código:" +
+                usuario.getCodamigo()+"\nConsulta condiciones en:\n https://dev.workpod.app/web/invita_amigo.html");
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
