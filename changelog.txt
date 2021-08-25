@@ -1,0 +1,156 @@
+# Changelog 
+
+## [2.5.2+Raúl] - 2021-08-17
+### Added
+ - WebView en el boton de preguntas frecuentes
+### Changed
+ - Bug al comprobar el estado del boton de terminos de uso (Registro)
+ - Bug al generar el codigo amigo
+ - Acceso al mapa mas limitado si hay problemas en el registro
+
+## [2.5.1+Raúl] - 2021-08-17
+### Added
+ - Acceso a web con los terminos de uso
+### Changed
+ - Modificado el icono de cierre de sesion
+ - Centrados titulos de varias pantallas
+
+## [2.5.0+Raúl] - 2021-08-17
+### Added
+ - Activity con webView para mostrar paginas webs en la app
+ - Botón para recuperar contraseña en pantalla de login
+ - Comprobacion de boton de terminos de uso en registro
+
+## [2.4.10+Raúl] - 2021-08-15
+### Added
+ - Aceptacion de terminos en la pantalla de registro
+
+## [2.4.9+Raúl]  - 2021-08-15 
+### Changed
+ - Cambios estéticos en la pantalla de Login
+### Added
+ - Geolocalización añadida para ver workpod desde pantalla de sesiones
+### Fixed
+ - Arreglado bug que duplicaba el icono de la aplicación (En la galeria de apps de android)
+ - Arreglos en el icono de la App
+
+##[2.4.8+Raúl] - 2021-08-10 
+### Added
+ - Botón para acceder sin registrarse movido a la pantalla de inicio
+### Fixed
+ - Arreglado bug que hacía que el botón de acceder sin registrase entrase como
+   el último usuario registrado en la app (si esta no se reiniciaba)
+
+##[2.4.7+Juan Vicente] - 2021-08-10  
+###Changed
+-Aplicados los cambios hablados en la reunión respecto a invita a un amigo.
+
+##[2.4.6+Juan Vicente] - 2021-08-06 
+### Added
+-Añadidos más svgs creados y mejorando la funcionalidad de invita a un amigo.
+
+##[2.4.5+Juan Vicente] - 2021-08-05 
+### Added
+-Añadido svg give five
+
+##[2.4.4+Juan Vicente] - 2021-08-04
+### Added
+-Añadido de manera programática los monigotes y el nombre de los amigos unidos por el usuario.
+
+##[2.4.3+Juan Vicente] - 2021-08-03
+### Added
+-Volcado el código amigo y minutos gratis en java.
+
+##[2.4.2+Juan Vicente] - 2021-08-02 
+### Added
+-Añadida funcionalidad al btn ShareFriendCode.
+
+##[2.4.1+Juan Vicente] - 2021-08-01 
+### Added
+- Funcionalidad de btns Amigos Unidos y Minutos Gratis Conseguidos.
+
+##[2.4.0+Juan Vicente] - 2021-08-01  
+### Added
+- Empezando con funcionalidad invita a un amigo. Interfaz gráfica terminada y escalada.
+
+##[2.3.5+Raúl] - 2021-07-29 
+### Added
+ - Splash Screen
+ - Autologin en Splash Screen
+
+##[2.3.4+Juan Vicente] - 2021-07-29 
+### Changed
+ - Habilitado boton reservar desde la activity transacciones
+
+##[2.3.3+Raúl] - 2021-07-29 
+### Added
+ - Habilitado boton para cerrar sesion en el menu de usuario
+
+##[2.3.2+Raúl] - 2021-07-29 
+### Fixed
+ - Solucionado error al cifrar el archivo de autologueo
+
+##[2.3.1+Raúl] - 2021-07-29 
+### Added
+ - Añadido cifrado para el archivo de autologueo
+ - Cierre de sesión al iniciar en un dispositivo diferente
+
+##[2.3.0+Raúl] - 2021-07-29 
+### Added
+ - Añadida funcion para login automático.
+
+##[2.2.1+Juan Vicente] - 2021-07-29
+###Fixed
+ -Corregido error de escalado.
+###Fixed
+ -Corregido error de que el estado del workpod cambia en el Fragment_Dialog_Workpod a reservado cuando el usuario reserva desde el histórico.
+
+##[2.2.0+Juan Vicente] - 2021-07-28
+###Added
+ -Añadido icono de la app
+###Fixed
+ -Corregido error capturar excepción en el histórico.
+
+##[2.1.3+Juan Vicente] - 2021-07-27
+###Fixed
+ - Corregido error en la desactivación del botón reservar cuando abrimos el dialog workpod desde el histórico.
+
+##[2.1.2+Juan Vicente] - 2021-07-27
+###Changed
+ -Botón reservar desactivado cuando abrimos el dialog workpod desde el histórico.
+
+##[2.1.1+Juan Vicente] - 2021-07-28
+### Fixed
+ - Corregido error bucle infinito al abrir más de una vez el dialog workpod desde el histórico.
+
+##[2.1.0+Juan Vicente] - 2021-07-27
+### Added
+ - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
+
+[2.5.1] : https://github.com/Denigt/WorkPod/commit/ba2074995577c453cb7e3d873890c735b1ece64f
+[2.5.0] : https://github.com/Denigt/WorkPod/commit/d0dc1d79cac8d523b1af83abdba6329f9d8651b7
+[2.4.10] : https://github.com/Denigt/WorkPod/commit/bb3f6cbce0c0c575a8dbd647dd3101b1b563ab6e
+[2.4.9] : https://github.com/Denigt/WorkPod/commit/72e8127d9f812312116fcc144fccd27c98317d53
+[2.4.8] : https://github.com/Denigt/WorkPod/commit/4dd8e453e88fe178541ba96dd1c46d4f25d89988
+[2.4.7] : https://github.com/Denigt/WorkPod/commit/62ef45a2737255b54b0551186e17147c6f8701e8
+[2.4.6] : https://github.com/Denigt/WorkPod/commit/217627dee4cfaa87d00789a08332dcae2ce47695
+[2.4.5] : https://github.com/Denigt/WorkPod/commit/af0d3cbb9c21b4292776dadf59bee6d453b33e77
+[2.4.4] : https://github.com/Denigt/WorkPod/commit/3f59e2d8e1e227db6fa70de41817928600f863be
+[2.4.3] : https://github.com/Denigt/WorkPod/commit/fe94dc70a25fb730bd3957907f49f5c752f02f01
+[2.4.2] : https://github.com/Denigt/WorkPod/commit/ee9e8ee6cd9bc19cf9748fe1003cad45e3c65ffc
+[2.4.1] : https://github.com/Denigt/WorkPod/commit/686f4a75cfc95b548f4be7549b2c8288c67fb7ab
+[2.4.0] : https://github.com/Denigt/WorkPod/commit/7f94f7130496404c88f48bfa268d30486a479ada
+[2.3.5] : https://github.com/Denigt/WorkPod/commit/8188e435308364af33a349f1f2bd1d15fa9b4555
+[2.3.4] : https://github.com/Denigt/WorkPod/commit/5277d0108b43400bb5cdd7db53a0ea26133c94cf
+[2.3.3] : https://github.com/Denigt/WorkPod/commit/5a7eef0c05883a566f6edd1cc4375feff59c6381
+[2.3.2] : https://github.com/Denigt/WorkPod/commit/d506c9afa16e1653ac8b494f2b1abe9015cd4e24
+[2.3.1] : https://github.com/Denigt/WorkPod/commit/1a3e772004e1dba0040b0be33d5406c8171f294e
+[2.3.0] : https://github.com/Denigt/WorkPod/commit/52f437bbc90e40734555e53d0258883858bf5ab4
+[2.1.1] : https://github.com/Denigt/WorkPod/commit/610964a14d9c544c6aa98b26cd51cf56710aabc6
+[2.2.0] : https://github.com/Denigt/WorkPod/commit/31eb1c1b6f2a6502a64acdc00b953741561882af
+[2.1.3] : https://github.com/Denigt/WorkPod/commit/2a50b0ab75020dd338788c3fbf21f12818796230
+[2.1.2] : https://github.com/Denigt/WorkPod/commit/013e9d8868484502951245eed3ee93c282c572cd
+[2.1.1] : https://github.com/Denigt/WorkPod/commit/571b16d427289a7171679d40a2be0a19f2d55ee0
+[2.1.0] : https://github.com/Denigt/WorkPod/commit/65d53e5e6d87b35db32eb03d1890a93132148ecd
+
+

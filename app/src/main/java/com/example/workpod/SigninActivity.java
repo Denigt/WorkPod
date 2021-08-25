@@ -213,7 +213,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     Method.showError(this, "Introduzca una dirección de email válida");
                     txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
-                }if (btnTerminos.isChecked()) {
+                }if (!btnTerminos.isChecked()) {
                     Method.showError(this, "Debe aceptar los términos de uso");
                     btnTerminos.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
@@ -268,7 +268,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                 select.start();
                             });
                             insert.postRunOnUI(this, () -> {
-                                if (insert.getError().code > -1) {
+                                if (insert.getError().code > -1 && InfoApp.USER != null) {
                                     // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
                                     Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                                     finishAffinity();

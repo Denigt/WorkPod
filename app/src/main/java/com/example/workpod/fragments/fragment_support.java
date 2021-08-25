@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.workpod.R;
 import com.example.workpod.ValoracionWorkpod;
+import com.example.workpod.WebActivity;
 import com.example.workpod.WorkpodActivity;
 import com.example.workpod.adapters.Adaptador_LsV_Menu_Usuario;
 import com.example.workpod.adapters.Adaptador_LsV_Support;
@@ -124,6 +125,11 @@ public class fragment_support extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 LsV_Support lsV_support = (LsV_Support) aSuport.getItem(i);
+                if (lsV_support.getCodigo() == 0) {
+                    Intent terminos = new Intent(requireContext(), WebActivity.class);
+                    terminos.putExtra("web", "https://dev.workpod.app/web/terminos_condiciones.html");
+                    startActivity(terminos);
+                }
                 if (lsV_support.getCodigo() == 2) {
                     Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
                     fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");
