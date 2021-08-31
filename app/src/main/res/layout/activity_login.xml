@@ -117,7 +117,8 @@
                     android:textColor="@color/textgray"
                     android:textSize="16dp"
                     android:textAlignment="textEnd"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:clickable="true"/>
             </LinearLayout>
 
             <EditText

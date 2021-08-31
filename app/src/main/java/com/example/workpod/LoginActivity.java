@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox btnShowContrasena;
     private Button btnAcceder;
     private Button btnRegistrar;
+    private TextView btnLostContrasena;
     private TextView tVActvityLoginBienvenido;
     private TextView tVActvityLoginIniSesion;
     private TextView tVActvityLoginEmail;
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnVolverOnClick(v);
         btnAccederOnClick(v);
         btnRegistrarOnClick(v);
+        btnLostContrasenaOnClick(v);
     }
 
     @Override
@@ -229,6 +231,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Lleva al usuario a la pantalla para registrase
+     * @param v Vista clicada
+     */
+    private void btnLostContrasenaOnClick(View v) {
+        if (v.getId() == btnLostContrasena.getId()) {
+            saveActivity();
+            Intent activity = new Intent(getApplicationContext(), PasswordActivity.class);
+            activity.putExtra("email", email);
+            startActivity(activity);
+        }
+    }
+
     // OTROS METODOS
     /**
      * Inicializa la actividad:
@@ -250,6 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnVolver = findViewById(R.id.btnVolver);
         btnAcceder = findViewById(R.id.btnAcceder);
         btnRegistrar = findViewById(R.id.btnRegistrar);
+        btnLostContrasena = findViewById(R.id.btnLostContrasena);
 
         tVActvityLoginAunNoLogin=findViewById(R.id.tVActvityLoginAunNoLogin);
         tVActvityLoginBienvenido=findViewById(R.id.tVActvityLoginBienvenido);
@@ -266,6 +282,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnVolver.setOnClickListener(this);
         btnAcceder.setOnClickListener(this);
         btnRegistrar.setOnClickListener(this);
+        btnLostContrasena.setOnClickListener(this);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
