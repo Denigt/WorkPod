@@ -143,6 +143,7 @@ public class Database<T extends DataDb> extends Thread {
                 if(dato instanceof Usuario)
                     verificar_user((Usuario)dato);
                 else error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
+                break;
             case RESET:
                 if(dato instanceof Usuario)
                     reset_pass((Usuario)dato);

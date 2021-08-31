@@ -1,5 +1,9 @@
 # Changelog 
 
+## [2.7.1+Raúl] - 2021-08-31
+### Fixed
+ - Bug que mandaba correo para reestablecer contrasena tras el de verificacion
+
 ## [2.7.0+Raúl] - 2021-08-31
 ### Added
  - Activity para recuperar contrasena
