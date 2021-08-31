@@ -265,20 +265,19 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                         verificacion.start();
                                     }else InfoApp.USER = null;
                                 });
+                                select.postRunOnUI(this, ()-> {
+                                    if (insert.getError().code > -1 && InfoApp.USER != null) {
+                                        // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
+                                        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                                        finishAffinity();
+                                        startActivity(activity);
+                                        finish();
+                                    } else
+                                        Toast.makeText(this, "No se ha podido crear el usuario", Toast.LENGTH_LONG).show();
+                                });
                                 select.start();
                             });
-                            insert.postRunOnUI(this, () -> {
-                                if (insert.getError().code > -1 && InfoApp.USER != null) {
-                                    // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
-                                    Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
-                                    finishAffinity();
-                                    startActivity(activity);
-                                    finish();
-                                } else
-                                    Toast.makeText(this, "No se ha podido crear el usuario", Toast.LENGTH_LONG).show();
-                            });
                             insert.start();
-
                         } else
                             Toast.makeText(this, "Ya existe un usuario con el mismo Email", Toast.LENGTH_LONG).show();
                     });
