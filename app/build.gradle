@@ -1,6 +1,8 @@
-plugins {
-    id 'com.android.application'
-}
+
+    apply plugin: 'com.android.application'
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.crashlytics'
+
 
 android {
     compileSdkVersion 30
@@ -13,7 +15,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
-        applicationId "com.example.workpod"
+        applicationId "com.workpodapp.workpod"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -54,4 +56,15 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+    //FIREBASE
+    // Importación de la BoM de FireBase. Administra las versiones de las biblioetcas que utilicemos de firebase, por ello no especificamos versiones
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    // Es necesaria para la integración de firebase, no solo de analytics
+    implementation 'com.google.firebase:firebase-analytics'
+    //implementación crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics'
+    /*Si no usamos BoM
+     implementation 'com.google.firebase:firebase-crashlytics:18.2.0'
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+     */
 }

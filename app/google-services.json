@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "578325611078",
+    "project_id": "workpod-7cc92",
+    "storage_bucket": "workpod-7cc92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578325611078:android:c0dee88f11245e5560c047",
+        "android_client_info": {
+          "package_name": "com.workpodapp.workpod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578325611078-6ik4urauauhsp9sscmnvh8v26hv1oi4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmSt7P3Q5Io80iddRvt8UVsQlFgRZMAp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578325611078-6ik4urauauhsp9sscmnvh8v26hv1oi4n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
