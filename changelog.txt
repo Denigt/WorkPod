@@ -1,5 +1,12 @@
 # Changelog 
 
+## [3.2.0+Juan Vicente] - 2021-09-02
+### Changed
+ - Nombre paquete.
+### Added
+ - Plugins y dependencias de FireBase y Crashlytics.
+ - Override onResume() en fragment_sesion.
+
 ## [2.7.2+Raúl] - 2021-08-31
 ### Fixed
  - Bug que impedia acceder al mapa tras registrarse (solo en algunos casos)
@@ -14,6 +21,16 @@
  - Envio de correo al solicitar la recuperacion de la contrasena
 ### Changed
  - Icono de cierre de sesion
+
+## [2.6.1+Juan Vicente] - 2021-08-26
+### Added
+ - Añadida apk
+### Changed
+ - Cambio url tyc por el webView hecho en WordPress.
+
+## [2.5.3+Juan Vicente] - 2021-08-25
+### Added
+ - Adaptado envío de friendcode para que sea idéntico al de waylet
 
 ## [2.5.2+Raúl] - 2021-08-17
 ### Added
@@ -142,7 +159,10 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.2.0] : https://github.com/Denigt/WorkPod/commit/6a1ed0c38416a1b5c0b8392908f41702eb76427b
 [2.7.0] : https://github.com/Denigt/WorkPod/commit/bf6a20e638c83ab13f7ebaafa5b19c551f463123
+[2.6.1] : https://github.com/Denigt/WorkPod/commit/4a058711807d6dab95d61ca75e7f40f546e22862
+[2.5.3] : https://github.com/Denigt/WorkPod/commit/5e043bb7491128f0e84f2fb55eae2864aea2286c
 [2.5.2] : https://github.com/Denigt/WorkPod/commit/5e043bb7491128f0e84f2fb55eae2864aea2286c
 [2.5.1] : https://github.com/Denigt/WorkPod/commit/ba2074995577c453cb7e3d873890c735b1ece64f
 [2.5.0] : https://github.com/Denigt/WorkPod/commit/d0dc1d79cac8d523b1af83abdba6329f9d8651b7
