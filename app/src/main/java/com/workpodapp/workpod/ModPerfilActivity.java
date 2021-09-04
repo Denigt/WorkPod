@@ -122,7 +122,6 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
 
                     // ENVIAR CORREO DE VERIFICACION SI SE HA CAMBIADO EL CORREO
                     if (!modUser.getVerificar().equals(true) && !modUser.getEmail().equals(modUser.getVerificar())) {
-                        modUser.setEmail(modUser.getVerificar());
                         Database<Usuario> verificacion = new Database<>(Database.CAMBIO_EMAIL, modUser);
                         verificacion.start();
                     }
