@@ -118,31 +118,9 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         tVTiempoTranscurrido = view.findViewById(R.id.TVTiempoTranscurrido);
         tVWifi = view.findViewById(R.id.TVWifi);
         tVSesionDireccionTitulo = view.findViewById(R.id.TVSesionDireccionTitulo);
-      /*  //PARO CRONÓMETRO PARA QUE NO SE DUPLIQUE
-        this.cerrarWorkpod = false;
-        this.precio = 0.0;
-        try {
-            fechaEntrada = sesion.getEntrada();
-            tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
-            //INICIALIZAMOS CRONOMETRO
-            this.centesimas = 0;
-            horas = Math.round(tiempoSesion / 3600);
-            minutos = Math.round((tiempoSesion - (3600 * horas)) / 60);
-            segundos = Math.round(tiempoSesion - ((horas * 3600) + (minutos * 60)));
 
-            //ARRANCAMOS CRONOMETRO
-            tVSesionCapacidad.setText(String.valueOf(sesion.getWorkpod().getNumUsuarios()));
-            tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
-            crono = cronometro();
-           // crono.start();
-
-            ValoracionWorkpod.boolReservaFinalizada = false;
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }*/
+        //ARRANCAMOS EL HILO QUE HARÁ DE CONTADOR
+        arrancarCrono();
 
         //CAMBIAMOS DE COLOR A LOS BOTONES (POR LA API 21)
         btnCerrarWorPod.setBackgroundColor(Color.parseColor("#DA4B4B"));
@@ -177,26 +155,10 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         try {
-            this.precio = 0.0;
-            fechaEntrada = sesion.getEntrada();
-            tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
-            //INICIALIZAMOS CRONOMETRO
-            this.centesimas = 0;
-            horas = Math.round(tiempoSesion / 3600);
-            minutos = Math.round((tiempoSesion - (3600 * horas)) / 60);
-            segundos = Math.round(tiempoSesion - ((horas * 3600) + (minutos * 60)));
-
-            //ARRANCAMOS CRONOMETRO
-            tVSesionCapacidad.setText("Capacidad: " + String.valueOf(sesion.getWorkpod().getNumUsuarios()));
-            tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
-            cerrarWorkpod = false;
-            crono = cronometro();
-            crono.start();
-
-            ValoracionWorkpod.boolReservaFinalizada = false;
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            //SI LA APP ENTRA EN ONPAUSE, SI SE PARASE EL CRONO, LO DETECTARÍAMOS PORQUE EL BOOLEANO ESTARÍA A TRUE Y LO VOLVERÍAMOS A ARRANCAR
+            if (this.cerrarWorkpod) {
+                arrancarCrono();
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -365,6 +327,34 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
                 //reinicioReserva();
             }
         });
+    }
+
+    /**
+     * Inicializamos la fecha de entrada, calculamos el tiempo que hay entre la fecha de entrada y la actual y lo mostramos por pantalla. También iniciailizamos
+     * el hilo y lo arrancamos
+     */
+    private void arrancarCrono() {
+        try {
+            this.precio = 0.0;
+            fechaEntrada = sesion.getEntrada();
+            tiempoSesion = Method.subsDate(ZonedDateTime.now(), fechaEntrada);
+            //INICIALIZAMOS CRONOMETRO
+            this.centesimas = 0;
+            horas = Math.round(tiempoSesion / 3600);
+            minutos = Math.round((tiempoSesion - (3600 * horas)) / 60);
+            segundos = Math.round(tiempoSesion - ((horas * 3600) + (minutos * 60)));
+
+            //ARRANCAMOS CRONOMETRO
+            tVSesionCapacidad.setText("Capacidad: " + String.valueOf(sesion.getWorkpod().getNumUsuarios()));
+            tVSesionDireccion.setText(String.valueOf(sesion.getDireccion().toLongString()));
+            cerrarWorkpod = false;
+            crono = cronometro();
+            crono.start();
+
+            ValoracionWorkpod.boolReservaFinalizada = false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
