@@ -1,5 +1,9 @@
 # Changelog 
 
+## [3.2.2+Raúl] - 2021-09-02
+### Fixed
+ - Bug en el envio de correos
+
 ## [3.2.1+Raúl] - 2021-09-02
 ### Changed
  - Metodo de envio de emails unificado

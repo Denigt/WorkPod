@@ -137,7 +137,9 @@ public class Database<T extends DataDb> extends Thread {
             case UPDATE:
                 update(dato);
                 break;
-            case VERIFICACION | RESET:
+            case VERIFICACION:
+            case RESET:
+            case CAMBIO_EMAIL:
                 if(dato instanceof Usuario)
                     send_email((Usuario)dato);
                 else error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
@@ -628,7 +630,7 @@ public class Database<T extends DataDb> extends Thread {
     }
 //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
-        if (tipoConsulta < 0  || tipoConsulta > 7)
+        if (tipoConsulta < 0 )
             tipoConsulta = -1;
 
         this.tipoConsulta = tipoConsulta;
