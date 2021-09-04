@@ -48,6 +48,7 @@ public class Database<T extends DataDb> extends Thread {
     public static final int SELECTUSER = 5;
     public static final int VERIFICACION = 6;
     public static final int RESET = 7;
+    public static final int CAMBIO_EMAIL = 8;
 //-------------------------------------------
     /**
      * Consulta que se va a realizar
@@ -136,15 +137,10 @@ public class Database<T extends DataDb> extends Thread {
             case UPDATE:
                 update(dato);
                 break;
-            case VERIFICACION:
+            case VERIFICACION | RESET:
                 if(dato instanceof Usuario)
-                    verificar_user((Usuario)dato);
+                    send_email((Usuario)dato);
                 else error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
-                break;
-            case RESET:
-                if(dato instanceof Usuario)
-                    reset_pass((Usuario)dato);
-                else error = new ErrorMessage(-5, "El reseteo necesita que se le pase un usuario");
                 break;
         }
 
@@ -541,66 +537,24 @@ public class Database<T extends DataDb> extends Thread {
      * Envia un correo de verificacion al usuario indicado
      * @param obj Usuario al que mandar el correo
      */
-    private void verificar_user(Usuario obj){
+    private void send_email(Usuario obj){
         // PREPARAR LA CONEXION
         if (TABLAS.contains(obj.getTabla())) {
-            String urlString = String.format("%s/php/%s.php", URL_SERVIDOR, "correo_verificacion");
 
-            try {
-                // Establecemos los parametros necesarios para el metodo SelectID
-                urlString += "?destinatario=" + obj.getID();
-
-                URL url = new URL(urlString);
-                // ABRIMOS CONEXIÓN
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                int respuesta = connection.getResponseCode();
-
-                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
-                if (respuesta == HttpURLConnection.HTTP_OK) {
-                    // PREPARAMOS LA CADENA DE ENTRADA
-                    String result = new String();
-                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
-
-                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
-                    BufferedReader reader = new BufferedReader(in);
-
-                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        result += line;
-                    }
-                    connection.disconnect();
-
-                    // TRANSFORMAR STRING A JSON
-                    JSONObject json = new JSONObject(result);
-
-                    // OBTENER EL CODIGO DE ERROR
-                    error = new ErrorMessage(json);
-                }else{
-                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
-                    Log.e("DATABASE VERIFICACION", "No se ha podido conectar con el servidor");
-                }
-            }catch (MalformedURLException e) {
-                error = new ErrorMessage(-404, "URL invalida");
-                Log.e("DATABASE VERIFICACION", "URL invalida");
-            }catch (IOException e) {
-                error = new ErrorMessage(-404, "No hay conexion a internet");
-                Log.e("DATABASE VERIFICACION", "Error al leer los datos del servidor");
-            }catch(JSONException e) {
-                error = new ErrorMessage(-11, "Problema al crear el JSON");
-                Log.e("DATABASE VERIFICACION", "Error obtener JSON");
+            String correo;
+            switch (tipoConsulta){
+                case VERIFICACION:
+                    correo = "correo_verificacion";
+                    break;
+                case RESET:
+                    correo = "correo_reset_contrasena";
+                    break;
+                case CAMBIO_EMAIL:
+                    correo = "correo_cambio_email";
+                    break;
+                default: correo = "";
             }
-        }
-    }
-
-    /**
-     * Envia un correo de reseteo de contraseña al usuario indicado
-     * @param obj Usuario al que mandar el correo
-     */
-    private void reset_pass(Usuario obj){
-        // PREPARAR LA CONEXION
-        if (TABLAS.contains(obj.getTabla())) {
-            String urlString = String.format("%s/php/%s.php", URL_SERVIDOR, "correo_reset_contrasena");
+            String urlString = String.format("%s/php/%s.php", URL_SERVIDOR, correo);
 
             try {
                 // Establecemos los parametros necesarios para el metodo SelectID

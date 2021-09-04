@@ -1,5 +1,10 @@
 # Changelog 
 
+## [3.2.1+Raúl] - 2021-09-02
+### Changed
+ - Metodo de envio de emails unificado
+ - Cambiado el email que se manda al modificar el email
+
 ## [3.2.0+Juan Vicente] - 2021-09-02
 ### Changed
  - Nombre paquete.
