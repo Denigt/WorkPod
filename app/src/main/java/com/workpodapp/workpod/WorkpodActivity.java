@@ -85,6 +85,8 @@ public class WorkpodActivity extends FragmentActivity {
                 } else if(InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (ValoracionWorkpod.boolReservaFinalizada)) {
                     InfoApp.USER.getReserva().setEstado("FINALIZADA");
                     InfoApp.RESERVA.setEstado("FINALIZADA");
+                    //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
+                    Fragment_Maps.miReserva=true;
                     //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
                     FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
                     fTransaction = fragmentManager.beginTransaction();
@@ -93,6 +95,8 @@ public class WorkpodActivity extends FragmentActivity {
                     boolSession = false;
                     ValoracionWorkpod.boolReservaFinalizada=false;
                 }else{
+                    //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
+                    Fragment_Maps.miReserva=true;
                     //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
                     FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
                     fTransaction = fragmentManager.beginTransaction();
@@ -227,6 +231,8 @@ public class WorkpodActivity extends FragmentActivity {
         FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
         //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
         fTransaction = fragmentManager.beginTransaction();
+        //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
+        Fragment_Maps.miReserva=true;
         //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
         fTransaction.replace(R.id.LLFragment, fragment_maps).commit();
         boolLoc = true;

@@ -105,6 +105,9 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     // FRAGMENT CON LISTA DE WORKPODS
     Fragment_Dialog_Cluster fragmentCluster = null;
 
+    //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT, SE MUESTRE EL DIALOG_WORKPOD
+    public static boolean miReserva=false;
+
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
         lstUbicacion = new ArrayList<>();
@@ -212,9 +215,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                     FLMiReserva.setVisibility(View.VISIBLE);
             } else if (dbUbicacion.getError().code == -404)
                 Toast.makeText(getContext(), "No hay conexión a Internet", Toast.LENGTH_LONG).show();
+            //MOSTRAMOS EL FRAGMENT_DIALOG_WORKPOD CON LA RESERVA DEL USUARIO
+            mostrarReserva();
+
         });
         dbUbicacion.start();
     }
+
+
 
     // LISTENERS
     @Override
@@ -340,6 +348,38 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             ft.setReorderingAllowed(false);
         }
         ft.detach(this).attach(this).commit();
+    }
+
+    /**
+     * Este método permitirá que se abra el Fragment_Dialog_Workpod si tienes una reserva  y sin que tengas que pulsar el btn miReserva
+     * Este método se ejecuta en el onMapReady para que no haya problemas con la actualización del mapas, en el onCreateView es imposible.
+     * Es similar al btnMiReservaOnClick pero con la diferencia del bool miReserva, que apunta a true si entras por primera vez al mapa o si viajas
+     * del NV al mapa
+     */
+    private void mostrarReserva() {
+        if(miReserva){
+            if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()){
+                miReserva=false;
+                Workpod workpod = null;
+                Ubicacion ubicacion = null;
+                for (Ubicacion u : lstUbicacion){
+                    for (Workpod w : u.getWorkpods()){
+                        if (w.getId() == InfoApp.USER.getReserva().getWorkpod()){
+                            workpod = w;
+                            ubicacion = u;
+                            break;
+                        }
+                    }
+                    if (workpod != null) break;
+                }
+                if (workpod != null) {
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, this);
+                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
+                }
+            }else {
+                FLMiReserva.setVisibility(View.GONE);
+            }
+        }
     }
 
 //=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================
