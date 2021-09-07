@@ -1,5 +1,14 @@
 # Changelog 
 
+## [3.3.1+Juan Vicente] - 2021-09-07
+### Added
+ - Dialog_Validar_Usuario
+ - Mostrar Dialog_Workpod al acceder al Fragment_Maps cuando el usuario tiene una reserva
+
+## [3.2.3+Juan Vicente] - 2021-09-04
+### Fixed
+ - Bug duplicación hilos en sesión
+
 ## [3.2.2+Raúl] - 2021-09-02
 ### Fixed
  - Bug en el envio de correos
@@ -167,7 +176,10 @@
 ##[2.1.0+Juan Vicente] - 2021-07-27
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
-
+[3.3.1] : https://github.com/Denigt/WorkPod/commit/f9f0995a5f92fc405ff005736478009ccdcdfc01
+[3.2.3] : https://github.com/Denigt/WorkPod/commit/ebb0c0ac09586838dac9f8e8498ada031f16f66b
+[3.2.2] : https://github.com/Denigt/WorkPod/commit/604f4d93341159bbaf84c95d03d2fa75698abd43
+[3.2.1] : https://github.com/Denigt/WorkPod/commit/a70e848519917b5177868050d593bafc74db9453
 [3.2.0] : https://github.com/Denigt/WorkPod/commit/6a1ed0c38416a1b5c0b8392908f41702eb76427b
 [2.7.0] : https://github.com/Denigt/WorkPod/commit/bf6a20e638c83ab13f7ebaafa5b19c551f463123
 [2.6.1] : https://github.com/Denigt/WorkPod/commit/4a058711807d6dab95d61ca75e7f40f546e22862
