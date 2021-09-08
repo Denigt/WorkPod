@@ -1,5 +1,9 @@
 # Changelog 
 
+## [3.3.3+Raúl] - 2021-09-04
+### Fixed
+ - Bug inicio de sesion
+
 ## [3.3.2+Raúl] - 2021-09-08
 ### Added
  - Se bloquea el acceso a usuarios no validados
