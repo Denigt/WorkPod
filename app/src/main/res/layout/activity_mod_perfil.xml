@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <!--RelativeLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:focusable="true"
             android:scaleType="fitCenter"
             android:src="@drawable/button_btn_cancelar" />
-    </RelativeLayout>
+    </RelativeLayout-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -165,4 +165,32 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="20dp">
+        <ImageButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentEnd="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:lines="1"
+            android:src="@drawable/button_btn_siguiente"/>
+
+
+        <ImageButton
+            android:id="@+id/btnCancelar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentStart="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:lines="1"
+            android:src="@drawable/button_btn_volver"/>
+    </RelativeLayout>
 </LinearLayout>

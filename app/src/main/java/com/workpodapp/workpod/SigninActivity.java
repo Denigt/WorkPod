@@ -168,7 +168,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     private void btnSiguienteOnClick(View v) {
         if (v.getId() == btnSiguiente.getId()) {
             // VALIDAR DATOS DE LA PRIMERA PANTALLA
-            if (pantalla == 0) {
+            if (pantalla == 1) {
                 boolean error = false;
 
                 saveActivity();
@@ -185,41 +185,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                 if (dni.equals(null) || dni.equals("")) {
                     Method.showError(this, "Introduzca su documento de identificación");
                     txtDNI.setBackgroundTintList(getResources().getColorStateList(R.color.red));
-                    error = true;
-                }
-                if (!error) {
-                    pantalla = 1;
-                    initActivity();
-                }
-            }
-            // VALIDAR DATOS DE LA SEGUNDA PANTALLA
-            else {
-                boolean error = false;
-                saveActivity();
-
-                if (email.equals(null) || email.equals("")) {
-                    Method.showError(this, "Introduzca su email");
-                    txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
-                    error = true;
-                } else if (!Method.checkEmail(email)) {
-                    Method.showError(this, "Introduzca una dirección de email válida");
-                    txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
-                    error = true;
-                }if (!btnTerminos.isChecked()) {
-                    Method.showError(this, "Debe aceptar los términos de uso");
-                    btnTerminos.setBackgroundTintList(getResources().getColorStateList(R.color.red));
-                    error = true;
-                } if (contrasena.equals(null) || contrasena.equals("")) {
-                    Method.showError(this, "Introduzca una contraseña");
-                    txtContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
-                    error = true;
-                } else if (!Method.checkPassword(contrasena)) {
-                    Method.showError(this, "La contraseña ha de tener 10 caracteres y un símbolo");
-                    txtContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
-                    error = true;
-                } else if (!contrasena.equals(txtRContrasena.getText().toString())) {
-                    Method.showError(this, "Las contraseñas no coinciden");
-                    txtRContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
                 }
                 if (!error) {
@@ -276,6 +241,41 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     consulta.start();
                 }
             }
+            // VALIDAR DATOS DE LA SEGUNDA PANTALLA
+            else {
+                boolean error = false;
+                saveActivity();
+
+                if (email.equals(null) || email.equals("")) {
+                    Method.showError(this, "Introduzca su email");
+                    txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                } else if (!Method.checkEmail(email)) {
+                    Method.showError(this, "Introduzca una dirección de email válida");
+                    txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                }if (!btnTerminos.isChecked()) {
+                    Method.showError(this, "Debe aceptar los términos de uso");
+                    btnTerminos.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                } if (contrasena.equals(null) || contrasena.equals("")) {
+                    Method.showError(this, "Introduzca una contraseña");
+                    txtContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                } else if (!Method.checkPassword(contrasena)) {
+                    Method.showError(this, "La contraseña ha de tener 10 caracteres y un símbolo");
+                    txtContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                } else if (!contrasena.equals(txtRContrasena.getText().toString())) {
+                    Method.showError(this, "Las contraseñas no coinciden");
+                    txtRContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
+                    error = true;
+                }
+                if (!error) {
+                    pantalla = 1;
+                    initActivity();
+                }
+            }
         }
     }
 
@@ -302,7 +302,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      * @param v Vista clicada
      */
     private void btnVerTerminosOnClick(View v) {
-        if (pantalla == 1 && v.getId() == btnVerTerminos.getId()) {
+        if (pantalla == 0 && v.getId() == btnVerTerminos.getId()) {
             saveActivity();
             Intent terminos = new Intent(getApplicationContext(), WebActivity.class);
             terminos.putExtra("web", "https://www.workpod.app/tyc/");
@@ -320,13 +320,13 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      */
     private void initActivity() {
         // ESTABLECER LAYOUT DE LA ACTIVIDAD
-        if (pantalla == 0)
+        if (pantalla == 1)
             setContentView(R.layout.activity_signin);
         else
             setContentView(R.layout.activity_signin2);
 
         // BUSCAR LOS CONTROLES DEL XML
-        if (pantalla == 0) {
+        if (pantalla == 1) {
             txtNombre = findViewById(R.id.txtNombre);
             txtNombre.setText(nombre);
             txtApellido = findViewById(R.id.txtApellido);
@@ -373,7 +373,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         btnVolver = findViewById(R.id.btnVolver);
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
-        if (pantalla == 0) {
+        if (pantalla == 1) {
             txtNombre.setOnFocusChangeListener(this);
             txtApellido.setOnFocusChangeListener(this);
             txtDNI.setOnFocusChangeListener(this);
@@ -395,7 +395,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      * Almacena en las variables de la actividad los valores de todos los campos de la misma
      */
     private void saveActivity() {
-        if (pantalla == 0) {
+        if (pantalla == 1) {
             nombre = txtNombre.getText().toString().trim();
             apellido = txtApellido.getText().toString().trim();
             dni = txtDNI.getText().toString().trim();

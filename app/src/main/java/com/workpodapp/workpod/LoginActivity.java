@@ -45,14 +45,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton btnSiguiente;
     private ImageButton btnVolver;
     private CheckBox btnShowContrasena;
-    private Button btnAcceder;
-    private Button btnRegistrar;
+    //private Button btnAcceder;
+    //private Button btnRegistrar;
     private TextView btnLostContrasena;
     private TextView tVActvityLoginBienvenido;
     private TextView tVActvityLoginIniSesion;
     private TextView tVActvityLoginEmail;
     private TextView tVActvityLoginContrasena;
-    private TextView tVActvityLoginAunNoLogin;
+    //private TextView tVActvityLoginAunNoLogin;
     private Sesion sesion;
 
     //COLECCIONES
@@ -82,8 +82,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         btnSiguienteOnClick(v);
         btnVolverOnClick(v);
-        btnAccederOnClick(v);
-        btnRegistrarOnClick(v);
+        //btnAccederOnClick(v);
+        //btnRegistrarOnClick(v);
         btnLostContrasenaOnClick(v);
     }
 
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param v Vista clicada
      */
     private void btnSiguienteOnClick(View v){
-        if (v.getId() == btnSiguiente.getId() || v.getId() == btnAcceder.getId()){
+        if (v.getId() == btnSiguiente.getId() /*|| v.getId() == btnAcceder.getId()*/){
             // VALIDAR DATOS
             boolean error = false;
 
@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if(!error) {
                 Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
                 consulta.postRun(()->{
-                    if (consulta.getError().code > -1) {
+                    if (consulta.getError().code > -1 && consulta.getDato().isVerificado()) {
                         try {
                             String input = String.format("%s\n%s", consulta.getDato().getEmail(), consulta.getDato().getPassword());
 
@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
 
                 consulta.postRunOnUI(this, ()->{
-                    if (consulta.getError().code > -1) {
+                    if (consulta.getError().code > -1 && consulta.getDato().isVerificado()) {
                         InfoApp.USER = consulta.getDato();
                         InfoApp.USER.setInstalacion(InfoApp.INSTALLATION);
                     // Actualizacion de la instalacion del usuario en la base de datos
@@ -186,6 +186,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         finishAffinity();
                         startActivity(activity);
                         finish();
+                    }else if (!consulta.getDato().isVerificado()){
+                        Toast.makeText(this, "Usuario no verificado", Toast.LENGTH_LONG).show();
                     }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                     else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
                 });
@@ -222,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param v Vista clicada
      */
     private void btnRegistrarOnClick(View v) {
-        if (v.getId() == btnRegistrar.getId()) {
+        if (false) {
             Intent activity = new Intent(getApplicationContext(), SigninActivity.class);
             startActivity(activity);
             finish();
@@ -261,11 +263,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnSiguiente = findViewById(R.id.btnSiguiente);
         btnVolver = findViewById(R.id.btnVolver);
-        btnAcceder = findViewById(R.id.btnAcceder);
-        btnRegistrar = findViewById(R.id.btnRegistrar);
+        //btnAcceder = findViewById(R.id.btnAcceder);
+        //btnRegistrar = findViewById(R.id.btnRegistrar);
         btnLostContrasena = findViewById(R.id.btnLostContrasena);
 
-        tVActvityLoginAunNoLogin=findViewById(R.id.tVActvityLoginAunNoLogin);
+        //tVActvityLoginAunNoLogin=findViewById(R.id.tVActvityLoginAunNoLogin);
         tVActvityLoginBienvenido=findViewById(R.id.tVActvityLoginBienvenido);
         tVActvityLoginContrasena=findViewById(R.id.tVActvityLoginContrasena);
         tVActvityLoginEmail=findViewById(R.id.tVActvityLoginEmail);
@@ -278,8 +280,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnSiguiente.setOnClickListener(this);
         btnVolver.setOnClickListener(this);
-        btnAcceder.setOnClickListener(this);
-        btnRegistrar.setOnClickListener(this);
+        //btnAcceder.setOnClickListener(this);
+        //btnRegistrar.setOnClickListener(this);
         btnLostContrasena.setOnClickListener(this);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
@@ -324,10 +326,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,12,15));
-        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",12,12,15));
+        //lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,12,15));
+        //lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",12,12,15));
 
-        lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,20,24));
+        //lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,20,24));
         lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34,34));
         lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",18,18,18));
         lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",18,18,18));

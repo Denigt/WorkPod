@@ -1,5 +1,14 @@
 # Changelog 
 
+## [3.3.2+Raúl] - 2021-09-08
+### Added
+ - Se bloquea el acceso a usuarios no validados
+ - Metodo isVerificado en el Usuario
+### Changed
+ - Pantallas de registro cambiadas de orden
+ - Modificado el aspecto visual de las pantallas de login, sigin y modificar perfil
+ - Retirada de los botones para usuarios no registrados en el login
+
 ## [3.3.1+Juan Vicente] - 2021-09-07
 ### Added
  - Dialog_Validar_Usuario

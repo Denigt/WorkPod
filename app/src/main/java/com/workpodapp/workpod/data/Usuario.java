@@ -78,6 +78,10 @@ public class Usuario implements DataDb{
         this.verificar = verificar;
     }
 
+    public boolean isVerificado() {
+        return verificar.toLowerCase() == "true";
+    }
+
     public ZonedDateTime getfVerificacion() {
         return fVerificacion;
     }
