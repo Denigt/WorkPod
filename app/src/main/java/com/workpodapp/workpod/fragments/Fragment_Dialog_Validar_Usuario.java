@@ -150,6 +150,6 @@ public class Fragment_Dialog_Validar_Usuario  extends DialogFragment implements 
         //ECO DE CORREO ENVIADO
         Toast.makeText(getActivity(),"Correo verificación vuelto a enviar",Toast.LENGTH_LONG).show();
         //cerrar el dialog
-        dismiss();
+          dismiss();
     }
 }

@@ -1,5 +1,11 @@
 # Changelog 
 
+## [3.3.4+Juan Vicente] - 2021-09-04
+### Added
+ - activity_verify, escalado y funcional
+### Fixed
+ - Usuario apuntaba a null en LoginActivity al abrir el Dialog_Validar_Usuario
+
 ## [3.3.3+Raúl] - 2021-09-04
 ### Fixed
  - Bug inicio de sesion

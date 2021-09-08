@@ -24,6 +24,9 @@ import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
+import com.workpodapp.workpod.data.Workpod;
+import com.workpodapp.workpod.fragments.Fragment_Dialog_Call;
+import com.workpodapp.workpod.fragments.Fragment_Dialog_Validar_Usuario;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_TextView;
 
@@ -187,7 +190,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         startActivity(activity);
                         finish();
                     }else if (!consulta.getDato().isVerificado()){
-                        Toast.makeText(this, "Usuario no verificado", Toast.LENGTH_LONG).show();
+                        InfoApp.USER = consulta.getDato();
+                        Fragment_Dialog_Validar_Usuario fragment_Dialog_Validar_Usuario = new Fragment_Dialog_Validar_Usuario();
+                        fragment_Dialog_Validar_Usuario.show(this.getSupportFragmentManager(), "DialogValidarUsuario");
                     }else if (consulta.getError().code > -3) Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
                     else Toast.makeText(this, "Problema al comprobar tu usuario\nIntentalo más tarde, por favor", Toast.LENGTH_LONG).show();
                 });

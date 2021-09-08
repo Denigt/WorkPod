@@ -225,7 +225,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                 select.postRunOnUI(this, ()-> {
                                     if (insert.getError().code > -1 && InfoApp.USER != null) {
                                         // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
-                                        Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
+                                        Intent activity = new Intent(getApplicationContext(), activity_verify.class);
                                         finishAffinity();
                                         startActivity(activity);
                                         finish();
