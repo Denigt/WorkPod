@@ -11,10 +11,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/TV_Verify_Titulo"
                 android:layout_width="match_parent"
@@ -57,7 +59,29 @@
                     android:layout_marginBottom="30dp"
                     android:src="@drawable/button_btn_aceptar" />
             </FrameLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rounded_back_button"
+                android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/BtnUsuarioValidado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparente"
+                    android:backgroundTint="@color/blue"
+                    android:text="Ya he validado mi usuario"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,28 +124,7 @@
                     android:textSize="18dp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/rounded_back_button"
-                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/BtnUsuarioValidado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/transparente"
-                    android:backgroundTint="@color/blue"
-                    android:text="Ya he validado mi usuario"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
