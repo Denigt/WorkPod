@@ -1,6 +1,6 @@
 # Changelog 
 
-## [3.3.4+Juan Vicente] - 2021-09-04
+## [3.4.0+Juan Vicente] - 2021-09-04
 ### Added
  - activity_verify, escalado y funcional
 ### Fixed
@@ -195,6 +195,10 @@
 ##[2.1.0+Juan Vicente] - 2021-07-27
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
+
+[3.4.0] : https://github.com/Denigt/WorkPod/commit/fb8724fb29f7727f4b4e64ea269e4faee35625e9
+[3.3.3] : https://github.com/Denigt/WorkPod/commit/97d50e5f13280b3b6ea5d346d4054397dfa311e5
+[3.3.2] : https://github.com/Denigt/WorkPod/commit/050025d22a64b542b1d9d7de3fcecef07592a8d1
 [3.3.1] : https://github.com/Denigt/WorkPod/commit/f9f0995a5f92fc405ff005736478009ccdcdfc01
 [3.2.3] : https://github.com/Denigt/WorkPod/commit/ebb0c0ac09586838dac9f8e8498ada031f16f66b
 [3.2.2] : https://github.com/Denigt/WorkPod/commit/604f4d93341159bbaf84c95d03d2fa75698abd43
