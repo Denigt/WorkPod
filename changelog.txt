@@ -1,5 +1,9 @@
 # Changelog 
 
+## [3.5.0+Juan Vicente] - 2021-09-04
+### Added
+ - Empezando con FCM, push a todos los usuarios.
+
 ## [3.4.0+Juan Vicente] - 2021-09-04
 ### Added
  - activity_verify, escalado y funcional
@@ -196,6 +200,7 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.5.0] : https://github.com/Denigt/WorkPod/commit/5f59e05ead224b25db5cd4d31d73b6f4e4b1d134
 [3.4.0] : https://github.com/Denigt/WorkPod/commit/fb8724fb29f7727f4b4e64ea269e4faee35625e9
 [3.3.3] : https://github.com/Denigt/WorkPod/commit/97d50e5f13280b3b6ea5d346d4054397dfa311e5
 [3.3.2] : https://github.com/Denigt/WorkPod/commit/050025d22a64b542b1d9d7de3fcecef07592a8d1
