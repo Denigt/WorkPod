@@ -63,6 +63,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     //implementación crashlytics
     implementation 'com.google.firebase:firebase-crashlytics'
+    //implentación de cloud messaging
+    implementation 'com.google.firebase:firebase-messaging'
     /*Si no usamos BoM
      implementation 'com.google.firebase:firebase-crashlytics:18.2.0'
     implementation 'com.google.firebase:firebase-analytics:19.0.0'
