@@ -1,5 +1,6 @@
 package com.workpodapp.workpod;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,6 +9,9 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
@@ -17,6 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static java.sql.DriverManager.println;
 
 public class SplashScreen extends AppCompatActivity {
     // DECLARACION DE VARIABLES
@@ -84,5 +90,30 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
         consulta.start();
+
+        //==================================PROVISIONAL, PRUEBAS FCM========================================================================
+        //OBTENER ID DEL DISPOSITIVO
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                String token=task.getResult();
+                println("Token: "+token);
+                Log.println(Log.INFO,"ID Dispositivo",token);
+            }
+        });
+//FILTRAR POR TEMAS
+        FirebaseMessaging.getInstance().subscribeToTopic("Madrid").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                String msg="";
+                if (!task.isSuccessful()) {
+                    msg = "Ha habido un error";
+                }
+                Log.println(Log.INFO,"Madrid",msg);
+            }
+        });
     }
 }
