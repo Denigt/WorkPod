@@ -1,5 +1,6 @@
 package com.workpodapp.workpod;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_TextView;
 
+import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +126,15 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
                     if (!modUser.getVerificar().equals(true) && !modUser.getEmail().equals(modUser.getVerificar())) {
                         Database<Usuario> verificacion = new Database<>(Database.CAMBIO_EMAIL, modUser);
                         verificacion.start();
+
+                        // CERRAR SESION
+                        File fileLogin = this.getFileStreamPath(InfoApp.LOGFILE);
+                        if (fileLogin.delete()) {
+                            Toast.makeText(this, "Se ha cerrado la sesion", Toast.LENGTH_SHORT).show();
+                            Intent activity = new Intent(this, InitActivity.class);
+                            finishAffinity();
+                            startActivity(activity);
+                        }
                     }
                     finish();
                 } else {

@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         finishAffinity();
                         startActivity(activity);
                         finish();
-                    }else if (!consulta.getDato().isVerificado()){
+                    }else if (consulta.getError().code > -1 && !consulta.getDato().isVerificado()){
                         InfoApp.USER = consulta.getDato();
                         Fragment_Dialog_Validar_Usuario fragment_Dialog_Validar_Usuario = new Fragment_Dialog_Validar_Usuario();
                         fragment_Dialog_Validar_Usuario.show(this.getSupportFragmentManager(), "DialogValidarUsuario");

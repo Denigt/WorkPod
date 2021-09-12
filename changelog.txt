@@ -1,5 +1,13 @@
 # Changelog 
 
+## [3.5.1+Raul] - 2021-09-12
+### Added
+ - Cierre de sesion al modificar email
+### Fixed
+ - Error en el login si el correo no existe
+### Changed
+ - Fondo del dialogo de verificar el email
+
 ## [3.5.0+Juan Vicente] - 2021-09-04
 ### Added
  - Empezando con FCM, push a todos los usuarios.

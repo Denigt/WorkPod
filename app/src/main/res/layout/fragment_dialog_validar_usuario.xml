@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="20dp"
-    android:backgroundTint="#88FBDEDE"
-    android:background="@drawable/rounded_border_square"
+    android:background="@drawable/rounded_back_solid"
     tools:context=".fragments.Fragment_Dialog_Validar_Usuario">
 
     <LinearLayout
