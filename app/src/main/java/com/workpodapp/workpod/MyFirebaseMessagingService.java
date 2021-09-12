@@ -18,12 +18,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getNotification().getBody() != null) {
-            Log.i("PVL", "RECEIVED MESSAGE: " + remoteMessage.getNotification().getBody());
+            Looper.prepare();
+            Log.i("INFORMATION", "RECEIVED MESSAGE: " + remoteMessage.getNotification().getBody());
             String texto= remoteMessage.getData().get("url");
             String asunto= remoteMessage.getNotification().getTitle();
-            Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
+          //  Toast.makeText(getBaseContext(),asunto,Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(),remoteMessage.getNotification().getBody(),Toast.LENGTH_LONG).show();
+            Looper.loop();
         }
 
-      //  Toast.makeText(getBaseContext(),remoteMessage.getNotification().getBody(),Toast.LENGTH_LONG).show();
+
     }
 }

@@ -105,7 +105,7 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 //FILTRAR POR TEMAS
-        FirebaseMessaging.getInstance().subscribeToTopic("Madrid").addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseMessaging.getInstance().subscribeToTopic("Prueba").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 String msg="";
