@@ -1,6 +1,6 @@
 # Changelog 
 
-## [3.6.0+Raul] - 2021-09-16
+## [3.6.1+Juan Vicente] - 2021-09-16
 ### Changed
  -Tema prueba por all. Será un tema común a todos los usuarios y permitirá mandar una notificación a todos cuando sea necesario.
 
@@ -229,6 +229,8 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.6.1] : https://github.com/Denigt/WorkPod/commit/094343a9722236a2f2d8824d04f386fb25c45031
+[3.6.0] : https://github.com/Denigt/WorkPod/commit/5e64bec25bda3629eae9a4648a8238cca46ef631
 [3.5.3] : https://github.com/Denigt/WorkPod/commit/7a55bd54762866c8a5ec5f5d60f7df6d52a05c27
 [3.5.2] : https://github.com/Denigt/WorkPod/commit/4c7647bc47cc21e969e6325ae9300a95004b4bc7
 [3.5.1] : https://github.com/Denigt/WorkPod/commit/c0c727448363ec579bc6f51a3c3eb81e0f9bb534
