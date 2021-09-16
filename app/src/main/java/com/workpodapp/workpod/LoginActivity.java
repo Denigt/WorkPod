@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Instalacion;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.data.Workpod;
@@ -184,6 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // Actualizacion de la instalacion del usuario en la base de datos
                         Database<Usuario> update = new Database<>(Database.UPDATE, InfoApp.USER);
                         update.start();
+                        new Database<Instalacion>(Database.INSTALL, new Instalacion(getContentResolver(), InfoApp.USER.getId())).start();
 
                         Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                         finishAffinity();

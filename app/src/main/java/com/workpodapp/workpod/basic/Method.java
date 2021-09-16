@@ -7,6 +7,11 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_Image_View;
 import com.workpodapp.workpod.scale.Scale_TextView;
@@ -25,6 +30,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import static java.sql.DriverManager.println;
 
 /**
  * Incorpora metodos estaticos para funciones basicas
@@ -415,5 +422,13 @@ public abstract class Method {
             Log.e("CIFRADO AES", "Error con el tamano del texto a encriptar");
         }
         return null;
+    }
+
+    public static String getFBid(){
+        Task<String> tarea = FirebaseMessaging.getInstance().getToken();
+        while (!tarea.isComplete());
+        if (tarea.isSuccessful())
+            return tarea.getResult();
+        else return "";
     }
 }

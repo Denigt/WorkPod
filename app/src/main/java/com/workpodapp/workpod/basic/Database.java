@@ -49,6 +49,7 @@ public class Database<T extends DataDb> extends Thread {
     public static final int VERIFICACION = 6;
     public static final int RESET = 7;
     public static final int CAMBIO_EMAIL = 8;
+    public static final int INSTALL = 10;
 //-------------------------------------------
     /**
      * Consulta que se va a realizar
@@ -115,13 +116,15 @@ public class Database<T extends DataDb> extends Thread {
         TABLAS.add("sesion");
         TABLAS.add("ubicacion");
         TABLAS.add("reserva");
+        TABLAS.add("instalacion");
     }
 
     // HILOS A EJECUTAR
     @Override
     public void run() {
         finish = false;
-        switch (tipoConsulta){
+
+        switch (tipoConsulta) {
             case SELECTALL:
                 lstSelect = select(dato);
                 break;
@@ -140,10 +143,14 @@ public class Database<T extends DataDb> extends Thread {
             case VERIFICACION:
             case RESET:
             case CAMBIO_EMAIL:
-                if(dato instanceof Usuario)
-                    send_email((Usuario)dato);
-                else error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
+                if (dato instanceof Usuario)
+                    send_email((Usuario) dato);
+                else
+                    error = new ErrorMessage(-5, "La verificacion necesita que se le pase un usuario");
                 break;
+            case INSTALL:
+                if (dato instanceof Instalacion)
+                    install((Instalacion) dato);
         }
 
         // EJECUTAR CODIGO POSTCONSULTA
@@ -559,7 +566,7 @@ public class Database<T extends DataDb> extends Thread {
             String urlString = String.format("%s/php/%s.php", URL_SERVIDOR, correo);
 
             try {
-                // Establecemos los parametros necesarios para el metodo SelectID
+                // Establecemos los parametros necesarios para el metodo
                 urlString += "?destinatario=" + obj.getID();
 
                 URL url = new URL(urlString);
@@ -601,6 +608,71 @@ public class Database<T extends DataDb> extends Thread {
             }catch(JSONException e) {
                 error = new ErrorMessage(-11, "Problema al crear el JSON");
                 Log.e("DATABASE VERIFICACION", "Error obtener JSON");
+            }
+        }
+    }
+
+    /**
+     * Actualiza el objeto en la tabla que le corresponda
+     * @param obj Objeto a actualizar
+     * @return true si se ha podido actualizar el objeto
+     */
+    private void install(Instalacion obj){
+        boolean retorno = false;
+        // PREPARAR LA CONEXION
+        if (TABLAS.contains(obj.getTabla())) {
+            String urlString = String.format("%s/php/%s/%s.php", URL_SERVIDOR, obj.getTabla(), (obj.getUsuario() == 0)?"create":"login");
+
+            try {
+                URL url = new URL(urlString);
+                // ABRIMOS CONEXIÓN
+                HttpURLConnection connection = conexion(url);
+
+                // PREPARAMOS LA CADENA PARA ENVIAR LOS DATOS A INSERTAR
+                OutputStream out = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
+
+                // ENVIAR LOS DATOS
+                writer.write(obj.dataAJSON().toString());
+                writer.flush();
+                writer.close();
+
+                // SI LA RESPUESTA DE LA CONEXIÓN ES CORRECTA ES CORRECTA
+                int respuesta = connection.getResponseCode();
+
+                if (respuesta == HttpURLConnection.HTTP_OK) {
+                    // PREPARAMOS LA CADENA DE ENTRADA PARA RECOGER LA RESPUESTA DEL SERVIDOR
+                    String result = new String();
+                    InputStreamReader in = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8);
+
+                    // CREAR UN READER A PARTIR DE LA INPUTSTREAM
+                    BufferedReader reader = new BufferedReader(in);
+
+                    // LEER LA ENTRADA Y ALMACENARLA EN UNA STRING
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+                    connection.disconnect();
+
+                    // TRANSFORMAR STRING A JSON
+                    JSONObject json = new JSONObject(result);
+
+                    // OBTENER EL CODIGO DE ERROR
+                    error = new ErrorMessage(json);
+                }else{
+                    error = new ErrorMessage(-respuesta, "Problema con el servidor");
+                    Log.e("DATABASE INSTALL", "No se ha podido conectar con el servidor");
+                }
+            }catch (MalformedURLException e) {
+                error = new ErrorMessage(-404, "URL invalida");
+                Log.e("DATABASE INSTALL", "URL invalida");
+            }catch (IOException e) {
+                error = new ErrorMessage(-404, "No hay conexion a internet");
+                Log.e("DATABASE INSTALL", "Error al leer los datos del servidor");
+            }catch(JSONException e) {
+                error = new ErrorMessage(-11, "Problema al crear el JSON de error");
+                Log.e("DATABASE INSTALL", "Error obtener JSON");
             }
         }
     }

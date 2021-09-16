@@ -15,6 +15,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Instalacion;
 import com.workpodapp.workpod.data.Usuario;
 
 import java.io.File;
@@ -35,8 +36,9 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        // NADA MAS INICIAR LA APP OBTENER LA IDENTIFICACION DE LA APLICACION
+        // NADA MAS INICIAR LA APP OBTENER LA IDENTIFICACION DE LA APLICACION E INFORMAR A LA BD SOBRE LA INSTALACION
         InfoApp.INSTALLATION = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        new Database<Instalacion>(Database.INSTALL, new Instalacion(getContentResolver())).start();
 
         // COMPROBAR SI HAY FICHERO DE AUTOLOGIN
         File fileLogin = getFileStreamPath(InfoApp.LOGFILE);
@@ -92,18 +94,6 @@ public class SplashScreen extends AppCompatActivity {
         consulta.start();
 
         //==================================PROVISIONAL, PRUEBAS FCM========================================================================
-        //OBTENER ID DEL DISPOSITIVO
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if (!task.isSuccessful()) {
-                    return;
-                }
-                String token=task.getResult();
-                println("Token: "+token);
-                Log.println(Log.INFO,"ID Dispositivo",token);
-            }
-        });
 //FILTRAR POR TEMAS
         FirebaseMessaging.getInstance().subscribeToTopic("Prueba").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
