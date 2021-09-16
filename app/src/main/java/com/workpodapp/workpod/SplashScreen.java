@@ -95,15 +95,16 @@ public class SplashScreen extends AppCompatActivity {
 
         //==================================PROVISIONAL, PRUEBAS FCM========================================================================
 //FILTRAR POR TEMAS
-        FirebaseMessaging.getInstance().subscribeToTopic("Prueba").addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseMessaging.getInstance().subscribeToTopic("all").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 String msg="";
                 if (!task.isSuccessful()) {
                     msg = "Ha habido un error";
                 }
-                Log.println(Log.INFO,"Madrid",msg);
+                Log.println(Log.INFO,"All",msg);
             }
         });
+
     }
 }

@@ -1,6 +1,10 @@
 # Changelog 
 
 ## [3.6.0+Raul] - 2021-09-16
+### Changed
+ -Tema prueba por all. Será un tema común a todos los usuarios y permitirá mandar una notificación a todos cuando sea necesario.
+
+## [3.6.0+Raul] - 2021-09-16
 ### Added
  - Se registra en la base de datos la instalacion de la app
  - Se registran el último inicio de sesion en una determinada instalacion
