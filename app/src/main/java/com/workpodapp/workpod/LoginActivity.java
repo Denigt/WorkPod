@@ -292,10 +292,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLostContrasena.setOnClickListener(this);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+       /* if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             FrameLayout lyt = findViewById(R.id.lytForeground1);
             lyt.setBackground(getDrawable(R.drawable.rounded_border_button));
-        }
+        }*/
 
         //ESCALAMOS ELEMENTOS
         escalarElementos();

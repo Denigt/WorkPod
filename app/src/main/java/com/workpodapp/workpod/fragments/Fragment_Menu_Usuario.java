@@ -23,24 +23,11 @@ import com.workpodapp.workpod.R;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_Menu_Usuario#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnItemClickListener {
 
     // PARAMETROS PARA LA GESTION DEL LISTVIEW
     private ListView lsV_Menu_Usuario;
     ArrayList<LsV_Menu_Usuario> aLstMU = new ArrayList<>();
-
-    // PARAMETROS PARA EL FRAGMENT, NO SE USA, SE PUEDE BORRAR
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     // VARIABLES DE USO PRIVADO SIN GETTERS NI SETTERS
     private Adaptador_LsV_Menu_Usuario aMU;
@@ -50,20 +37,9 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MenuUsuario.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Fragment_Menu_Usuario newInstance(String param1, String param2) {
         Fragment_Menu_Usuario fragment = new Fragment_Menu_Usuario();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,8 +48,6 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -90,7 +64,8 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_settings, "Configuración"));
         aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_phone, "Soporte"));
         aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Invita a un amigo"));
-        aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.empty_icon_lock, "Cerrar sesión"));
+        aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.fill_icon_friends, "Canjear códigos de descuento"));
+        aLstMU.add(new LsV_Menu_Usuario(7, R.drawable.empty_icon_lock, "Cerrar sesión"));
         aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
         lsV_Menu_Usuario.setAdapter(aMU);
         lsV_Menu_Usuario.setOnItemClickListener(this);
@@ -114,8 +89,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         onClickConfiguracion(i);
         onClickSoporte(i);
         onClickInvita(i);
+        onClickDescuentos(i);
         onClickCerrar(i);
     }
+
+
 
     // EVENTOS ON CLICK PARA LOS ITEMS DEL LISTVIEW
     private void onClickPago(int index){
@@ -181,7 +159,16 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentInvitaAmigo).commit();
         }
     }
+    private void onClickDescuentos(int index) {
+        if (index == InfoFragment.DESCUENTOS) {
+            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
+            InfoFragment.anterior = InfoFragment.actual;
+            InfoFragment.actual = InfoFragment.DESCUENTOS;
 
+            Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
+        }
+    }
     private void onClickCerrar(int index){
         if (index == InfoFragment.CERRAR) {
             File fileLogin = getActivity().getFileStreamPath(InfoApp.LOGFILE);

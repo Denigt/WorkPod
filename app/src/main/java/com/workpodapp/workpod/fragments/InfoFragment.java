@@ -8,7 +8,8 @@ public class InfoFragment {
     public static final int CONFIGURACION = 3;
     public static final int SOPORTE = 4;
     public static final int INVITA = 5;
-    public static final int CERRAR = 6;
+    public static final int DESCUENTOS = 6;
+    public static final int CERRAR = 7;
 
     // CODIGO DE FRAGMENTS CONTEXTUALES (PANTALLAS PRINCIPALES)
     public static final int MAPA = 10;

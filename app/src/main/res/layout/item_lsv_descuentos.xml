@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bordes_redondeados_item_lsv_descuentos"
+    android:layout_marginTop="10dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/iLLDescuento"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/iTV_Nombre_Descuento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Invita a un amigo"
+            android:textAlignment="center"
+            android:textColor="@color/darkblue"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/iTV_Min_Descuento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="15 minutos gratis"
+            android:textAlignment="center"
+            android:textColor="@color/blue"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded_back_button"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/iBtnCanjear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparente"
+            android:backgroundTint="@color/blue"
+
+            android:text="Canjear"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

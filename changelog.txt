@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.7.0+Juan Vicente] - 2021-09-18
+###Added
+ -Fragment Canjear codigos
+
 ## [3.6.1+Juan Vicente] - 2021-09-16
 ### Changed
  -Tema prueba por all. Será un tema común a todos los usuarios y permitirá mandar una notificación a todos cuando sea necesario.
