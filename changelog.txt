@@ -1,5 +1,13 @@
 # Changelog 
 
+##[3.7.2+Juan Vicente] - 2021-09-19
+###Fixed
+ -Pequeñas correcciones en Fragment_Canjear_Codigos
+
+##[3.7.1+Juan Vicente] - 2021-09-19
+###Added
+ -Added Fragment_Canjear_Codigos tras finalizar sesion
+
 ##[3.7.0+Juan Vicente] - 2021-09-18
 ###Added
  -Fragment Canjear codigos
@@ -233,6 +241,8 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.7.1] : https://github.com/Denigt/WorkPod/commit/c7d3daf4aafc5e0a3227f99eaa3ad5b5d2608534
+[3.7.0] : https://github.com/Denigt/WorkPod/commit/b966d0d742cb9de3cea7fba7e4308b1d6a837fda
 [3.6.1] : https://github.com/Denigt/WorkPod/commit/094343a9722236a2f2d8824d04f386fb25c45031
 [3.6.0] : https://github.com/Denigt/WorkPod/commit/5e64bec25bda3629eae9a4648a8238cca46ef631
 [3.5.3] : https://github.com/Denigt/WorkPod/commit/7a55bd54762866c8a5ec5f5d60f7df6d52a05c27

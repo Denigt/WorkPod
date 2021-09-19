@@ -116,7 +116,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
-
+        contruyendoLsV(view);
         if (canjearCodigosMU) {
             accesoMU(view);
         }
@@ -127,17 +127,18 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
     private void accesoMU(View view) {
         if (InfoApp.USER.getEmail().equalsIgnoreCase("juanvitj@gmail.com")) {
-            contruyendoLsV(view);
+
             canjearCodigosMU = false;
             lLDescuentoMenu.setVisibility(View.VISIBLE);
             lLDescuentoSesion.setVisibility(View.GONE);
             iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
         } else {
             lLShareFriendDescuento.setVisibility(View.VISIBLE);
-            lLDescuentoMenu.setVisibility(View.GONE);
+            lLDescuentoSesion.setVisibility(View.GONE);
             tV_Descuentos.setVisibility(View.GONE);
             tV_No_Descuentos.setVisibility(View.VISIBLE);
             iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
+            lsV_Codigo_Descuento.setVisibility(View.GONE);
         }
 
     }
