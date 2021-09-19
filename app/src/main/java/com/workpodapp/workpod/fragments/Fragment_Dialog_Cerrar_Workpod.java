@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.ValoracionWorkpod;
+import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
@@ -184,10 +185,16 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             update.start();
             //HACEMOS EL INSERT DE SESION
             finiquitarSesion();
+            WorkpodActivity.boolLoc=false;
+            WorkpodActivity.boolSession=false;
             //CONTROLAMOS QUE NO SE VA A PASAR DE ACTIVITY HASTA QUE SE HAYA ACTUALIZADO LA RESERVA DEL USURIO
-            Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
+            Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
+            dismiss();
+
+         /*  Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(activity);
+            startActivity(activity);*/
         }catch (Exception e){
             e.printStackTrace();
         }

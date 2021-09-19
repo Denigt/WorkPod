@@ -45,7 +45,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@color/blue"
+        android:background="#E6F6FD"
         android:gravity="center"
         android:visibility="gone">
 
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@color/white"
+            android:background="#E6F6FD"
             android:gravity="center_horizontal"
             android:justificationMode="inter_word"
             android:padding="10dp"
@@ -181,7 +181,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:text="No tienes códigos de descuento\nComparte tu código amigo"
-        android:textColor="@color/blue"
+        android:textColor="#F17575"
         android:textSize="22dp"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -200,7 +200,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_back_button"

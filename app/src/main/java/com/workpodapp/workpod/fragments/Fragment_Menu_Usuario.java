@@ -32,7 +32,6 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     // VARIABLES DE USO PRIVADO SIN GETTERS NI SETTERS
     private Adaptador_LsV_Menu_Usuario aMU;
 
-
     public Fragment_Menu_Usuario() {
         // Required empty public constructor
     }
@@ -164,6 +163,8 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
             // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
             InfoFragment.anterior = InfoFragment.actual;
             InfoFragment.actual = InfoFragment.DESCUENTOS;
+            //CANJEARCODIGOS APUNTA A TRUE AL ACCEDER DESDE EL MENÚ DE USUARIO
+            Fragment_Canjear_Codigos.canjearCodigosMU=true;
 
             Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();

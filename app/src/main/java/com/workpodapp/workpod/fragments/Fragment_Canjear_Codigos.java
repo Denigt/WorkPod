@@ -1,5 +1,6 @@
 package com.workpodapp.workpod.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,8 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.workpodapp.workpod.R;
+import com.workpodapp.workpod.ValoracionWorkpod;
+import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
+import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_Image_View;
@@ -45,6 +50,8 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private Button btnShareFriendCodeDescuento;
     private ImageView iV_Btn_Cancelar_Descuento;
 
+    Usuario usuario;
+
     //PARAMETROS PARA LA GESTIÓN DEL LSV
     private ListView lsV_Codigo_Descuento;
     private List<LsV_Descuentos> lstDescuentos = new ArrayList<>();
@@ -56,6 +63,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
     List<Scale_Image_View> lstIv;
+    //VARIABLE CONTROLAR IR A CANJEAR_CODIGOS DESDE MENU DE USUARIO
+    public static boolean canjearCodigosMU = false;
+    private boolean boolIVCancelar = false;
 
     public Fragment_Canjear_Codigos() {
         // Required empty public constructor
@@ -92,12 +102,14 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         btnCancelarDescuento = view.findViewById(R.id.BtnCancelarDescuento);
         btnGuardarDescuento = view.findViewById(R.id.BtnGuardarDescuento);
         btnShareFriendCodeDescuento = view.findViewById(R.id.BtnShareFriendCodeDescuento);
-        eTCanjearCodigos=view.findViewById(R.id.ETCanjearCodigos);
+        eTCanjearCodigos = view.findViewById(R.id.ETCanjearCodigos);
+        lsV_Codigo_Descuento = view.findViewById(R.id.Lsv_codigo_descuento);
 
         //LISTENERS
         btnShareFriendCodeDescuento.setOnClickListener(this);
         btnGuardarDescuento.setOnClickListener(this);
         btnCancelarDescuento.setOnClickListener(this);
+        iV_Btn_Cancelar_Descuento.setOnClickListener(this);
 
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
@@ -105,13 +117,37 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
-        lsV_Codigo_Descuento = view.findViewById(R.id.Lsv_codigo_descuento);
+        if (canjearCodigosMU) {
+            accesoMU(view);
+        }
+        WorkpodActivity.boolValoracion = true;
+        usuario = InfoApp.USER;
+        return view;
+    }
+
+    private void accesoMU(View view) {
+        if (InfoApp.USER.getEmail().equalsIgnoreCase("juanvitj@gmail.com")) {
+            contruyendoLsV(view);
+            canjearCodigosMU = false;
+            lLDescuentoMenu.setVisibility(View.VISIBLE);
+            lLDescuentoSesion.setVisibility(View.GONE);
+            iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
+        } else {
+            lLShareFriendDescuento.setVisibility(View.VISIBLE);
+            lLDescuentoMenu.setVisibility(View.GONE);
+            tV_Descuentos.setVisibility(View.GONE);
+            tV_No_Descuentos.setVisibility(View.VISIBLE);
+            iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void contruyendoLsV(View view) {
+
         lstDescuentos.add(new LsV_Descuentos(0, "Invita a un Amigo", "20 minutos gratis"));
         lstDescuentos.add(new LsV_Descuentos(1, "Descuento por Antigüedad", "10 minutos gratis"));
         aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics);
         lsV_Codigo_Descuento.setAdapter(aLsvDescuentos);
-
-        return view;
     }
 
 
@@ -125,7 +161,38 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.IV_Btn_Cancelar_Descuento) {
+            salirFragmentDescuento();
+        } else if (v.getId() == R.id.BtnShareFriendCodeDescuento) {
+            shareFriendCode();
+        }
+    }
 
+    /**
+     * A través de un intent, podrá enviar el usuario su código amigo a cualquier app q tenga instalada en su móvil que sirva para
+     * enviar datos como redes sociales, emails, mensajes...
+     */
+    private void shareFriendCode() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola\n ¡Te regalo 15 minutos gratis en la sesión de Workpod que quieras " +
+                "canjearlos! Para conseguirlo: descárgate la app de Workpod, introduce una tarjeta de pago y canjea mi código:" +
+                usuario.getCodamigo() + "\nConsulta condiciones en:\n https://dev.workpod.app/web/invita_amigo.html");
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
+    /**
+     * Cuando le des al IV de cancelar (la X roja) se irá al fragment de valoración workpod
+     * Este IV solo aparece si se abre este fragment al finalizar l sesión
+     */
+    private void salirFragmentDescuento() {
+        boolIVCancelar = true;
+        Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
+        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(activity);
     }
 
     //MÉTODOS
@@ -160,7 +227,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         lstTv.add(new Scale_TextView(tV_Descuentos_Sesion, "wrap_content", "bold", 13, 15, 17));
         lstTv.add(new Scale_TextView(tV_Descuentos_Menu, "wrap_content", "bold", 13, 15, 17));
         lstTv.add(new Scale_TextView(tV_Descuentos, "match_parent", "bold", 16, 18, 22));
-        lstTv.add(new Scale_TextView(tV_No_Descuentos, "wrap_content", "bold", 22, 18, 22));
+        lstTv.add(new Scale_TextView(tV_No_Descuentos, "match_parent", "bold", 22, 18, 22));
 
         lstIv.add(new Scale_Image_View(iV_Btn_Cancelar_Descuento, 0, 60, 0, 80, 0, 130, "wrap_content", ""));
 
@@ -180,5 +247,10 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             btnGuardarDescuento.setPadding(40, 0, 40, 0);
             eTCanjearCodigos.setTextSize(16);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
