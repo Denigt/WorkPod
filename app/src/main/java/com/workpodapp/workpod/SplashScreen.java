@@ -38,7 +38,24 @@ public class SplashScreen extends AppCompatActivity {
 
         // NADA MAS INICIAR LA APP OBTENER LA IDENTIFICACION DE LA APLICACION E INFORMAR A LA BD SOBRE LA INSTALACION
         InfoApp.INSTALLATION = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        new Database<Instalacion>(Database.INSTALL, new Instalacion(getContentResolver())).start();
+        InfoApp.TOPICS.add(InfoApp.INSTALLATION);
+        Database<Instalacion> install = new Database<Instalacion>(Database.INSTALL, new Instalacion(getContentResolver()));
+        install.postRun(()->{
+            //if (install.getError().code > -1)
+                for (String topic : InfoApp.TOPICS) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("SUBSCRIBE_TOPICS", String.format("No se ha podido suscribir %s al tema %s", InfoApp.INSTALLATION, topic));
+                            }else{
+                                Log.i("SUBSCRIBE_TOPICS", String.format("%s suscrito al tema %s", InfoApp.INSTALLATION, topic));
+                            }
+                        }
+                    });
+                }
+        });
+        install.start();
 
         // COMPROBAR SI HAY FICHERO DE AUTOLOGIN
         File fileLogin = getFileStreamPath(InfoApp.LOGFILE);
@@ -92,19 +109,6 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
         consulta.start();
-
-        //==================================PROVISIONAL, PRUEBAS FCM========================================================================
-//FILTRAR POR TEMAS
-        FirebaseMessaging.getInstance().subscribeToTopic("all").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                String msg="";
-                if (!task.isSuccessful()) {
-                    msg = "Ha habido un error";
-                }
-                Log.println(Log.INFO,"All",msg);
-            }
-        });
 
     }
 }

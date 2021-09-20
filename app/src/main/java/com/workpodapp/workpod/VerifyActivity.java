@@ -23,7 +23,7 @@ import com.workpodapp.workpod.scale.Scale_TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class activity_verify extends AppCompatActivity implements View.OnClickListener {
+public class VerifyActivity extends AppCompatActivity implements View.OnClickListener {
 
     //XML
     private TextView tV_Verify_Titulo;

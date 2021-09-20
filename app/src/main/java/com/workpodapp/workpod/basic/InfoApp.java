@@ -2,6 +2,8 @@ package com.workpodapp.workpod.basic;
 
 import com.workpodapp.workpod.data.*;
 
+import java.util.ArrayList;
+
 /**
  * Clase para acceder a datos compartidos entre distintas actividades
  * QUEDA PROHIBIDO INTRODUCIR INFORMACION CONFIDENCIAL EN ESTA CLASE (Tarjetas, contrasenas, ubicacion de usuarios, datos de facturacion...)
@@ -33,11 +35,16 @@ public abstract class InfoApp {
     public static final String LOGFILE = "log.cfg";
 
     public static String INSTALLATION;
+
+    public static ArrayList<String> TOPICS;
     static {
         USER = null;
         RESERVA = null;
         WORKPOD = null;
         INSTALLATION = null;
+
+        TOPICS = new ArrayList<>();
+        TOPICS.add("all");
     }
 
 }
