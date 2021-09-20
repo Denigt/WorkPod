@@ -2,17 +2,14 @@ package com.workpodapp.workpod;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +22,6 @@ import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Instalacion;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
-import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.fragments.Fragment_Dialog_Call;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_Validar_Usuario;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_TextView;
@@ -51,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox btnShowContrasena;
     //private Button btnAcceder;
     //private Button btnRegistrar;
-    private TextView btnLostContrasena;
+    private TextView tVBtnLostContrasena;
     private TextView tVActvityLoginBienvenido;
     private TextView tVActvityLoginIniSesion;
     private TextView tVActvityLoginEmail;
@@ -243,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param v Vista clicada
      */
     private void btnLostContrasenaOnClick(View v) {
-        if (v.getId() == btnLostContrasena.getId()) {
+        if (v.getId() == tVBtnLostContrasena.getId()) {
             saveActivity();
             Intent activity = new Intent(getApplicationContext(), PasswordActivity.class);
             activity.putExtra("email", email);
@@ -272,7 +267,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnVolver = findViewById(R.id.btnVolver);
         //btnAcceder = findViewById(R.id.btnAcceder);
         //btnRegistrar = findViewById(R.id.btnRegistrar);
-        btnLostContrasena = findViewById(R.id.btnLostContrasena);
+        tVBtnLostContrasena = findViewById(R.id.btnLostContrasena);
 
         //tVActvityLoginAunNoLogin=findViewById(R.id.tVActvityLoginAunNoLogin);
         tVActvityLoginBienvenido=findViewById(R.id.tVActvityLoginBienvenido);
@@ -289,7 +284,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnVolver.setOnClickListener(this);
         //btnAcceder.setOnClickListener(this);
         //btnRegistrar.setOnClickListener(this);
-        btnLostContrasena.setOnClickListener(this);
+        tVBtnLostContrasena.setOnClickListener(this);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
        /* if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
@@ -338,9 +333,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,20,24));
         lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34,34));
-        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",18,18,18));
-        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",18,18,18));
-        lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",24,24,24));
+        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",14,18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",14,18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",20,24,24));
+        lstTv.add(new Scale_TextView(tVBtnLostContrasena,"wrap_content","bold",13,14,16));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

@@ -9,10 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.fragments.Fragment_Canjear_Codigos;
+import com.workpodapp.workpod.fragments.Fragment_Dialog_More_Information;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_TextView;
@@ -23,6 +26,7 @@ import java.util.List;
 public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClickListener {
 
     Context context;
+    FragmentManager manager;
     List<LsV_Descuentos> lstDescuentos = new ArrayList<>();
 
     //VARIABLES DEL ITEM
@@ -38,7 +42,9 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
 
-    public Adaptador_Lsv_Descuentos() {
+    String letterBtnMoreInfo="";
+
+    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics) {
     }
 
     public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos) {
@@ -46,10 +52,11 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
         this.lstDescuentos = lstDescuentos;
     }
 
-    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics) {
+    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics, FragmentManager supportFragmentManager) {
         this.context = context;
         this.lstDescuentos = lstDescuentos;
         this.metrics = metrics;
+        this.manager = supportFragmentManager;
     }
 
     @Override
@@ -78,6 +85,11 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
         tVnombreDescuento.setText(lstDescuentos.get(i).getNombreDescuento());
         tVminGratis.setText(lstDescuentos.get(i).getMinGratis());
+
+        if (Fragment_Canjear_Codigos.canjearCodigosMU) {
+            ibtnCanjear.setText("+ Info");
+            letterBtnMoreInfo= ibtnCanjear.getText().toString();
+        }
         ibtnCanjear.setOnClickListener(this);
 
         //ESCALAMOS ELEMENTOS
@@ -89,9 +101,14 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.iBtnCanjear) {
-            Toast.makeText(context, "funciona", Toast.LENGTH_LONG).show();
+        if (v.getId() == R.id.iBtnCanjear && ibtnCanjear.getText().toString().equals(letterBtnMoreInfo.trim())) {
+            showDialogMoreInformation(v);
         }
+    }
+
+    private void showDialogMoreInformation(View view) {
+        Fragment_Dialog_More_Information dialog_more_information = new Fragment_Dialog_More_Information();
+        dialog_more_information.show(manager, "Show Dialog More Information");
     }
     //MÉTODOS
 

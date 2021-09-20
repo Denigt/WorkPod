@@ -64,7 +64,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     List<Scale_TextView> lstTv;
     List<Scale_Image_View> lstIv;
     //VARIABLE CONTROLAR IR A CANJEAR_CODIGOS DESDE MENU DE USUARIO
-    public static boolean canjearCodigosMU = false;
+    public static boolean canjearCodigosMU;
     private boolean boolIVCancelar = false;
 
     public Fragment_Canjear_Codigos() {
@@ -88,7 +88,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment__canjear__codigos, container, false);
+        View view = inflater.inflate(R.layout.fragment_canjear_codigos, container, false);
         //INSTANCIAMOS ELEMENTOS DEL XML
         lLDescuentoMenu = view.findViewById(R.id.LLDescuentoMenu);
         lLDescuentoSesion = view.findViewById(R.id.LLDescuentoSesion);
@@ -119,16 +119,18 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         contruyendoLsV(view);
         if (canjearCodigosMU) {
             accesoMU(view);
+        }else{
+            //PERMITE QUE AL DARLE ATRÁS HABIENDO ABIERTO ESTE FRAGMENT TRAS FINALIZAR LA SESIÓN, TE LLEVE A VALORACIÓN DE WORKPOD
+            WorkpodActivity.boolValoracion = true;
         }
-        WorkpodActivity.boolValoracion = true;
+
         usuario = InfoApp.USER;
         return view;
     }
 
     private void accesoMU(View view) {
         if (InfoApp.USER.getEmail().equalsIgnoreCase("juanvitj@gmail.com")) {
-
-            canjearCodigosMU = false;
+          //  canjearCodigosMU = false;
             lLDescuentoMenu.setVisibility(View.VISIBLE);
             lLDescuentoSesion.setVisibility(View.GONE);
             iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
@@ -147,7 +149,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
         lstDescuentos.add(new LsV_Descuentos(0, "Invita a un Amigo", "20 minutos gratis"));
         lstDescuentos.add(new LsV_Descuentos(1, "Descuento por Antigüedad", "10 minutos gratis"));
-        aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics);
+        aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics, getActivity().getSupportFragmentManager());
         lsV_Codigo_Descuento.setAdapter(aLsvDescuentos);
     }
 

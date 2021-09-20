@@ -16,6 +16,8 @@
     <color name="TextoSegundoNivel">#445469</color>
     <color name="BtnRojo">#DA4B4B</color>
 
+    <!--COLORES ANADIDOS POR JV-->
+    <color name="light_blue">#E6F6FD</color>
     <!--COLORES RAUL-->
     <color name="blue">#FF58B1E3</color>
     <color name="tblue">#8858B1E3</color>

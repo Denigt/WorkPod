@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_blue"
+    android:orientation="vertical"
+    tools:context=".fragments.Fragment_Dialog_More_Information">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Texto"
+        android:elevation="6dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="10" />
+
+        <ImageView
+            android:id="@+id/IVSalirDialogMoreInformation"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/fill_icon_salir" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/TV_Titulo_Cupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Título del Cupón"
+            android:textColor="@color/blue"
+            android:textSize="27dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TV_Descripcion_Campana"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="Este cupón se debe por esta campaña, que quiere promocionar un producto o un evento que les interesa a los usurios de workpod"
+            android:textColor="@color/blue"
+            android:textSize="21dp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/TV_Condiciones_Uso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Condiciones de Uso"
+            android:textColor="@color/darkblue"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TV_Titulo_Fecha_Validez"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Validez: "
+                android:textStyle="bold"
+                android:textColor="@color/darkblue"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:id="@+id/TV_Fecha_Validez"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01/01/2001 "
+                android:textStyle="bold"
+                android:textColor="@color/blue"
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TV_Minutos_Minimos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Minutos mínimos para canjear este cupón: 15 "
+                android:textStyle="bold"
+                android:textColor="@color/darkblue"
+                android:textSize="17dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

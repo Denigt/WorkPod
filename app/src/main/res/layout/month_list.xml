@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Enero"
+        android:gravity="center"
         android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="@color/white"

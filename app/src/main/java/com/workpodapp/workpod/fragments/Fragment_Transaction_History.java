@@ -108,7 +108,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment__transaction__history, container, false);
+        View view = inflater.inflate(R.layout.fragment_transaction_history, container, false);
         //INICIALIZAMOS LOS ELEMENTOS DEL XML
         eLsV = (ExpandableListView) view.findViewById(R.id.eLsV2);
         spinnerYears = (Spinner) view.findViewById(R.id.SpinnerYears2);

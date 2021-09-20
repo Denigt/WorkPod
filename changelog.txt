@@ -1,5 +1,11 @@
 # Changelog 
 
+## [3.7.4+Juan Vicente] - 2021-09-20
+### Added
+ - Dialog + Info en Fragment_Canjear_Codigo.
+### Fixed
+ - Escalado TV password en LoginActivity
+
 ## [3.7.3+Raul] - 2021-09-20
 ### Added
  - Icono redondeado
