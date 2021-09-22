@@ -12,14 +12,14 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cupon implements DataDb{
+public class Cupon implements DataDb {
     private int id;
     private String codigo;
     private boolean canjeado;
     private ZonedDateTime fInsertado;
     private ZonedDateTime fCanjeado;
     private ZonedDateTime fCaducidad;
-    private int campana;
+    private Campana campana;
     private int usuario;
 
     public void set(Cupon cupon) {
@@ -57,6 +57,10 @@ public class Cupon implements DataDb{
         this.canjeado = canjeado;
     }
 
+    public void setCanjeado(int canjeado) {
+        this.canjeado = canjeado == 1;
+    }
+
     public ZonedDateTime getfInsertado() {
         return fInsertado;
     }
@@ -81,11 +85,11 @@ public class Cupon implements DataDb{
         this.fCaducidad = fCaducidad;
     }
 
-    public int getCampana() {
+    public Campana getCampana() {
         return campana;
     }
 
-    public void setCampana(int campana) {
+    public void setCampana(Campana campana) {
         this.campana = campana;
     }
 
@@ -104,10 +108,11 @@ public class Cupon implements DataDb{
         fInsertado = ZonedDateTime.now();
         fCanjeado = ZonedDateTime.now();
         fCaducidad = ZonedDateTime.now();
-        campana = 0;
+        campana = new Campana();
         usuario = 0;
     }
-    public Cupon(int id, String codigo, boolean canjeado, ZonedDateTime fInsertado, ZonedDateTime fCanjeado, ZonedDateTime fCaducidad, int campana, int usuario) {
+
+    public Cupon(int id, String codigo, boolean canjeado, ZonedDateTime fInsertado, ZonedDateTime fCanjeado, ZonedDateTime fCaducidad, Campana campana, int usuario) {
         setId(id);
         setCodigo(codigo);
         setCanjeado(canjeado);
@@ -129,18 +134,21 @@ public class Cupon implements DataDb{
             if (cuponJSON.has("codigo") && !cuponJSON.isNull("codigo"))
                 cupon.setCodigo(cuponJSON.getString("codigo"));
             if (cuponJSON.has("canjeado") && !cuponJSON.isNull("canjeado"))
-                cupon.setCanjeado(cuponJSON.getBoolean("canjeado"));
+                cupon.setCanjeado(cuponJSON.getInt("canjeado"));//error
             if (cuponJSON.has("fInsertado") && !cuponJSON.isNull("fInsertado"))
                 cupon.setfInsertado(Method.stringToDate(cuponJSON.getString("fInsertado"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
             if (cuponJSON.has("fCanjeado") && !cuponJSON.isNull("fCanjeado"))
                 cupon.setfCanjeado(Method.stringToDate(cuponJSON.getString("fCanjeado"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
             if (cuponJSON.has("fCaducidad") && !cuponJSON.isNull("fCaducidad"))
                 cupon.setfCaducidad(Method.stringToDate(cuponJSON.getString("fCaducidad"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
-            if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
-                cupon.setCampana(cuponJSON.getInt("campana"));
+        /*    if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
+                cupon.setCampana(cuponJSON.getInt("campana"));*/
             if (cuponJSON.has("usuario") && !cuponJSON.isNull("usuario"))
                 cupon.setUsuario(cuponJSON.getInt("usuario"));
-        }catch(Exception e){
+            if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
+                cupon.setCampana((Campana) new Campana().JSONaData(cuponJSON));
+            else cupon.setCampana(null);
+        } catch (Exception e) {
             Log.e("ERROR JSON_USUARIO", e.getMessage());
             cupon = null;
         }
@@ -160,7 +168,7 @@ public class Cupon implements DataDb{
             json.put("fCaducidad", Method.dateToString(fCaducidad, ZoneId.of("UCT")));
             json.put("campana", campana);
             json.put("usuario", usuario);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("ERROR USUARIO_JSON", e.getMessage());
         }
 
@@ -172,7 +180,7 @@ public class Cupon implements DataDb{
         ArrayList<Cupon> lstCupones = new ArrayList<>();
         try {
             JSONArray lstCuponesJSON = json.getJSONArray("cupon");
-            for (int i = 0; i < lstCuponesJSON.length(); i++){
+            for (int i = 0; i < lstCuponesJSON.length(); i++) {
                 Cupon cupon = new Cupon();
                 JSONObject cuponJSON = lstCuponesJSON.getJSONObject(i);
 
@@ -181,21 +189,24 @@ public class Cupon implements DataDb{
                 if (cuponJSON.has("codigo") && !cuponJSON.isNull("codigo"))
                     cupon.setCodigo(cuponJSON.getString("codigo"));
                 if (cuponJSON.has("canjeado") && !cuponJSON.isNull("canjeado"))
-                    cupon.setCanjeado(cuponJSON.getBoolean("canjeado"));
+                    cupon.setCanjeado(cuponJSON.getInt("canjeado"));//error
                 if (cuponJSON.has("fInsertado") && !cuponJSON.isNull("fInsertado"))
                     cupon.setfInsertado(Method.stringToDate(cuponJSON.getString("fInsertado"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
                 if (cuponJSON.has("fCanjeado") && !cuponJSON.isNull("fCanjeado"))
                     cupon.setfCanjeado(Method.stringToDate(cuponJSON.getString("fCanjeado"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
                 if (cuponJSON.has("fCaducidad") && !cuponJSON.isNull("fCaducidad"))
                     cupon.setfCaducidad(Method.stringToDate(cuponJSON.getString("fCaducidad"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
-                if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
-                    cupon.setCampana(cuponJSON.getInt("campana"));
+              /*  if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
+                    cupon.setCampana(cuponJSON.getInt("campana"));*/
                 if (cuponJSON.has("usuario") && !cuponJSON.isNull("usuario"))
                     cupon.setUsuario(cuponJSON.getInt("usuario"));
+                if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
+                    cupon.setCampana((Campana) new Campana().JSONaData(cuponJSON));
+                else cupon.setCampana(null);
 
                 lstCupones.add(cupon);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("ERROR JSON_USUARIO", e.getMessage());
         }
 
@@ -204,7 +215,7 @@ public class Cupon implements DataDb{
 
     @Override
     public String getTabla() {
-        return "campana";
+        return "cupon";
     }
 
     @Override

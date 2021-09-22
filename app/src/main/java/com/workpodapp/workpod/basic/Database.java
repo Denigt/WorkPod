@@ -39,7 +39,7 @@ public class Database<T extends DataDb> extends Thread {
      */
     public static final String URL_SERVIDOR = "https://dev.workpod.app";
 
-//--TIPOS DE CONSULTA------------------------
+    //--TIPOS DE CONSULTA------------------------
     public static final int SELECTALL = 0;
     public static final int SELECTID = 1;
     public static final int INSERT = 2;
@@ -117,6 +117,8 @@ public class Database<T extends DataDb> extends Thread {
         TABLAS.add("ubicacion");
         TABLAS.add("reserva");
         TABLAS.add("instalacion");
+        TABLAS.add("cupon");
+        TABLAS.add("campana");
     }
 
     // HILOS A EJECUTAR
@@ -700,7 +702,7 @@ public class Database<T extends DataDb> extends Thread {
         conex.connect();
         return conex;
     }
-//== CONSTRUCTORES ==============================================================
+    //== CONSTRUCTORES ==============================================================
     public Database(int tipoConsulta, T dato) {
         if (tipoConsulta < 0 )
             tipoConsulta = -1;
@@ -711,7 +713,7 @@ public class Database<T extends DataDb> extends Thread {
         this.error = new ErrorMessage();
     }
 
-//== GETTERS Y SETTERS ==========================================================
+    //== GETTERS Y SETTERS ==========================================================
     public int getTipoConsulta() {
         return tipoConsulta;
     }

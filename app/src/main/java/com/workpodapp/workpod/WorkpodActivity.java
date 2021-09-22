@@ -287,7 +287,7 @@ public class WorkpodActivity extends FragmentActivity {
     public void onBackPressed() {
         if ((boolfolder) && (boolLoc)) {
             volverAlFragmentTransactionHistory();
-        } else if (boolValoracion) {
+        } else if (boolValoracion && !boolSession) {
             valoracionWorkpod();
         } else if (!boolLoc && !boolSession) {
             volverAlFragmentInicial();

@@ -22,8 +22,10 @@ import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.ValoracionWorkpod;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
+import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Cupon;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
 import com.workpodapp.workpod.scale.Scale_Buttons;
@@ -63,6 +65,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
     List<Scale_Image_View> lstIv;
+    List<Cupon> lstCupones = new ArrayList<>();
     //VARIABLE CONTROLAR IR A CANJEAR_CODIGOS DESDE MENU DE USUARIO
     public static boolean canjearCodigosMU;
     private boolean boolIVCancelar = false;
@@ -116,21 +119,37 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
-        contruyendoLsV(view);
-        if (canjearCodigosMU) {
-            accesoMU(view);
-        }else{
-            //PERMITE QUE AL DARLE ATRÁS HABIENDO ABIERTO ESTE FRAGMENT TRAS FINALIZAR LA SESIÓN, TE LLEVE A VALORACIÓN DE WORKPOD
-            WorkpodActivity.boolValoracion = true;
-        }
+        volcarCupones(view);
 
-        usuario = InfoApp.USER;
+
         return view;
     }
 
+    private void volcarCupones(View view) {
+        usuario = InfoApp.USER;
+        Database<Cupon> dbCupon = new Database<>(Database.SELECTUSER, new Cupon());
+        dbCupon.postRun(() -> {
+            for (Cupon cupon : dbCupon.getLstSelect()) {
+                if (!lstCupones.contains(cupon)) {
+                    lstCupones.add(cupon);
+                }
+            }
+        });
+        dbCupon.postRunOnUI(getActivity(), () -> {
+            contruyendoLsV(view);
+            if (canjearCodigosMU) {
+                accesoMU(view);
+            } else {
+                //PERMITE QUE AL DARLE ATRÁS HABIENDO ABIERTO ESTE FRAGMENT TRAS FINALIZAR LA SESIÓN, TE LLEVE A VALORACIÓN DE WORKPOD
+                WorkpodActivity.boolValoracion = true;
+            }
+        });
+        dbCupon.start();
+    }
+
     private void accesoMU(View view) {
-        if (InfoApp.USER.getEmail().equalsIgnoreCase("juanvitj@gmail.com")) {
-          //  canjearCodigosMU = false;
+        if (!lstCupones.isEmpty()) {
+            //  canjearCodigosMU = false;
             lLDescuentoMenu.setVisibility(View.VISIBLE);
             lLDescuentoSesion.setVisibility(View.GONE);
             iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
@@ -168,6 +187,15 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             salirFragmentDescuento();
         } else if (v.getId() == R.id.BtnShareFriendCodeDescuento) {
             shareFriendCode();
+        } else if (v.getId() == R.id.BtnGuardarDescuento) {
+            onClickBtnGuardarDescuento();
+        }
+    }
+
+    private void onClickBtnGuardarDescuento() {
+        //CONTROLAMOS QUE EL USUARIO NO PUEDA METER SU PROPIO CÓDIGO AMIGO
+        if (eTCanjearCodigos.getText().toString().trim().equalsIgnoreCase(InfoApp.USER.getCodamigo())) {
+            Toast.makeText(getActivity(), "No puedes meter tu código amigo", Toast.LENGTH_LONG).show();
         }
     }
 

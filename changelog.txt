@@ -1,5 +1,9 @@
 # Changelog 
 
+## [3.7.5+Juan Vicente] - 2021-09-22
+### Added
+ - SELECTUSER cupon y campana
+
 ## [3.7.4+Juan Vicente] - 2021-09-20
 ### Added
  - Dialog + Info en Fragment_Canjear_Codigo.
@@ -261,6 +265,8 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.7.4] : https://github.com/Denigt/WorkPod/commit/274067f74b3cc9eb5bf86fb4199ecc34bf25a40e
+[3.7.3] : https://github.com/Denigt/WorkPod/commit/96d1935fbbd366a1cec14ea1400271c86580b2dd
 [3.7.2] : https://github.com/Denigt/WorkPod/commit/202206ec3bede0d4adb997aede62a1c4a1ac7c15
 [3.7.1] : https://github.com/Denigt/WorkPod/commit/c7d3daf4aafc5e0a3227f99eaa3ad5b5d2608534
 [3.7.0] : https://github.com/Denigt/WorkPod/commit/b966d0d742cb9de3cea7fba7e4308b1d6a837fda
