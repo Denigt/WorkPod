@@ -1,6 +1,8 @@
 package com.workpodapp.workpod.fragments;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,9 +12,11 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.text.Html;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,6 +66,10 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Window window = getDialog().getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         View view = inflater.inflate(R.layout.fragment_dialog_more_information, container, false);
         return view;
     }
@@ -91,13 +99,14 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         //  tV_Minutos_Minimos.setText("Minutos mínimos para canjear este cupón: " + Html.fromHtml("<font color='#FF58B1E3'>14</font>"));
 
         //INICIALIZAMOS ELEMENTOS XML
-        tV_Minutos_Minimos.setText(Integer.toString(cupon.getCampana().getConsumoMin()));
+        tV_Minutos_Minimos.setText(Integer.toString(cupon.getCampana().getConsumoMin()) + " minutos");
         tV_Titulo_Cupon.setText(cupon.getCampana().getNombre());
-        if(!cupon.getCampana().getFinCanjeo().equals(ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone()))){
-            tV_Fecha_Validez.setText(Integer.toString(cupon.getCampana().getFinCanjeo().getDayOfMonth())+"/"+
-                    Integer.toString(cupon.getCampana().getFinCanjeo().getMonth().getValue())+"/"+
+        if (!cupon.getCampana().getFinCanjeo().equals(ZonedDateTime.of(2000, 01, 01, 0, 0, 0, 0, ZonedDateTime.now().getZone()))) {
+            tV_Fecha_Validez.setText(Integer.toString(cupon.getCampana().getFinCanjeo().getDayOfMonth()) + "/" +
+                    Integer.toString(cupon.getCampana().getFinCanjeo().getMonth().getValue()) + "/" +
                     Integer.toString(cupon.getCampana().getFinCanjeo().getYear()));
-        }else{
+        } else {
+            tV_Titulo_Fecha_Validez.setVisibility(View.GONE);
             tV_Fecha_Validez.setText("No tiene fecha límite");
         }
         tV_Descripcion_Campana.setText(cupon.getCampana().getDescripcion());

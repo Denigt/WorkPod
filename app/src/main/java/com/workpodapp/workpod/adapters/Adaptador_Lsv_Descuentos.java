@@ -24,7 +24,7 @@ import com.workpodapp.workpod.scale.Scale_TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClickListener {
+public class Adaptador_Lsv_Descuentos extends BaseAdapter {
 
     Context context;
     FragmentManager manager;
@@ -87,14 +87,20 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
         tVnombreDescuento.setText(lstDescuentos.get(i).getNombreDescuento());
         tVminGratis.setText(lstDescuentos.get(i).getMinGratis());
-        cupon=lstCupones.get(i);
+
 
 
         if (Fragment_Canjear_Codigos.canjearCodigosMU) {
             ibtnCanjear.setText("+ Info");
             letterBtnMoreInfo = ibtnCanjear.getText().toString();
         }
-        ibtnCanjear.setOnClickListener(this);
+        ibtnCanjear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cupon=lstCupones.get(i);
+                showDialogMoreInformation(v);
+            }
+        });
 
         //ESCALAMOS ELEMENTOS
         width = metrics.widthPixels / metrics.density;
@@ -104,12 +110,6 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.iBtnCanjear && ibtnCanjear.getText().toString().equals(letterBtnMoreInfo.trim())) {
-            showDialogMoreInformation(v);
-        }
-    }
 
     private void showDialogMoreInformation(View view) {
 

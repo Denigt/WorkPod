@@ -50,6 +50,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private Button btnCancelarDescuento;
     private Button btnGuardarDescuento;
     private Button btnShareFriendCodeDescuento;
+    Button ibtnCanjear;
     private ImageView iV_Btn_Cancelar_Descuento;
 
     Usuario usuario;
@@ -107,6 +108,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         btnShareFriendCodeDescuento = view.findViewById(R.id.BtnShareFriendCodeDescuento);
         eTCanjearCodigos = view.findViewById(R.id.ETCanjearCodigos);
         lsV_Codigo_Descuento = view.findViewById(R.id.Lsv_codigo_descuento);
+        ibtnCanjear=view.findViewById(R.id.iBtnCanjear);
 //medir rendimiento de las query  block change q las cosas no han sido alteradas con el paso del tiempo. Criptomonedas pone en jaque al sistema financiero mundial. Si un bitcoin cuesta x cuando no hayas sido previsor, stoplost parar inversion
         //LISTENERS
         btnShareFriendCodeDescuento.setOnClickListener(this);

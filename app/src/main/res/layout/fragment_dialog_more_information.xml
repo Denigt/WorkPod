@@ -3,31 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/light_blue"
+    android:background="@drawable/rounded_border_square"
     android:orientation="vertical"
     tools:context=".fragments.Fragment_Dialog_More_Information">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/Texto"
-        android:elevation="6dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="10" />
+        android:background="@drawable/rounded_back_button"
+        android:gravity="right"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/IVSalirDialogMoreInformation"
-            android:layout_width="0dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:padding="5dp"
             android:src="@drawable/fill_icon_salir" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/blue"
+                android:textSize="6dp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -77,19 +85,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="Validez: "
-                android:textStyle="bold"
+                android:text="Válido hasta el"
                 android:textColor="@color/darkblue"
-                android:textSize="18dp"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/TV_Fecha_Validez"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="01/01/2001 "
-                android:textStyle="bold"
                 android:textColor="@color/blue"
-                android:textSize="18dp"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
 
@@ -97,24 +106,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/TV_Titulo_Minutos_Minimos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="Minutos mínimos para canjearlo:"
-                android:textStyle="bold"
+                android:text="Para sesiones de más de"
                 android:textColor="@color/darkblue"
-                android:textSize="17dp"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/TV_Minutos_Minimos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="15 "
-                android:textStyle="bold"
                 android:textColor="@color/blue"
-                android:textSize="17dp"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
