@@ -106,7 +106,7 @@ public class Campana implements DataDb{
         descripcion = "";
         descuento = 0;
         consumoMin = 0;
-        finCanjeo = ZonedDateTime.now();
+        finCanjeo = ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone());
         tipo = 0;
     }
     public Campana(int id, String mascara, String nombre, String descripcion, double descuento, int consumoMin, ZonedDateTime finCanjeo, int tipo) {

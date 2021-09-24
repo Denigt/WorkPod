@@ -17,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.workpodapp.workpod.R;
+import com.workpodapp.workpod.data.Cupon;
+
+import java.time.ZonedDateTime;
+import java.util.List;
 
 public class Fragment_Dialog_More_Information extends DialogFragment implements View.OnClickListener {
 
@@ -29,8 +33,15 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
     private TextView tV_Fecha_Validez;
     private TextView tV_Minutos_Minimos;
 
+    //COLECCIONES
+    Cupon cupon;
+
     public Fragment_Dialog_More_Information() {
 
+    }
+
+    public Fragment_Dialog_More_Information(Cupon cupon) {
+        this.cupon = cupon;
     }
 
     public static Fragment_Dialog_More_Information newInstance(String param1, String param2) {
@@ -70,14 +81,26 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         builder.setView(view);
 
         //INSTANCIAMOS ELEMENTOS DEL XML
-        tV_Condiciones_Uso=view.findViewById(R.id.TV_Condiciones_Uso);
-        tV_Descripcion_Campana=view.findViewById(R.id.TV_Descripcion_Campana);
-        tV_Fecha_Validez=view.findViewById(R.id.TV_Fecha_Validez);
-        tV_Minutos_Minimos=view.findViewById(R.id.TV_Minutos_Minimos);
-        tV_Titulo_Cupon=view.findViewById(R.id.TV_Titulo_Cupon);
-        tV_Titulo_Fecha_Validez=view.findViewById(R.id.TV_Titulo_Fecha_Validez);
-        iVSalirDialogMoreInformation=view.findViewById(R.id.IVSalirDialogMoreInformation);
-        tV_Minutos_Minimos.setText("Minutos mínimos para canjear este cupón: "+ Html.fromHtml("<font color='#FF58B1E3'>14</font>"));
+        tV_Condiciones_Uso = view.findViewById(R.id.TV_Condiciones_Uso);
+        tV_Descripcion_Campana = view.findViewById(R.id.TV_Descripcion_Campana);
+        tV_Fecha_Validez = view.findViewById(R.id.TV_Fecha_Validez);
+        tV_Minutos_Minimos = view.findViewById(R.id.TV_Minutos_Minimos);
+        tV_Titulo_Cupon = view.findViewById(R.id.TV_Titulo_Cupon);
+        tV_Titulo_Fecha_Validez = view.findViewById(R.id.TV_Titulo_Fecha_Validez);
+        iVSalirDialogMoreInformation = view.findViewById(R.id.IVSalirDialogMoreInformation);
+        //  tV_Minutos_Minimos.setText("Minutos mínimos para canjear este cupón: " + Html.fromHtml("<font color='#FF58B1E3'>14</font>"));
+
+        //INICIALIZAMOS ELEMENTOS XML
+        tV_Minutos_Minimos.setText(Integer.toString(cupon.getCampana().getConsumoMin()));
+        tV_Titulo_Cupon.setText(cupon.getCampana().getNombre());
+        if(!cupon.getCampana().getFinCanjeo().equals(ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone()))){
+            tV_Fecha_Validez.setText(Integer.toString(cupon.getCampana().getFinCanjeo().getDayOfMonth())+"/"+
+                    Integer.toString(cupon.getCampana().getFinCanjeo().getMonth().getValue())+"/"+
+                    Integer.toString(cupon.getCampana().getFinCanjeo().getYear()));
+        }else{
+            tV_Fecha_Validez.setText("No tiene fecha límite");
+        }
+        tV_Descripcion_Campana.setText(cupon.getCampana().getDescripcion());
 
         //LISTENERS
         iVSalirDialogMoreInformation.setOnClickListener(this);
@@ -86,7 +109,7 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==iVSalirDialogMoreInformation.getId()){
+        if (v.getId() == iVSalirDialogMoreInformation.getId()) {
             dismiss();
         }
     }

@@ -107,7 +107,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         btnShareFriendCodeDescuento = view.findViewById(R.id.BtnShareFriendCodeDescuento);
         eTCanjearCodigos = view.findViewById(R.id.ETCanjearCodigos);
         lsV_Codigo_Descuento = view.findViewById(R.id.Lsv_codigo_descuento);
-
+//medir rendimiento de las query  block change q las cosas no han sido alteradas con el paso del tiempo. Criptomonedas pone en jaque al sistema financiero mundial. Si un bitcoin cuesta x cuando no hayas sido previsor, stoplost parar inversion
         //LISTENERS
         btnShareFriendCodeDescuento.setOnClickListener(this);
         btnGuardarDescuento.setOnClickListener(this);
@@ -140,6 +140,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             if (canjearCodigosMU) {
                 accesoMU(view);
             } else {
+                accesoSesion();
                 //PERMITE QUE AL DARLE ATRÁS HABIENDO ABIERTO ESTE FRAGMENT TRAS FINALIZAR LA SESIÓN, TE LLEVE A VALORACIÓN DE WORKPOD
                 WorkpodActivity.boolValoracion = true;
             }
@@ -147,13 +148,38 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         dbCupon.start();
     }
 
+    /**
+     * Se harán visibles los elementos del XML que han de estar activos cuando el usuario accede a este fragment al finalizar una sesión
+     */
+    private void accesoSesion() {
+        tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
+        iV_Btn_Cancelar_Descuento.setVisibility(View.VISIBLE);
+        lLDescuentoSesion.setVisibility(View.VISIBLE);
+        eTCanjearCodigos.setVisibility(View.VISIBLE);
+        btnCancelarDescuento.setVisibility(View.VISIBLE);
+        btnGuardarDescuento.setVisibility(View.VISIBLE);
+        tV_Descuentos.setVisibility(View.VISIBLE);
+        lsV_Codigo_Descuento.setVisibility(View.VISIBLE);
+    }
+
     private void accesoMU(View view) {
         if (!lstCupones.isEmpty()) {
             //  canjearCodigosMU = false;
+            tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
             lLDescuentoMenu.setVisibility(View.VISIBLE);
+            eTCanjearCodigos.setVisibility(View.VISIBLE);
+            btnCancelarDescuento.setVisibility(View.VISIBLE);
+            btnGuardarDescuento.setVisibility(View.VISIBLE);
+            tV_Descuentos.setVisibility(View.VISIBLE);
+            lsV_Codigo_Descuento.setVisibility(View.VISIBLE);
             lLDescuentoSesion.setVisibility(View.GONE);
             iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
         } else {
+            tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
+            lLDescuentoMenu.setVisibility(View.VISIBLE);
+            eTCanjearCodigos.setVisibility(View.VISIBLE);
+            btnCancelarDescuento.setVisibility(View.VISIBLE);
+            btnGuardarDescuento.setVisibility(View.VISIBLE);
             lLShareFriendDescuento.setVisibility(View.VISIBLE);
             lLDescuentoSesion.setVisibility(View.GONE);
             tV_Descuentos.setVisibility(View.GONE);
@@ -165,10 +191,13 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     }
 
     private void contruyendoLsV(View view) {
-
-        lstDescuentos.add(new LsV_Descuentos(0, "Invita a un Amigo", "20 minutos gratis"));
-        lstDescuentos.add(new LsV_Descuentos(1, "Descuento por Antigüedad", "10 minutos gratis"));
-        aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics, getActivity().getSupportFragmentManager());
+        int i = 0;
+        for (Cupon cupones : lstCupones) {
+            lstDescuentos.add(new LsV_Descuentos(i, cupones.getCampana().getNombre().toString(),
+                    Double.toString(cupones.getCampana().getDescuento()) + " minutos gratis"));
+            i++;
+        }
+        aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics, getActivity().getSupportFragmentManager(),lstCupones);
         lsV_Codigo_Descuento.setAdapter(aLsvDescuentos);
     }
 
@@ -193,9 +222,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     }
 
     private void onClickBtnGuardarDescuento() {
-        //CONTROLAMOS QUE EL USUARIO NO PUEDA METER SU PROPIO CÓDIGO AMIGO
-        if (eTCanjearCodigos.getText().toString().trim().equalsIgnoreCase(InfoApp.USER.getCodamigo())) {
-            Toast.makeText(getActivity(), "No puedes meter tu código amigo", Toast.LENGTH_LONG).show();
+
+        if(eTCanjearCodigos.getText().toString().equals("")){
+            Toast.makeText(getActivity(),"Ingrese el código de un cupón para guardarlo",Toast.LENGTH_LONG).show();
         }
     }
 

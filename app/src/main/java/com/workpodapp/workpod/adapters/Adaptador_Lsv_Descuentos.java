@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Cupon;
 import com.workpodapp.workpod.fragments.Fragment_Canjear_Codigos;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_More_Information;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
@@ -35,28 +36,29 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
     TextView tVminGratis;
     Button ibtnCanjear;
 
+    Cupon cupon;
+
     //ESCALADO
     DisplayMetrics metrics;
     float width;
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
+    List<Cupon>lstCupones;
 
-    String letterBtnMoreInfo="";
+    String letterBtnMoreInfo = "";
 
     public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics) {
     }
 
-    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos) {
-        this.context = context;
-        this.lstDescuentos = lstDescuentos;
-    }
 
-    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics, FragmentManager supportFragmentManager) {
+    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics,
+                                    FragmentManager supportFragmentManager, List<Cupon>lstCupones) {
         this.context = context;
         this.lstDescuentos = lstDescuentos;
         this.metrics = metrics;
         this.manager = supportFragmentManager;
+        this.lstCupones=lstCupones;
     }
 
     @Override
@@ -85,16 +87,19 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
         tVnombreDescuento.setText(lstDescuentos.get(i).getNombreDescuento());
         tVminGratis.setText(lstDescuentos.get(i).getMinGratis());
+        cupon=lstCupones.get(i);
+
 
         if (Fragment_Canjear_Codigos.canjearCodigosMU) {
             ibtnCanjear.setText("+ Info");
-            letterBtnMoreInfo= ibtnCanjear.getText().toString();
+            letterBtnMoreInfo = ibtnCanjear.getText().toString();
         }
         ibtnCanjear.setOnClickListener(this);
 
         //ESCALAMOS ELEMENTOS
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
+
 
         return view;
     }
@@ -107,7 +112,8 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter implements View.OnClic
     }
 
     private void showDialogMoreInformation(View view) {
-        Fragment_Dialog_More_Information dialog_more_information = new Fragment_Dialog_More_Information();
+
+        Fragment_Dialog_More_Information dialog_more_information = new Fragment_Dialog_More_Information(cupon);
         dialog_more_information.show(manager, "Show Dialog More Information");
     }
     //MÉTODOS
