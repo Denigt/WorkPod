@@ -220,6 +220,16 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             shareFriendCode();
         } else if (v.getId() == R.id.BtnGuardarDescuento) {
             onClickBtnGuardarDescuento();
+        } else if (v.getId() == R.id.BtnCancelarDescuento) {
+            onClickBtnCancelarDescuento();
+        }
+    }
+
+    private void onClickBtnCancelarDescuento() {
+        if(!eTCanjearCodigos.getText().toString().equals("")){
+           eTCanjearCodigos.setText("");
+        }else{
+            Toast.makeText(getActivity(),"No has escrito nada",Toast.LENGTH_LONG).show();
         }
     }
 
