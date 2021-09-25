@@ -32,6 +32,7 @@ import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_Image_View;
 import com.workpodapp.workpod.scale.Scale_TextView;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,8 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private ImageView iV_Btn_Cancelar_Descuento;
 
     Usuario usuario;
+    Cupon cupon;
+    private int errorCode;
 
     //PARAMETROS PARA LA GESTIÓN DEL LSV
     private ListView lsV_Codigo_Descuento;
@@ -72,7 +75,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private boolean boolIVCancelar = false;
 
     public Fragment_Canjear_Codigos() {
-        // Required empty public constructor
+        this.errorCode=0;
     }
 
     public static Fragment_Canjear_Codigos newInstance(String param1, String param2) {
@@ -108,7 +111,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         btnShareFriendCodeDescuento = view.findViewById(R.id.BtnShareFriendCodeDescuento);
         eTCanjearCodigos = view.findViewById(R.id.ETCanjearCodigos);
         lsV_Codigo_Descuento = view.findViewById(R.id.Lsv_codigo_descuento);
-        ibtnCanjear=view.findViewById(R.id.iBtnCanjear);
+        ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
 //medir rendimiento de las query  block change q las cosas no han sido alteradas con el paso del tiempo. Criptomonedas pone en jaque al sistema financiero mundial. Si un bitcoin cuesta x cuando no hayas sido previsor, stoplost parar inversion
         //LISTENERS
         btnShareFriendCodeDescuento.setOnClickListener(this);
@@ -199,7 +202,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
                     (Integer.toString(cupones.getCampana().getDescuento())) + " minutos gratis"));
             i++;
         }
-        aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics, getActivity().getSupportFragmentManager(),lstCupones);
+        aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics, getActivity().getSupportFragmentManager(), lstCupones);
         lsV_Codigo_Descuento.setAdapter(aLsvDescuentos);
     }
 
@@ -226,17 +229,38 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     }
 
     private void onClickBtnCancelarDescuento() {
-        if(!eTCanjearCodigos.getText().toString().equals("")){
-           eTCanjearCodigos.setText("");
-        }else{
-            Toast.makeText(getActivity(),"No has escrito nada",Toast.LENGTH_LONG).show();
+        if (!eTCanjearCodigos.getText().toString().equals("")) {
+            eTCanjearCodigos.setText("");
+        } else {
+            Toast.makeText(getActivity(), "No has escrito nada", Toast.LENGTH_LONG).show();
         }
     }
 
     private void onClickBtnGuardarDescuento() {
 
-        if(eTCanjearCodigos.getText().toString().equals("")){
-            Toast.makeText(getActivity(),"Ingrese el código de un cupón para guardarlo",Toast.LENGTH_LONG).show();
+        if (eTCanjearCodigos.getText().toString().equals("")) {
+            Toast.makeText(getActivity(), "Ingrese el código de un cupón para guardarlo", Toast.LENGTH_LONG).show();
+        } else {
+            //INICIALIZAMOS LA VARIABLE CUPÓN
+            cupon = new Cupon();
+            cupon.setCodigo(eTCanjearCodigos.getText().toString());
+            cupon.setfInsertado(ZonedDateTime.now());
+            cupon.setUsuario(usuario.getId());
+
+            //REALIZAMOS EL INSERT
+            Database<Cupon> insert = new Database<>(Database.INSERT, cupon);
+            insert.postRun(() -> {
+                //LIMPIAMOS EL ET
+                eTCanjearCodigos.setText("");
+
+            });
+            insert.postRunOnUI(getActivity(), () -> {
+                if(insert.getError().code<-10){
+                    Toast.makeText(getActivity(),"Código no válido",Toast.LENGTH_LONG).show();
+                }
+
+            });
+            insert.start();
         }
     }
 

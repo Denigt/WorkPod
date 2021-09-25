@@ -97,8 +97,10 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         ibtnCanjear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cupon=lstCupones.get(i);
-                showDialogMoreInformation(v);
+                if (Fragment_Canjear_Codigos.canjearCodigosMU) {
+                    cupon=lstCupones.get(i);
+                    showDialogMoreInformation(v);;
+                }
             }
         });
 

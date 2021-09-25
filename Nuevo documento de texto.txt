@@ -1,0 +1,1 @@
+select m.id from campana m where '1234567p' REGEXP m.mascara
