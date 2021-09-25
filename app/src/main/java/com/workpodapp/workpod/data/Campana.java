@@ -19,7 +19,7 @@ public class Campana implements DataDb{
     private String mascara;
     private String nombre;
     private String descripcion;
-    private double descuento;
+    private int descuento;
     private int consumoMin;
     private ZonedDateTime finCanjeo;
     private int tipo;
@@ -67,11 +67,11 @@ public class Campana implements DataDb{
         this.descripcion = descripcion;
     }
 
-    public double getDescuento() {
+    public int getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(double descuento) {
+    public void setDescuento(int descuento) {
         this.descuento = descuento;
     }
 
@@ -109,7 +109,7 @@ public class Campana implements DataDb{
         finCanjeo = ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone());
         tipo = 0;
     }
-    public Campana(int id, String mascara, String nombre, String descripcion, double descuento, int consumoMin, ZonedDateTime finCanjeo, int tipo) {
+    public Campana(int id, String mascara, String nombre, String descripcion, int descuento, int consumoMin, ZonedDateTime finCanjeo, int tipo) {
         setId(id);
         setMascara(mascara);
         setNombre(nombre);
@@ -135,7 +135,7 @@ public class Campana implements DataDb{
             if (campanaJSON.has("descripcion") && !campanaJSON.isNull("descripcion"))
                 campana.setDescripcion(campanaJSON.getString("descripcion"));
             if (campanaJSON.has("descuento") && !campanaJSON.isNull("descuento"))
-                campana.setDescuento(campanaJSON.getDouble("descuento"));
+                campana.setDescuento(campanaJSON.getInt("descuento"));
             if (campanaJSON.has("consumoMin") && !campanaJSON.isNull("consumoMin"))
                 campana.setConsumoMin(campanaJSON.getInt("consumoMin"));
             if (campanaJSON.has("finCanjeo") && !campanaJSON.isNull("finCanjeo"))
@@ -179,7 +179,7 @@ public class Campana implements DataDb{
                 if (campanaJSON.has("descripcion") && !campanaJSON.isNull("descripcion"))
                     campana.setDescripcion(campanaJSON.getString("descripcion"));
                 if (campanaJSON.has("descuento") && !campanaJSON.isNull("descuento"))
-                    campana.setDescuento(campanaJSON.getDouble("descuento"));
+                    campana.setDescuento(campanaJSON.getInt("descuento"));
                 if (campanaJSON.has("consumoMin") && !campanaJSON.isNull("consumoMin"))
                     campana.setConsumoMin(campanaJSON.getInt("consumoMin"));
                 if (campanaJSON.has("finCanjeo") && !campanaJSON.isNull("finCanjeo"))

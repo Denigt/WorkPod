@@ -196,7 +196,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         int i = 0;
         for (Cupon cupones : lstCupones) {
             lstDescuentos.add(new LsV_Descuentos(i, cupones.getCampana().getNombre().toString(),
-                    Double.toString(cupones.getCampana().getDescuento()) + " minutos gratis"));
+                    (Integer.toString(cupones.getCampana().getDescuento())) + " minutos gratis"));
             i++;
         }
         aLsvDescuentos = new Adaptador_Lsv_Descuentos(view.getContext(), lstDescuentos, metrics, getActivity().getSupportFragmentManager(),lstCupones);

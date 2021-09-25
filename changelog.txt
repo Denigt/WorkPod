@@ -1,5 +1,9 @@
 # Changelog 
 
+## [3.7.9+Juan Vicente] - 2021-09-24
+### Changed
+ - Pequenos retoques en Fragment_Canjear_Codigo
+
 ## [3.7.8+Juan Vicente] - 2021-09-24
 ### Added
  - Funcionalidad btnCancelarDescuento en Fragment_Canjear_Codigo
@@ -277,6 +281,7 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.7.8] : https://github.com/Denigt/WorkPod/commit/302f9fa902586443f891b9caa8ad3783cc55060e
 [3.7.7] : https://github.com/Denigt/WorkPod/commit/638e4c0581341e2baec75d309c36abc778e009b1
 [3.7.6] : https://github.com/Denigt/WorkPod/commit/f73161391ac8d2597b779da73eed8b1caff4fcd7
 [3.7.5] : https://github.com/Denigt/WorkPod/commit/a44292856b8681c25d44fdca58f1510ecf6ccca5

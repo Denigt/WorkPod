@@ -62,6 +62,7 @@
             android:layout_marginBottom="20dp"
             android:text="Este cupón se debe por esta campaña, que quiere promocionar un producto o un evento que les interesa a los usurios de workpod"
             android:textColor="@color/blue"
+            android:justificationMode="inter_word"
             android:textSize="21dp"
             android:textStyle="normal" />
 
