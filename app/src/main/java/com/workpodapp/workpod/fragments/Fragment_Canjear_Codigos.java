@@ -257,10 +257,13 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
             });
             insert.postRunOnUI(getActivity(), () -> {
-                if(insert.getError().code<0){
-                    Toast.makeText(getActivity(),insert.getError().message,Toast.LENGTH_LONG).show();
-                }else{
+
+                if(insert.getError().code>-1){
                     volcarCupones(view);
+                } else if(insert.getError().code>-2){
+                    Toast.makeText(getActivity(),insert.getError().message,Toast.LENGTH_LONG).show();
+                }else if(insert.getError().code<-10){
+                    Toast.makeText(getActivity(),"Ya tienes un cupón para esa campaña",Toast.LENGTH_LONG).show();
                 }
 
             });
