@@ -196,6 +196,8 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     }
 
     private void contruyendoLsV(View view) {
+        //LIMPIAMOS EL LSV
+        lstDescuentos.clear();
         int i = 0;
         for (Cupon cupones : lstCupones) {
             lstDescuentos.add(new LsV_Descuentos(i, cupones.getCampana().getNombre().toString(),
@@ -222,7 +224,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         } else if (v.getId() == R.id.BtnShareFriendCodeDescuento) {
             shareFriendCode();
         } else if (v.getId() == R.id.BtnGuardarDescuento) {
-            onClickBtnGuardarDescuento();
+            onClickBtnGuardarDescuento(v);
         } else if (v.getId() == R.id.BtnCancelarDescuento) {
             onClickBtnCancelarDescuento();
         }
@@ -236,7 +238,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         }
     }
 
-    private void onClickBtnGuardarDescuento() {
+    private void onClickBtnGuardarDescuento(View view) {
 
         if (eTCanjearCodigos.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "Ingrese el código de un cupón para guardarlo", Toast.LENGTH_LONG).show();
@@ -255,8 +257,10 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
             });
             insert.postRunOnUI(getActivity(), () -> {
-                if(insert.getError().code<-10){
-                    Toast.makeText(getActivity(),"Código no válido",Toast.LENGTH_LONG).show();
+                if(insert.getError().code<0){
+                    Toast.makeText(getActivity(),insert.getError().message,Toast.LENGTH_LONG).show();
+                }else{
+                    volcarCupones(view);
                 }
 
             });
