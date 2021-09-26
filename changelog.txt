@@ -1,5 +1,9 @@
 # Changelog 
 
+## [3.7.13+Juan Vicente] - 2021-09-26
+### Added
+ - Actualización Fragment_Canjear_Codigo al ingresar un nuevo cupón
+
 ## [3.7.12+Juan Vicente] - 2021-09-26
 ### Fixed
   - Tratamiento de errores en Fragment_Canjear_Codigo
@@ -293,6 +297,7 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.7.12]: https://github.com/Denigt/WorkPod/commit/a204d2c78ae6f869285619e7fe8b3b16b0b8d749
 [3.7.11]: https://github.com/Denigt/WorkPod/commit/45adb47cf1e5769cafbda149584df59765398f2d
 [3.7.10]: https://github.com/Denigt/WorkPod/commit/83d4d34f0ca1164091846991d202ff0e7fd0dfc8
 [3.7.9] : https://github.com/Denigt/WorkPod/commit/a21a89e255ee0bedaa5a3df83fbd4da09fdd967a

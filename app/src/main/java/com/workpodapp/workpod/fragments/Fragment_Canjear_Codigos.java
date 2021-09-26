@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -259,7 +260,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             insert.postRunOnUI(getActivity(), () -> {
 
                 if(insert.getError().code>-1){
-                    volcarCupones(view);
+                    //REFRESCAMOS EL FRAGMENT SIN QUE SE REPITA
+                    Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
                 } else if(insert.getError().code>-2){
                     Toast.makeText(getActivity(),insert.getError().message,Toast.LENGTH_LONG).show();
                 }else if(insert.getError().code<-10){
