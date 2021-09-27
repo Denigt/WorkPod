@@ -1,5 +1,11 @@
 # Changelog 
 
+## [3.7.14+Raul] - 2021-09-28
+### Added
+ - Fragment de pago
+### Changed
+ - Sesion en InfoApp en mayusculas
+
 ## [3.7.13+Juan Vicente] - 2021-09-26
 ### Added
  - Actualización Fragment_Canjear_Codigo al ingresar un nuevo cupón

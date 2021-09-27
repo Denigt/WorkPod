@@ -21,7 +21,7 @@ public abstract class InfoApp {
      */
     public static Reserva RESERVA;
 
-    public static Sesion sesion;
+    public static Sesion SESION;
 
     /**
      * Workpod abierto por el usuario

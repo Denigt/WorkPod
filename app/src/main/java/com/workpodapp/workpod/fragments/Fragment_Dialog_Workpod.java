@@ -528,7 +528,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     sesion.setPrecio(0);
                     sesion.setDescuento(0);
                     sesion.setTiempo(0);
-                    InfoApp.sesion = sesion;
+                    InfoApp.SESION = sesion;
 
                     Database<Sesion> insert = new Database<>(Database.INSERT, sesion);
                     insert.postRun(() -> {
@@ -549,7 +549,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             }
             dBSession();
             //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
-            Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
+            Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
             //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
             WorkpodActivity.boolLoc = false;
@@ -918,12 +918,12 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 for (Sesion session : consultaSesion.getLstSelect()) {
                     sesion = session;
                 }
-                InfoApp.sesion = sesion;
+                InfoApp.SESION = sesion;
             });
             consultaSesion.start();
             //ESPERAMOS A QUE LA CONSULTA TERMINE PARA QUE NO SE ABRA EL FRAGMENT DE SESIÓN SIN QUE SE HAYA HECHO LA CONSULTA
             consultaSesion.join();
-            InfoApp.sesion = sesion;
+            InfoApp.SESION = sesion;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

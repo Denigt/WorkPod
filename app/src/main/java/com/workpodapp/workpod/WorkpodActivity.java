@@ -77,12 +77,12 @@ public class WorkpodActivity extends FragmentActivity {
     private void accederApp() {
         try {
             Log.i("INFO", InfoApp.USER.getReserva().getEstado());
-            if (InfoApp.sesion != null) {
-                fragment_sesion = new Fragment_sesion(InfoApp.sesion);
+            if (InfoApp.SESION != null) {
+                fragment_sesion = new Fragment_sesion(InfoApp.SESION);
             }
             if (InfoApp.USER.getReserva() != null) {
                 if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
-                    Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.sesion);
+                    Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
                     this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
                 } else if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (ValoracionWorkpod.boolReservaFinalizada)) {
                     InfoApp.USER.getReserva().setEstado("FINALIZADA");
@@ -144,7 +144,7 @@ public class WorkpodActivity extends FragmentActivity {
                 for (Sesion session : consultaSesion.getLstSelect()) {
                     sesion = session;
                 }
-                InfoApp.sesion = sesion;
+                InfoApp.SESION = sesion;
             });
             consultaSesion.start();
             //ESPERAMOS A QUE LA CONSULTA TERMINE PARA QUE NO SE ABRA EL FRAGMENT DE SESIÓN SIN QUE SE HAYA HECHO LA CONSULTA
@@ -257,7 +257,7 @@ public class WorkpodActivity extends FragmentActivity {
 
     public void volverAlFragmentSession() {
         try {
-            fragment_sesion = new Fragment_sesion(InfoApp.sesion);
+            fragment_sesion = new Fragment_sesion(InfoApp.SESION);
             //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD
             FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
             //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO

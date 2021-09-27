@@ -224,7 +224,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             refrescardB=false;
 
             //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
-            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.sesion != null
+            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
                     && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
                 WorkpodActivity.boolfolder=false;
                 sesionHistorico=true;
