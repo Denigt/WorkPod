@@ -1,5 +1,12 @@
 # Changelog 
 
+##[3.8.0+Juan Vicente] - 2021-09-30
+### Added
+ - Todos los cambios que pidió Luis.
+ - MGM en Fragmanet_Canjear_Codigos
+### Fixed
+ - Optimización del código que controlaba la navegación entre fragments
+
 ## [3.7.14+Raul] - 2021-09-28
 ### Added
  - Fragment de pago

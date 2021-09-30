@@ -128,16 +128,10 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         //ESCALAMOS ELEMENTOS
         escalarElementos();
 
-        //REMARCAR EL ICONO DEL NV (SOLO PARA CUANDO EL USUARIO ESTÉ EN UNA SESIÓN)
-        if (InfoApp.USER.getReserva() != null) {
-            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
-                WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_folder).setChecked(true);
-            }
-        }
-
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         iVLocationInTransactionHistory.setOnClickListener(this);
-
+        //PONEMOS EL ICONO DEL NV EN MENU USUARIO
+        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
         return view;
     }
 
@@ -159,41 +153,54 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         if (networkInfo == null || (networkInfo.isConnected() == false)) {
             Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
         } else {
-            try {
-                Database<Sesion> dbSesion = new Database<>(Database.SELECTUSER, new Sesion());
-                dbSesion.postRun(() -> {
-                    for (Sesion sesion : dbSesion.getLstSelect())
-                        if (sesion.getEntrada() != null && sesion.getSalida() != null) {
-                            if (!lstSesiones.contains(sesion))
-                                lstSesiones.add(sesion);
-                        }
+//CONTROLAMOS QUE SI YA SE HA VOLCADO LA LISTA, NO SE VUELVA A VOLCAR
+            if (lstSesiones.size() < 1) {
+                try {
+                    Database<Sesion> dbSesion = new Database<>(Database.SELECTUSER, new Sesion());
+                    dbSesion.postRun(() -> {
+                        for (Sesion sesion : dbSesion.getLstSelect())
+                            if (sesion.getEntrada() != null && sesion.getSalida() != null) {
+                                if (!lstSesiones.contains(sesion))
+                                    lstSesiones.add(sesion);
+                            }
 
-                });
-                dbSesion.postRunOnUI(getActivity(), () -> {
-                    if (lstSesiones.size() != 0) {
-                        //HACEMOS QUE APAREZCA LOS ELEMENTOS DE CUANDO EL USUARIO YA HA REALIZADO ALGUNA SESIÓN
-                        tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
-                        lLSeleccioneAnio.setVisibility(View.VISIBLE);
-                        eLsV.setVisibility(View.VISIBLE);
-                        //OCULTAMOS LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
-                        iVLocationInTransactionHistory.setVisibility(View.GONE);
-                        lLSinSesiones.setVisibility(View.GONE);
-                        montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
-                    } else {
-                        //OCULTAMOS EL SPINNER Y EL ELSV
-                        lLSeleccioneAnio.setVisibility(View.GONE);
-                        eLsV.setVisibility(View.GONE);
-                        //HACEMOS QUE APAREZCA LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
-                        tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
-                        iVLocationInTransactionHistory.setVisibility(View.VISIBLE);
-                        lLSinSesiones.setVisibility(View.VISIBLE);
-                    }
-                });
-                dbSesion.start();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+                    });
+                    dbSesion.postRunOnUI(getActivity(), () -> {
+                        if (lstSesiones.size() != 0) {
+                            //HACEMOS QUE APAREZCA LOS ELEMENTOS DE CUANDO EL USUARIO YA HA REALIZADO ALGUNA SESIÓN
+                            tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
+                            lLSeleccioneAnio.setVisibility(View.VISIBLE);
+                            eLsV.setVisibility(View.VISIBLE);
+                            //OCULTAMOS LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
+                            iVLocationInTransactionHistory.setVisibility(View.GONE);
+                            lLSinSesiones.setVisibility(View.GONE);
+                            montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
+                        } else {
+                            //OCULTAMOS EL SPINNER Y EL ELSV
+                            lLSeleccioneAnio.setVisibility(View.GONE);
+                            eLsV.setVisibility(View.GONE);
+                            //HACEMOS QUE APAREZCA LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
+                            tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
+                            iVLocationInTransactionHistory.setVisibility(View.VISIBLE);
+                            lLSinSesiones.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    dbSesion.start();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //HACEMOS QUE APAREZCA LOS ELEMENTOS DE CUANDO EL USUARIO YA HA REALIZADO ALGUNA SESIÓN
+                tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
+                lLSeleccioneAnio.setVisibility(View.VISIBLE);
+                eLsV.setVisibility(View.VISIBLE);
+                //OCULTAMOS LOS ELEMENTOS QUE SALEN CUANDO NO TIENES NINGUNA SESIÓN
+                iVLocationInTransactionHistory.setVisibility(View.GONE);
+                lLSinSesiones.setVisibility(View.GONE);
+                montandoSpinner(view, lstSesiones, i, lstYears, lstSpinner);
             }
         }
+
 
     }
 
@@ -213,7 +220,6 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void montandoSpinner(View view, List<Sesion> lstTransaction, int i, List<String> lstYears, List<Spinner_Years_Transaction_History> lstSpinner) {
-
         //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
         lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
         //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
@@ -363,10 +369,10 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
     }
 
     //CLASE DEL ADAPTADOR
-    //EL ADAPTADOR DE UN ELSV ES MUY PARECIDO AL DE UN LSV, SOLO QUE HAY DOS TIPOS VALORES, EL DE LOS TÍTULOS Y EL DE LOS DATOS QUE PERTENECEN
-    //A CADA TÍTULO, EL TÍTULO SERA UNA LIST<STRING> Y LOS DATOS SERÁN UN HASHMAP, DONDE LA KEY SERÁ EL TÍTULO Y LOS DATOS QUE PERTENECEN
-    //A DICHO TÍTULO SERÁ UNA LIST QUE SERÁ EL VALUE DEL HASHMAP
-    //LAS SOBREESCRITURAS DEL ADAPTADOR DEL ELSV ES COMO LA DE UN LSV PERO POR DUPLICADO, UNO PARA LOS TÍTULOS Y OTRO PARA LOS ITEMS
+//EL ADAPTADOR DE UN ELSV ES MUY PARECIDO AL DE UN LSV, SOLO QUE HAY DOS TIPOS VALORES, EL DE LOS TÍTULOS Y EL DE LOS DATOS QUE PERTENECEN
+//A CADA TÍTULO, EL TÍTULO SERA UNA LIST<STRING> Y LOS DATOS SERÁN UN HASHMAP, DONDE LA KEY SERÁ EL TÍTULO Y LOS DATOS QUE PERTENECEN
+//A DICHO TÍTULO SERÁ UNA LIST QUE SERÁ EL VALUE DEL HASHMAP
+//LAS SOBREESCRITURAS DEL ADAPTADOR DEL ELSV ES COMO LA DE UN LSV PERO POR DUPLICADO, UNO PARA LOS TÍTULOS Y OTRO PARA LOS ITEMS
     public class Adapter_ELsV extends BaseExpandableListAdapter {
         //DECLARAMOS EL CONTEXTO Y LA LIST PARA LOS TÍTULOS Y EL HASHMAP PARA LOS ITEMS
         private Context context;
@@ -496,8 +502,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.LLFragment, fragmentDialogTransactionSession).addToBackStack(null).commit();
                     //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE
-                    WorkpodActivity.boolfolder = true;
-                    WorkpodActivity.boolLoc = true;
+
                 }
             });
 
@@ -536,6 +541,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
             //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
 
         }
+
     }
 
     @Override
@@ -543,7 +549,6 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         if (InfoApp.USER != null) {
             try {
                 if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso")) {
-                    WorkpodActivity.boolfolder = false;
                     WorkpodActivity.boolSession = true;
                     WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
                 }

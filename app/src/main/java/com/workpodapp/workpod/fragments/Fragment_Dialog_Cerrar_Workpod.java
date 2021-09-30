@@ -185,9 +185,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             update.start();
             //HACEMOS EL INSERT DE SESION
             finiquitarSesion();
-            WorkpodActivity.boolLoc=false;
             WorkpodActivity.boolSession=false;
-            Fragment_Canjear_Codigos.canjearCodigosMU=false;
             //CONTROLAMOS QUE NO SE VA A PASAR DE ACTIVITY HASTA QUE SE HAYA ACTUALIZADO LA RESERVA DEL USURIO
             Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.data.Usuario;
+import com.workpodapp.workpod.fragments.InfoFragment;
 import com.workpodapp.workpod.testUsuario.Informacion_Usuario;
 
 public class Valoracion_Workpod_Final extends AppCompatActivity implements View.OnClickListener {
@@ -48,6 +49,7 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
         dbUsuario();
 
         resultadovaloracionUsuario();
+        InfoFragment.actual=InfoFragment.VALORACION_WORKPOD;
        // resultadoTestUsuario();
     }
 
@@ -59,7 +61,6 @@ public class Valoracion_Workpod_Final extends AppCompatActivity implements View.
         activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //LE INDICAMOS QUE QUEREMOS QUE VUELVA AL MAPA
         WorkpodActivity.boolSession = false;
-        WorkpodActivity.boolLoc = false;
         startActivity(activity);
     }
 

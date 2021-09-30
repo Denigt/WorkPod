@@ -44,21 +44,19 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
     List<Scale_TextView> lstTv;
-    List<Cupon>lstCupones;
-
-    String letterBtnMoreInfo = "";
+    List<Cupon> lstCupones;
 
     public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics) {
     }
 
 
     public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics,
-                                    FragmentManager supportFragmentManager, List<Cupon>lstCupones) {
+                                    FragmentManager supportFragmentManager, List<Cupon> lstCupones) {
         this.context = context;
         this.lstDescuentos = lstDescuentos;
         this.metrics = metrics;
         this.manager = supportFragmentManager;
-        this.lstCupones=lstCupones;
+        this.lstCupones = lstCupones;
     }
 
     @Override
@@ -88,19 +86,11 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         tVnombreDescuento.setText(lstDescuentos.get(i).getNombreDescuento());
         tVminGratis.setText(lstDescuentos.get(i).getMinGratis());
 
-
-
-        if (Fragment_Canjear_Codigos.canjearCodigosMU) {
-            ibtnCanjear.setText("+ Info");
-            letterBtnMoreInfo = ibtnCanjear.getText().toString();
-        }
         ibtnCanjear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Fragment_Canjear_Codigos.canjearCodigosMU) {
-                    cupon=lstCupones.get(i);
-                    showDialogMoreInformation(v);;
-                }
+                cupon = lstCupones.get(i);
+                showDialogMoreInformation(v);
             }
         });
 
@@ -141,10 +131,10 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(ibtnCanjear, "wrap_content", "bold", 14, 15, 17));
+        lstBtn.add(new Scale_Buttons(ibtnCanjear, "wrap_content", "bold", 12, 15, 17));
 
-        lstTv.add(new Scale_TextView(tVminGratis, "wrap_content", "bold", 15, 16, 20));
-        lstTv.add(new Scale_TextView(tVnombreDescuento, "wrap_content", "bold", 18, 20, 25));
+        lstTv.add(new Scale_TextView(tVminGratis, "wrap_content", "bold", 13, 16, 20));
+        lstTv.add(new Scale_TextView(tVnombreDescuento, "wrap_content", "bold", 16, 20, 25));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

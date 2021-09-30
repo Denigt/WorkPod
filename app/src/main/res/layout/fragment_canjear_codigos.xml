@@ -6,6 +6,7 @@
     android:orientation="vertical"
     tools:context=".fragments.Fragment_Canjear_Codigos">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,77 +22,221 @@
             android:textColor="@color/blue"
             android:textSize="26dp"
             android:textStyle="bold"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLMGM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#E6F6FD"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/IV_Give_Five"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/fill_icon_give_five" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/LLShareFriendDescuento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_back_button"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <Button
+                    android:id="@+id/BtnShareFriendCodeDescuento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparente"
+                    android:backgroundTint="@color/blue"
+                    android:textAllCaps="false"
+                    android:text="Invita a un amigo"
+                    android:textColor="#F3F3D8"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/TV_MGM_Minutos_Estandar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Y consigue 15\nminutos gratis"
+                    android:textColor="@color/darkblue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/IV_Btn_Siguiente"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:lines="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/button_btn_siguiente" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLDatosMGM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#E6F6FD"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:gravity="right"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/IV_Btn_Cancelar_Descuento"
+            <TextView
+                android:id="@+id/TV_MGM_Minutos_Titulo"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/button_btn_cancelar"
-                android:visibility="gone"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#E6F6FD"
+                android:gravity="center_horizontal"
+                android:text="Has conseguido "
+                android:textColor="@color/blue"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TV_MGM_Minutos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#E6F6FD"
+                android:gravity="center_horizontal"
+                android:text="45 minutos"
+                android:textColor="@color/darkblue"
+                android:textSize="25dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LLDescuentoMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#E6F6FD"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/TV_Descuentos_Menu"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="#E6F6FD"
-            android:gravity="center_horizontal"
-            android:justificationMode="inter_word"
-            android:padding="10dp"
-            android:text="Si quieres canjear alguno de tus códigos de descuento en la próxima sesión de workpod, seleccionalo y se aplicará en tu próxima sesión "
-            android:textAlignment="center"
-            android:textColor="@color/blue"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/LLDescuentoSesion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#E6F6FD"
-        android:gravity="center"
-        android:visibility="gone">
+            <ImageButton
+                android:id="@+id/IV_Btn_Volver"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:lines="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/button_btn_volver" />
 
-        <TextView
-            android:id="@+id/TV_Descuentos_Sesion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="#E6F6FD"
-            android:gravity="center_horizontal"
-            android:justificationMode="inter_word"
-            android:padding="10dp"
-            android:text="Si quieres canjear alguno de tus códigos de descuento en esta sesión de workpod, seleccionalo y pulsa en canjear  "
-            android:textAlignment="center"
-            android:textColor="@color/blue"
-            android:textSize="18dp"
-            android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/TV_MGM_Amigos_Titulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="invitando a "
+                        android:textColor="@color/blue"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/TV_MGM_Amigos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:text="3 amigos"
+                        android:textColor="@color/darkblue"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LLShareMoreFriend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/rounded_back_button"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <Button
+                        android:id="@+id/BtnShareMoreFriendCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/transparente"
+                        android:backgroundTint="@color/blue"
+                        android:text="Invita a más amigos"
+                        android:textAllCaps="false"
+                        android:textColor="#F3F3D8"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <EditText
@@ -101,7 +246,7 @@
         android:layout_margin="20dp"
         android:hint="Ingresa tu código y pulsa en guardar"
         android:textColorHint="@color/blue"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -129,7 +274,7 @@
                 android:text="Cancelar"
                 android:textAllCaps="false"
                 android:textSize="18dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -163,7 +308,7 @@
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
@@ -179,7 +324,7 @@
         android:textColor="@color/blue"
         android:textSize="22dp"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/TV_No_Descuentos"
@@ -193,7 +338,6 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
-
     <ListView
         android:id="@+id/Lsv_codigo_descuento"
         android:layout_width="wrap_content"
@@ -201,31 +345,8 @@
         android:layout_margin="20dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="15dp"
-        android:visibility="gone"/>
+        android:scrollbars="vertical"
+        android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/LLShareFriendDescuento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_back_button"
-        android:orientation="vertical"
-        android:visibility="gone">
 
-        <Button
-            android:id="@+id/BtnShareFriendCodeDescuento"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/transparente"
-            android:backgroundTint="@color/blue"
-            android:text="Comparte tu código amigo"
-            android:textAllCaps="false"
-            android:textColor="#F3F3D8"
-            android:textSize="23dp"
-            android:textStyle="bold" />
-    </LinearLayout>
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,10 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     // VARIABLES DE USO PRIVADO SIN GETTERS NI SETTERS
     private Adaptador_LsV_Menu_Usuario aMU;
 
+    //ESCALADO
+    DisplayMetrics metrics;
+    float width;
+
     public Fragment_Menu_Usuario() {
         // Required empty public constructor
     }
@@ -57,15 +62,16 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         View view = inflater.inflate(R.layout.fragment_menu_usuario, container, false);
         //ARMAMOS EL LSV
         lsV_Menu_Usuario = (ListView) view.findViewById(R.id.LsV_Menu_Usuario);
-        aLstMU.add(new LsV_Menu_Usuario(0, R.drawable.fill_icon_tarjeta, "Perfil de pago"));
-        aLstMU.add(new LsV_Menu_Usuario(1, R.drawable.fill_icon_user, "Perfil"));
-        aLstMU.add(new LsV_Menu_Usuario(2, R.drawable.fill_icon_historial, "Histórico de transacciones"));
-        aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_settings, "Configuración"));
-        aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_phone, "Soporte"));
-        aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Invita a un amigo"));
-        aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.fill_icon_friends, "Canjear códigos de descuento"));
-        aLstMU.add(new LsV_Menu_Usuario(7, R.drawable.empty_icon_lock, "Cerrar sesión"));
-        aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU);
+        aLstMU.add(new LsV_Menu_Usuario(0, R.drawable.fill_icon_user, "Mi Perfil"));
+        aLstMU.add(new LsV_Menu_Usuario(1, R.drawable.fill_icon_tarjeta, "Métodos de pago"));
+        aLstMU.add(new LsV_Menu_Usuario(2, R.drawable.fill_icon_friends, "Canjear códigos"));
+        aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_phone, "Contáctanos"));
+        aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_historial, "Histórico de transacciones"));
+        aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Cómo funciona"));
+        aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.empty_icon_lock, "Cerrar sesión"));
+        metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        aMU = new Adaptador_LsV_Menu_Usuario(view.getContext(), aLstMU, metrics);
         lsV_Menu_Usuario.setAdapter(aMU);
         lsV_Menu_Usuario.setOnItemClickListener(this);
 
@@ -75,33 +81,26 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
                 WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
             }
         }
-
+        //INDICAMOS QUE VUELVA AL MAPA CUANDO LE DE ATRÁS O PULSE EL MAPA EN EL NV
+        InfoFragment.actual = InfoFragment.MENU;
         return view;
     }
 
     // LISTENERS
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-        onClickPago(i);
         onClickPerfil(i);
-        onClickTransacciones(i);
-        onClickConfiguracion(i);
-        onClickSoporte(i);
-        onClickInvita(i);
+        onClickPago(i);
         onClickDescuentos(i);
+        onClickSoporte(i);
+        onClickTransacciones(i);
+        onClickComoFunciona(i);
         onClickCerrar(i);
     }
 
 
-
     // EVENTOS ON CLICK PARA LOS ITEMS DEL LISTVIEW
-    private void onClickPago(int index){
-        if (index == InfoFragment.PAGO) {
-
-        }
-    }
-
-    private void onClickPerfil(int index){
+    private void onClickPerfil(int index) {
         if (index == InfoFragment.PERFIL) {
             // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
             InfoFragment.anterior = InfoFragment.actual;
@@ -112,29 +111,24 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         }
     }
 
-    private void onClickTransacciones(int index){
-        if (index == InfoFragment.TRANSACCIONES) {
-            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
-            InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.TRANSACCIONES;
+    private void onClickPago(int index) {
+        if (index == InfoFragment.PAGO) {
 
-            Fragment_Transaction_History fragmentTransaction = new Fragment_Transaction_History();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
-            //CAMBIAMOS LA SELECCIÓN AL ICONO DE TRANSACCIONES
-            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_folder);
-            WorkpodActivity.boolLoc=false;
         }
     }
 
-    private void onClickConfiguracion(int index){
-        if (index == InfoFragment.CONFIGURACION) {
+    private void onClickDescuentos(int index) {
+        if (index == InfoFragment.DESCUENTOS) {
             // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
             InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.CONFIGURACION;
+            InfoFragment.actual = InfoFragment.DESCUENTOS;
+
+            Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
         }
     }
 
-    private void onClickSoporte(int index){
+    private void onClickSoporte(int index) {
         if (index == InfoFragment.SOPORTE) {
             // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
             InfoFragment.anterior = InfoFragment.actual;
@@ -142,38 +136,29 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
             fragment_support fragmentSupport = new fragment_support();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
-            //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
-            WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
-            WorkpodActivity.boolLoc=false;
         }
     }
 
-    private void onClickInvita(int index){
-        if (index == InfoFragment.INVITA) {
+    private void onClickTransacciones(int index) {
+        if (index == InfoFragment.TRANSACCIONES) {
             // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
             InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.INVITA;
-
-            Fragment_invita_Amigo fragmentInvitaAmigo = new Fragment_invita_Amigo();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentInvitaAmigo).commit();
+            InfoFragment.actual = InfoFragment.TRANSACCIONES;
+            Fragment_Transaction_History fragmentTransaction = new Fragment_Transaction_History();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentTransaction).commit();
         }
     }
-    private void onClickDescuentos(int index) {
-        if (index == InfoFragment.DESCUENTOS) {
-            // ALMACENAR CUAL ES EL FRAGMENT QUE SE MUESTRA AL USUARIO Y CUAL FUE EL ULTIMO MOSTRADO
-            InfoFragment.anterior = InfoFragment.actual;
-            InfoFragment.actual = InfoFragment.DESCUENTOS;
-            //CANJEARCODIGOS APUNTA A TRUE AL ACCEDER DESDE EL MENÚ DE USUARIO
-            Fragment_Canjear_Codigos.canjearCodigosMU=true;
 
-            Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
+    private void onClickComoFunciona(int index) {
+        if (index == InfoFragment.COMO_FUNCIONA) {
+
         }
     }
-    private void onClickCerrar(int index){
+
+    private void onClickCerrar(int index) {
         if (index == InfoFragment.CERRAR) {
             File fileLogin = getActivity().getFileStreamPath(InfoApp.LOGFILE);
-            if (fileLogin.delete()){
+            if (fileLogin.delete()) {
                 Toast.makeText(requireContext(), "Se ha cerrado la sesion", Toast.LENGTH_SHORT).show();
                 Intent activity = new Intent(requireContext(), InitActivity.class);
                 startActivity(activity);

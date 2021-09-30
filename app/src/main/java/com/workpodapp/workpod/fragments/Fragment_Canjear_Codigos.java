@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -41,19 +40,30 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
     //XML
     private TextView tV_Titulo_Canjea_Codigos;
-    private TextView tV_Descuentos_Sesion;
-    private TextView tV_Descuentos_Menu;
     private TextView tV_Descuentos;
     private TextView tV_No_Descuentos;
+    private TextView tV_MGM_Minutos_Estandar;
+    private TextView tV_MGM_Minutos_Titulo;
+    private TextView tV_MGM_Minutos;
+    private TextView tV_MGM_Amigos;
+    private TextView tV_MGM_Amigos_Titulo;
+
     private LinearLayout lLShareFriendDescuento;
-    private LinearLayout lLDescuentoMenu;
-    private LinearLayout lLDescuentoSesion;
+    private LinearLayout lLMGM;
+    private LinearLayout lLDatosMGM;
+
+    private ImageView iV_Give_Five;
+    private ImageView iV_Btn_Volver;
+    private ImageView iV_Btn_Siguiente;
+
     private EditText eTCanjearCodigos;
+
     private Button btnCancelarDescuento;
     private Button btnGuardarDescuento;
     private Button btnShareFriendCodeDescuento;
-    Button ibtnCanjear;
-    private ImageView iV_Btn_Cancelar_Descuento;
+    private Button btnShareMoreFriendCode;
+    private Button ibtnCanjear;
+
 
     Usuario usuario;
     Cupon cupon;
@@ -71,12 +81,12 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     List<Scale_TextView> lstTv;
     List<Scale_Image_View> lstIv;
     List<Cupon> lstCupones = new ArrayList<>();
-    //VARIABLE CONTROLAR IR A CANJEAR_CODIGOS DESDE MENU DE USUARIO
-    public static boolean canjearCodigosMU;
+
+
     private boolean boolIVCancelar = false;
 
     public Fragment_Canjear_Codigos() {
-        this.errorCode=0;
+        this.errorCode = 0;
     }
 
     public static Fragment_Canjear_Codigos newInstance(String param1, String param2) {
@@ -98,27 +108,39 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canjear_codigos, container, false);
         //INSTANCIAMOS ELEMENTOS DEL XML
-        lLDescuentoMenu = view.findViewById(R.id.LLDescuentoMenu);
-        lLDescuentoSesion = view.findViewById(R.id.LLDescuentoSesion);
+        lLDatosMGM = view.findViewById(R.id.LLDatosMGM);
+        lLMGM = view.findViewById(R.id.LLMGM);
         lLShareFriendDescuento = view.findViewById(R.id.LLShareFriendDescuento);
+
         tV_Titulo_Canjea_Codigos = view.findViewById(R.id.TV_Titulo_Canjea_Codigos);
-        tV_Descuentos_Menu = view.findViewById(R.id.TV_Descuentos_Menu);
         tV_Descuentos = view.findViewById(R.id.TV_Descuentos);
-        tV_Descuentos_Sesion = view.findViewById(R.id.TV_Descuentos_Sesion);
         tV_No_Descuentos = view.findViewById(R.id.TV_No_Descuentos);
-        iV_Btn_Cancelar_Descuento = view.findViewById(R.id.IV_Btn_Cancelar_Descuento);
+        tV_MGM_Amigos = view.findViewById(R.id.TV_MGM_Amigos);
+        tV_MGM_Amigos_Titulo = view.findViewById(R.id.TV_MGM_Amigos_Titulo);
+        tV_MGM_Minutos = view.findViewById(R.id.TV_MGM_Minutos);
+        tV_MGM_Minutos_Estandar = view.findViewById(R.id.TV_MGM_Minutos_Estandar);
+        tV_MGM_Minutos_Titulo = view.findViewById(R.id.TV_MGM_Minutos_Titulo);
+
+        iV_Btn_Siguiente = view.findViewById(R.id.IV_Btn_Siguiente);
+        iV_Btn_Volver = view.findViewById(R.id.IV_Btn_Volver);
+        iV_Give_Five = view.findViewById(R.id.IV_Give_Five);
+
         btnCancelarDescuento = view.findViewById(R.id.BtnCancelarDescuento);
         btnGuardarDescuento = view.findViewById(R.id.BtnGuardarDescuento);
         btnShareFriendCodeDescuento = view.findViewById(R.id.BtnShareFriendCodeDescuento);
+        btnShareMoreFriendCode = view.findViewById(R.id.BtnShareMoreFriendCode);
+
         eTCanjearCodigos = view.findViewById(R.id.ETCanjearCodigos);
         lsV_Codigo_Descuento = view.findViewById(R.id.Lsv_codigo_descuento);
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
-//medir rendimiento de las query  block change q las cosas no han sido alteradas con el paso del tiempo. Criptomonedas pone en jaque al sistema financiero mundial. Si un bitcoin cuesta x cuando no hayas sido previsor, stoplost parar inversion
+
         //LISTENERS
         btnShareFriendCodeDescuento.setOnClickListener(this);
+        btnShareMoreFriendCode.setOnClickListener(this);
         btnGuardarDescuento.setOnClickListener(this);
         btnCancelarDescuento.setOnClickListener(this);
-        iV_Btn_Cancelar_Descuento.setOnClickListener(this);
+        iV_Btn_Volver.setOnClickListener(this);
+        iV_Btn_Siguiente.setOnClickListener(this);
 
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
@@ -127,6 +149,8 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         escalarElementos(metrics);
         volcarCupones(view);
 
+        //PONEMOS EL ICONO DEL NV EN MENU USUARIO
+        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
         return view;
     }
@@ -143,54 +167,30 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         });
         dbCupon.postRunOnUI(getActivity(), () -> {
             contruyendoLsV(view);
-            if (canjearCodigosMU) {
-                accesoMU(view);
-            } else {
-                accesoSesion();
-                //PERMITE QUE AL DARLE ATRÁS HABIENDO ABIERTO ESTE FRAGMENT TRAS FINALIZAR LA SESIÓN, TE LLEVE A VALORACIÓN DE WORKPOD
-                WorkpodActivity.boolValoracion = true;
-            }
+            accesoMU(view);
+
         });
         dbCupon.start();
     }
 
-    /**
-     * Se harán visibles los elementos del XML que han de estar activos cuando el usuario accede a este fragment al finalizar una sesión
-     */
-    private void accesoSesion() {
-        tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
-        iV_Btn_Cancelar_Descuento.setVisibility(View.VISIBLE);
-        lLDescuentoSesion.setVisibility(View.VISIBLE);
-        eTCanjearCodigos.setVisibility(View.VISIBLE);
-        btnCancelarDescuento.setVisibility(View.VISIBLE);
-        btnGuardarDescuento.setVisibility(View.VISIBLE);
-        tV_Descuentos.setVisibility(View.VISIBLE);
-        lsV_Codigo_Descuento.setVisibility(View.VISIBLE);
-    }
-
     private void accesoMU(View view) {
         if (!lstCupones.isEmpty()) {
-            //  canjearCodigosMU = false;
+            lLMGM.setVisibility(View.VISIBLE);
             tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
-            lLDescuentoMenu.setVisibility(View.VISIBLE);
             eTCanjearCodigos.setVisibility(View.VISIBLE);
             btnCancelarDescuento.setVisibility(View.VISIBLE);
             btnGuardarDescuento.setVisibility(View.VISIBLE);
             tV_Descuentos.setVisibility(View.VISIBLE);
             lsV_Codigo_Descuento.setVisibility(View.VISIBLE);
-            lLDescuentoSesion.setVisibility(View.GONE);
-            iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
         } else {
+            lLMGM.setVisibility(View.VISIBLE);
             tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
-            lLDescuentoMenu.setVisibility(View.VISIBLE);
             eTCanjearCodigos.setVisibility(View.VISIBLE);
             btnCancelarDescuento.setVisibility(View.VISIBLE);
             btnGuardarDescuento.setVisibility(View.VISIBLE);
             lLShareFriendDescuento.setVisibility(View.VISIBLE);
-            lLDescuentoSesion.setVisibility(View.GONE);
             tV_Descuentos.setVisibility(View.GONE);
             tV_No_Descuentos.setVisibility(View.VISIBLE);
-            iV_Btn_Cancelar_Descuento.setVisibility(View.GONE);
             lsV_Codigo_Descuento.setVisibility(View.GONE);
         }
 
@@ -220,15 +220,27 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.IV_Btn_Cancelar_Descuento) {
-            salirFragmentDescuento();
-        } else if (v.getId() == R.id.BtnShareFriendCodeDescuento) {
+        if (v.getId() == R.id.BtnShareFriendCodeDescuento || v.getId() == R.id.BtnShareMoreFriendCode) {
             shareFriendCode();
         } else if (v.getId() == R.id.BtnGuardarDescuento) {
             onClickBtnGuardarDescuento(v);
         } else if (v.getId() == R.id.BtnCancelarDescuento) {
             onClickBtnCancelarDescuento();
+        } else if (v.getId() == R.id.IV_Btn_Siguiente) {
+            onClickIV_Btn_Siguiente();
+        } else if (v.getId() == R.id.IV_Btn_Volver) {
+            onClickIV_Btn_Volver();
         }
+    }
+
+    private void onClickIV_Btn_Volver() {
+        lLMGM.setVisibility(View.VISIBLE);
+        lLDatosMGM.setVisibility(View.GONE);
+    }
+
+    private void onClickIV_Btn_Siguiente() {
+        lLMGM.setVisibility(View.GONE);
+        lLDatosMGM.setVisibility(View.VISIBLE);
     }
 
     private void onClickBtnCancelarDescuento() {
@@ -259,14 +271,14 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             });
             insert.postRunOnUI(getActivity(), () -> {
 
-                if(insert.getError().code>-1){
+                if (insert.getError().code > -1) {
                     //REFRESCAMOS EL FRAGMENT SIN QUE SE REPITA
                     Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
-                } else if(insert.getError().code>-2){
-                    Toast.makeText(getActivity(),insert.getError().message,Toast.LENGTH_LONG).show();
-                }else if(insert.getError().code<-10){
-                    Toast.makeText(getActivity(),"Ya tienes un cupón para esa campaña",Toast.LENGTH_LONG).show();
+                } else if (insert.getError().code > -2) {
+                    Toast.makeText(getActivity(), insert.getError().message, Toast.LENGTH_LONG).show();
+                } else if (insert.getError().code < -10) {
+                    Toast.makeText(getActivity(), "Ya tienes un cupón para esa campaña", Toast.LENGTH_LONG).show();
                 }
 
             });
@@ -288,17 +300,6 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
-    }
-
-    /**
-     * Cuando le des al IV de cancelar (la X roja) se irá al fragment de valoración workpod
-     * Este IV solo aparece si se abre este fragment al finalizar l sesión
-     */
-    private void salirFragmentDescuento() {
-        boolIVCancelar = true;
-        Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
-        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(activity);
     }
 
     //MÉTODOS
@@ -323,19 +324,26 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         this.lstBtn = new ArrayList<>();
         this.lstTv = new ArrayList<>();
         this.lstIv = new ArrayList<>();
+        String n=InfoApp.INSTALLATION;
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnCancelarDescuento, "wrap_content", "bold", 14, 16, 18));
-        lstBtn.add(new Scale_Buttons(btnGuardarDescuento, "wrap_content", "bold", 14, 16, 18));
-        lstBtn.add(new Scale_Buttons(btnShareFriendCodeDescuento, "wrap_content", "bold", 20, 20, 23));
+        lstBtn.add(new Scale_Buttons(btnCancelarDescuento, "wrap_content", "bold", 13, 16, 18));
+        lstBtn.add(new Scale_Buttons(btnGuardarDescuento, "wrap_content", "bold", 13, 16, 18));
+        lstBtn.add(new Scale_Buttons(btnShareFriendCodeDescuento, "wrap_content", "bold", 14, 17, 20));
+        lstBtn.add(new Scale_Buttons(btnShareMoreFriendCode, "wrap_content", "bold", 14, 16, 20));
 
-        lstTv.add(new Scale_TextView(tV_Titulo_Canjea_Codigos, "wrap_content", "bold", 20, 22, 26));
-        lstTv.add(new Scale_TextView(tV_Descuentos_Sesion, "wrap_content", "bold", 13, 15, 17));
-        lstTv.add(new Scale_TextView(tV_Descuentos_Menu, "wrap_content", "bold", 13, 15, 17));
+        lstTv.add(new Scale_TextView(tV_Titulo_Canjea_Codigos, "wrap_content", "bold", 18, 21, 26));
         lstTv.add(new Scale_TextView(tV_Descuentos, "match_parent", "bold", 16, 18, 22));
         lstTv.add(new Scale_TextView(tV_No_Descuentos, "match_parent", "bold", 22, 18, 22));
+        lstTv.add(new Scale_TextView(tV_MGM_Minutos_Estandar, "wrap_content", "bold", 13, 16, 18));
+        lstTv.add(new Scale_TextView(tV_MGM_Amigos, "wrap_content", "bold", 14, 19, 22));
+        lstTv.add(new Scale_TextView(tV_MGM_Amigos_Titulo, "wrap_content", "bold", 14, 19, 22));
+        lstTv.add(new Scale_TextView(tV_MGM_Minutos, "wrap_content", "bold", 14, 19, 22));
+        lstTv.add(new Scale_TextView(tV_MGM_Minutos_Titulo, "wrap_content", "bold", 14, 19, 22));
 
-        lstIv.add(new Scale_Image_View(iV_Btn_Cancelar_Descuento, 0, 60, 0, 80, 0, 130, "wrap_content", ""));
+        lstIv.add(new Scale_Image_View(iV_Btn_Volver, 50, 50, 100, 100, 130, 130, "", ""));
+        lstIv.add(new Scale_Image_View(iV_Btn_Siguiente, 50, 50, 80, 80, 120, 120, "", ""));
+        lstIv.add(new Scale_Image_View(iV_Give_Five, 150, 100, 220, 150, 350, 200, "", ""));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
@@ -348,10 +356,18 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
             btnCancelarDescuento.setPadding(60, 0, 60, 0);
             btnGuardarDescuento.setPadding(60, 0, 60, 0);
+            tV_Titulo_Canjea_Codigos.setText("Canjea tus códigos de descuento");
         } else if (width <= (550 / metrics.density)) {
             btnCancelarDescuento.setPadding(40, 0, 40, 0);
             btnGuardarDescuento.setPadding(40, 0, 40, 0);
-            eTCanjearCodigos.setTextSize(16);
+            btnShareFriendCodeDescuento.setPadding(0, 0, 0, 0);
+            eTCanjearCodigos.setTextSize(14);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(20, 10, 10, 10);
+            lLShareFriendDescuento.setLayoutParams(params);
+            tV_Titulo_Canjea_Codigos.setText("Canjea tus códigos de descuento");
+            btnShareMoreFriendCode.getLayoutParams().height=50;
+            btnShareFriendCodeDescuento.getLayoutParams().height=50;
         }
     }
 

@@ -81,7 +81,6 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private String[] matrizSignos;
     private List<Ubicacion> lstUbicacion = new ArrayList<>();
     private List<Workpod>lstWorkpods=new ArrayList<>();
-    public static Boolean sesionHistorico=false;
     private boolean refrescardB=false;
     public static boolean desactivarBtnReservar=false;
 
@@ -153,7 +152,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
         iVDialogUbication = (ImageView) view.findViewById(R.id.IVDialogUbication);
 
-
+        InfoFragment.actual=InfoFragment.TRANSACTION_SESSION;
 
         // Iniciar el hilo para solicitar la ubicacion
         locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -226,9 +225,8 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
             if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
                     && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
-                WorkpodActivity.boolfolder=false;
-                sesionHistorico=true;
-                getActivity().onBackPressed();
+                Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
 
             }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
             else {

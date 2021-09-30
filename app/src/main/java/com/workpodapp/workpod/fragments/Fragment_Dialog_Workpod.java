@@ -551,9 +551,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             //LLAMAMOS AL FRAGMENT DE SESIÓN FINALIZADA
             Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
-            //CONTROLAMOS QUE AL SALIR DE LA SESIÓN FINALIZADA, VOLVAMOS AL FRAGMENT INICIAL
-            WorkpodActivity.boolLoc = false;
-            WorkpodActivity.boolfolder = false;
             //CERRAMOS EL DIALOGO EMERGENTE
             dismiss();
         }

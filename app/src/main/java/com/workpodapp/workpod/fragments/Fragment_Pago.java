@@ -121,7 +121,6 @@ public class Fragment_Pago extends Fragment implements View.OnClickListener {
                     updateSesion.postRunOnUI(getActivity(), () -> {
                         if (updateSesion.getError().code > -1){
                             InfoApp.SESION = sesion;
-                            WorkpodActivity.boolLoc=false;
                             WorkpodActivity.boolSession=false;
 
                             Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);

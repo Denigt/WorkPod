@@ -164,6 +164,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         etxtBusqueda.setOnClickListener(this);
         etxtBusqueda.setOnQueryTextListener(new MapSearchListener(etxtBusqueda, lsvBusqueda));
 
+        //PARA EVITAR QUE TRAS FINALIZAR UNA SESIÓN VUELVAS 2 VECES AL MAPA
+        InfoFragment.actual=InfoFragment.MAPA;
         return view;
     }
 

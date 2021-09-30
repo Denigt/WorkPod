@@ -54,8 +54,7 @@
             android:layout_gravity="center"
             android:background="@color/transparente"
             android:backgroundTint="@color/blue"
-
-            android:text="Canjear"
+            android:text="+ Info"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="17dp"

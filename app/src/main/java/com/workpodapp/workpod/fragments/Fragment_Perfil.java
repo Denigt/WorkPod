@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.workpodapp.workpod.ModPerfilActivity;
 import com.workpodapp.workpod.R;
+import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_dirfacturacion;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
@@ -165,10 +166,14 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             }
 
             //txtDNI.setText(InfoApp.USER.getTelefono());
+
         }
 
         //ESCALAR ELEMENTOS
         escalarElementos();
+
+        //PONEMOS EL ICONO DEL NV EN MENU USUARIO
+        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
         return view;
     }
@@ -242,4 +247,5 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);
     }
+
 }

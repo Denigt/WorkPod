@@ -136,8 +136,8 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         escalarElementos();
 
         //CONTROLAMOS QUE UNA VEZ ENTRADA EN LA SESIÓN, AL DARLE PARA ATRÁS NO VUELVAS AL MAPA
-        WorkpodActivity.boolLoc = true;
         WorkpodActivity.boolSession = true;
+        InfoFragment.actual=InfoFragment.SESSION;
 
         return view;
     }
@@ -169,7 +169,6 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
         //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
         WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);
-        WorkpodActivity.boolLoc = false;
     }
 
     /**

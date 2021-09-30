@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.data.Usuario;
+import com.workpodapp.workpod.fragments.InfoFragment;
 import com.workpodapp.workpod.testUsuario.Informacion_Usuario;
 
 public class ValoracionWorkpod extends AppCompatActivity implements View.OnClickListener {
@@ -50,6 +51,8 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
 
         //VOLCAMOS DE NUEVO LA INFORMACIÓN ESTO ES SI QUEREMOS Q AL VOLVER NO TENGAMOS Q VOLVER A LOGGEARNOS
         dbUsuario();
+
+        InfoFragment.actual=InfoFragment.VALORACION_WORKPOD;
 
     }
 
