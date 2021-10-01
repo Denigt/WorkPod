@@ -273,7 +273,7 @@ public class WorkpodActivity extends FragmentActivity {
             volverAlFragmentTransactionHistory();
         } else if (InfoFragment.actual == InfoFragment.MAPA || InfoFragment.actual==InfoFragment.SESSION ) {
             //SUSTITUYO ONBACKPRESSED POR FINISH PARA QUE PASE LO QUE PASE, AL LLEGAR AQUÍ, SALGAMOS DE LA APP
-            super.finish();
+            finish();
         } else {
             volverAlMenu();
         }

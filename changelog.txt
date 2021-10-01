@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.9.1+Juan Vicente] - 2021-10-01
+### Fixed
+ - PagoActivity
+
 ##[3.9.0+Raul] - 2021-10-01
 ### Added
  - Implementado el activity de pago

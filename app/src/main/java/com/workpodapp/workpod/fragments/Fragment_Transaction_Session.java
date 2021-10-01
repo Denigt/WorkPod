@@ -227,7 +227,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                     && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
                 Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
-
+                WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
             }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
             else {
                 //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)

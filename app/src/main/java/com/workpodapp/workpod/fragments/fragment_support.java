@@ -92,7 +92,6 @@ public class fragment_support extends Fragment {
      */
     public void construyendo_LsV(View view) {
 
-        aLstSupport.add(new LsV_Support(0, R.drawable.fill_icon_interrogacion, "Preguntas Frecuentes"));
         aLstSupport.add(new LsV_Support(1, R.drawable.fill_icon_gmail, "workpodtfg@gmail.com"));
         aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_llamar, "Contacta por Teléfono "));
         final Adaptador_LsV_Support aSuport = new Adaptador_LsV_Support(view.getContext(), aLstSupport, metrics);
@@ -101,11 +100,11 @@ public class fragment_support extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 LsV_Support lsV_support = (LsV_Support) aSuport.getItem(i);
-                if (lsV_support.getCodigo() == 0) {
+              /*  if (lsV_support.getCodigo() == 0) {
                     Intent terminos = new Intent(requireContext(), WebActivity.class);
                     terminos.putExtra("web", "https://dev.workpod.app/web/terminos_condiciones.html");
                     startActivity(terminos);
-                }
+                }*/
                 if (lsV_support.getCodigo() == 2) {
                     Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
                     fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");

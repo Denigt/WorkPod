@@ -89,6 +89,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         ibtnCanjear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //if(ibtnCanjear.getText().)
                 cupon = lstCupones.get(i);
                 showDialogMoreInformation(v);
             }

@@ -112,8 +112,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         txtDescuento.setText(String.format("%.2f€", sesion.getDescuento()));
 
         lsvCupones = findViewById(R.id.lsvCupones);
-        adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), itemsDescuentos, metrics, getSupportFragmentManager(), lstCupones);
-        lsvCupones.setAdapter(adDescuentos);
+
 
         btnVolver = findViewById(R.id.btnVolver);
         btnPagar = findViewById(R.id.btnPagar);
@@ -127,6 +126,9 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
+        //SI LO PONES ANTES, METRICS APUNTA A NULO
+        adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), itemsDescuentos, metrics, getSupportFragmentManager(), lstCupones);
+        lsvCupones.setAdapter(adDescuentos);
     }
 
     //SOBRESECRITURAS

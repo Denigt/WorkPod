@@ -873,7 +873,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
 
     private void escaladoParticular(DisplayMetrics metrics, int n) {
         try {
-            if ((width <= (1500 / metrics.density)) && (width > (750 / metrics.density))){
+            if ((width <= (1500 / metrics.density)) && (width > (750 / metrics.density))) {
                 if (btnReservarWorkpod.getText().equals("Reservado")) {
                     btnReservarWorkpod.setTextSize(21);
                 } else if (btnReservarWorkpod.getText().equals("Reservar"))
@@ -881,7 +881,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 if (n == 1) {
                     btnReservarWorkpod.setTextSize(20);
                 }
-            }else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
                 if (btnReservarWorkpod.getText().equals("Reservado")) {
                     btnReservarWorkpod.setTextSize(19);
                 } else if (btnReservarWorkpod.getText().equals("Reservar"))
@@ -906,14 +906,16 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     }
 
     /**
-     * Realiza la consulta a la BD para que si el usuario tiene una sesión no le salga el mapa y le salga su sesión
+     * Coge la última sesión para hacerte el cobro
      */
     private void dBSession() {
         try {
             Database<Sesion> consultaSesion = new Database<>(Database.SELECTUSER, new Sesion());
             consultaSesion.postRun(() -> {
                 for (Sesion session : consultaSesion.getLstSelect()) {
-                    sesion = session;
+                    /*if (sesion==null || session.getEntrada().compareTo(sesion.getEntrada()) > 0) POR SI DESORDENAN LA BD
+                    si alguien coge los datos, los exporta y lo guarda en otra bd ahi si q es susceptible de q se desordene*/
+                        sesion = session;
                 }
                 InfoApp.SESION = sesion;
             });
