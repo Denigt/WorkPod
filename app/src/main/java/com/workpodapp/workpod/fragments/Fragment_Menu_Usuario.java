@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.workpodapp.workpod.BuildConfig;
 import com.workpodapp.workpod.InitActivity;
 import com.workpodapp.workpod.ValoracionWorkpod;
 import com.workpodapp.workpod.WorkpodActivity;
@@ -32,6 +34,7 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     // VARIABLES DE USO PRIVADO SIN GETTERS NI SETTERS
     private Adaptador_LsV_Menu_Usuario aMU;
+    private TextView txtVersion;
 
     //ESCALADO
     DisplayMetrics metrics;
@@ -60,6 +63,10 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_usuario, container, false);
+
+        // ESTABLECER VERSION
+        txtVersion = view.findViewById(R.id.txtVersion);
+        txtVersion.setText(BuildConfig.VERSION_NAME);
         //ARMAMOS EL LSV
         lsV_Menu_Usuario = (ListView) view.findViewById(R.id.LsV_Menu_Usuario);
         aLstMU.add(new LsV_Menu_Usuario(0, R.drawable.fill_icon_user, "Mi Perfil"));

@@ -124,6 +124,22 @@ public abstract class Method {
     }
 
     /**
+     * Redondea el numero con tantos decimales como se indique
+     * @param num Numero a redondear
+     * @param dec Numero de decimales, negativo para redondear a decenas centenas...
+     * @return Numero redondeado
+     */
+    public static double round(double num, int dec){
+        double ret;
+        if (dec >= 0){
+            ret = Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+        }else {
+            ret = Math.round(num / Math.pow(10, dec)) * Math.pow(10, dec);
+        }
+        return ret;
+    }
+
+    /**
      * Esclaremos los btns del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
      * absolutos, sino los reales.
      *

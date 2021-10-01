@@ -1,9 +1,24 @@
 # Changelog 
 
+##[3.9.0+Raul] - 2021-10-01
+### Added
+ - Implementado el activity de pago
+ - Setter en la clase sesion
+ - Constructor añadido en LsV_Descuentos
+ - Metodo para redondear en la clase Method
+### Fixed
+ - Calculo del precio en el activity de pago
+ - Calculo del tiempo en el activity de pago
+ - Botones de pagar y volver
+### Changed
+ - Fragment de pago transformado a activity
+ - Version se actualiza sola en SplashScreen y en Menu de Usuario
+
 ##[3.8.0+Juan Vicente] - 2021-09-30
 ### Added
- - Todos los cambios que pidió Luis.
- - MGM en Fragmanet_Canjear_Codigos
+ - Modificado el menu de usuario
+ - Modificada la barra de navegacion
+ - MGM en Fragment_Canjear_Codigos
 ### Fixed
  - Optimización del código que controlaba la navegación entre fragments
 

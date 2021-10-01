@@ -82,6 +82,9 @@
         <activity android:name=".PasswordActivity"
             android:label="Contrasena Olvidada" />
 
+        <activity android:name=".PagoActivity"
+            android:label="Pago" />
+
         <activity android:name=".WebActivity"
             android:label="Web" />
 

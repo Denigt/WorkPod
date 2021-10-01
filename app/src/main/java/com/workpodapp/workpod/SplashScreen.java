@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,13 +30,17 @@ import static java.sql.DriverManager.println;
 public class SplashScreen extends AppCompatActivity {
     // DECLARACION DE VARIABLES
     private boolean isLogon = false;
+    private TextView txtVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         // ESTABLECER LAYOUT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        // ESTABLECER VERSION
+        txtVersion = findViewById(R.id.txtVersion);
+        txtVersion.setText(BuildConfig.VERSION_NAME);
 
         // NADA MAS INICIAR LA APP OBTENER LA IDENTIFICACION DE LA APLICACION E INFORMAR A LA BD SOBRE LA INSTALACION
         InfoApp.INSTALLATION = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);

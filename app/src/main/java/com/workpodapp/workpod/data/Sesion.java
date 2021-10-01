@@ -21,13 +21,28 @@ public class Sesion implements DataDb {
     private ZonedDateTime salida;
     private double precio;
     private double tiempo;
-    private int descuento;
+    private double descuento;
     private int usuario;
     private Workpod workpod;
     private Direccion direccion;
 
-    //CONSTRUCTOR POR DEFECTO
+    public void set(Sesion sesion)  {
+        try{
+            id = sesion.getId();
+            entrada = sesion.getEntrada();
+            salida = sesion.getSalida();
+            precio = sesion.getPrecio();
+            tiempo = sesion.getTiempo();
+            descuento = sesion.getDescuento();
+            usuario = sesion.getIdUsuario();
+            workpod = sesion.getWorkpod();
+            direccion = sesion.getDireccion();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
 
+    //CONSTRUCTOR POR DEFECTO
     public Sesion() {
     }
 
@@ -107,11 +122,11 @@ public class Sesion implements DataDb {
         this.tiempo = tiempo;
     }
 
-    public int getDescuento() {
+    public double getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(int descuento) {
+    public void setDescuento(double descuento) {
         this.descuento = descuento;
     }
 

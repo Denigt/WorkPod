@@ -1,5 +1,6 @@
 package com.workpodapp.workpod.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.workpodapp.workpod.PagoActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.ValoracionWorkpod;
 import com.workpodapp.workpod.WorkpodActivity;
@@ -176,8 +178,12 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      */
     private void onClickCerrarWorkpod() {
         //ABRIMOS DIALOG EMERGENTE PARA QUE EL USUARIO DECIDA SI SALIR
-        Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(sesion, reserva, ubicacion);
-        fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(), "Dialog Cerrar Workpod");
+        /*Fragment_Dialog_Cerrar_Workpod fragmentDialogCerrarWorkpod = new Fragment_Dialog_Cerrar_Workpod(sesion, reserva, ubicacion);
+        fragmentDialogCerrarWorkpod.show(getActivity().getSupportFragmentManager(), "Dialog Cerrar Workpod");*/
+
+        // ABRIMOS EL ACTIVITY PARA REALIZAR EL PAGO
+        Intent activity = new Intent(requireActivity(), PagoActivity.class);
+        startActivity(activity);
 
     }
 

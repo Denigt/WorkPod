@@ -1,5 +1,7 @@
 package com.workpodapp.workpod.otherclass;
 
+import com.workpodapp.workpod.data.Cupon;
+
 public class LsV_Descuentos {
     //DECLARACIÓN DE ATRIBUTOS
     private int id;
@@ -8,6 +10,13 @@ public class LsV_Descuentos {
 
     //CONSTRUCTOR POR DEFECTO
     public LsV_Descuentos() {
+    }
+
+    // CONSTRUCTOR MAS SENCILLO
+    public LsV_Descuentos(int id, Cupon cupon) {
+        this.id = id;
+        this.nombreDescuento = cupon.getCampana().getNombre();
+        this.minGratis = cupon.getCampana().getDescuento() + " minutos gratis";
     }
 
     //CONSTRUCTOR CON TODOS LOS ATRIBUTOS

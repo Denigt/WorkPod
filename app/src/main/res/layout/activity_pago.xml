@@ -76,13 +76,13 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/IVPassword"
+                        android:id="@+id/IVTiempo"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty_icon_clock_blue" />
 
                     <TextView
-                        android:id="@+id/TVPassword"
+                        android:id="@+id/TVTiempo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
@@ -196,6 +196,7 @@
             </LinearLayout>
 
             <ListView
+                android:id="@+id/lsvCupones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

@@ -15,13 +15,25 @@
         android:src="@drawable/logo_logo"
         android:scaleType="fitCenter"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="15dp"
-        android:text="Version 1.0.0"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:text="Version "
         android:textColor="@color/white"/>
 
+        <TextView
+            android:id="@+id/txtVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="1.0.0"
+            android:textColor="@color/white"/>
+    </LinearLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
