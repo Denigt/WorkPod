@@ -28,7 +28,6 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
 
     Context context;
     FragmentManager manager;
-    List<LsV_Descuentos> lstDescuentos = new ArrayList<>();
 
     //VARIABLES DEL ITEM
     LinearLayout lLDescuento;
@@ -37,6 +36,9 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     Button ibtnCanjear;
 
     Cupon cupon;
+
+    // INDICA SI SE HA CREADO EL ADAPTADOR PARA REALIZAR PAGOS
+    private boolean pago;
 
     //ESCALADO
     DisplayMetrics metrics;
@@ -49,29 +51,44 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics) {
     }
 
-
-    public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics,
+    public Adaptador_Lsv_Descuentos(Context context, DisplayMetrics metrics,
                                     FragmentManager supportFragmentManager, List<Cupon> lstCupones) {
         this.context = context;
-        this.lstDescuentos = lstDescuentos;
         this.metrics = metrics;
         this.manager = supportFragmentManager;
         this.lstCupones = lstCupones;
+        this.pago = false;
+    }
+
+    /**
+     * Constructor a usar si se necesita cambiar entre el boton de +info y canjear
+     * @param context Contexto de la aplicacion, se obtiene del fragment o activity
+     * @param supportFragmentManager Controlador de fragments para poder abrir fragments y dialogos desde el listView
+     * @param lstCupones Lista de cupones
+     * @param pago True si se quiere boton para canjear, false para boton de +info
+     * @param metrics Ajustar tamano de los elementos del listView
+     */
+    public Adaptador_Lsv_Descuentos(Context context, FragmentManager supportFragmentManager, List<Cupon> lstCupones, boolean pago, DisplayMetrics metrics) {
+        this.context = context;
+        this.metrics = metrics;
+        this.manager = supportFragmentManager;
+        this.lstCupones = lstCupones;
+        this.pago = pago;
     }
 
     @Override
     public int getCount() {
-        return lstDescuentos.size();
+        return lstCupones.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return lstDescuentos.get(i);
+        return lstCupones.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return lstDescuentos.get(i).getId();
+        return lstCupones.get(i).getId();
     }
 
     @Override
@@ -83,17 +100,21 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         tVnombreDescuento = view.findViewById(R.id.iTV_Nombre_Descuento);
         tVminGratis = view.findViewById(R.id.iTV_Min_Descuento);
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
-        tVnombreDescuento.setText(lstDescuentos.get(i).getNombreDescuento());
-        tVminGratis.setText(lstDescuentos.get(i).getMinGratis());
+        tVnombreDescuento.setText(lstCupones.get(i).getCampana().getNombre());
+        tVminGratis.setText(lstCupones.get(i).getCampana().getDescuento() + " minutos gratis");
 
-        ibtnCanjear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if(ibtnCanjear.getText().)
-                cupon = lstCupones.get(i);
-                showDialogMoreInformation(v);
-            }
-        });
+        if (!pago) {
+            ibtnCanjear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //if(ibtnCanjear.getText().)
+                    cupon = lstCupones.get(i);
+                    showDialogMoreInformation(v);
+                }
+            });
+        }else {
+            ibtnCanjear.setText("Canjear");
+        }
 
         //ESCALAMOS ELEMENTOS
         width = metrics.widthPixels / metrics.density;
@@ -105,7 +126,6 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
 
 
     private void showDialogMoreInformation(View view) {
-
         Fragment_Dialog_More_Information dialog_more_information = new Fragment_Dialog_More_Information(cupon);
         dialog_more_information.show(manager, "Show Dialog More Information");
     }

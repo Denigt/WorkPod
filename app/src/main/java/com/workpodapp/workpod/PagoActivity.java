@@ -62,17 +62,11 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         consulta.postRun(()->{
             if (consulta.getError().code > -1) {
                 lstCupones.addAll(consulta.getLstSelect());
-
-                int i = 0;
-                for (Cupon cupon : lstCupones) {
-                    itemsDescuentos.add(new LsV_Descuentos(i, cupon));
-                    i++;
-                }
             }
         });
         consulta.postRunOnUI(this, () -> {
             if (consulta.getError().code > -1 && lsvCupones != null){
-                adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), itemsDescuentos, metrics, getSupportFragmentManager(), lstCupones);
+                adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), getSupportFragmentManager(), lstCupones, true, metrics);
                 lsvCupones.setAdapter(adDescuentos);
             }
         });
@@ -127,7 +121,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
         //SI LO PONES ANTES, METRICS APUNTA A NULO
-        adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), itemsDescuentos, metrics, getSupportFragmentManager(), lstCupones);
+        adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), getSupportFragmentManager(), lstCupones, true, metrics);
         lsvCupones.setAdapter(adDescuentos);
     }
 
