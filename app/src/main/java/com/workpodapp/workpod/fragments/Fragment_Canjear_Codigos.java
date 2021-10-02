@@ -251,7 +251,10 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
         if (eTCanjearCodigos.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "Ingrese el código de un cupón para guardarlo", Toast.LENGTH_LONG).show();
-        } else {
+        } else if(eTCanjearCodigos.getText().toString().trim().equals(InfoApp.USER.getCodamigo())) {
+            Toast.makeText(getActivity(),"No puedes meter tu código amigo",Toast.LENGTH_LONG).show();
+
+        }else{
             //INICIALIZAMOS LA VARIABLE CUPÓN
             cupon = new Cupon();
             cupon.setCodigo(eTCanjearCodigos.getText().toString());
@@ -274,7 +277,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
                 } else if (insert.getError().code > -2) {
                     Toast.makeText(getActivity(), insert.getError().message, Toast.LENGTH_LONG).show();
                 } else if (insert.getError().code < -10) {
-                    Toast.makeText(getActivity(), "Ya tienes un cupón para esa campaña", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Ya has ingresado ese cupón", Toast.LENGTH_LONG).show();
                 }
 
             });
