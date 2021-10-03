@@ -34,6 +34,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     TextView tVnombreDescuento;
     TextView tVminGratis;
     Button ibtnCanjear;
+    LinearLayout llBtnCanjear;
 
     Cupon cupon;
 
@@ -100,6 +101,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         tVnombreDescuento = view.findViewById(R.id.iTV_Nombre_Descuento);
         tVminGratis = view.findViewById(R.id.iTV_Min_Descuento);
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
+        llBtnCanjear = view.findViewById(R.id.llBntCanjear);
         tVnombreDescuento.setText(lstCupones.get(i).getCampana().getNombre());
         tVminGratis.setText(lstCupones.get(i).getCampana().getDescuento() + " minutos gratis");
 
@@ -114,6 +116,37 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
             });
         }else {
             ibtnCanjear.setText("Canjear");
+
+            if (lstCupones.get(i).isCanjeado() && lstCupones.get(i).getfCanjeado() == null) {
+                ibtnCanjear.setText("Canjeado");
+                ((LinearLayout) ibtnCanjear.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
+            }
+            ibtnCanjear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (R.id.iBtnCanjear == v.getId()) {
+                        boolean aplicado = false;
+                        for (Cupon cupon : lstCupones) {
+                            if (cupon.isCanjeado() && cupon.getfCanjeado() == null) {
+                                aplicado = true;
+                                if (cupon.equals(lstCupones.get(i))) {
+                                    lstCupones.get(i).setCanjeado(false);
+                                    cupon = null;
+                                    ((Button) v).setText("Canjear");
+                                    ((LinearLayout) v.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button));
+                                }
+                                break;
+                            }
+                        }
+                        if (!aplicado) {
+                            lstCupones.get(i).setCanjeado(true);
+                            cupon = lstCupones.get(i);
+                            ((Button) v).setText("Canjeado");
+                            ((LinearLayout) v.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
+                        }
+                    }
+                }
+            });
         }
 
         //ESCALAMOS ELEMENTOS
@@ -170,5 +203,9 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         } else if (width <= (550 / metrics.density)) {
             lLDescuento.getLayoutParams().width = 220;
         }
+    }
+
+    public Cupon getCupon() {
+        return cupon;
     }
 }

@@ -106,7 +106,7 @@ public class Cupon implements DataDb {
         codigo = "";
         canjeado = false;
         fInsertado = ZonedDateTime.now();
-        fCanjeado = ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone());
+        fCanjeado = null;
         fCaducidad = ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone());
         campana = new Campana();
         usuario = 0;

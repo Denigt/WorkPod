@@ -1,12 +1,18 @@
 # Changelog 
 
+##[3.9.4+Raul] - 2021-10-03
+### Added
+ - Marcar cupones como cajeados (Solo se permite canjear uno y se puede descanjear)
+### Fixed
+ - Fecha de canjeo de cupon nula
+
 ##[3.9.3+Juan Vicente] - 2021-10-02
 ### Fixed
  - Fragment Canjear Cupones
 
 ##[3.9.2+Raul] - 2021-10-02
 ### Fixed
- - Adaptador cupones y lsv
+ - Adaptador de cupones y descuentos en fragment de pago
 
 ##[3.9.1+Juan Vicente] - 2021-10-01
 ### Fixed

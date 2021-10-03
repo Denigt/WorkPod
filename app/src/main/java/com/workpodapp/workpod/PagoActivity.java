@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagoActivity extends AppCompatActivity implements View.OnClickListener {
+public class PagoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     // XML
     private TextView txtCabina;
@@ -123,15 +124,37 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         //SI LO PONES ANTES, METRICS APUNTA A NULO
         adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), getSupportFragmentManager(), lstCupones, true, metrics);
         lsvCupones.setAdapter(adDescuentos);
+        lsvCupones.setOnItemClickListener(this);
     }
 
     //SOBRESECRITURAS
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Cupon cupon = adDescuentos.getCupon();
+
+        double precio = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+        sesion.setPrecio(precio -  Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+        sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+
+        txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+        txtPrecio.setText(String.format("%.2f€", sesion.getDescuento()));
+    }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == btnVolver.getId()) {
             onClickBtnVolver();
         } else if (v.getId() == btnPagar.getId()) {
             onClickBtnPagar();
+        } else if (v.getId() == lsvCupones.getId()){
+            Cupon cupon = adDescuentos.getCupon();
+
+            double precio = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+            sesion.setPrecio(precio -  Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+            sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+
+            txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+            txtPrecio.setText(String.format("%.2f€", sesion.getDescuento()));
         }
     }
 
