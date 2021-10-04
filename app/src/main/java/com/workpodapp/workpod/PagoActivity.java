@@ -30,7 +30,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class PagoActivity extends AppCompatActivity implements View.OnClickListener {
 
     // XML
     private TextView txtCabina;
@@ -67,7 +67,22 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         });
         consulta.postRunOnUI(this, () -> {
             if (consulta.getError().code > -1 && lsvCupones != null){
-                adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), getSupportFragmentManager(), lstCupones, true, metrics);
+                adDescuentos = new Adaptador_Lsv_Descuentos(this, getSupportFragmentManager(), lstCupones, true, metrics);
+
+                adDescuentos.setOnBtnClick(() -> {
+                    Cupon cupon = adDescuentos.getCupon();
+
+                    double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+                    sesion.setPrecio(importe);
+                    if (cupon == null)
+                        sesion.setDescuento(0);
+                    else
+                        sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+
+                    txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+                    txtTotal.setText(String.format("%.2f€", sesion.getPrecio()));
+                    txtDescuento.setText(String.format("%.2f€", sesion.getDescuento()));
+                });
                 lsvCupones.setAdapter(adDescuentos);
             }
         });
@@ -122,22 +137,20 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
         //SI LO PONES ANTES, METRICS APUNTA A NULO
-        adDescuentos = new Adaptador_Lsv_Descuentos(getApplicationContext(), getSupportFragmentManager(), lstCupones, true, metrics);
+        adDescuentos = new Adaptador_Lsv_Descuentos(this, getSupportFragmentManager(), lstCupones, true, metrics);
+
+        adDescuentos.setOnBtnClick(() -> {
+            Cupon cupon = adDescuentos.getCupon();
+
+            double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+            sesion.setPrecio(importe);
+            sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+
+            txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+            txtTotal.setText(String.format("%.2f€", sesion.getPrecio()));
+            txtDescuento.setText(String.format("%.2f€", sesion.getDescuento()));
+        });
         lsvCupones.setAdapter(adDescuentos);
-        lsvCupones.setOnItemClickListener(this);
-    }
-
-    //SOBRESECRITURAS
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Cupon cupon = adDescuentos.getCupon();
-
-        double precio = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
-        sesion.setPrecio(precio -  Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
-        sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
-
-        txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
-        txtPrecio.setText(String.format("%.2f€", sesion.getDescuento()));
     }
 
     @Override
@@ -146,15 +159,6 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
             onClickBtnVolver();
         } else if (v.getId() == btnPagar.getId()) {
             onClickBtnPagar();
-        } else if (v.getId() == lsvCupones.getId()){
-            Cupon cupon = adDescuentos.getCupon();
-
-            double precio = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
-            sesion.setPrecio(precio -  Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
-            sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
-
-            txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
-            txtPrecio.setText(String.format("%.2f€", sesion.getDescuento()));
         }
     }
 
@@ -178,6 +182,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                 if (updateReserva.getError().code > -1) {
                     // SI NO HA HABIDO ERRORES ACTUALIZAR LA SESION EN LA DB
                     Database<Sesion> updateSesion = new Database<>(Database.UPDATE, sesion);
+                    Database<Cupon> updateCupon = new Database<>(Database.UPDATE, adDescuentos.getCupon());
                     updateSesion.postRunOnUI(updateReserva.getActivity(), () -> {
                         if (updateSesion.getError().code > -1){
                             InfoApp.SESION = sesion;
@@ -188,6 +193,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                             startActivity(activity);
                         }
                     });
+                    updateCupon.start();
                     updateSesion.start();
                 }
             });

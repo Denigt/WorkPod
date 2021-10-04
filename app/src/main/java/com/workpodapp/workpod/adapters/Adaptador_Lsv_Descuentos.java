@@ -1,5 +1,6 @@
 package com.workpodapp.workpod.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -21,11 +23,13 @@ import com.workpodapp.workpod.otherclass.LsV_Descuentos;
 import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_TextView;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Adaptador_Lsv_Descuentos extends BaseAdapter {
-
+    private Activity activity;
+    private Runnable onBtnClick = null;
     Context context;
     FragmentManager manager;
 
@@ -54,6 +58,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
 
     public Adaptador_Lsv_Descuentos(Context context, DisplayMetrics metrics,
                                     FragmentManager supportFragmentManager, List<Cupon> lstCupones) {
+        this.activity = null;
         this.context = context;
         this.metrics = metrics;
         this.manager = supportFragmentManager;
@@ -70,7 +75,26 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
      * @param metrics Ajustar tamano de los elementos del listView
      */
     public Adaptador_Lsv_Descuentos(Context context, FragmentManager supportFragmentManager, List<Cupon> lstCupones, boolean pago, DisplayMetrics metrics) {
+        this.activity = null;
         this.context = context;
+        this.metrics = metrics;
+        this.manager = supportFragmentManager;
+        this.lstCupones = lstCupones;
+        this.pago = pago;
+    }
+
+    /**
+     * Constructor a usar si se necesita cambiar entre el boton de +info y canjear
+     * Tambien sustituye el context por activity, lo que permite ejecutar el Runnable onBtnClick (El cual se ejecuta al pulsar el boton)
+     * @param activity Actividad en ejecucion
+     * @param supportFragmentManager Controlador de fragments para poder abrir fragments y dialogos desde el listView
+     * @param lstCupones Lista de cupones
+     * @param pago True si se quiere boton para canjear, false para boton de +info
+     * @param metrics Ajustar tamano de los elementos del listView
+     */
+    public Adaptador_Lsv_Descuentos(Activity activity, FragmentManager supportFragmentManager, List<Cupon> lstCupones, boolean pago, DisplayMetrics metrics) {
+        this.activity = activity;
+        this.context = activity.getApplicationContext();
         this.metrics = metrics;
         this.manager = supportFragmentManager;
         this.lstCupones = lstCupones;
@@ -112,6 +136,9 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                     //if(ibtnCanjear.getText().)
                     cupon = lstCupones.get(i);
                     showDialogMoreInformation(v);
+
+                    if (activity != null && onBtnClick != null)
+                        activity.runOnUiThread(onBtnClick);
                 }
             });
         }else {
@@ -126,10 +153,10 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                 public void onClick(View v) {
                     if (R.id.iBtnCanjear == v.getId()) {
                         boolean aplicado = false;
-                        for (Cupon cupon : lstCupones) {
-                            if (cupon.isCanjeado() && cupon.getfCanjeado() == null) {
+                        for (Cupon auxCupon : lstCupones) {
+                            if (auxCupon.isCanjeado() && auxCupon.getfCanjeado() == null) {
                                 aplicado = true;
-                                if (cupon.equals(lstCupones.get(i))) {
+                                if (auxCupon.equals(lstCupones.get(i))) {
                                     lstCupones.get(i).setCanjeado(false);
                                     cupon = null;
                                     ((Button) v).setText("Canjear");
@@ -139,11 +166,18 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                             }
                         }
                         if (!aplicado) {
-                            lstCupones.get(i).setCanjeado(true);
-                            cupon = lstCupones.get(i);
-                            ((Button) v).setText("Canjeado");
-                            ((LinearLayout) v.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
+                            if (lstCupones.get(i).getfCaducidad() == null || Method.subsDate(ZonedDateTime.now(), lstCupones.get(i).getfCaducidad()) <= 0) {
+                                lstCupones.get(i).setCanjeado(true);
+                                cupon = lstCupones.get(i);
+                                ((Button) v).setText("Canjeado");
+                                ((LinearLayout) v.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
+                            } else {
+                                Toast.makeText(context, "El cupón está caducado", Toast.LENGTH_SHORT);
+                            }
                         }
+
+                        if (activity != null && onBtnClick != null)
+                            activity.runOnUiThread(onBtnClick);
                     }
                 }
             });
@@ -163,7 +197,6 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         dialog_more_information.show(manager, "Show Dialog More Information");
     }
     //MÉTODOS
-
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
@@ -203,6 +236,16 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         } else if (width <= (550 / metrics.density)) {
             lLDescuento.getLayoutParams().width = 220;
         }
+    }
+
+    /**
+     * Establece el runnable a ejecutar al pulsar el boton
+     * El runnable se ejecuta en el hilo de la interfaz por lo que puede pausar la intefaz del programa,
+     * impedir interacciones con la interfaz y afectar a la misma, cuidado con que codigo se mete en el
+     * @param onBtnClick
+     */
+    public void setOnBtnClick(Runnable onBtnClick) {
+        this.onBtnClick = onBtnClick;
     }
 
     public Cupon getCupon() {

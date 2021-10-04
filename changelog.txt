@@ -1,10 +1,20 @@
 # Changelog 
 
+##[3.9.5+Raul] - 2021-10-04
+### Added
+ - Canjear cupones
+### Changed
+ - El adapatador de Lsv descuentos puede ejecutar un Runnable en la UI al pulsar un boton
+### Fixed
+ - Problema al insertar cupones nuevos
+ - Se muestra el descuento al aplicar un cupon
+
 ##[3.9.4+Raul] - 2021-10-03
 ### Added
  - Marcar cupones como cajeados (Solo se permite canjear uno y se puede descanjear)
 ### Fixed
  - Fecha de canjeo de cupon nula
+ - Modificar perfil ahora no cierra sesion ni envia email al cambiar cualquier dato
 
 ##[3.9.3+Juan Vicente] - 2021-10-02
 ### Fixed

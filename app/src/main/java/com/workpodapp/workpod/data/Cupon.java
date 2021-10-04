@@ -107,7 +107,7 @@ public class Cupon implements DataDb {
         canjeado = false;
         fInsertado = ZonedDateTime.now();
         fCanjeado = null;
-        fCaducidad = ZonedDateTime.of(2000,01,01,0,0,0,0,ZonedDateTime.now().getZone());
+        fCaducidad = null;
         campana = new Campana();
         usuario = 0;
     }
@@ -141,8 +141,6 @@ public class Cupon implements DataDb {
                 cupon.setfCanjeado(Method.stringToDate(cuponJSON.getString("fCanjeado"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
             if (cuponJSON.has("fCaducidad") && !cuponJSON.isNull("fCaducidad"))
                 cupon.setfCaducidad(Method.stringToDate(cuponJSON.getString("fCaducidad"), ZoneId.of("UCT")).withZoneSameInstant(ZoneId.systemDefault()));
-        /*    if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
-                cupon.setCampana(cuponJSON.getInt("campana"));*/
             if (cuponJSON.has("usuario") && !cuponJSON.isNull("usuario"))
                 cupon.setUsuario(cuponJSON.getInt("usuario"));
             if (cuponJSON.has("campana") && !cuponJSON.isNull("campana"))
@@ -163,10 +161,14 @@ public class Cupon implements DataDb {
             json.put("id", id);
             json.put("codigo", codigo);
             json.put("canjeado", canjeado);
-            json.put("fInsertado", Method.dateToString(fInsertado, ZoneId.of("UCT")));
-            json.put("fCanjeado", Method.dateToString(fCanjeado, ZoneId.of("UCT")));
-            json.put("fCaducidad", Method.dateToString(fCaducidad, ZoneId.of("UCT")));
-            json.put("campana", campana);
+            if (fInsertado != null)
+                json.put("fInsertado", Method.dateToString(fInsertado, ZoneId.of("UCT")));
+            if (fCanjeado != null)
+                json.put("fCanjeado", Method.dateToString(fCanjeado, ZoneId.of("UCT")));
+            if (fCaducidad != null)
+                json.put("fCaducidad", Method.dateToString(fCaducidad, ZoneId.of("UCT")));
+            if (campana != null)
+                json.put("campana", campana.dataAJSON().toString());
             json.put("usuario", usuario);
         } catch (Exception e) {
             Log.e("ERROR USUARIO_JSON", e.getMessage());
