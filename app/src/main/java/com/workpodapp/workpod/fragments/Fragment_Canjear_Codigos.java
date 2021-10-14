@@ -81,6 +81,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     List<Scale_TextView> lstTv;
     List<Scale_Image_View> lstIv;
     List<Cupon> lstCupones = new ArrayList<>();
+    List<Cupon> lstAmigos = new ArrayList<>();
 
 
     private boolean boolIVCancelar = false;
@@ -182,8 +183,26 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             btnGuardarDescuento.setVisibility(View.VISIBLE);
             tV_Descuentos.setVisibility(View.VISIBLE);
             lsV_Codigo_Descuento.setVisibility(View.VISIBLE);
+            //Le pasamos a la lista de amigos, los cupones de Por Invitar a un Amigo
+            lstAmigos.clear();
+            for (Cupon cupon : lstCupones) {
+                if (cupon.getCampana().getNombre().equalsIgnoreCase("Por Invitar a un Amigo"))
+                    lstAmigos.add(cupon);
+            }
+
+            if (lstAmigos.isEmpty()) {
+                iV_Btn_Siguiente.setVisibility(View.GONE);
+            } else {
+                //Inicializamos los minutos y los amigos conseguidos
+                tV_MGM_Minutos.setText(Integer.toString(lstAmigos.size() * lstAmigos.get(0).getCampana().getDescuento()) + " minutos");
+                tV_MGM_Amigos.setText(Integer.toString(lstAmigos.size()) + " amigos");
+                if (lstAmigos.size() == 1)
+                    tV_MGM_Amigos.setText(Integer.toString(lstAmigos.size()) + " amigo");
+            }
+
         } else {
             lLMGM.setVisibility(View.VISIBLE);
+            iV_Btn_Siguiente.setVisibility(View.GONE);
             tV_Titulo_Canjea_Codigos.setVisibility(View.VISIBLE);
             eTCanjearCodigos.setVisibility(View.VISIBLE);
             btnCancelarDescuento.setVisibility(View.VISIBLE);
@@ -251,10 +270,10 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
         if (eTCanjearCodigos.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "Ingrese el código de un cupón para guardarlo", Toast.LENGTH_LONG).show();
-        } else if(eTCanjearCodigos.getText().toString().trim().equals(InfoApp.USER.getCodamigo())) {
-            Toast.makeText(getActivity(),"No puedes meter tu código amigo",Toast.LENGTH_LONG).show();
+        } else if (eTCanjearCodigos.getText().toString().trim().equals(InfoApp.USER.getCodamigo())) {
+            Toast.makeText(getActivity(), "No puedes meter tu código amigo", Toast.LENGTH_LONG).show();
 
-        }else{
+        } else {
             //INICIALIZAMOS LA VARIABLE CUPÓN
             cupon = new Cupon();
             cupon.setCodigo(eTCanjearCodigos.getText().toString());
@@ -323,7 +342,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         this.lstBtn = new ArrayList<>();
         this.lstTv = new ArrayList<>();
         this.lstIv = new ArrayList<>();
-        String n=InfoApp.INSTALLATION;
+        String n = InfoApp.INSTALLATION;
 
         //LLENAMOS COLECCIONES
         lstBtn.add(new Scale_Buttons(btnCancelarDescuento, "wrap_content", "bold", 13, 16, 18));
@@ -365,8 +384,8 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             params.setMargins(20, 10, 10, 10);
             lLShareFriendDescuento.setLayoutParams(params);
             tV_Titulo_Canjea_Codigos.setText("Canjea tus códigos de descuento");
-            btnShareMoreFriendCode.getLayoutParams().height=50;
-            btnShareFriendCodeDescuento.getLayoutParams().height=50;
+            btnShareMoreFriendCode.getLayoutParams().height = 50;
+            btnShareFriendCodeDescuento.getLayoutParams().height = 50;
         }
     }
 

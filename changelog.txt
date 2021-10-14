@@ -1,5 +1,11 @@
 # Changelog 
 
+##[3.9.6+Juan Vicente] - 2021-10-14
+###Added
+ - Funcionalidad al Fragment_Canjear_Codigos para que se refleje el nº de amigos que se han unido a workpod por ti.
+###Fixed 
+ -Btn para mostar el nº de amigos que se han unido a workpod por el MGM del usuario solo será visible cuando tenga al menos un amigo.
+
 ##[3.9.5+Raul] - 2021-10-04
 ### Added
  - Canjear cupones
@@ -353,6 +359,15 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.9.5] : https://github.com/Denigt/WorkPod/commit/8d38aaeaf1bfc3da397356423e260c026249a76d
+[3.9.4] : https://github.com/Denigt/WorkPod/commit/57553319f9fcf9103bbd57141bd8c9f1ef9ee49d
+[3.9.3] : https://github.com/Denigt/WorkPod/commit/08741716004923e291ea9966b151fb68ac310e84
+[3.9.2] : https://github.com/Denigt/WorkPod/commit/50a9f3a9d1ec8f719a28939b5e64764e3a01040c
+[3.9.1] : https://github.com/Denigt/WorkPod/commit/743ff181d98705404efb5655e4655ca5a514cb42
+[3.9.0] : https://github.com/Denigt/WorkPod/commit/29065b162dbd760bc1cddc98f0d98abaaca6ff59
+[3.8.0] : https://github.com/Denigt/WorkPod/commit/e6a0ba92928ba4bf9600b8f28adaee9feb75281c
+[3.7.14]: https://github.com/Denigt/WorkPod/commit/a030879f91a0feb674a3c2f0e7e13a0be0846fe3
+[3.7.13]: https://github.com/Denigt/WorkPod/commit/af19bbb027ba4f23d0d0a15203bd2d93cb83d833
 [3.7.12]: https://github.com/Denigt/WorkPod/commit/a204d2c78ae6f869285619e7fe8b3b16b0b8d749
 [3.7.11]: https://github.com/Denigt/WorkPod/commit/45adb47cf1e5769cafbda149584df59765398f2d
 [3.7.10]: https://github.com/Denigt/WorkPod/commit/83d4d34f0ca1164091846991d202ff0e7fd0dfc8
