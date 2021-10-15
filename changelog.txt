@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.9.7+Raúl] - 2021-10-15
+###Fixed
+ -No actualizar cupon si no se ha canjeado ninguno
+
 ##[3.9.6+Juan Vicente] - 2021-10-14
 ###Added
  - Funcionalidad al Fragment_Canjear_Codigos para que se refleje el nº de amigos que se han unido a workpod por ti.
@@ -359,6 +363,8 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.9.7] : https://github.com/Denigt/WorkPod/commit/90aab863457c293c5577864a0bf5ed858725e7da
+[3.9.6] : https://github.com/Denigt/WorkPod/commit/e29229576ffe3e0bc7767e6bee381f7401d8a9b1
 [3.9.5] : https://github.com/Denigt/WorkPod/commit/8d38aaeaf1bfc3da397356423e260c026249a76d
 [3.9.4] : https://github.com/Denigt/WorkPod/commit/57553319f9fcf9103bbd57141bd8c9f1ef9ee49d
 [3.9.3] : https://github.com/Denigt/WorkPod/commit/08741716004923e291ea9966b151fb68ac310e84
