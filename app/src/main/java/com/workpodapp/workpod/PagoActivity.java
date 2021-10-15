@@ -193,7 +193,8 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                             startActivity(activity);
                         }
                     });
-                    updateCupon.start();
+                    if (adDescuentos.getCupon() != null)
+                        updateCupon.start();
                     updateSesion.start();
                 }
             });
