@@ -70,11 +70,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         //ARMAMOS EL LSV
         lsV_Menu_Usuario = (ListView) view.findViewById(R.id.LsV_Menu_Usuario);
         aLstMU.add(new LsV_Menu_Usuario(0, R.drawable.fill_icon_user, "Mi Perfil"));
-        aLstMU.add(new LsV_Menu_Usuario(1, R.drawable.fill_icon_tarjeta, "Métodos de pago"));
+        //aLstMU.add(new LsV_Menu_Usuario(1, R.drawable.fill_icon_tarjeta, "Métodos de pago"));
         aLstMU.add(new LsV_Menu_Usuario(2, R.drawable.fill_icon_friends, "Canjear códigos"));
         aLstMU.add(new LsV_Menu_Usuario(3, R.drawable.fill_icon_phone, "Contáctanos"));
         aLstMU.add(new LsV_Menu_Usuario(4, R.drawable.fill_icon_historial, "Histórico de transacciones"));
-        aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Cómo funciona"));
+       // aLstMU.add(new LsV_Menu_Usuario(5, R.drawable.fill_icon_friends, "Cómo funciona"));
         aLstMU.add(new LsV_Menu_Usuario(6, R.drawable.empty_icon_lock, "Cerrar sesión"));
         metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -97,11 +97,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
         onClickPerfil(i);
-        onClickPago(i);
+       // onClickPago(i);
         onClickDescuentos(i);
         onClickSoporte(i);
         onClickTransacciones(i);
-        onClickComoFunciona(i);
+        //onClickComoFunciona(i);
         onClickCerrar(i);
     }
 
@@ -118,11 +118,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         }
     }
 
-    private void onClickPago(int index) {
+   /* private void onClickPago(int index) {
         if (index == InfoFragment.PAGO) {
 
         }
-    }
+    }*/
 
     private void onClickDescuentos(int index) {
         if (index == InfoFragment.DESCUENTOS) {
@@ -156,11 +156,11 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         }
     }
 
-    private void onClickComoFunciona(int index) {
+    /*private void onClickComoFunciona(int index) {
         if (index == InfoFragment.COMO_FUNCIONA) {
 
         }
-    }
+    }*/
 
     private void onClickCerrar(int index) {
         if (index == InfoFragment.CERRAR) {

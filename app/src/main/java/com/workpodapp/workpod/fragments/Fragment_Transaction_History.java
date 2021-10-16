@@ -365,6 +365,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
      */
     private void irAlMapa() {
         //CERRAMOS EL FRAGMENT Y VOLVEMOS AL MAPA
+        InfoFragment.actual = InfoFragment.MENU;
         getActivity().onBackPressed();
     }
 

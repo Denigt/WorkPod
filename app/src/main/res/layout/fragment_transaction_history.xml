@@ -101,7 +101,7 @@ a que pruebes esta experiencia!!!\n\nAcude al mapa y busca una cabina cerca de t
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:src="@drawable/fill_icon_location_history"
+        android:src="@drawable/img_location_provisional"
         android:visibility="gone"/>
 
 </LinearLayout>

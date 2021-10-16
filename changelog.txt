@@ -1,5 +1,19 @@
 # Changelog 
 
+##[3.9.10+Juan Vicente] -2021-10-16
+###Changed
+ - Ocultar metodos de pago y como funciona de menu de usuario
+ - Imagenes de imgSwitcher de InitActivity
+ - Icono de ir al mapa en el historico cuando no tienes ninguna consulta
+ - color del texto cuando no tienes cupones en fragment_canjear_codigos
+ - La espera para que empiece el cronómetro y poder abrir el workpod al reservar es de 1 seg (antes eran 3)
+###Fixed
+ -Bug en Fragment_Dialog_Workpod, no reiniciaba el cronómetro hasta salir del Dialog y si cancelo la reserva y lo vuelvo a reservar,
+  el tiempo no empezaba en 20 minutos
+ -El icono del histórico cuando está vacío no te llevaba al mapa
+ 
+ 
+
 ##[3.9.9+Raúl] - 2021-10-16
 ### Added
  - Metodos en Sesion para calcular el precio con descuento y el descuento

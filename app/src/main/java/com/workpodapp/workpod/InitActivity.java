@@ -42,8 +42,8 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     List<Scale_TextView>lstTv;
 
     // RECURSOS DEL LOS SWITCHER
-    private final int[] images = {R.drawable.empty_icon_user_21, R.drawable.fill_icon_contact_us_cicle_21, R.drawable.fill_icon_friends};
-    private final String[] texts = {"Telefono", "Historial", "Amigos"};
+    private final int[] images = {R.drawable.img1_init_activity, R.drawable.img2_init_activity, R.drawable.img3_init_activity};
+    private final String[] texts = {"Para tí, que eres un trabajador activo", "24 horas al día,\n 7 días a la semana", "Paga solo por los minutos que consumas"};
     private int lastPos = 0;
 
     @Override
@@ -85,7 +85,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
                 return imageView;
             }
         });
-        imgSwitcher.setBackgroundResource(R.color.blue);
+        imgSwitcher.setBackgroundResource(R.color.white);
         imgSwitcher.setImageResource(images[lastPos]);
         imgSwitcher.setInAnimation(getApplicationContext(), R.anim.left_in);
         imgSwitcher.setOutAnimation(getApplicationContext(), R.anim.left_out);
@@ -100,7 +100,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
                 return txtView;
             }
         });
-        txtSwitcher.setText(texts[lastPos]);
+        tvTituloInitActivity.setText(texts[lastPos]);
         txtSwitcher.setInAnimation(getApplicationContext(), R.anim.left_in);
         txtSwitcher.setOutAnimation(getApplicationContext(), R.anim.left_out);
 
@@ -182,7 +182,7 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
 
             chgButtons(lastPos);
             imgSwitcher.setImageResource(images[lastPos]);
-            txtSwitcher.setText(texts[lastPos]);
+            tvTituloInitActivity.setText(texts[lastPos]);
         }
     }
 

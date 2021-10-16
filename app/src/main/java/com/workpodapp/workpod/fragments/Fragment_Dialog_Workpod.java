@@ -60,7 +60,7 @@ import java.util.List;
 public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnClickListener {
 
     //CONSTANTES
-    private static final int TIEMPO_EMPIECE_CRONO = 3000;
+    private static final int TIEMPO_EMPIECE_CRONO = 1000;
 
     //INSTANCIAS DE LA CLASE DATA
     Ubicacion ubicacion;
@@ -237,9 +237,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         btnCancelarReserva = view.findViewById(R.id.btnCancelarReserva);
 
         //INICIALIZAMOS OTRAS VARIABLES
-        this.centesimas = 100;
-        this.segundos = 60;
-        this.minutos = 20;
+        inicializarCrono();
 
         // Toast.makeText(getActivity(),String.valueOf(posicion.latitude)+","+String.valueOf(posicion.longitude),Toast.LENGTH_LONG).show();
 
@@ -389,8 +387,8 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 //CALCULAMOS EL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
                 long resto = (20 * 60) - Method.subsDate(ZonedDateTime.now(), fechaReservaWorkpod);
                 //INICIALIZAMOS LAS VARIABLES CON EL TIEMPO QUE QUEDA
-                minutos = resto / 60;
-                segundos = resto % 60;
+                this.minutos = resto / 60;
+                this.segundos = resto % 60;
                 //INICIALIZAMOS Y ARRANCAMOS EL HILO
                 arrancarCronometro();
                 //ECO DEL TIEMPO QUE LE QUEDA AL USUARIO PARA LLEGAR A LA CABINA
@@ -639,8 +637,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
             if (update.getError().code > -1) {
-                //PARAMOS CRONOMETRO
+                //PARAMOS CRONOMETRO Y LO INICIALIZAMOS DE NUEVO A 20 MIN
                 finish = true;
+                inicializarCrono();
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
                 lLEstadoWorkpod.getLayoutParams().width = 0;
@@ -749,6 +748,15 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             btnAbrirAhora.setVisibility(View.GONE);
         }
 
+    }
+
+    /**
+     * Inicializamos cronómetro
+     */
+    private void inicializarCrono() {
+        this.centesimas = 100;
+        this.segundos = 60;
+        this.minutos = 20;
     }
 
     private void arrancarCronometro() throws InterruptedException {

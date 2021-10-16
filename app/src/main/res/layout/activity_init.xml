@@ -35,7 +35,8 @@
             android:id="@+id/txtSwitcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"/>
+            android:layout_weight="2"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -117,11 +118,11 @@
                 android:id="@+id/btnConectar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/logo_linkedin_small"
                 android:lines="1"
                 android:text="Conectar"
                 android:background="?selectableItemBackground"
-                android:foreground="@drawable/rounded_border_button"/>
+                android:foreground="@drawable/rounded_border_button" />
+            <!--android:drawableLeft="@drawable/logo_linkedin_small"-->
         </FrameLayout>
     </LinearLayout>
 
