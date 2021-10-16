@@ -56,6 +56,24 @@ public class Sesion implements DataDb {
         this.direccion = direccion;
     }
 
+    /**
+     * Calcula el precio de la sesion restando el precio total y el descuento de la misma
+     * @return Precio con descuento aplicado
+     */
+    public double calculaPrecio(){
+        double precioConDescuento = precio - descuento;
+        return Method.round(precioConDescuento > 0? precioConDescuento : 0, 2);
+    }
+
+    /**
+     * Calcula el descuento de la sesion a partir del precio del workpod y los minutos de la campana, siempre menor o igual al precio total
+     * @return Descuento
+     */
+    public double calculaDescuento(Campana campana, Workpod workpod){
+        double descuento = campana.getDescuento() * workpod.getPrecio();
+        return Method.round(descuento > precio? precio : descuento, 2);
+    }
+
     public int getId() {
         return id;
     }

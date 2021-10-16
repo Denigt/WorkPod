@@ -441,10 +441,10 @@ public abstract class Method {
     }
 
     public static String getFBid(){
-        Task<String> tarea = FirebaseMessaging.getInstance().getToken();
+        /*Task<String> tarea = FirebaseMessaging.getInstance().getToken();
         while (!tarea.isComplete());
         if (tarea.isSuccessful())
             return tarea.getResult();
-        else return "";
+        else*/ return "";
     }
 }

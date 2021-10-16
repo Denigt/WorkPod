@@ -1,20 +1,30 @@
 # Changelog 
 
+##[3.9.9+Raúl] - 2021-10-16
+### Added
+ - Metodos en Sesion para calcular el precio con descuento y el descuento
+### Fixed
+ - El precio de la sesion no puede ser menor a 0
+ - El descuento no puede ser mayor al precio
+### Changed
+ - Tamaño de iconos del mapa
+ - Puestos los marcadores de los workpods en primer plano
+ - Deshabilitada la obtencion de la clave de firebase
+
 ##[3.9.8+Raúl] - 2021-10-16
-###Fixed
+### Fixed
  - Modificado el sistema para canjear cupones (No se ha podido probar si funciona)
-###Changed
+### Changed
  - Limitada la rotacion de la pantalla
 
-
 ##[3.9.7+Raúl] - 2021-10-15
-###Fixed
+### Fixed
  -No actualizar cupon si no se ha canjeado ninguno
 
 ##[3.9.6+Juan Vicente] - 2021-10-14
-###Added
+### Added
  - Funcionalidad al Fragment_Canjear_Codigos para que se refleje el nº de amigos que se han unido a workpod por ti.
-###Fixed 
+### Fixed 
  -Btn para mostar el nº de amigos que se han unido a workpod por el MGM del usuario solo será visible cuando tenga al menos un amigo.
 
 ##[3.9.5+Raul] - 2021-10-04

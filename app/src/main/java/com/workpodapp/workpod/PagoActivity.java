@@ -77,9 +77,9 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                     if (cupon == null)
                         sesion.setDescuento(0);
                     else
-                        sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+                        sesion.setDescuento(sesion.calculaDescuento(cupon.getCampana(), sesion.getWorkpod()));
 
-                    txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+                    txtPrecio.setText(String.format("%.2f€", sesion.calculaPrecio()));
                     txtTotal.setText(String.format("%.2f€", sesion.getPrecio()));
                     txtDescuento.setText(String.format("%.2f€", sesion.getDescuento()));
                 });
@@ -113,7 +113,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         txtTiempo.setText(String.format("%02d:%02d:%02d", tiempo[0], tiempo[1], tiempo[2]));
 
         txtPrecio = findViewById(R.id.TVPrecio);
-        txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+        txtPrecio.setText(String.format("%.2f€", sesion.calculaPrecio()));
 
         txtTotal = findViewById(R.id.TVPrecioTotal);
         txtTotal.setText(String.format("%.2f€", sesion.getPrecio()));
@@ -144,9 +144,9 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
 
             double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
             sesion.setPrecio(importe);
-            sesion.setDescuento(Method.round(cupon.getCampana().getDescuento() * sesion.getWorkpod().getPrecio(), 2));
+            sesion.setDescuento(sesion.calculaDescuento(cupon.getCampana(), sesion.getWorkpod()));
 
-            txtPrecio.setText(String.format("%.2f€", sesion.getPrecio() - sesion.getDescuento()));
+            txtPrecio.setText(String.format("%.2f€", sesion.calculaPrecio()));
             txtTotal.setText(String.format("%.2f€", sesion.getPrecio()));
             txtDescuento.setText(String.format("%.2f€", sesion.getDescuento()));
         });

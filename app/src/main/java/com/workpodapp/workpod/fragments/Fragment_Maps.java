@@ -82,8 +82,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     private Shared<LatLng> posicion = new Shared<>();
 
     // TAMANO DE LOS ICONOS Y MARCADORES DE MAPA
-    private int TAM_ICON = 130;
-    private int TAM_MARKERS = 140;
+    private int TAM_ICON = 100;
+    private int TAM_MARKERS = 110;
 
     // VARIABLES PARA LOS CONTROLES DEL FRAGMENT
     private ImageButton btnCentrar;
@@ -463,7 +463,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             if (!compruebaGPS()) {
                 if (posicion.resource != null) {
                     if (markPosicion == null) {
-                        markPosicion = mMap.addMarker(new MarkerOptions().position(posicion.resource).title("Mi posición"));
+                        markPosicion = mMap.addMarker(new MarkerOptions().position(posicion.resource).zIndex(0));
                         markPosicion.setIcon(VectortoBitmap(getContext(), R.drawable.button_btn_centrar, TAM_ICON, TAM_ICON));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion.resource, defaultZoom));
                     } else
@@ -504,7 +504,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             Marker markPosicion;
             for (Ubicacion ubicacion : lstUbicacion) {
                 LatLng posicion = new LatLng(ubicacion.getLat(), ubicacion.getLon());
-                markPosicion = mMap.addMarker(new MarkerOptions().position(posicion));
+                markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).zIndex(1));
                 markPosicion.setTag(ubicacion);
 
                 boolean allReservados = ubicacion.allResevados();
