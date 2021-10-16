@@ -143,6 +143,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
             });
         }else {
             ibtnCanjear.setText("Canjear");
+            ibtnCanjear.setTag(lstCupones.get(i));
 
             if (lstCupones.get(i).isCanjeado() && lstCupones.get(i).getfCanjeado() == null) {
                 ibtnCanjear.setText("Canjeado");
@@ -156,7 +157,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                         for (Cupon auxCupon : lstCupones) {
                             if (auxCupon.isCanjeado() && auxCupon.getfCanjeado() == null) {
                                 aplicado = true;
-                                if (auxCupon.equals(lstCupones.get(i))) {
+                                if (auxCupon.equals(v.getTag())) {
                                     lstCupones.get(i).setCanjeado(false);
                                     cupon = null;
                                     ((Button) v).setText("Canjear");
@@ -166,9 +167,9 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                             }
                         }
                         if (!aplicado) {
-                            if (lstCupones.get(i).getfCaducidad() == null || Method.subsDate(ZonedDateTime.now(), lstCupones.get(i).getfCaducidad()) <= 0) {
-                                lstCupones.get(i).setCanjeado(true);
-                                cupon = lstCupones.get(i);
+                            if (((Cupon)v.getTag()).getfCaducidad() == null || Method.subsDate(ZonedDateTime.now(), ((Cupon)v.getTag()).getfCaducidad()) <= 0) {
+                                ((Cupon)v.getTag()).setCanjeado(true);
+                                cupon = (Cupon)v.getTag();;
                                 ((Button) v).setText("Canjeado");
                                 ((LinearLayout) v.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
                             } else {

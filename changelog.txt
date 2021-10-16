@@ -1,5 +1,12 @@
 # Changelog 
 
+##[3.9.8+Raúl] - 2021-10-16
+###Fixed
+ - Modificado el sistema para canjear cupones (No se ha podido probar si funciona)
+###Changed
+ - Limitada la rotacion de la pantalla
+
+
 ##[3.9.7+Raúl] - 2021-10-15
 ###Fixed
  -No actualizar cupon si no se ha canjeado ninguno

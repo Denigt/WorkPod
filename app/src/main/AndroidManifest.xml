@@ -30,7 +30,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!--Personalizar icono (aún no consigo q se vea) y color del push-->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo_logofb" />
@@ -41,7 +41,8 @@
 
         <!-- ACTIVIDADES -->
         <activity android:name=".SplashScreen"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,24 +52,26 @@
         <activity
             android:name=".InitActivity"
             android:label="Inicio"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
 
         <!-- ACTIVIDAD DE REGISTRO -->
         <activity
             android:name=".SigninActivity"
-            android:label="Registrarse" />
+            android:label="Registrarse"/>
 
         <!-- ACTIVIDAD DE LOGIN -->
         <activity
             android:name=".LoginActivity"
             android:label="Acceder"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"/>
 
         <!-- ACTIVIDAD DE PRINCIPAL (mapa y menus) -->
         <activity
             android:name=".WorkpodActivity"
             android:label="Navegacion"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
 
         <!-- ACTIVIDAD PARA MODIFICAR PERFIL -->
         <activity
@@ -77,27 +80,36 @@
 
         <activity android:name=".VerifyActivity"
             android:label="Validar Email"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".PasswordActivity"
-            android:label="Contrasena Olvidada" />
+            android:label="Contrasena Olvidada"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".PagoActivity"
-            android:label="Pago" />
+            android:label="Pago"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".WebActivity"
-            android:label="Web" />
+            android:label="Web"
+            android:screenOrientation="portrait" />
 
         <!-- ACTIVIDADES DE VALORACION Y ENCUESTAS AL USUARIO -->
-        <activity android:name=".Valoracion_Workpod_Final" />
+        <activity android:name=".Valoracion_Workpod_Final"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".testUsuario.Informacion_Usuario3" />
+        <activity android:name=".testUsuario.Informacion_Usuario3"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".testUsuario.Informacion_Usuario2" />
+        <activity android:name=".testUsuario.Informacion_Usuario2"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".testUsuario.Informacion_Usuario" />
+        <activity android:name=".testUsuario.Informacion_Usuario"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ValoracionWorkpod" />
+        <activity android:name=".ValoracionWorkpod"
+            android:screenOrientation="portrait" />
 
     </application>
 
