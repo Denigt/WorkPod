@@ -74,13 +74,17 @@ public class Fragment_Support extends Fragment {
         //ESCALAMOS ELEMENTOS
         escalarElementos();
 
-        //PONEMOS EL ICONO DEL NV EN MENU USUARIO
-        if(InfoApp.USER!=null)
+        if(InfoApp.USER==null){
+            WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(true);
+            InfoFragment.actual = InfoFragment.MENU;
+        }else{
+            //PONEMOS EL ICONO DEL NV EN MENU USUARIO
             WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
-        //Como al soporte se puede acceder desde la sesión, hay que volver a asignar el InfroFragment.actual a soporte
-        //para volver al menú al darle atrás
-        InfoFragment.actual = InfoFragment.SOPORTE;
+            //Como al soporte se puede acceder desde la sesión, hay que volver a asignar el InfroFragment.actual a soporte
+            //para volver al menú al darle atrás
+            InfoFragment.actual = InfoFragment.SOPORTE;
+        }
 
         return view;
     }

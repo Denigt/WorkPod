@@ -100,7 +100,7 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
         if (v.getId() == R.id.IVSalir) {
             dismiss();
         } else if (v.getId() == R.id.IVLlamar) {
-            llamar(v);
+           // llamar(v);
         }
     }
 

@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.9.13+Juan Vicente] -2021-10-17
+###Fixed
+ -Fragment_Support
+
 ##[3.9.12+Juan Vicente] -2021-10-17
 ###Added
  -Codigo de invita un amigo en el layout MGM en fragment_canjear_codigos
@@ -407,6 +411,7 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.9.12]: https://github.com/Denigt/WorkPod/commit/64f814774f4b8479076de86aab964f231be64336
 [3.9.11]: https://github.com/Denigt/WorkPod/commit/fbd89b12d7dee265350b769eff872fe685053a86
 [3.9.10]: https://github.com/Denigt/WorkPod/commit/102fb9d91f5fce0ab34d4c775aeebb6b242da621
 [3.9.9] : https://github.com/Denigt/WorkPod/commit/82a7ed6cda9a1088a724950382d8d3d3a45829c7

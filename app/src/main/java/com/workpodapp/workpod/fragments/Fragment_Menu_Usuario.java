@@ -83,11 +83,16 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
         lsV_Menu_Usuario.setOnItemClickListener(this);
 
         //REMARCAR EL ICONO DEL NV (SOLO PARA CUANDO EL USUARIO ESTÉ EN UNA SESIÓN)
-        if (InfoApp.USER.getReserva() != null) {
-            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
-                WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
+        try{
+            if (InfoApp.USER.getReserva() != null) {
+                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
+                }
             }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
+
         //INDICAMOS QUE VUELVA AL MAPA CUANDO LE DE ATRÁS O PULSE EL MAPA EN EL NV
         InfoFragment.actual = InfoFragment.MENU;
         return view;
