@@ -51,6 +51,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private TextView tVDialogOffers;
     private TextView tVDialogSessionTime;
     private TextView tVDialogPrice;
+    private TextView tVTotalPagado;
     private ImageView iVDialogUbication;
 
     //VARIABLES CON LAS QUE COGEREMOS LOS DATOS DEL CONSTRUCTOR
@@ -150,6 +151,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         tVDialogOffers = (TextView) view.findViewById(R.id.TVDialogOffers);
         tVDialogPrice = (TextView) view.findViewById(R.id.TVDialogPrice);
         tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
+        tVTotalPagado=view.findViewById(R.id.TVTotalPagado);
         iVDialogUbication = (ImageView) view.findViewById(R.id.IVDialogUbication);
 
         InfoFragment.actual=InfoFragment.TRANSACTION_SESSION;
@@ -340,12 +342,14 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         //SI HAY OFERTAS
         if (!ofertas.equals(SIN_OFERTAS)) {
             precioFinal = precio - (precio * (Double.parseDouble(ofertas)) / 100);
-            tVDialogOffers.setText(ofertas + "%");
-            tVDialogPrice.setText(String.format("%.2f", precioFinal) + "€");
+            tVDialogOffers.setText("Descuento de: "+ofertas + "€");
+            tVDialogPrice.setText(precio.toString() + "€");
+            tVTotalPagado.setText("Ha pagado un total de "+(precio-Double.parseDouble(ofertas))+"€");
         } else {
             //SI NO HAY OFERTAS
             tVDialogPrice.setText(precio.toString() + "€");
-            tVDialogOffers.setText(ofertas);
+            tVDialogOffers.setText(SIN_OFERTAS);
+            tVTotalPagado.setText("Ha pagado un total de "+(precio)+"€");
         }
     }
 

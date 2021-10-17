@@ -426,7 +426,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18, 18, 20));
 
         lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 40, 55));
-        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18, 18, 25));
+        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18, 18, 22));
         lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20, 20));
         lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15, 15));
         lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 15, 16, 17));

@@ -1,5 +1,20 @@
 # Changelog 
 
+##[3.9.12+Juan Vicente] -2021-10-17
+###Added
+ -Codigo de invita un amigo en el layout MGM en fragment_canjear_codigos
+ -Workpod 2021 al lado de nuestros nombres 
+###Changed
+ -Email y tlfn de soporte.
+ -Escalados en diferentes partes de la app
+ -Fragment_Transaction_Sesion muestra precio, descuento y el total pagado 
+###Fixed
+ -Bug en Fragment_Transaction_History
+
+##[3.9.11+Juan Vicente] -2021-10-17
+###Fixed 
+ -Bug en WorkpodActivity, el NV no accedia al soporte
+
 ##[3.9.10+Juan Vicente] -2021-10-16
 ###Changed
  - Ocultar metodos de pago y como funciona de menu de usuario
@@ -12,8 +27,6 @@
   el tiempo no empezaba en 20 minutos
  -El icono del histórico cuando está vacío no te llevaba al mapa
  
- 
-
 ##[3.9.9+Raúl] - 2021-10-16
 ### Added
  - Metodos en Sesion para calcular el precio con descuento y el descuento
@@ -394,6 +407,10 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.9.11]: https://github.com/Denigt/WorkPod/commit/fbd89b12d7dee265350b769eff872fe685053a86
+[3.9.10]: https://github.com/Denigt/WorkPod/commit/102fb9d91f5fce0ab34d4c775aeebb6b242da621
+[3.9.9] : https://github.com/Denigt/WorkPod/commit/82a7ed6cda9a1088a724950382d8d3d3a45829c7
+[3.9.8] : https://github.com/Denigt/WorkPod/commit/38b4030450836f4183dac750089e6a5a9cc2eca8
 [3.9.7] : https://github.com/Denigt/WorkPod/commit/90aab863457c293c5577864a0bf5ed858725e7da
 [3.9.6] : https://github.com/Denigt/WorkPod/commit/e29229576ffe3e0bc7767e6bee381f7401d8a9b1
 [3.9.5] : https://github.com/Denigt/WorkPod/commit/8d38aaeaf1bfc3da397356423e260c026249a76d

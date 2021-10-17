@@ -333,10 +333,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,20,24));
         lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34,34));
-        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",14,18,18));
-        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",14,18,18));
+        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",14,16,17));
+        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",14,18,17));
         lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",20,24,24));
-        lstTv.add(new Scale_TextView(tVBtnLostContrasena,"wrap_content","bold",13,14,16));
+        lstTv.add(new Scale_TextView(tVBtnLostContrasena,"wrap_content","bold",13,14,14));
 
         Method.scaleBtns(metrics, lstBtn);
         Method.scaleTv(metrics, lstTv);

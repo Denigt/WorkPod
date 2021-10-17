@@ -47,6 +47,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private TextView tV_MGM_Minutos;
     private TextView tV_MGM_Amigos;
     private TextView tV_MGM_Amigos_Titulo;
+    private TextView tV_MGM;
 
     private LinearLayout lLShareFriendDescuento;
     private LinearLayout lLMGM;
@@ -121,6 +122,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         tV_MGM_Minutos = view.findViewById(R.id.TV_MGM_Minutos);
         tV_MGM_Minutos_Estandar = view.findViewById(R.id.TV_MGM_Minutos_Estandar);
         tV_MGM_Minutos_Titulo = view.findViewById(R.id.TV_MGM_Minutos_Titulo);
+        tV_MGM=view.findViewById(R.id.TV_MGM);
 
         iV_Btn_Siguiente = view.findViewById(R.id.IV_Btn_Siguiente);
         iV_Btn_Volver = view.findViewById(R.id.IV_Btn_Volver);
@@ -147,11 +149,16 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
-        escalarElementos(metrics);
+
         volcarCupones(view);
 
         //PONEMOS EL ICONO DEL NV EN MENU USUARIO
         WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
+
+        //Inicializamos TV_MGM con el MGM del usuario
+        tV_MGM.setText("MGM: "+InfoApp.USER.getCodamigo());
+
+        escalarElementos(metrics);
 
         return view;
     }
@@ -345,8 +352,8 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         String n = InfoApp.INSTALLATION;
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnCancelarDescuento, "wrap_content", "bold", 13, 16, 18));
-        lstBtn.add(new Scale_Buttons(btnGuardarDescuento, "wrap_content", "bold", 13, 16, 18));
+        lstBtn.add(new Scale_Buttons(btnCancelarDescuento, "wrap_content", "bold", 13, 16, 17));
+        lstBtn.add(new Scale_Buttons(btnGuardarDescuento, "wrap_content", "bold", 13, 16, 17));
         lstBtn.add(new Scale_Buttons(btnShareFriendCodeDescuento, "wrap_content", "bold", 14, 17, 20));
         lstBtn.add(new Scale_Buttons(btnShareMoreFriendCode, "wrap_content", "bold", 14, 16, 20));
 
@@ -358,6 +365,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         lstTv.add(new Scale_TextView(tV_MGM_Amigos_Titulo, "wrap_content", "bold", 14, 19, 22));
         lstTv.add(new Scale_TextView(tV_MGM_Minutos, "wrap_content", "bold", 14, 19, 22));
         lstTv.add(new Scale_TextView(tV_MGM_Minutos_Titulo, "wrap_content", "bold", 14, 19, 22));
+        lstTv.add(new Scale_TextView(tV_MGM, "wrap_content", "bold", 15, 15, 15));
 
         lstIv.add(new Scale_Image_View(iV_Btn_Volver, 50, 50, 100, 100, 130, 130, "", ""));
         lstIv.add(new Scale_Image_View(iV_Btn_Siguiente, 50, 50, 80, 80, 120, 120, "", ""));

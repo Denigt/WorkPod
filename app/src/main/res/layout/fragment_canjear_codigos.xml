@@ -38,12 +38,27 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/IV_Give_Five"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/fill_icon_give_five" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/IV_Give_Five"
+                android:layout_width="130dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/fill_icon_give_five" />
+            <TextView
+                android:id="@+id/TV_MGM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MGM: RyWdtd90"
+                android:textStyle="bold"
+                android:textColor="@color/darkblue"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -304,8 +319,8 @@
                     android:layout_gravity="center"
                     android:background="@color/transparente"
                     android:backgroundTint="@color/blue"
-                    android:paddingLeft="45dp"
-                    android:paddingRight="46dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
                     android:text="Guardar"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

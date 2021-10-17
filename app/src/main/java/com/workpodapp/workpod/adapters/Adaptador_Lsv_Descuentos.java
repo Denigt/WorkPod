@@ -219,7 +219,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(ibtnCanjear, "wrap_content", "bold", 12, 15, 17));
+        lstBtn.add(new Scale_Buttons(ibtnCanjear, "wrap_content", "bold", 12, 13, 14));
 
         lstTv.add(new Scale_TextView(tVminGratis, "wrap_content", "bold", 13, 16, 20));
         lstTv.add(new Scale_TextView(tVnombreDescuento, "wrap_content", "bold", 16, 20, 25));

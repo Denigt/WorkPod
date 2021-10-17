@@ -254,7 +254,8 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                             //LE PASAMOS DICHO AÑO AL ELSV
                             construyendoELsV(transaction.getEntrada().getYear());
                             //INICIALIZAMOS EL ADAPATADOR DEL ELSV
-                            adapter_eLsV = new Adapter_ELsV(view.getContext(), monthList, itemList);
+                            //He Cambiado view.getContext por getActivity().getApplicationContext() para q nunca apunte a null
+                            adapter_eLsV = new Adapter_ELsV(getActivity().getApplicationContext(), monthList, itemList);
                             //LE PASAMOS EL ADAPTADOR AL ELSV
                             eLsV.setAdapter(adapter_eLsV);
                         }
@@ -263,6 +264,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                     //CONTROLA QUE NO CASQUE EL ADAPTADOR CUANDO APUNTA A NULO (LN 251) ESTO OCURRE CUANDO ESTAMOS EN UNA SESIÓN Y ACCEDEMOS
                     //AL HISTÓRICO Y DESPUÉS ABANDONAMOS LA APP
                     e.printStackTrace();
+
                 }
 
             }
