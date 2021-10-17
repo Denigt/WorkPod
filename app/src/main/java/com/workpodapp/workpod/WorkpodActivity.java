@@ -16,6 +16,7 @@ import com.workpodapp.workpod.fragments.Fragment_Transaction_History;
 import com.workpodapp.workpod.fragments.Fragment_sesion;
 import com.workpodapp.workpod.fragments.InfoFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.workpodapp.workpod.fragments.Fragment_Support;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -196,6 +197,15 @@ public class WorkpodActivity extends FragmentActivity {
             Fragment_Menu_Usuario menuUsuario = new Fragment_Menu_Usuario();
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, menuUsuario);
+            fTransaction.commit();
+        } else if (menuitem.getItemId() == R.id.inv_support) {
+            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+            fTransaction = fragmentManager.beginTransaction();
+            //CREAMOS UN OBJETO DEL FRAGMENTO
+            Fragment_Support support = new Fragment_Support();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, support);
             fTransaction.commit();
         }
     }

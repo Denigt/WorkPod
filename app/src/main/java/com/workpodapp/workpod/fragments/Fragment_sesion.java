@@ -167,7 +167,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     }
 
     private void onClickContactarSoporte() {
-        fragment_support fragmentSupport = new fragment_support();
+        Fragment_Support fragmentSupport = new Fragment_Support();
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
         //CAMBIAMOS LA SELECCIÓN AL ICONO DE SOPORTE
         WorkpodActivity.btnNV.setSelectedItemId(R.id.inv_support);

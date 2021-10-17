@@ -141,7 +141,7 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
             InfoFragment.anterior = InfoFragment.actual;
             InfoFragment.actual = InfoFragment.SOPORTE;
 
-            fragment_support fragmentSupport = new fragment_support();
+            Fragment_Support fragmentSupport = new Fragment_Support();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSupport).commit();
         }
     }

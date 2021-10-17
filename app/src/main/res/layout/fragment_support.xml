@@ -6,7 +6,7 @@
     android:background="@color/Texto"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".fragments.fragment_support">
+    tools:context=".fragments.Fragment_Support">
 
     <LinearLayout
         android:layout_width="match_parent"
