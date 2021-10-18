@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.9.14+Juan Vicente] -2021-10-18
+###Fixed
+ -Fragment_Support
+
 ##[3.9.13+Juan Vicente] -2021-10-17
 ###Fixed
  -Fragment_Support

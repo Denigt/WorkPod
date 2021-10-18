@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.ValoracionWorkpod;
@@ -113,8 +114,9 @@ public class Fragment_Support extends Fragment {
                     startActivity(terminos);
                 }*/
                 if (lsV_support.getCodigo() == 2) {
-                    Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
-                    fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");
+                   /* Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
+                    fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");*/
+                    Toast.makeText(getActivity(),"Esta función está deshabilitada",Toast.LENGTH_LONG).show();
                 }
             }
         });
