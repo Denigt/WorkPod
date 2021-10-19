@@ -320,7 +320,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola\n ¡Te regalo 15 minutos gratis en la sesión de Workpod que quieras " +
                 "canjearlos! Para conseguirlo: descárgate la app de Workpod, introduce una tarjeta de pago y canjea mi código:" +
-                usuario.getCodamigo() + "\nConsulta condiciones en:\n https://dev.workpod.app/web/invita_amigo.html");
+                usuario.getCodamigo() + "\nConsulta condiciones en:\n https://github.com/Denigt/WorkPod/raw/master/Workpod_MW.apk");
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);

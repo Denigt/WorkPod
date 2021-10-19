@@ -113,6 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="5dp"
+            android:visibility="gone"
             >
             <Button
                 android:id="@+id/btnConectar"
@@ -121,7 +122,8 @@
                 android:lines="1"
                 android:text="Conectar"
                 android:background="?selectableItemBackground"
-                android:foreground="@drawable/rounded_border_button" />
+                android:foreground="@drawable/rounded_border_button"
+                />
             <!--android:drawableLeft="@drawable/logo_linkedin_small"-->
         </FrameLayout>
     </LinearLayout>

@@ -40,7 +40,7 @@ public abstract class Method {
     // Simbolos admitidos como tales en la creacion de la contrasena
     public static final char[] PASS_SYMBOLS = {'\\', '|', '!', '@', '"', '·', '#', '~', '$', '%',
             '€', '/', '(', ')', '=', '[', ']', '?', '¿', '¡', '*', '{', '}', '-', '_', ':', '.', ';',
-            '-', '+', 'º', 'ª', '<', '>'};
+            '-', '+', 'º', 'ª', '<', '>',','};
     //Longitud minima de la contrasena
     public static final int PASS_MINLENGHT = 10;
     //Patron para comprobar el email
