@@ -1,25 +1,28 @@
 package com.workpodapp.workpod.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.StrictMode;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.workpodapp.workpod.R;
-import com.workpodapp.workpod.ValoracionWorkpod;
+import com.workpodapp.workpod.WebActivity;
 import com.workpodapp.workpod.WorkpodActivity;
-import com.workpodapp.workpod.adapters.Adaptador_LsV_Support;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
-import com.workpodapp.workpod.otherclass.LsV_Support;
 import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
@@ -30,10 +33,28 @@ import java.util.List;
  * Use the {@link Fragment_Support#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Support extends Fragment {
-    private ListView lsV_Support;
-    private TextView tVFgmSupportTitulo;
-    ArrayList<LsV_Support> aLstSupport = new ArrayList<>();
+public class Fragment_Support extends Fragment implements View.OnClickListener {
+
+    //XML
+    private TextView tVTituloConsultas;
+    private TextView tVFAQ;
+    private TextView tVTyC;
+    private TextView tVTituloContactos;
+    private TextView tVMail;
+    private TextView tVCall;
+
+    private ImageView iVFAQ;
+    private ImageView iVTyC;
+    private ImageView iVMail;
+    private ImageView iVCall;
+
+    private LinearLayout lLFAQ;
+    private LinearLayout lLTyC;
+    private LinearLayout lLMail;
+    private LinearLayout lLCall;
+
+
+    //ESCALADO
     DisplayMetrics metrics = new DisplayMetrics();
 
     //COLECCIONES;
@@ -63,22 +84,38 @@ public class Fragment_Support extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_support, container, false);
-        lsV_Support = (ListView) view.findViewById(R.id.LsV_Support);
-        tVFgmSupportTitulo = view.findViewById(R.id.tVFgmSupportTitulo);
+
+        //Bindeamos java con xml
+        tVCall = view.findViewById(R.id.TVCall);
+        tVMail = view.findViewById(R.id.TVMail);
+        tVFAQ = view.findViewById(R.id.TVFAQ);
+        tVTyC = view.findViewById(R.id.TVTyC);
+        tVTituloConsultas = view.findViewById(R.id.TVTituloConsultas);
+        tVTituloContactos = view.findViewById(R.id.TVTituloContactos);
+        iVCall = view.findViewById(R.id.IVCall);
+        iVMail = view.findViewById(R.id.IVMail);
+        iVFAQ = view.findViewById(R.id.IVFAQ);
+        iVTyC = view.findViewById(R.id.IVTyC);
+        lLCall = view.findViewById(R.id.LLCall);
+        lLMail = view.findViewById(R.id.LLMail);
+        lLFAQ = view.findViewById(R.id.LLFAQ);
+        lLTyC = view.findViewById(R.id.LLTyC);
+
+        lLTyC.setOnClickListener(this);
+        lLFAQ.setOnClickListener(this);
+        lLMail.setOnClickListener(this);
+        lLCall.setOnClickListener(this);
 
         //INICIALIZAMOS EL OBJETO DISPLAYMETRICS CON LOS PARÁMETROS DE NUESTRO DISPOSITIVO
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        //ARMAMOS EL LSV
-        construyendo_LsV(view);
-
         //ESCALAMOS ELEMENTOS
         escalarElementos();
 
-        if(InfoApp.USER==null){
+        if (InfoApp.USER == null) {
             WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(true);
             InfoFragment.actual = InfoFragment.MENU;
-        }else{
+        } else {
             //PONEMOS EL ICONO DEL NV EN MENU USUARIO
             WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
@@ -91,36 +128,7 @@ public class Fragment_Support extends Fragment {
     }
 
 
-    //METODOS
 
-    /**
-     * Método para construir el ListView donde se encontrará el email, el tlfn y la dirección de la compañía
-     *
-     * @param view instancia de la clase View
-     */
-    public void construyendo_LsV(View view) {
-
-        aLstSupport.add(new LsV_Support(1, R.drawable.fill_icon_gmail, "info@uworkpod.com"));
-        aLstSupport.add(new LsV_Support(2, R.drawable.fill_icon_llamar, "Contacta por Teléfono "));
-        final Adaptador_LsV_Support aSuport = new Adaptador_LsV_Support(view.getContext(), aLstSupport, metrics);
-        lsV_Support.setAdapter(aSuport);
-        lsV_Support.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                LsV_Support lsV_support = (LsV_Support) aSuport.getItem(i);
-              /*  if (lsV_support.getCodigo() == 0) {
-                    Intent terminos = new Intent(requireContext(), WebActivity.class);
-                    terminos.putExtra("web", "https://dev.workpod.app/web/terminos_condiciones.html");
-                    startActivity(terminos);
-                }*/
-                if (lsV_support.getCodigo() == 2) {
-                   /* Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
-                    fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");*/
-                    Toast.makeText(getActivity(),"Esta función está deshabilitada",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
 
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
@@ -140,13 +148,61 @@ public class Fragment_Support extends Fragment {
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVFgmSupportTitulo, "", "normal", 30, 30, 30));
+        List<ImageView> lstIV = new ArrayList<>();
+        lstIV.add(iVCall);
+        lstIV.add(iVFAQ);
+        lstIV.add(iVMail);
+        lstIV.add(iVTyC);
+
+        List<TextView> lstTV = new ArrayList<>();
+        lstTV.add(tVCall);
+        lstTV.add(tVFAQ);
+        lstTV.add(tVMail);
+        lstTV.add(tVTituloConsultas);
+        lstTV.add(tVTituloContactos);
+        lstTV.add(tVTyC);
 
         Method.scaleTv(metrics, lstTv);
+        Method.newScaleIv(metrics,lstIV);
+        Method.newScaleTv(metrics,lstTV);
     }
 
     @Override
     public void onDestroy() {
-            super.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.LLTyC) {
+            onClickLLTyC();
+        } else if (v.getId() == R.id.LLFAQ) {
+            float width =metrics.widthPixels;
+
+            Toast.makeText(getActivity(), String.valueOf(width), Toast.LENGTH_LONG).show();
+        } else if (v.getId() == R.id.LLMail) {
+            onClickLLMail();
+
+        } else if (v.getId() == R.id.LLCall) {
+            onCLickLLCall();
+
+        }
+    }
+
+    private void onCLickLLCall() {
+        Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
+        fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");
+    }
+
+    private void onClickLLMail() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "info@uworkpod.com", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Android APP - ");
+        startActivity(emailIntent);
+    }
+
+    private void onClickLLTyC() {
+        Intent terminos = new Intent(getActivity(), WebActivity.class);
+        terminos.putExtra("web", "https://www.workpod.app/tyc/");
+        startActivity(terminos);
     }
 }

@@ -1,5 +1,11 @@
 # Changelog 
 
+##[3.9.15+Juan Vicente] -2021-10-18
+###Added
+ - TyC y FAQ a Fragment_Support
+###Changed
+ -Diseño Fragment_Support
+
 ##[3.9.14+Juan Vicente] -2021-10-18
 ###Fixed
  -Fragment_Support
@@ -415,6 +421,8 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.9.14]: https://github.com/Denigt/WorkPod/commit/fd989415b14070b1580e10ab020a083b8ce25f41
+[3.9.13]: https://github.com/Denigt/WorkPod/commit/809de6ae7056ad6fa72a4d1b8e44607f37577e16
 [3.9.12]: https://github.com/Denigt/WorkPod/commit/64f814774f4b8479076de86aab964f231be64336
 [3.9.11]: https://github.com/Denigt/WorkPod/commit/fbd89b12d7dee265350b769eff872fe685053a86
 [3.9.10]: https://github.com/Denigt/WorkPod/commit/102fb9d91f5fce0ab34d4c775aeebb6b242da621
@@ -438,7 +446,7 @@
 [3.7.8] : https://github.com/Denigt/WorkPod/commit/302f9fa902586443f891b9caa8ad3783cc55060e
 [3.7.7] : https://github.com/Denigt/WorkPod/commit/638e4c0581341e2baec75d309c36abc778e009b1
 [3.7.6] : https://github.com/Denigt/WorkPod/commit/f73161391ac8d2597b779da73eed8b1caff4fcd7
-[3.7.5] : https://github.com/Denigt/WorkPod/commit/a44292856b8681c25d44fdca58f1510ecf6ccca5
+[.7.5] : https://github.com/Denigt/WorkPod/commit/a44292856b8681c25d44fdca58f1510ecf6ccca5
 [3.7.4] : https://github.com/Denigt/WorkPod/commit/274067f74b3cc9eb5bf86fb4199ecc34bf25a40e
 [3.7.3] : https://github.com/Denigt/WorkPod/commit/96d1935fbbd366a1cec14ea1400271c86580b2dd
 [3.7.2] : https://github.com/Denigt/WorkPod/commit/202206ec3bede0d4adb997aede62a1c4a1ac7c15

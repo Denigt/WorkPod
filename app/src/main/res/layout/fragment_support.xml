@@ -3,57 +3,217 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Texto"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:gravity="center"
     tools:context=".fragments.Fragment_Support">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <LinearLayout
-            android:layout_width="293dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@color/white"
-            android:gravity="center">
-            <TextView
-                android:id="@+id/tVFgmSupportTitulo"
-                android:layout_width="200dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/Texto"
-                android:text="Contacta con nosotros"
-                android:textAlignment="center"
-                android:textSize="30dp"
-                android:textColor="@color/white"
-                android:gravity="center"/>
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="100dp"
-                android:background="@color/Texto"
-                android:src="@drawable/fill_icon_contact_us_cicle_21"/>
-        </LinearLayout>
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/LsV_Support"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="15dp" />
+                android:layout_margin="20dp"
+                android:background="@color/white"
+                android:gravity="center">
 
+                <TextView
+                    android:id="@+id/TVTituloConsultas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="¿Tienes algún problema?\n¡¡Consulta lo que necesitas!!"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <LinearLayout
+                    android:id="@+id/LLFAQ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/bordes_redondeados_support"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/TVFAQ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/light_blue"
+                        android:gravity="center"
+                        android:text="Preguntas\n Frecuentes"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkblue"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/IVFAQ"
+                        android:layout_width="170dp"
+                        android:layout_height="150dp"
+                        android:padding="10dp"
+                        android:src="@drawable/tyc" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LLTyC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordes_redondeados_support"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/TVTyC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/light_blue"
+                        android:gravity="center"
+                        android:text="Términos y\n condiciones"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkblue"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/IVTyC"
+                        android:layout_width="170dp"
+                        android:layout_height="150dp"
+                        android:padding="10dp"
+                        android:src="@drawable/faq" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/white"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/TVTituloContactos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="¿Necesitas contactar con\n nosotros?"
+                        android:textAlignment="center"
+                        android:textColor="@color/blue"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/LLMail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/bordes_redondeados_support"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/TVMail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@color/light_blue"
+                            android:gravity="center"
+                            android:text="Escríbenos un\n Email"
+                            android:textAlignment="center"
+                            android:textColor="@color/darkblue"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/IVMail"
+                            android:layout_width="170dp"
+                            android:layout_height="150dp"
+                            android:padding="10dp"
+                            android:src="@drawable/email" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LLCall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bordes_redondeados_support"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/TVCall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@color/light_blue"
+                            android:gravity="center"
+                            android:text="Llámanos por\n Teléfono"
+                            android:textAlignment="center"
+                            android:textColor="@color/darkblue"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/IVCall"
+                            android:layout_width="170dp"
+                            android:layout_height="150dp"
+                            android:padding="10dp"
+                            android:src="@drawable/llamar" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
+
 </LinearLayout>

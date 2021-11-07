@@ -48,18 +48,18 @@ public class SplashScreen extends AppCompatActivity {
         Database<Instalacion> install = new Database<Instalacion>(Database.INSTALL, new Instalacion(getContentResolver()));
         install.postRun(()->{
             //if (install.getError().code > -1)
-                for (String topic : InfoApp.TOPICS) {
-                    FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (!task.isSuccessful()) {
-                                Log.e("SUBSCRIBE_TOPICS", String.format("No se ha podido suscribir %s al tema %s", InfoApp.INSTALLATION, topic));
-                            }else{
-                                Log.i("SUBSCRIBE_TOPICS", String.format("%s suscrito al tema %s", InfoApp.INSTALLATION, topic));
-                            }
+            for (String topic : InfoApp.TOPICS) {
+                FirebaseMessaging.getInstance().subscribeToTopic(topic).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("SUBSCRIBE_TOPICS", String.format("No se ha podido suscribir %s al tema %s", InfoApp.INSTALLATION, topic));
+                        }else{
+                            Log.i("SUBSCRIBE_TOPICS", String.format("%s suscrito al tema %s", InfoApp.INSTALLATION, topic));
                         }
-                    });
-                }
+                    }
+                });
+            }
         });
         install.start();
 

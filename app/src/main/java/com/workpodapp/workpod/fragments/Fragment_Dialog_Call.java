@@ -100,7 +100,7 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
         if (v.getId() == R.id.IVSalir) {
             dismiss();
         } else if (v.getId() == R.id.IVLlamar) {
-           // llamar(v);
+            llamar(v);
         }
     }
 
@@ -121,7 +121,7 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
             } else {
                 Log.i("Mensaje", "Se tiene permiso para llamar");
                 //COMPROBAMOS QUE EL Nº DE TLFN NO ESTÉ VACÍO.
-                String dial = "tel:000.000.000";//PONER OBLIGATORIAMENTE tel
+                String dial = "tel:618.950.208";//PONER OBLIGATORIAMENTE tel
                 startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));//ESTO SERÁ LA LLAMADA
 
             }

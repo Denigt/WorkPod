@@ -42,7 +42,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
-            android:text="000.000.000"
+            android:text="618.950.208"
             android:textColor="@color/Texto"
             android:textSize="35dp"
             android:textStyle="bold" />

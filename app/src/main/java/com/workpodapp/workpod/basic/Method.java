@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,11 +43,13 @@ public abstract class Method {
     // Simbolos admitidos como tales en la creacion de la contrasena
     public static final char[] PASS_SYMBOLS = {'\\', '|', '!', '@', '"', '·', '#', '~', '$', '%',
             '€', '/', '(', ')', '=', '[', ']', '?', '¿', '¡', '*', '{', '}', '-', '_', ':', '.', ';',
-            '-', '+', 'º', 'ª', '<', '>',','};
+            '-', '+', 'º', 'ª', '<', '>', ','};
     //Longitud minima de la contrasena
     public static final int PASS_MINLENGHT = 10;
     //Patron para comprobar el email
     public static final String EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+$";
+    public static final double widthEmulator = 451.42856;
+    public static final double heightEmulator = 871.7143;
 
     /**
      * Muestra el mensaje en la zona inferior de la pantalla
@@ -125,15 +130,16 @@ public abstract class Method {
 
     /**
      * Redondea el numero con tantos decimales como se indique
+     *
      * @param num Numero a redondear
      * @param dec Numero de decimales, negativo para redondear a decenas centenas...
      * @return Numero redondeado
      */
-    public static double round(double num, int dec){
+    public static double round(double num, int dec) {
         double ret;
-        if (dec >= 0){
+        if (dec >= 0) {
             ret = Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
-        }else {
+        } else {
             ret = Math.round(num / Math.pow(10, dec)) * Math.pow(10, dec);
         }
         return ret;
@@ -323,6 +329,33 @@ public abstract class Method {
         }
     }
 
+    public static void newScaleIv(DisplayMetrics metrics, List<ImageView> lstIv) {
+        float width = metrics.widthPixels / metrics.density;
+        float height = metrics.heightPixels / metrics.density;
+        double parseoWidth = width / widthEmulator;
+        double parseoHeight = height / heightEmulator;
+        for (ImageView iv : lstIv) {
+            if (iv.getLayoutParams().width >= 0) {
+                iv.getLayoutParams().width = Integer.valueOf((int) Math.round(iv.getLayoutParams().width * parseoWidth));
+            }
+            if (iv.getLayoutParams().height >= 0) {
+                iv.getLayoutParams().height = Integer.valueOf((int) Math.round(iv.getLayoutParams().height * parseoHeight));
+            }
+        }
+    }
+
+    public static void newScaleTv(DisplayMetrics metrics, List<TextView> lstTv) {
+        float width = metrics.widthPixels/ metrics.density;
+        float parseoWidth = (float) (width /widthEmulator);
+        for (TextView tv : lstTv) {
+            //IMPORTANTÍSIMO especificar que el tamaño lo estamos metiendo en píxeles y no en dp
+           tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,tv.getTextSize() * parseoWidth);
+            if (tv.getLayoutParams().width >= 0) {
+                tv.getLayoutParams().width = Integer.valueOf((int) Math.round(tv.getLayoutParams().width * parseoWidth));
+            }
+        }
+    }
+
     /**
      * Obtiene una String en formato yyyy-mm-dd hh:mm:ss a partir de un ZonedDateTime
      *
@@ -353,6 +386,7 @@ public abstract class Method {
 
     /**
      * Cifra la cadena pasada como parametro en MD5
+     *
      * @param input Cadena a crifrar
      * @return Cadena cifrada
      */
@@ -367,8 +401,7 @@ public abstract class Method {
             while (hashtext.length() < 32) {
                 hashtext = "0" + hashtext;
             }
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             Log.e("CIFRADO MD5", "No se ha encontrado el algoritmo de cifrado");
         }
 
@@ -377,14 +410,15 @@ public abstract class Method {
 
     /**
      * Encripta la entrada usando como clave la key pasada como parametro
+     *
      * @param input Texto a encriptar
-     * @param key Clave a usar
+     * @param key   Clave a usar
      * @return Texto encriptado (En bytes)
      */
-    public static byte[] encryptAES(String input, String key){
-        try{
+    public static byte[] encryptAES(String input, String key) {
+        try {
             // Creamos una clave de encriptado unica a traves de la pasada por el usuario
-            SecretKey pass = new SecretKeySpec(md5(key).getBytes(),  0, 32, "AES");
+            SecretKey pass = new SecretKeySpec(md5(key).getBytes(), 0, 32, "AES");
 
             // Se obtiene un cifrador AES
             Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -397,13 +431,13 @@ public abstract class Method {
             aes.init(Cipher.DECRYPT_MODE, pass);
             byte[] desencriptado = aes.doFinal(encriptado);
             return encriptado;
-        }catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             Log.e("CIFRADO AES", "No se ha encontrado el algoritmo de cifrado");
-        }catch (NoSuchPaddingException | BadPaddingException e) {
+        } catch (NoSuchPaddingException | BadPaddingException e) {
             Log.e("CIFRADO AES", "No tengo muy claro porque salta esta excepcion");
-        }catch (InvalidKeyException e) {
+        } catch (InvalidKeyException e) {
             Log.e("CIFRADO AES", "La clave indicada no es valida");
-        }catch (IllegalBlockSizeException e) {
+        } catch (IllegalBlockSizeException e) {
             Log.e("CIFRADO AES", "Error con el tamano del texto a encriptar");
         }
         return null;
@@ -411,14 +445,15 @@ public abstract class Method {
 
     /**
      * Desencripta la entrada usando como clave la key pasada como parametro
+     *
      * @param input bytes a desencriptar
-     * @param key Clave a usar
+     * @param key   Clave a usar
      * @return Texto desencriptado
      */
-    public static String decryptAES(byte[] input, String key){
-        try{
+    public static String decryptAES(byte[] input, String key) {
+        try {
             // Creamos una clave de encriptado unica a traves de la pasada por el usuario
-            SecretKey pass = new SecretKeySpec(md5(key).getBytes(),  0, 32, "AES");
+            SecretKey pass = new SecretKeySpec(md5(key).getBytes(), 0, 32, "AES");
 
             // Se obtiene un cifrador AES
             Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -428,23 +463,24 @@ public abstract class Method {
             byte[] desencriptado = aes.doFinal(input);
 
             return new String(desencriptado);
-        }catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             Log.e("CIFRADO AES", "No se ha encontrado el algoritmo de cifrado");
-        }catch (NoSuchPaddingException | BadPaddingException e) {
+        } catch (NoSuchPaddingException | BadPaddingException e) {
             Log.e("CIFRADO AES", "No tengo muy claro porque salta esta excepcion");
-        }catch (InvalidKeyException e) {
+        } catch (InvalidKeyException e) {
             Log.e("CIFRADO AES", "La clave indicada no es valida");
-        }catch (IllegalBlockSizeException e) {
+        } catch (IllegalBlockSizeException e) {
             Log.e("CIFRADO AES", "Error con el tamano del texto a encriptar");
         }
         return null;
     }
 
-    public static String getFBid(){
+    public static String getFBid() {
         /*Task<String> tarea = FirebaseMessaging.getInstance().getToken();
         while (!tarea.isComplete());
         if (tarea.isSuccessful())
             return tarea.getResult();
-        else*/ return "";
+        else*/
+        return "";
     }
 }
