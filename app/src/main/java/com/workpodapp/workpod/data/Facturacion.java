@@ -12,7 +12,12 @@ public class Facturacion implements DataDb{
     private int id;
     private Direccion facturacion;
     private Direccion postal;
-    private String nombre;
+    private Usuario usuario;
+
+    public Facturacion(){
+        facturacion = Direccion.getInstance();
+        postal = Direccion.getInstance();
+    }
 
     public int getId() {
         return id;
@@ -39,11 +44,11 @@ public class Facturacion implements DataDb{
     }
 
     public String getNombre() {
-        return nombre;
+        return usuario.getNombre();
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void getUsuario(Usuario user) {
+        this.usuario = user;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class Facturacion implements DataDb{
             if (facturaJSON.has("id") && !facturaJSON.isNull("id"))
                 factura.setId(facturaJSON.getInt("id"));
             if (facturaJSON.has("nombre") && !facturaJSON.isNull("nombre"))
-                factura.setNombre(facturaJSON.getString("nombre"));
+                factura.usuario.setNombre(facturaJSON.getString("nombre"));
 
             factura.setFacturacion(Direccion.fromJSON(facturaJSON, "direccionFac", "ciudadFac", "provinciaFac", "paisFac", "codPostalFac"));
             factura.setPostal(Direccion.fromJSON(facturaJSON, "direccionPos", "ciudadPos", "provinciaPos", "paisPos", "codPostal"));
@@ -90,7 +95,9 @@ public class Facturacion implements DataDb{
                 if (facturaJSON.has("id") && !facturaJSON.isNull("id"))
                     factura.setId(facturaJSON.getInt("id"));
                 if (facturaJSON.has("nombre") && !facturaJSON.isNull("nombre"))
-                    factura.setNombre(facturaJSON.getString("nombre"));
+                    factura.usuario.setNombre(facturaJSON.getString("nombre"));
+                if (facturaJSON.has("dni") && !facturaJSON.isNull("dni"))
+                    factura.usuario.setDni(facturaJSON.getString("dni"));
 
                 factura.setFacturacion(Direccion.fromJSON(facturaJSON, "direccionFac", "ciudadFac", "provinciaFac", "paisFac", "codPostalFac"));
                 factura.setPostal(Direccion.fromJSON(facturaJSON, "direccionPos", "ciudadPos", "provinciaPos", "paisPos", "codPostal"));
@@ -106,7 +113,7 @@ public class Facturacion implements DataDb{
 
     @Override
     public String getTabla() {
-        return "dirFactutacion";
+        return "facturacion";
     }
 
     @Override

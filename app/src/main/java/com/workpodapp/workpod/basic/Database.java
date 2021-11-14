@@ -116,6 +116,7 @@ public class Database<T extends DataDb> extends Thread {
         TABLAS.add("sesion");
         TABLAS.add("ubicacion");
         TABLAS.add("reserva");
+        TABLAS.add("facturacion");
         TABLAS.add("instalacion");
         TABLAS.add("cupon");
         TABLAS.add("campana");

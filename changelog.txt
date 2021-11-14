@@ -1,42 +1,49 @@
 # Changelog 
 
-##[3.9.15+Juan Vicente] -2021-10-18
-###Added
+##[3.10.0+Raúl] -2021-11-14
+### Added
+ - Activity para añadir direcciones de facturación
+### Changed
+ - Modelo de facturación
+ - Estilo visual de la pantalla de perfil
+
+##[3.9.15+Juan Vicente] -2021-10-19
+### Added
  - TyC y FAQ a Fragment_Support
-###Changed
+### Changed
  -Diseño Fragment_Support
 
 ##[3.9.14+Juan Vicente] -2021-10-18
-###Fixed
+### Fixed
  -Fragment_Support
 
 ##[3.9.13+Juan Vicente] -2021-10-17
-###Fixed
+### Fixed
  -Fragment_Support
 
 ##[3.9.12+Juan Vicente] -2021-10-17
-###Added
+### Added
  -Codigo de invita un amigo en el layout MGM en fragment_canjear_codigos
  -Workpod 2021 al lado de nuestros nombres 
-###Changed
+### Changed
  -Email y tlfn de soporte.
  -Escalados en diferentes partes de la app
  -Fragment_Transaction_Sesion muestra precio, descuento y el total pagado 
-###Fixed
+### Fixed
  -Bug en Fragment_Transaction_History
 
 ##[3.9.11+Juan Vicente] -2021-10-17
-###Fixed 
+### Fixed 
  -Bug en WorkpodActivity, el NV no accedia al soporte
 
 ##[3.9.10+Juan Vicente] -2021-10-16
-###Changed
+### Changed
  - Ocultar metodos de pago y como funciona de menu de usuario
  - Imagenes de imgSwitcher de InitActivity
  - Icono de ir al mapa en el historico cuando no tienes ninguna consulta
  - color del texto cuando no tienes cupones en fragment_canjear_codigos
  - La espera para que empiece el cronómetro y poder abrir el workpod al reservar es de 1 seg (antes eran 3)
-###Fixed
+### Fixed
  -Bug en Fragment_Dialog_Workpod, no reiniciaba el cronómetro hasta salir del Dialog y si cancelo la reserva y lo vuelvo a reservar,
   el tiempo no empezaba en 20 minutos
  -El icono del histórico cuando está vacío no te llevaba al mapa

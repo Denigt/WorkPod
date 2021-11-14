@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ModPerfilActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="20dp"
+        android:background="@drawable/subrayado">
+
+        <ImageButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/button_btn_aceptar" />
+
+        <ImageButton
+            android:id="@+id/btnCancelar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/button_btn_cancelar" />
+    </RelativeLayout-->
+    <TextView
+        android:id="@+id/tVActModPerfilTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Dirección de Facturación"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tVTitleFactura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:text="¿Qué dirección ponemos en las facturas?"
+                android:textColor="@color/blue"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tVPais"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="País"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtPais"
+                style="@style/Theme.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp" />
+
+            <TextView
+                android:id="@+id/tVProvincia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Provincia"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtProvincia"
+                style="@style/Theme.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp" />
+
+            <TextView
+                android:id="@+id/tVCiudad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Ciudad o municipio"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtCiudad"
+                style="@style/Theme.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp" />
+
+            <TextView
+                android:id="@+id/tVDireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Dirección (calle, numero)"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtDireccion"
+                style="@style/Theme.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp" />
+
+            <TextView
+                android:id="@+id/tVCP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Código Postal"
+                android:textColor="@color/blue"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtCP"
+                style="@style/Theme.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:inputType="number"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tVTitleFacturaPos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:text="¿Dónde enviamos las facturas?"
+                    android:textColor="@color/blue"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tVPaisPos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="País"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtPaisPos"
+                    style="@style/Theme.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp" />
+
+                <TextView
+                    android:id="@+id/tVProvinciaPos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Provincia"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtProvinciaPos"
+                    style="@style/Theme.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp" />
+
+                <TextView
+                    android:id="@+id/tVCiudadPos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Ciudad o municipio"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtCiudadPos"
+                    style="@style/Theme.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp" />
+
+                <TextView
+                    android:id="@+id/tVDireccionPos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Dirección (calle, numero)"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtDireccionPos"
+                    style="@style/Theme.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp" />
+
+                <TextView
+                    android:id="@+id/tVCPPos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Código Postal"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtCPPos"
+                    style="@style/Theme.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="20dp">
+        <ImageButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentEnd="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:lines="1"
+            android:src="@drawable/button_btn_siguiente"/>
+
+
+        <ImageButton
+            android:id="@+id/btnCancelar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentStart="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:lines="1"
+            android:src="@drawable/button_btn_volver"/>
+    </RelativeLayout>
+</LinearLayout>

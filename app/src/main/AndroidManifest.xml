@@ -78,6 +78,11 @@
             android:name=".ModPerfilActivity"
             android:label="Modificar perfil" />
 
+        <!-- ACTIVIDAD PARA ANADIR DIRECCIONES DE FACTURACION -->
+        <activity
+            android:name=".AddFacturacionActivity"
+            android:label="Añadir dirección" />
+
         <activity android:name=".VerifyActivity"
             android:label="Validar Email"
             android:windowSoftInputMode="stateHidden"

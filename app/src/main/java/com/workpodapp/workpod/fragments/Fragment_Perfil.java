@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.workpodapp.workpod.AddFacturacionActivity;
 import com.workpodapp.workpod.ModPerfilActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
@@ -40,6 +41,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     // CONTROLES DEL FRAGMENT
     private ImageButton btnEdit;
     private Button btnShowInfo;
+    private Button btnShowFacturacion;
     private Button btnPassword;
     private TextView txtNombre;
     private TextView txtEmail;
@@ -50,6 +52,9 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     private TextView tVPerfil;
     private TextView tVDirFacturacion;
     private LinearLayout lytPrivate;
+    private LinearLayout lytFacturacion;
+    private FrameLayout lytShowInfo;
+    private FrameLayout lytShowFacturacion;
     private ExpandableListView elsvFacturacion;
 
     //COLECCIONES
@@ -118,6 +123,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         // BUSQUEDA E INICIALIZACION DE LOS CONTROLES DEL LAYOUT
         btnEdit = view.findViewById(R.id.btnEdit);
         btnShowInfo = view.findViewById(R.id.btnShowInfo);
+        btnShowFacturacion = view.findViewById(R.id.btnShowFacturacion);
         btnPassword=view.findViewById(R.id.btnPassword);
 
         txtNombre = view.findViewById(R.id.txtNombre);
@@ -132,6 +138,11 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         elsvFacturacion = view.findViewById(R.id.elsvFacturacion);
         lytPrivate = view.findViewById(R.id.lytPrivate);
         lytPrivate.setVisibility(View.GONE);
+        lytFacturacion = view.findViewById(R.id.lytFacturacion);
+        lytFacturacion.setVisibility(View.GONE);
+
+        lytShowInfo = view.findViewById(R.id.lytShowInfo);
+        lytShowFacturacion = view.findViewById(R.id.lytShowFacturacion);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
@@ -144,6 +155,8 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         // ASIGNACION DE LOS LISTENERS A LOS CONTROLES
         btnEdit.setOnClickListener(this);
         btnShowInfo.setOnClickListener(this);
+        btnShowFacturacion.setOnClickListener(this);
+        btnPassword.setOnClickListener(this);
 
         // INICIALIZAR DATOS DEL FRAGMENT SI HAY UN USUARIO REGISTRADO
         if (InfoApp.USER != null) {
@@ -183,6 +196,8 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         btnEditOnClick(v);
         btnShowInfoOnClick(v);
+        btnShowFacturacionOnClick(v);
+        btnPasswordOnClick(v);
     }
 
     // METODOS ONCLICK DE CADA CONTROL
@@ -197,14 +212,34 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
 
     private void btnShowInfoOnClick(View v) {
         if (v.getId() == btnShowInfo.getId()){
-            showInfo = !showInfo;
-
-            if (showInfo) {
+            //if (showInfo) {
                 lytPrivate.setVisibility(View.VISIBLE);
-                btnShowInfo.setText("Ocultar información personal");
-            }else {
+                lytFacturacion.setVisibility(View.GONE);
+                lytShowInfo.setBackground(getResources().getDrawable(R.drawable.subrayado));
+                lytShowFacturacion.setBackground(null);
+                btnPassword.setText("Modificar contraseña");
+            /*}else {
                 lytPrivate.setVisibility(View.GONE);
                 btnShowInfo.setText("Mostrar información personal");
+            }*/
+        }
+    }
+
+    private void btnShowFacturacionOnClick(View v) {
+        if (v.getId() == btnShowFacturacion.getId()){
+            lytFacturacion.setVisibility(View.VISIBLE);
+            lytPrivate.setVisibility(View.GONE);
+            lytShowFacturacion.setBackground(getResources().getDrawable(R.drawable.subrayado));
+            lytShowInfo.setBackground(null);
+            btnPassword.setText("Añadir dirección");
+        }
+    }
+
+    private void btnPasswordOnClick(View v) {
+        if (v.getId() == btnPassword.getId()){
+            if (lytFacturacion.getVisibility() == View.VISIBLE) {
+                Intent activity = new Intent(getContext(), AddFacturacionActivity.class);
+                startActivity(activity);
             }
         }
     }
