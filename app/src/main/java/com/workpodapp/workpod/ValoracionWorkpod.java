@@ -5,22 +5,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
+import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.fragments.InfoFragment;
 import com.workpodapp.workpod.testUsuario.Informacion_Usuario;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ValoracionWorkpod extends AppCompatActivity implements View.OnClickListener {
     //XML
     private ImageView iVStar1, iVStar2, iVStar3, iVStar4, iVStar5;
     private Button btnNoParticiparTest, btnParticiparTest;
+    private TextView tVOpinion, tVOpinion1, tVOpinion2, tVOpinion3;
+    private LinearLayout lLFragmentTest;
     public static boolean boolReservaFinalizada = false;
+
+    //ESCALADO
+    DisplayMetrics metrics;
 
 
     //GUARDAR INFORMACIÓN TEST
@@ -37,8 +49,13 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
         iVStar3 = (ImageView) findViewById(R.id.IVStar3);
         iVStar4 = (ImageView) findViewById(R.id.IVStar4);
         iVStar5 = (ImageView) findViewById(R.id.IVStar5);
+        tVOpinion = (TextView) findViewById(R.id.TVOpinion);
+        tVOpinion1 = (TextView) findViewById(R.id.TVOpinion1);
+        tVOpinion2 = (TextView) findViewById(R.id.TVOpinion2);
+        tVOpinion3 = (TextView) findViewById(R.id.TVOpinion3);
         btnNoParticiparTest = (Button) findViewById(R.id.BtnNoParticiparValoracion);
         btnParticiparTest = (Button) findViewById(R.id.BtnParticiparValoracion);
+        lLFragmentTest = findViewById(R.id.LLFragmentTest);
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         iVStar1.setOnClickListener(this);
@@ -52,7 +69,12 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
         //VOLCAMOS DE NUEVO LA INFORMACIÓN ESTO ES SI QUEREMOS Q AL VOLVER NO TENGAMOS Q VOLVER A LOGGEARNOS
         dbUsuario();
 
-        InfoFragment.actual=InfoFragment.VALORACION_WORKPOD;
+        InfoFragment.actual = InfoFragment.VALORACION_WORKPOD;
+
+        //Escalado
+        metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        escalarElementos(metrics);
 
     }
 
@@ -159,6 +181,32 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
                 e.printStackTrace();
             }
         }
+    }
+
+    private void escalarElementos(DisplayMetrics metrics) {
+        //INICIALIZAMOS COLECCIONES
+        List<View> lstView = new ArrayList<>();
+
+        //LLENAMOS COLECCIONES
+        lstView.add(btnNoParticiparTest);
+        lstView.add(btnParticiparTest);
+        lstView.add(iVStar1);
+        lstView.add(iVStar2);
+        lstView.add(iVStar3);
+        lstView.add(iVStar4);
+        lstView.add(iVStar5);
+        lstView.add(tVOpinion);
+        lstView.add(tVOpinion1);
+        lstView.add(tVOpinion2);
+        lstView.add(tVOpinion3);
+        lstView.add(lLFragmentTest);
+        Method.scaleViews(metrics, lstView);
+        escaladoParticular(metrics);
+    }
+
+    private void escaladoParticular(DisplayMetrics metrics) {
+        float height = metrics.heightPixels / metrics.density;
+        lLFragmentTest.getLayoutParams().height = Integer.valueOf((int) Math.round(lLFragmentTest.getLayoutParams().height * (height / Method.heightEmulator)));
     }
 
     @Override

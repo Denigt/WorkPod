@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.workpodapp.workpod.PagoActivity;
@@ -23,8 +24,6 @@ import com.workpodapp.workpod.data.Reserva;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Ubicacion;
 import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -40,15 +39,21 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
     //XML
     private Button btnCerrarWorPod;
     private Button btnContactarSoporte;
+
+    private ImageView iVWifi;
+    private ImageView iVPassword;
+    private ImageView iVAssistent;
+
     private TextView tVWifi;
+    private TextView tVPassword;
+    private TextView tVEstamosAqui;
+    private TextView tVTiempoTranscurridoTitulo;
+    private TextView tVReportarProblema;
+    private TextView tVLinkSoporte;
     private TextView tVSesionCapacidad;
     private TextView tVSesionDireccion;
     private TextView tVTiempoTranscurrido;
     private TextView tVSesionDireccionTitulo;
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
 
     //BD
     Ubicacion ubicacion;
@@ -115,6 +120,17 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         //INICIALIZAMOS ELEMENTOS DEL XML
         btnCerrarWorPod = view.findViewById(R.id.BtnCerrarWorPod);
         btnContactarSoporte = view.findViewById(R.id.BtnContactarSoporte);
+
+        iVAssistent=view.findViewById(R.id.IVAssistent);
+        iVPassword=view.findViewById(R.id.IVPassword);
+        iVWifi=view.findViewById(R.id.IVWifi);
+
+        tVPassword=view.findViewById(R.id.TVPassword);
+        tVEstamosAqui=view.findViewById(R.id.TVEstamosAqui);
+        tVLinkSoporte=view.findViewById(R.id.TVLinkSoporte);
+        tVReportarProblema=view.findViewById(R.id.TVReportarProblema);
+        tVLinkSoporte=view.findViewById(R.id.TVLinkSoporte);
+        tVTiempoTranscurridoTitulo=view.findViewById(R.id.TVTiempoTranscurridoTitulo);
         tVSesionCapacidad = view.findViewById(R.id.TVSesionCapacidad);
         tVSesionDireccion = view.findViewById(R.id.TVSesionDireccion);
         tVTiempoTranscurrido = view.findViewById(R.id.TVTiempoTranscurrido);
@@ -139,7 +155,7 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
 
         //CONTROLAMOS QUE UNA VEZ ENTRADA EN LA SESIÓN, AL DARLE PARA ATRÁS NO VUELVAS AL MAPA
         WorkpodActivity.boolSession = true;
-        InfoFragment.actual=InfoFragment.SESSION;
+        InfoFragment.actual = InfoFragment.SESSION;
 
         return view;
     }
@@ -234,25 +250,33 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
-        this.lstBtn = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnCerrarWorPod, "", "normal", 20, 20, 20));
-        lstBtn.add(new Scale_Buttons(btnContactarSoporte, "", "normal", 20, 20, 20));
+        lstView.add((T) btnCerrarWorPod);
+        lstView.add((T) btnContactarSoporte);
 
-        lstTv.add(new Scale_TextView(tVWifi, "wrap_content", "bold", 18, 18, 18));
-        lstTv.add(new Scale_TextView(tVSesionCapacidad, "wrap_content", "bold", 18, 18, 18));
-        lstTv.add(new Scale_TextView(tVSesionDireccionTitulo, "wrap_content", "bold", 18, 18, 18));
-        lstTv.add(new Scale_TextView(tVSesionDireccion, "wrap_content", "bold", 18, 18, 18));
-        lstTv.add(new Scale_TextView(tVTiempoTranscurrido, "wrap_content", "bold", 55, 55, 55));
+        lstView.add((T) iVWifi);
+        lstView.add((T) iVPassword);
+        lstView.add((T) iVAssistent);
 
-        Method.scaleTv(metrics, lstTv);
+        lstView.add((T) tVEstamosAqui);
+        lstView.add((T) tVPassword);
+        lstView.add((T) tVReportarProblema);
+        lstView.add((T) tVLinkSoporte);
+        lstView.add((T) tVTiempoTranscurridoTitulo);
+        lstView.add((T) tVWifi);
+        lstView.add((T) tVSesionCapacidad);
+        lstView.add((T) tVSesionDireccionTitulo);
+        lstView.add((T) tVSesionDireccion);
+        lstView.add((T) tVTiempoTranscurrido);
+
+        Method.scaleViews(metrics, lstView);
     }
 
     public Thread cronometro() throws InterruptedException {

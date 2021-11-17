@@ -38,7 +38,6 @@ public class Fragment_Menu_Usuario extends Fragment implements AdapterView.OnIte
 
     //ESCALADO
     DisplayMetrics metrics;
-    float width;
 
     public Fragment_Menu_Usuario() {
         // Required empty public constructor

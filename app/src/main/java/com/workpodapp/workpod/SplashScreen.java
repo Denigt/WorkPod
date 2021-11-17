@@ -4,10 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +25,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import static java.sql.DriverManager.println;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SplashScreen extends AppCompatActivity {
     // DECLARACION DE VARIABLES
     private boolean isLogon = false;
     private TextView txtVersion;
+    private TextView tVDesarrolladores;
+
+    //ESCALADO
+    DisplayMetrics metrics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,11 @@ public class SplashScreen extends AppCompatActivity {
 
         // ESTABLECER VERSION
         txtVersion = findViewById(R.id.txtVersion);
+        tVDesarrolladores=findViewById(R.id.TVDesarrolladores);
         txtVersion.setText(BuildConfig.VERSION_NAME);
+
+
+        escalarElementos();
 
         // NADA MAS INICIAR LA APP OBTENER LA IDENTIFICACION DE LA APLICACION E INFORMAR A LA BD SOBRE LA INSTALACION
         InfoApp.INSTALLATION = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -116,5 +125,30 @@ public class SplashScreen extends AppCompatActivity {
         });
         consulta.start();
 
+    }
+
+    /**
+     * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
+     * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
+     * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
+     * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
+     * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
+     * para dispositivos pequeños como para dispositivos grandes).
+     *
+     * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
+     * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
+     *
+     * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
+     *
+     */
+    private <T extends View> void escalarElementos() {
+        //INICIALIZAMOS COLECCIONES
+        List<T>lstView =new ArrayList<>();
+        metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        //LLENAMOS COLECCIONES
+        lstView.add((T) txtVersion);
+        lstView.add((T) tVDesarrolladores);
+        Method.scaleViews(metrics, lstView);
     }
 }

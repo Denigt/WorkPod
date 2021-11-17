@@ -32,6 +32,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/TVOpinion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -42,6 +43,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/TVOpinion1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -52,6 +54,7 @@
                     android:textSize="18dp" />
 
                 <TextView
+                    android:id="@+id/TVOpinion2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -114,6 +117,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/TVOpinion3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="35dp"
@@ -125,10 +129,11 @@
 
                 <Button
                     android:id="@+id/BtnParticiparValoracion"
-                    android:layout_width="304dp"
+                    android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="20dp"
                     android:backgroundTint="@color/Texto"
                     android:text="¡Sí! Quiero participar"
                     android:textAllCaps="false"
@@ -137,9 +142,10 @@
 
                 <Button
                     android:id="@+id/BtnNoParticiparValoracion"
-                    android:layout_width="304dp"
+                    android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="35dp"
                     android:backgroundTint="@color/white"
                     android:text="Tal vez la próxima vez..."

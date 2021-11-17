@@ -17,7 +17,6 @@ import androidx.fragment.app.FragmentManager;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Cupon;
-import com.workpodapp.workpod.fragments.Fragment_Canjear_Codigos;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_More_Information;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
 import com.workpodapp.workpod.scale.Scale_Buttons;
@@ -68,11 +67,12 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
 
     /**
      * Constructor a usar si se necesita cambiar entre el boton de +info y canjear
-     * @param context Contexto de la aplicacion, se obtiene del fragment o activity
+     *
+     * @param context                Contexto de la aplicacion, se obtiene del fragment o activity
      * @param supportFragmentManager Controlador de fragments para poder abrir fragments y dialogos desde el listView
-     * @param lstCupones Lista de cupones
-     * @param pago True si se quiere boton para canjear, false para boton de +info
-     * @param metrics Ajustar tamano de los elementos del listView
+     * @param lstCupones             Lista de cupones
+     * @param pago                   True si se quiere boton para canjear, false para boton de +info
+     * @param metrics                Ajustar tamano de los elementos del listView
      */
     public Adaptador_Lsv_Descuentos(Context context, FragmentManager supportFragmentManager, List<Cupon> lstCupones, boolean pago, DisplayMetrics metrics) {
         this.activity = null;
@@ -86,11 +86,12 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     /**
      * Constructor a usar si se necesita cambiar entre el boton de +info y canjear
      * Tambien sustituye el context por activity, lo que permite ejecutar el Runnable onBtnClick (El cual se ejecuta al pulsar el boton)
-     * @param activity Actividad en ejecucion
+     *
+     * @param activity               Actividad en ejecucion
      * @param supportFragmentManager Controlador de fragments para poder abrir fragments y dialogos desde el listView
-     * @param lstCupones Lista de cupones
-     * @param pago True si se quiere boton para canjear, false para boton de +info
-     * @param metrics Ajustar tamano de los elementos del listView
+     * @param lstCupones             Lista de cupones
+     * @param pago                   True si se quiere boton para canjear, false para boton de +info
+     * @param metrics                Ajustar tamano de los elementos del listView
      */
     public Adaptador_Lsv_Descuentos(Activity activity, FragmentManager supportFragmentManager, List<Cupon> lstCupones, boolean pago, DisplayMetrics metrics) {
         this.activity = activity;
@@ -141,7 +142,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                         activity.runOnUiThread(onBtnClick);
                 }
             });
-        }else {
+        } else {
             ibtnCanjear.setText("Canjear");
             ibtnCanjear.setTag(lstCupones.get(i));
 
@@ -167,9 +168,10 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                             }
                         }
                         if (!aplicado) {
-                            if (((Cupon)v.getTag()).getfCaducidad() == null || Method.subsDate(ZonedDateTime.now(), ((Cupon)v.getTag()).getfCaducidad()) <= 0) {
-                                ((Cupon)v.getTag()).setCanjeado(true);
-                                cupon = (Cupon)v.getTag();;
+                            if (((Cupon) v.getTag()).getfCaducidad() == null || Method.subsDate(ZonedDateTime.now(), ((Cupon) v.getTag()).getfCaducidad()) <= 0) {
+                                ((Cupon) v.getTag()).setCanjeado(true);
+                                cupon = (Cupon) v.getTag();
+                                ;
                                 ((Button) v).setText("Canjeado");
                                 ((LinearLayout) v.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_green));
                             } else {
@@ -198,6 +200,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         dialog_more_information.show(manager, "Show Dialog More Information");
     }
     //MÉTODOS
+
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
@@ -213,36 +216,24 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(ibtnCanjear, "wrap_content", "bold", 12, 13, 14));
+        lstView.add((T) ibtnCanjear);
+        lstView.add((T) tVminGratis);
+        lstView.add((T) tVnombreDescuento);
+        lstView.add((T) lLDescuento);
 
-        lstTv.add(new Scale_TextView(tVminGratis, "wrap_content", "bold", 13, 16, 20));
-        lstTv.add(new Scale_TextView(tVnombreDescuento, "wrap_content", "bold", 16, 20, 25));
-
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
-
-        escaladoParticular(metrics);
-
-    }
-
-    private void escaladoParticular(DisplayMetrics metrics) {
-        if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
-            lLDescuento.getLayoutParams().width = 350;
-        } else if (width <= (550 / metrics.density)) {
-            lLDescuento.getLayoutParams().width = 220;
-        }
+        Method.scaleViews(metrics, lstView);
     }
 
     /**
      * Establece el runnable a ejecutar al pulsar el boton
      * El runnable se ejecuta en el hilo de la interfaz por lo que puede pausar la intefaz del programa,
      * impedir interacciones con la interfaz y afectar a la misma, cuidado con que codigo se mete en el
+     *
      * @param onBtnClick
      */
     public void setOnBtnClick(Runnable onBtnClick) {

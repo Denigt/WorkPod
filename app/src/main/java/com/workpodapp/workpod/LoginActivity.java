@@ -23,8 +23,6 @@ import com.workpodapp.workpod.data.Instalacion;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_Validar_Usuario;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,10 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView tVActvityLoginContrasena;
     //private TextView tVActvityLoginAunNoLogin;
     private Sesion sesion;
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView>lstTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,10 +313,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      *
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
        //INICIALIZAMOS COLECCIONES
-        this.lstBtn=new ArrayList<>();
-        this.lstTv=new ArrayList<>();
+        List<T> lstView=new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -332,17 +325,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",12,12,15));
 
         //lstTv.add(new Scale_TextView(tVActvityLoginAunNoLogin,"Match_Parent","bold",20,20,24));
-        lstTv.add(new Scale_TextView(tVActvityLoginBienvenido,"Match_Parent","bold",34,34,34));
-        lstTv.add(new Scale_TextView(tVActvityLoginContrasena,"Match_Parent","bold",14,16,17));
-        lstTv.add(new Scale_TextView(tVActvityLoginEmail,"Match_Parent","bold",14,18,17));
-        lstTv.add(new Scale_TextView(tVActvityLoginIniSesion,"Match_Parent","bold",20,24,24));
-        lstTv.add(new Scale_TextView(tVBtnLostContrasena,"wrap_content","bold",13,14,14));
-
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
+        lstView.add((T) tVActvityLoginBienvenido);
+        lstView.add((T) tVActvityLoginContrasena);
+        lstView.add((T) tVActvityLoginEmail);
+        lstView.add((T) tVActvityLoginIniSesion);
+        lstView.add((T) tVBtnLostContrasena);
+        lstView.add((T)btnShowContrasena);
+        lstView.add((T)btnSiguiente);
+        lstView.add((T)btnVolver);
 
         //LLENAMOS COLECCIONES
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics,lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 }

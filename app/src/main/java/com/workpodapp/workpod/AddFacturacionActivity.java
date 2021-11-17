@@ -160,7 +160,7 @@ public class AddFacturacionActivity extends AppCompatActivity implements View.On
 
         //LLENAMOS COLECCIONES
 
-        Method.scaleTv(metrics, lstTv);
+      //  Method.scaleTv(metrics, lstTv);
 
     }
 }

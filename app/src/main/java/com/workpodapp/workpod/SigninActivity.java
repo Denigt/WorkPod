@@ -2,7 +2,6 @@ package com.workpodapp.workpod;
 
 import com.workpodapp.workpod.basic.*;
 import com.workpodapp.workpod.data.Usuario;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -74,9 +73,6 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
     private String correo;
     private String password;
     private Session sesion;
-
-    //COLECCIONES
-    List<Scale_TextView> lstTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +192,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                             Database<Usuario> insert = new Database<>(Database.INSERT, new Usuario(email, nombre, apellido, dni, contrasena, 0, null, null, null));
                             insert.postRun(() -> {
                                 Database<Usuario> select = new Database<>(Database.SELECTID, new Usuario(email, contrasena));
-                                select.postRun(()->{
+                                select.postRun(() -> {
                                     if (select.getError().code > -1) {
                                         try {
                                             String input = String.format("%s\n%s", select.getDato().getEmail(), select.getDato().getPassword());
@@ -212,7 +208,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                         } catch (IOException e) {
                                             Log.e("AUTOLOGIN", "No se puede escribir en el fichero");
                                         }
-                                        if (InfoApp.USER==null)
+                                        if (InfoApp.USER == null)
                                             InfoApp.USER = new Usuario();
 
                                         InfoApp.USER.set(select.getDato());
@@ -220,9 +216,9 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                                         // ENVIAR CORREO DE VERIFICACION
                                         Database<Usuario> verificacion = new Database<>(Database.VERIFICACION, InfoApp.USER);
                                         verificacion.start();
-                                    }else InfoApp.USER = null;
+                                    } else InfoApp.USER = null;
                                 });
-                                select.postRunOnUI(this, ()-> {
+                                select.postRunOnUI(this, () -> {
                                     if (insert.getError().code > -1 && InfoApp.USER != null) {
                                         // SI NO HA HABIDO NINGUN PROBLEMA PASAR A LA SIGUIENTE ACTIVIDAD HABIENDO INICIADO SESION
                                         Intent activity = new Intent(getApplicationContext(), VerifyActivity.class);
@@ -254,11 +250,13 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
                     Method.showError(this, "Introduzca una dirección de email válida");
                     txtEmail.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
-                }if (!btnTerminos.isChecked()) {
+                }
+                if (!btnTerminos.isChecked()) {
                     Method.showError(this, "Debe aceptar los términos de uso");
                     btnTerminos.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
-                } if (contrasena.equals(null) || contrasena.equals("")) {
+                }
+                if (contrasena.equals(null) || contrasena.equals("")) {
                     Method.showError(this, "Introduzca una contraseña");
                     txtContrasena.setBackgroundTintList(getResources().getColorStateList(R.color.red));
                     error = true;
@@ -325,6 +323,8 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
         else
             setContentView(R.layout.activity_signin2);
 
+        btnSiguiente = findViewById(R.id.btnSiguiente);
+        btnVolver = findViewById(R.id.btnVolver);
         // BUSCAR LOS CONTROLES DEL XML
         if (pantalla == 1) {
             txtNombre = findViewById(R.id.txtNombre);
@@ -369,8 +369,7 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
             //ESCALAMOS ELEMENTOS
             escalarElementosSignin2();
         }
-        btnSiguiente = findViewById(R.id.btnSiguiente);
-        btnVolver = findViewById(R.id.btnVolver);
+
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         if (pantalla == 1) {
@@ -418,21 +417,26 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementosSignin1() {
+    private <T extends View> void escalarElementosSignin1() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVActSigninApellidos, "Match_Parent", "bold", 18,18, 18));
-        lstTv.add(new Scale_TextView(tVActSigninNombre, "Match_Parent", "bold", 18,18, 18));
-        lstTv.add(new Scale_TextView(tVActSigninPregNIFNIE, "Match_Parent", "bold", 24,24, 24));
-        lstTv.add(new Scale_TextView(tVActSigninPregNombre, "Match_Parent", "bold", 24,24, 24));
-        lstTv.add(new Scale_TextView(tVActSigninTitulo, "Match_Parent", "bold", 34,34, 34));
+        lstView.add((T) tVActSigninApellidos);
+        lstView.add((T) tVActSigninNombre);
+        lstView.add((T) tVActSigninPregNIFNIE);
+        lstView.add((T) tVActSigninPregNombre);
+        lstView.add((T) tVActSigninTitulo);
+        lstView.add((T) txtApellido);
+        lstView.add((T) txtNombre);
+        lstView.add((T) txtDNI);
+        lstView.add((T) btnSiguiente);
+        lstView.add((T) btnVolver);
 
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 
     /**
@@ -448,22 +452,28 @@ public class SigninActivity extends AppCompatActivity implements View.OnClickLis
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementosSignin2() {
+    private <T extends View> void escalarElementosSignin2() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVActSignin2Contrasena, "Match_Parent", "bold", 18, 18,18));
-        lstTv.add(new Scale_TextView(tVActSignin2Email, "Match_Parent", "bold", 18, 18,18));
-        lstTv.add(new Scale_TextView(tVActSignin2InstruccionesContrasena, "Match_Parent", "bold", 16, 16,16));
-        lstTv.add(new Scale_TextView(tVActSignin2PregContrasena, "Match_Parent", "bold", 24, 24,24));
-        lstTv.add(new Scale_TextView(tVActSignin2PregEmail, "Match_Parent", "bold", 24,24, 24));
-        lstTv.add(new Scale_TextView(tVActSignin2RepetirContrasena, "Match_Parent", "bold", 18, 18,18));
-        lstTv.add(new Scale_TextView(tVActSignin2Titulo, "Match_Parent", "bold", 34,34, 34));
+        lstView.add((T) tVActSignin2Contrasena);
+        lstView.add((T) tVActSignin2Email);
+        lstView.add((T) tVActSignin2InstruccionesContrasena);
+        lstView.add((T) tVActSignin2PregContrasena);
+        lstView.add((T) tVActSignin2PregEmail);
+        lstView.add((T) tVActSignin2RepetirContrasena);
+        lstView.add((T) tVActSignin2Titulo);
+        lstView.add((T) btnVolver);
+        lstView.add((T) btnSiguiente);
+        lstView.add((T) btnPromociones);
+        lstView.add((T) btnTerminos);
+        lstView.add((T) btnVerTerminos);
+        lstView.add((T) btnShowContrasena);
 
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 }

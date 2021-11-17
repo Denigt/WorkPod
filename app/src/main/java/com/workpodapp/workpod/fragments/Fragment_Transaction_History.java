@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.workpodapp.workpod.R;
-import com.workpodapp.workpod.ValoracionWorkpod;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Spinner;
 import com.workpodapp.workpod.basic.Database;
@@ -347,19 +346,19 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVfgmTransHistMisSesiones, "", "bold", 35, 35, 35));
-        lstTv.add(new Scale_TextView(tVfgmTransHistSelectAnio, "wrap_content", "bold", 23, 23, 23));
-        lstTv.add(new Scale_TextView(tVNoSesion, "match_parent", "bold", 15, 18, 22));
+        lstView.add((T) tVfgmTransHistMisSesiones);
+        lstView.add((T) tVfgmTransHistSelectAnio);
+        lstView.add((T) tVNoSesion);
 
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 
     /**

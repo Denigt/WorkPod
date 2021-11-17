@@ -1,7 +1,6 @@
 package com.workpodapp.workpod.fragments;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.workpodapp.workpod.R;
-import com.workpodapp.workpod.ValoracionWorkpod;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
@@ -49,8 +47,8 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     private double tiempo;
 
     //VARIABLES PARA ESCALADO
-    private List<Scale_Buttons>lstBtn;
-    private List<Scale_TextView>lstTv;
+    private List<Scale_Buttons> lstBtn;
+    private List<Scale_TextView> lstTv;
     DisplayMetrics metrics;
     float width;
 
@@ -70,19 +68,18 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     private boolean controlador;
 
 
-
     private ImageView iVFDCerrarWorkpodSalir;
 
     public Fragment_Dialog_Cerrar_Workpod(Sesion sesion, Reserva reserva, Ubicacion ubicacion) {
-        this.sesion=sesion;
+        this.sesion = sesion;
         this.workpod = sesion.getWorkpod();
-        this.ubicacion=ubicacion;
-        this.reserva=reserva;
-        this.centesimas=0;
-        this.segundos=0;
-        this.minutos=0;
-        this.horas=0;
-        this.tiempo=0.0;
+        this.ubicacion = ubicacion;
+        this.reserva = reserva;
+        this.centesimas = 0;
+        this.segundos = 0;
+        this.minutos = 0;
+        this.horas = 0;
+        this.tiempo = 0.0;
 
     }
 
@@ -116,11 +113,11 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
         //INSTANCIAMOS ELEMENTOS DEL XML
         btnNo = view.findViewById(R.id.BtnNo);
         btnSi = view.findViewById(R.id.BtnSi);
-        tVFragDiagCerrarWorkpodPregunta=view.findViewById(R.id.TVFragDiagCerrarWorkpodPregunta);
+        tVFragDiagCerrarWorkpodPregunta = view.findViewById(R.id.TVFragDiagCerrarWorkpodPregunta);
         iVFDCerrarWorkpodSalir = view.findViewById(R.id.IVFDCerrarWorkpodSalir);
         //INICIALIZAMOS VARIABLES
         this.precioSesion = 0.0;
-        this.controlador=false;
+        this.controlador = false;
         //EVENTOS DE LOS CONTROLES
         btnNo.setOnClickListener(this);
         btnSi.setOnClickListener(this);
@@ -152,7 +149,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
      * Al darle al btn Si, nos vamos a la parte del cuestionario.
      */
     private void onClickBtnSi() {
-        try{
+        try {
             //PARAMOS EL HILO
             Fragment_sesion.cerrarWorkpod = true;
             //UPDATE A LA TABLA RESERVA
@@ -162,11 +159,11 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             reserva.set(InfoApp.USER.getReserva());
             //HACEMOS UN UPDATE PARA ACTUALIZAR EL ESTADO DE LA RESERVA
             reserva.setEstado("FINALIZADA");
-            InfoApp.RESERVA=reserva;
+            InfoApp.RESERVA = reserva;
             // ESTABLECER LA RESERVA DEL USUARIO
             InfoApp.USER.setReserva(reserva);
             Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
-            update.postRun( () -> {
+            update.postRun(() -> {
                 if (update.getError().code > -1) {
                     try {
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
@@ -175,7 +172,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
                                 item.setReserva(reserva);
 
                         //CONTROLAMOS QUE NO SE VA A PASAR DE ACTIVITY HASTA QUE SE HAYA ACTUALIZADO LA RESERVA DEL USURIO
-                        controlador=true;
+                        controlador = true;
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
@@ -185,7 +182,7 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
             update.start();
             //HACEMOS EL INSERT DE SESION
             finiquitarSesion();
-            WorkpodActivity.boolSession=false;
+            WorkpodActivity.boolSession = false;
             //CONTROLAMOS QUE NO SE VA A PASAR DE ACTIVITY HASTA QUE SE HAYA ACTUALIZADO LA RESERVA DEL USURIO
             Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
@@ -194,40 +191,40 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
          /*  Intent activity = new Intent(getActivity(), ValoracionWorkpod.class);
             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(activity);*/
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void finiquitarSesion()  {
+    private void finiquitarSesion() {
 
-        try{
+        try {
             //INICIALIZAR LA SALIDA
             sesion.setSalida(ZonedDateTime.now());
             //CALCULAMOS PRECIO
             tiempoSesion = Method.subsDate(sesion.getSalida(), sesion.getEntrada());
             //INICIALIZAMOS CRONOMETRO
             this.centesimas = 0;
-            horas= Math.floor(tiempoSesion/3600) ;
-            minutos = Math.floor(((tiempoSesion-(3600*horas))/60));
-            segundos = Math.floor(tiempoSesion%60);
+            horas = Math.floor(tiempoSesion / 3600);
+            minutos = Math.floor(((tiempoSesion - (3600 * horas)) / 60));
+            segundos = Math.floor(tiempoSesion % 60);
             //CALCULAMOS PRECIO DE LA SESION
-            if(horas==0){
-                this.precioSesion=(minutos*sesion.getWorkpod().getPrecio())+ ((segundos*sesion.getWorkpod().getPrecio())/60);
-            }else{
-                this.precioSesion=(horas*60*sesion.getWorkpod().getPrecio()+ minutos*sesion.getWorkpod().getPrecio())+ ((segundos*sesion.getWorkpod().getPrecio())/60);
+            if (horas == 0) {
+                this.precioSesion = (minutos * sesion.getWorkpod().getPrecio()) + ((segundos * sesion.getWorkpod().getPrecio()) / 60);
+            } else {
+                this.precioSesion = (horas * 60 * sesion.getWorkpod().getPrecio() + minutos * sesion.getWorkpod().getPrecio()) + ((segundos * sesion.getWorkpod().getPrecio()) / 60);
             }
             //SE LO PASAMOS AL OBJETO SESION
             sesion.setPrecio(precioSesion);
-            this.tiempo=horas + (minutos/60);
+            this.tiempo = horas + (minutos / 60);
             sesion.setTiempo(tiempo);
 
             //ACTUALIZAMOS SESION
             Database<Sesion> update = new Database<>(Database.UPDATE, sesion);
             update.start();
             update.join();
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -264,18 +261,16 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnSi, "wrap_content", "normal", 20, 20, 20));
-        lstBtn.add(new Scale_Buttons(btnNo, "wrap_content", "normal", 20, 20, 20));
+        lstView.add((T) btnSi);
+        lstView.add((T) btnNo);
 
-        lstTv.add(new Scale_TextView(tVFragDiagCerrarWorkpodPregunta, "wrap_content", "bold", 15, 17, 18));
+        lstView.add((T) tVFragDiagCerrarWorkpodPregunta);
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 }

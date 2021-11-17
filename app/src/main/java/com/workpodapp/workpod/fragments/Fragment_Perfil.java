@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +41,12 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
 
     // CONTROLES DEL FRAGMENT
     private ImageButton btnEdit;
+    private ImageButton iBUser;
     private Button btnShowInfo;
     private Button btnShowFacturacion;
     private Button btnPassword;
     private TextView txtNombre;
+    private TextView tVTituloEmail;
     private TextView txtEmail;
     private TextView tVTituloDNI;
     private TextView txtDNI;
@@ -56,15 +59,17 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     private FrameLayout lytShowInfo;
     private FrameLayout lytShowFacturacion;
     private ExpandableListView elsvFacturacion;
+    private boolean inicio;
 
     //COLECCIONES
     List<Scale_Buttons> lstBtn;
-    List<Scale_TextView>lstTv;
+    List<Scale_TextView> lstTv;
 
     // VARIABLES QUE MANEJAN EL ESTADO DEL FRAGMENT
     private boolean showInfo = false;
 
     public Fragment_Perfil() {
+        this.inicio=true;
     }
 
     /**
@@ -114,7 +119,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             //txtDNI.setText(InfoApp.USER.getTelefono());
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -124,16 +129,18 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         btnEdit = view.findViewById(R.id.btnEdit);
         btnShowInfo = view.findViewById(R.id.btnShowInfo);
         btnShowFacturacion = view.findViewById(R.id.btnShowFacturacion);
-        btnPassword=view.findViewById(R.id.btnPassword);
+        btnPassword = view.findViewById(R.id.btnPassword);
 
         txtNombre = view.findViewById(R.id.txtNombre);
+        tVTituloEmail=view.findViewById(R.id.tVTituloEmail);
         txtEmail = view.findViewById(R.id.txtEmail);
         txtDNI = view.findViewById(R.id.txtDNI);
         txtTelefono = view.findViewById(R.id.txtTelefono);
-        tVDirFacturacion=view.findViewById(R.id.tVDirFacturacion);
-        tVPerfil=view.findViewById(R.id.tVPerfil);
-        tVTituloDNI=view.findViewById(R.id.tVTituloDNI);
-        tVTituloTlfn=view.findViewById(R.id.tVTituloTlfn);
+        tVDirFacturacion = view.findViewById(R.id.tVDirFacturacion);
+        tVPerfil = view.findViewById(R.id.tVPerfil);
+        tVTituloDNI = view.findViewById(R.id.tVTituloDNI);
+        tVTituloTlfn = view.findViewById(R.id.tVTituloTlfn);
+        iBUser=view.findViewById(R.id.IBUser);
 
         elsvFacturacion = view.findViewById(R.id.elsvFacturacion);
         lytPrivate = view.findViewById(R.id.lytPrivate);
@@ -145,12 +152,12 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         lytShowFacturacion = view.findViewById(R.id.lytShowFacturacion);
 
         // DIBUJAR FOREGROUND SI LA VERSION ES MENOR A LA 23
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
-            FrameLayout lyt = view.findViewById(R.id.lytForeground1);
-            lyt.setForeground(getContext().getDrawable(R.drawable.rounded_border_button));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            LinearLayout lyt = view.findViewById(R.id.lytForeground1);
+            lyt.setBackground(getContext().getDrawable(R.drawable.rounded_border_button));
 
-            lyt = view.findViewById(R.id.lytForeground2);
-            lyt.setForeground(getContext().getDrawable(R.drawable.rounded_border_button));
+           FrameLayout lyt2 = view.findViewById(R.id.lytForeground2);
+            lyt2.setForeground(getContext().getDrawable(R.drawable.rounded_border_button));
         }
         // ASIGNACION DE LOS LISTENERS A LOS CONTROLES
         btnEdit.setOnClickListener(this);
@@ -173,7 +180,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
                         return false;
                     }
                 });
-            }else {
+            } else {
                 elsvFacturacion.setVisibility(View.GONE);
                 tVDirFacturacion.setText("Sin direcciones de facturación");
             }
@@ -188,6 +195,8 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
         //PONEMOS EL ICONO DEL NV EN MENU USUARIO
         WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
+        //Ponemos por defecto que se muestren los datos del usuario
+        btnShowInfoOnClick(view);
         return view;
     }
 
@@ -202,7 +211,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
 
     // METODOS ONCLICK DE CADA CONTROL
     private void btnEditOnClick(View v) {
-        if (v.getId() == btnEdit.getId()){
+        if (v.getId() == btnEdit.getId()) {
             showInfo = !showInfo;
 
             Intent activity = new Intent(getContext(), ModPerfilActivity.class);
@@ -211,13 +220,13 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     }
 
     private void btnShowInfoOnClick(View v) {
-        if (v.getId() == btnShowInfo.getId()){
+        if (v.getId() == btnShowInfo.getId() || inicio) {
             //if (showInfo) {
-                lytPrivate.setVisibility(View.VISIBLE);
-                lytFacturacion.setVisibility(View.GONE);
-                lytShowInfo.setBackground(getResources().getDrawable(R.drawable.subrayado));
-                lytShowFacturacion.setBackground(null);
-                btnPassword.setText("Modificar contraseña");
+            lytPrivate.setVisibility(View.VISIBLE);
+            lytFacturacion.setVisibility(View.GONE);
+            lytShowInfo.setBackground(getResources().getDrawable(R.drawable.subrayado));
+            lytShowFacturacion.setBackground(null);
+            btnPassword.setText("Modificar contraseña");
             /*}else {
                 lytPrivate.setVisibility(View.GONE);
                 btnShowInfo.setText("Mostrar información personal");
@@ -226,7 +235,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     }
 
     private void btnShowFacturacionOnClick(View v) {
-        if (v.getId() == btnShowFacturacion.getId()){
+        if (v.getId() == btnShowFacturacion.getId()) {
             lytFacturacion.setVisibility(View.VISIBLE);
             lytPrivate.setVisibility(View.GONE);
             lytShowFacturacion.setBackground(getResources().getDrawable(R.drawable.subrayado));
@@ -236,7 +245,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     }
 
     private void btnPasswordOnClick(View v) {
-        if (v.getId() == btnPassword.getId()){
+        if (v.getId() == btnPassword.getId()) {
             if (lytFacturacion.getVisibility() == View.VISIBLE) {
                 Intent activity = new Intent(getContext(), AddFacturacionActivity.class);
                 startActivity(activity);
@@ -251,36 +260,48 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
      * el elemento tiene unos dp definidos que queremos que se conserven tanto en dispositivos grandes como en pequeños.
      * También especificamos en la List el estilo de letra (bold, italic, normal) y el tamaño de la fuente del texto tanto
      * para dispositivos pequeños como para dispositivos grandes).
-     *
+     * <p>
      * Como el método scale de la clase Methods no es un activity o un fragment no podemos inicializar nuestro objeto de la clase
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
-     *
+     * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
      */
-    private void escalarElementos() {
+    private  void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn=new ArrayList<>();
-        this.lstTv=new ArrayList<>();
+        List<View> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnShowInfo,"match_parent","bold",14,14,14));
-        lstBtn.add(new Scale_Buttons(btnPassword,"match_parent","bold",14,14,14));
+        lstView.add( btnShowInfo);
+        lstView.add( btnPassword);
 
-        lstTv.add(new Scale_TextView(tVPerfil,"match_parent","bold",40,40,40));
-        lstTv.add(new Scale_TextView(txtNombre,"match_parent","bold",16,18,18));
-        lstTv.add(new Scale_TextView(txtEmail,"match_parent","bold",16,16,16));
-        lstTv.add(new Scale_TextView(tVTituloDNI,"match_parent","bold",18,18,18));
-        lstTv.add(new Scale_TextView(txtDNI,"match_parent","bold",16,16,16));
-        lstTv.add(new Scale_TextView(tVTituloTlfn,"match_parent","bold",18,18,18));
-        lstTv.add(new Scale_TextView(txtTelefono,"match_parent","bold",16,16,16));
-        lstTv.add(new Scale_TextView(tVDirFacturacion,"match_parent","bold",18,18,18));
+        lstView.add( tVPerfil);
+        lstView.add( txtNombre);
+        lstView.add( txtEmail);
+        lstView.add( tVTituloDNI);
+        lstView.add( txtDNI);
+        lstView.add(tVTituloEmail);
+        lstView.add( tVTituloTlfn);
+        lstView.add( txtTelefono);
+        lstView.add( tVDirFacturacion);
+        lstView.add( btnShowInfo);
+        lstView.add( btnShowFacturacion);
+        lstView.add( lytShowInfo);
+        lstView.add( lytShowFacturacion);
+        lstView.add( iBUser);
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
+        //Fuerzo a que tengan el mismo tamaño, mis datos aparece siempre más pequeño
+        btnShowInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnShowFacturacion.getTextSize());
+
+        escaladoParticular(metrics);
+    }
+
+    private void escaladoParticular(DisplayMetrics metrics) {
+        float height = metrics.heightPixels / metrics.density;
+        iBUser.getLayoutParams().height = Integer.valueOf((int) Math.round(iBUser.getLayoutParams().height * (height / Method.heightEmulator)));
     }
 
 }

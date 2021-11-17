@@ -24,9 +24,7 @@ import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Usuario;
-import com.workpodapp.workpod.scale.Scale_Buttons;
 import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +56,10 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
     private float widht = 0;
 
     //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
     List<Scale_Image_View> lstIv;
 
     //ESCALADO
     DisplayMetrics metrics;
-    float width;
 
     //BBDD
     List<String> lstAmigos;
@@ -112,11 +107,11 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         lLShareFriend = view.findViewById(R.id.LLShareFriend);
         tVInvitaAmigo = view.findViewById(R.id.TVInvitaAmigo);
         tVTituloInvitaAmigo = view.findViewById(R.id.TVTituloInvitaAmigo);
-        tVTituloMinGratisDisponibles=view.findViewById(R.id.TVTituloMinGratisDisponibles);
+        tVTituloMinGratisDisponibles = view.findViewById(R.id.TVTituloMinGratisDisponibles);
         tVMinGratisDisponibles = view.findViewById(R.id.TVMinGratisDisponibles);
-        tVMinGratisTotales=view.findViewById(R.id.TVMinGratisTotales);
-        tVMinGratisGastados=view.findViewById(R.id.TVMinGratisGastados);
-        tVTituloMinGratisTotales=view.findViewById(R.id.TVTituloMinGratisTotales);
+        tVMinGratisTotales = view.findViewById(R.id.TVMinGratisTotales);
+        tVMinGratisGastados = view.findViewById(R.id.TVMinGratisGastados);
+        tVTituloMinGratisTotales = view.findViewById(R.id.TVTituloMinGratisTotales);
         iVInvitaAmigo = view.findViewById(R.id.IVInvitaAmigo);
         iVFlecha_Amigos_Unidos = view.findViewById(R.id.IVFlecha_Amigos_Unidos);
         iVFlecha_Minutos_Gratis = view.findViewById(R.id.IVFlecha_Minutos_Gratis);
@@ -132,7 +127,6 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
         //RELLENAMOS LISTA DE AMIGOS UNIDOS POR EL USUARIO (PROVISIONAL)
@@ -145,7 +139,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         usuario = InfoApp.USER;
 
         //INICIALIZAMOS EL Nº DE AMIGOS UNIDOS A LA APP POR EL USUARIO
-        nFriends=usuario.getnAmigos();
+        nFriends = usuario.getnAmigos();
 
         return view;
     }
@@ -190,32 +184,27 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
-        this.lstIv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnShareFriendCode, "wrap_content", "bold", 20, 23, 23));
-        lstBtn.add(new Scale_Buttons(btnJoinFriends, "wrap_content", "bold", 21, 23, 23));
-        lstBtn.add(new Scale_Buttons(btnFreeMin, "wrap_content", "bold", 21, 23, 23));
+        lstView.add((T) btnShareFriendCode);
+        lstView.add((T) btnJoinFriends);
+        lstView.add((T) btnFreeMin);
 
-        lstTv.add(new Scale_TextView(tVTituloInvitaAmigo, "wrap_content", "bold", 35, 35, 35));
-        lstTv.add(new Scale_TextView(tVTituloMinGratisTotales, "wrap_content", "bold", 18, 20, 20));
-        lstTv.add(new Scale_TextView(tVTituloMinGratisDisponibles, "wrap_content", "bold", 18, 20, 20));
-        lstTv.add(new Scale_TextView(tVMinGratisGastados, "wrap_content", "bold", 18, 20, 20));
-        lstTv.add(new Scale_TextView(tVMinGratisDisponibles, "wrap_content", "bold", 65, 65, 65));
-        lstTv.add(new Scale_TextView(tVMinGratisTotales, "wrap_content", "bold", 65, 65, 65));
-        lstTv.add(new Scale_TextView(tVInvitaAmigo, "n", "bold", 15, 17, 18, 280, 80,
-                420, 150, 650, 200));
+        lstView.add((T) tVTituloInvitaAmigo);
+        lstView.add((T) tVTituloMinGratisTotales);
+        lstView.add((T) tVTituloMinGratisDisponibles);
+        lstView.add((T) tVMinGratisGastados);
+        lstView.add((T) tVMinGratisDisponibles);
+        lstView.add((T) tVMinGratisTotales);
+        lstView.add((T) tVInvitaAmigo);
 
-        lstIv.add(new Scale_Image_View(iVInvitaAmigo, 100, 100, 180, 150, 280, 250, "", ""));
-        lstIv.add(new Scale_Image_View(iVFlecha_Amigos_Unidos, 40, 42, 70, 72, 88, 90, "", ""));
+        lstView.add((T) iVInvitaAmigo);
+        lstView.add((T) iVFlecha_Amigos_Unidos);
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
-        Method.scaleIv(metrics, lstIv);
+        Method.scaleViews(metrics, lstView);
     }
 
     /**
@@ -227,7 +216,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola\n ¡Te regalo 15 minutos gratis en la sesión de Workpod que quieras " +
                 "canjearlos! Para conseguirlo: descárgate la app de Workpod, introduce una tarjeta de pago y canjea mi código:" +
-                usuario.getCodamigo()+"\nConsulta condiciones en:\n https://dev.workpod.app/web/invita_amigo.html");
+                usuario.getCodamigo() + "\nConsulta condiciones en:\n https://dev.workpod.app/web/invita_amigo.html");
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -245,9 +234,9 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
         tVMinGratisDisponibles.setText(String.valueOf(usuario.getMinGratis()) + " min");
         //CALCULAMOS LOS MIN TOTALES OBTENIDOS, NO ES NECESARIO CREAR UN CAMPO EN LA BD, SI ESTÁ ESTANDARIZADO A 20 MIN POR AMIGO CON MULTIPLICAR
         //EL Nº DE AMIGOS X 20 YA ESTARÍA
-        tVMinGratisTotales.setText(String.valueOf(nFriends*20)+ " min");
+        tVMinGratisTotales.setText(String.valueOf(nFriends * 20) + " min");
         //CALCULAMOS LA DIFERENCIA ENTRE LOS MINUTOS OBTENIDOS Y LOS MINUTS QUE AL USUARIO LE QUEDAN DISPONIBLES
-        tVMinGratisGastados.setText("Has gastado "+String.valueOf((nFriends*20 - usuario.getMinGratis()))+ " min");
+        tVMinGratisGastados.setText("Has gastado " + String.valueOf((nFriends * 20 - usuario.getMinGratis())) + " min");
         iVFlecha_Minutos_Gratis.setImageResource(R.drawable.fill_icon_desvanecer_minutos_obtenidos);
         minutosGratis = true;
     }
@@ -277,7 +266,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
             ImageView iVAmigo = new ImageView(getActivity());
             TextView tVAmigo = new TextView(getActivity());
             //ESCALAMOS LOS ICONOS EN FUNCIÓN DEL TAMAÑO Y LA DENSIDAD MÉTRICA DE LA PANTALLA
-            width = metrics.widthPixels / metrics.density;
+           float width = metrics.widthPixels / metrics.density;
             if (width > (1200 / metrics.density)) {
                 iVAmigo.setLayoutParams(new LinearLayout.LayoutParams(420, 420));
                 tVAmigo.setTextSize(20);
@@ -293,7 +282,7 @@ public class Fragment_invita_Amigo extends Fragment implements View.OnClickListe
             }
             iVAmigo.setImageResource(R.drawable.fill_icon_user_orange);
             tVAmigo.setGravity(Gravity.CENTER);
-            tVAmigo.setText("Tienes "+nFriends+" amigos en Workpod");
+            tVAmigo.setText("Tienes " + nFriends + " amigos en Workpod");
             tVAmigo.setTextColor(Color.parseColor("#C5A475"));
             tVAmigo.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

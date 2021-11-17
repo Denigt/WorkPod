@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.workpodapp.workpod.R;
-import com.workpodapp.workpod.ValoracionWorkpod;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
 import com.workpodapp.workpod.basic.Database;
@@ -122,7 +121,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         tV_MGM_Minutos = view.findViewById(R.id.TV_MGM_Minutos);
         tV_MGM_Minutos_Estandar = view.findViewById(R.id.TV_MGM_Minutos_Estandar);
         tV_MGM_Minutos_Titulo = view.findViewById(R.id.TV_MGM_Minutos_Titulo);
-        tV_MGM=view.findViewById(R.id.TV_MGM);
+        tV_MGM = view.findViewById(R.id.TV_MGM);
 
         iV_Btn_Siguiente = view.findViewById(R.id.IV_Btn_Siguiente);
         iV_Btn_Volver = view.findViewById(R.id.IV_Btn_Volver);
@@ -156,7 +155,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
         //Inicializamos TV_MGM con el MGM del usuario
-        tV_MGM.setText("MGM: "+InfoApp.USER.getCodamigo());
+        tV_MGM.setText("MGM: " + InfoApp.USER.getCodamigo());
 
         escalarElementos(metrics);
 
@@ -198,7 +197,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             }
 
             if (lstAmigos.isEmpty()) {
-                iV_Btn_Siguiente.setVisibility(View.GONE);
+                iV_Btn_Siguiente.setVisibility(View.INVISIBLE);
             } else {
                 //Inicializamos los minutos y los amigos conseguidos
                 tV_MGM_Minutos.setText(Integer.toString(lstAmigos.size() * lstAmigos.get(0).getCampana().getDescuento()) + " minutos");
@@ -344,56 +343,62 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
-        this.lstIv = new ArrayList<>();
-        String n = InfoApp.INSTALLATION;
+        List<T> lstView = new ArrayList<>();
+        lstTv=new ArrayList<>();
+        lstBtn=new ArrayList<>();
+        lstIv=new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnCancelarDescuento, "wrap_content", "bold", 13, 16, 17));
-        lstBtn.add(new Scale_Buttons(btnGuardarDescuento, "wrap_content", "bold", 13, 16, 17));
-        lstBtn.add(new Scale_Buttons(btnShareFriendCodeDescuento, "wrap_content", "bold", 14, 17, 20));
-        lstBtn.add(new Scale_Buttons(btnShareMoreFriendCode, "wrap_content", "bold", 14, 16, 20));
+        lstView.add((T) btnCancelarDescuento);
+        lstView.add((T) btnGuardarDescuento);
+        lstView.add((T) btnShareFriendCodeDescuento);
+        lstView.add((T) btnShareMoreFriendCode);
 
-        lstTv.add(new Scale_TextView(tV_Titulo_Canjea_Codigos, "wrap_content", "bold", 18, 21, 26));
-        lstTv.add(new Scale_TextView(tV_Descuentos, "match_parent", "bold", 16, 18, 22));
-        lstTv.add(new Scale_TextView(tV_No_Descuentos, "match_parent", "bold", 22, 18, 22));
-        lstTv.add(new Scale_TextView(tV_MGM_Minutos_Estandar, "wrap_content", "bold", 13, 16, 18));
-        lstTv.add(new Scale_TextView(tV_MGM_Amigos, "wrap_content", "bold", 14, 19, 22));
-        lstTv.add(new Scale_TextView(tV_MGM_Amigos_Titulo, "wrap_content", "bold", 14, 19, 22));
-        lstTv.add(new Scale_TextView(tV_MGM_Minutos, "wrap_content", "bold", 14, 19, 22));
-        lstTv.add(new Scale_TextView(tV_MGM_Minutos_Titulo, "wrap_content", "bold", 14, 19, 22));
-        lstTv.add(new Scale_TextView(tV_MGM, "wrap_content", "bold", 15, 15, 15));
+        lstView.add((T) tV_Titulo_Canjea_Codigos);
+        lstView.add((T) tV_Descuentos);
+        lstView.add((T) tV_No_Descuentos);
+        lstView.add((T) tV_MGM_Minutos_Estandar);
+        lstView.add((T) tV_MGM_Amigos);
+        lstView.add((T) tV_MGM_Amigos_Titulo);
+        lstView.add((T) tV_MGM_Minutos);
+        lstView.add((T) tV_MGM_Minutos_Titulo);
+        lstView.add((T) tV_MGM);
 
-        lstIv.add(new Scale_Image_View(iV_Btn_Volver, 50, 50, 100, 100, 130, 130, "", ""));
-        lstIv.add(new Scale_Image_View(iV_Btn_Siguiente, 50, 50, 80, 80, 120, 120, "", ""));
-        lstIv.add(new Scale_Image_View(iV_Give_Five, 150, 100, 220, 150, 350, 200, "", ""));
+        lstView.add((T)iV_Btn_Volver);
+        lstView.add((T)iV_Btn_Siguiente);
+        lstView.add((T)iV_Give_Five);
+        lstView.add((T)eTCanjearCodigos);
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
-        Method.scaleIv(metrics, lstIv);
+        Method.scaleViews(metrics, lstView);
 
         escaladoParticular(metrics, lstBtn);
     }
 
     private void escaladoParticular(DisplayMetrics metrics, List<Scale_Buttons> lstBtn) {
         if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
+            btnShareFriendCodeDescuento.setTextSize(17);
+            btnShareMoreFriendCode.setTextSize(16);
             btnCancelarDescuento.setPadding(60, 0, 60, 0);
             btnGuardarDescuento.setPadding(60, 0, 60, 0);
             tV_Titulo_Canjea_Codigos.setText("Canjea tus códigos de descuento");
         } else if (width <= (550 / metrics.density)) {
+            btnShareFriendCodeDescuento.setTextSize(14);
+            btnShareMoreFriendCode.setTextSize(14);
             btnCancelarDescuento.setPadding(40, 0, 40, 0);
             btnGuardarDescuento.setPadding(40, 0, 40, 0);
             btnShareFriendCodeDescuento.setPadding(0, 0, 0, 0);
-            eTCanjearCodigos.setTextSize(14);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(20, 10, 10, 10);
             lLShareFriendDescuento.setLayoutParams(params);
             tV_Titulo_Canjea_Codigos.setText("Canjea tus códigos de descuento");
             btnShareMoreFriendCode.getLayoutParams().height = 50;
             btnShareFriendCodeDescuento.getLayoutParams().height = 50;
+        }
+        if (iV_Give_Five.getLayoutParams().height >= 0) {
+            float height = metrics.heightPixels / metrics.density;
+            iV_Give_Five.getLayoutParams().height = Integer.valueOf((int) Math.round(iV_Give_Five.getLayoutParams().height * (height / Method.heightEmulator)));
         }
     }
 

@@ -41,6 +41,7 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/IBUser"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="20dp"
@@ -62,7 +63,7 @@
                 android:id="@+id/txtNombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="20dp"
 
                 android:text="Nombre y apellido"
                 android:textColor="@color/blue"
@@ -78,7 +79,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginVertical="20dp">
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="20dp">
         <FrameLayout
             android:id="@+id/lytShowInfo"
             android:layout_width="0dp"
@@ -89,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mis datos"
+                android:textSize="15dp"
                 android:background="?selectableItemBackground"/>
         </FrameLayout>
         <FrameLayout
@@ -101,6 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Facturación"
+                android:textSize="15dp"
                 android:background="?selectableItemBackground"/>
         </FrameLayout>
     </LinearLayout>
@@ -167,7 +171,7 @@
                     android:textColor="@color/textgray"/>
 
                 <TextView
-                    android:id="@+id/tVEmail"
+                    android:id="@+id/tVTituloEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"

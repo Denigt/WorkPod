@@ -46,7 +46,7 @@
             <ImageView
                 android:id="@+id/IV_Give_Five"
                 android:layout_width="130dp"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/fill_icon_give_five" />
             <TextView
@@ -79,7 +79,7 @@
 
                 <Button
                     android:id="@+id/BtnShareFriendCodeDescuento"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@color/transparente"
@@ -157,7 +157,7 @@
                 android:gravity="center_horizontal"
                 android:text="Has conseguido "
                 android:textColor="@color/blue"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -170,7 +170,7 @@
                 android:gravity="center_horizontal"
                 android:text="45 minutos"
                 android:textColor="@color/darkblue"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -213,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:text="invitando a "
                         android:textColor="@color/blue"
-                        android:textSize="25dp"
+                        android:textSize="20dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -223,7 +223,7 @@
                         android:layout_marginRight="20dp"
                         android:text="3 amigos"
                         android:textColor="@color/darkblue"
-                        android:textSize="25dp"
+                        android:textSize="20dp"
                         android:textStyle="bold" />
                 </LinearLayout>
 

@@ -236,22 +236,19 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      *
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn=new ArrayList<>();
-        this.lstTv=new ArrayList<>();
+       List<T>lstView=new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnConectar,"Match_Parent","bold",11,11,15));
-        lstBtn.add(new Scale_Buttons(btnAcceder,"Match_Parent","bold",12,12,15));
-        lstBtn.add(new Scale_Buttons(btnRegistrar,"Match_Parent","bold",25,25,25));
+        lstView.add((T) btnConectar);
+        lstView.add((T) btnAcceder);
+        lstView.add((T) btnRegistrar);
+        lstView.add((T) tvTituloInitActivity);
 
-        lstTv.add(new Scale_TextView(tvTituloInitActivity,"Match_Parent","bold",29,29,29));
-
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 }

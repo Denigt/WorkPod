@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -145,213 +147,23 @@ public abstract class Method {
         return ret;
     }
 
-    /**
-     * Esclaremos los btns del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
-     * absolutos, sino los reales.
-     *
-     * @param metrics objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
-     */
-    public static void scaleBtns(DisplayMetrics metrics, List<Scale_Buttons> lstBtns) {
-        //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
-        //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
-        float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
-        float height = metrics.heightPixels / metrics.density; // alto absoluto en pixels
-
-        for (Scale_Buttons btn : lstBtns) {
-            //DEFINIMOS TAMAÑO FUENTE
-            if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
-                btn.getButton().setTextSize(btn.getSizeBig());
-                //DEFINIMOS ANCHO DEL BTN
-                if (btn.getWidth().trim().equalsIgnoreCase("MATCH_PARENT") && btn.getWidhtBig() == 0) {
-                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (btn.getWidth().trim().equalsIgnoreCase("WRAP_CONTENT") && btn.getWidhtBig() == 0) {
-                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    btn.getButton().getLayoutParams().width = btn.getWidhtBig();
-                }
-            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
-                btn.getButton().setTextSize(btn.getSizeMiddle());
-                //DEFINIMOS ANCHO DEL BTN
-                if (btn.getWidth().trim().equalsIgnoreCase("MATCH_PARENT") && btn.getWidhtMiddle() == 0) {
-                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (btn.getWidth().trim().equalsIgnoreCase("WRAP_CONTENT") && btn.getWidhtMiddle() == 0) {
-                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    btn.getButton().getLayoutParams().width = btn.getWidhtMiddle();
-                }
-            } else if (width <= (550 / metrics.density)) {
-                btn.getButton().setTextSize(btn.getSizeLittle());
-                //DEFINIMOS ANCHO DEL BTN
-                if (btn.getWidth().trim().equalsIgnoreCase("MATCH_PARENT") && btn.getWidhtLittle() == 0) {
-                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (btn.getWidth().trim().equalsIgnoreCase("WRAP_CONTENT") && btn.getWidhtLittle() == 0) {
-                    btn.getButton().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    btn.getButton().getLayoutParams().width = btn.getWidhtLittle();
-                }
-            }
-
-            //APLICAMOS EL ESTILO CORRESPONDIENTE
-            if (btn.getStyle().trim().equalsIgnoreCase("bold")) {
-                btn.getButton().setTypeface(null, Typeface.BOLD);
-            } else if (btn.getStyle().trim().equalsIgnoreCase("italic")) {
-                btn.getButton().setTypeface(null, Typeface.ITALIC);
-            } else if (btn.getStyle().trim().equalsIgnoreCase("normal")) {
-                btn.getButton().setTypeface(null, Typeface.NORMAL);
-            } else if (btn.getStyle().trim().equalsIgnoreCase("bold_italic")) {
-                btn.getButton().setTypeface(null, Typeface.BOLD_ITALIC);
-            }
-        }
-    }
-
-    /**
-     * escalaremos los tv del XML teniendo en cuenta la densidad de pixeles del móvil para que el widht y el height que se cojan no sean los
-     * absolutos, sino los reales.
-     *
-     * @param metrics objeto de la clase metrics, servirá para coger los parámetros del dispositivo en el que se encuentre la app.
-     */
-    public static void scaleTv(DisplayMetrics metrics, List<Scale_TextView> lstTv) {
-        //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
-        //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
-        float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
-        float height = metrics.heightPixels / metrics.density; // alto absoluto en pixels
-
-        for (Scale_TextView tv : lstTv) {
-            //DEFINIMOS TAMAÑO FUENTE
-            if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
-                tv.getTextView().setTextSize(tv.getSizeBig());
-                //DEFINIMOS ANCHO DEL TXT
-                if (tv.getWidht().trim().equalsIgnoreCase("MATCH_PARENT") && tv.getWidhtBig() == 0) {
-                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (tv.getWidht().trim().equalsIgnoreCase("WRAP_CONTENT") && tv.getWidhtBig() == 0) {
-                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else if (tv.getWidht().trim().equalsIgnoreCase("N")) {
-                    tv.getTextView().getLayoutParams().width = tv.getWidhtBig();
-                    tv.getTextView().getLayoutParams().height = tv.getHeightBig();
-                }
-            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
-                tv.getTextView().setTextSize(tv.getSizeMiddle());
-                //DEFINIMOS ANCHO DEL TXT
-                if (tv.getWidht().trim().equalsIgnoreCase("MATCH_PARENT") && tv.getWidhtMiddle() == 0) {
-                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (tv.getWidht().trim().equalsIgnoreCase("WRAP_CONTENT") && tv.getWidhtMiddle() == 0) {
-                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else if (tv.getWidht().trim().equalsIgnoreCase("N")) {
-                    tv.getTextView().getLayoutParams().width = tv.getWidhtMiddle();
-                    tv.getTextView().getLayoutParams().height = tv.getHeightMiddle();
-                }
-            } else if (width <= (550 / metrics.density)) {
-                tv.getTextView().setTextSize(tv.getSizeLittle());
-                //DEFINIMOS ANCHO DEL TXT
-                if (tv.getWidht().trim().equalsIgnoreCase("MATCH_PARENT") && tv.getWidhtLittle() == 0) {
-                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (tv.getWidht().trim().equalsIgnoreCase("WRAP_CONTENT") && tv.getWidhtLittle() == 0) {
-                    tv.getTextView().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else if (tv.getWidht().trim().equalsIgnoreCase("N")) {
-                    tv.getTextView().getLayoutParams().width = tv.getWidhtLittle();
-                    tv.getTextView().getLayoutParams().height = tv.getHeightLittle();
-                }
-            }
-
-            //APLICAMOS EL ESTILO CORRESPONDIENTE
-            if (tv.getStyle().trim().equalsIgnoreCase("bold")) {
-                tv.getTextView().setTypeface(null, Typeface.BOLD);
-            } else if (tv.getStyle().trim().equalsIgnoreCase("italic")) {
-                tv.getTextView().setTypeface(null, Typeface.ITALIC);
-            } else if (tv.getStyle().trim().equalsIgnoreCase("normal")) {
-                tv.getTextView().setTypeface(null, Typeface.NORMAL);
-            } else if (tv.getStyle().trim().equalsIgnoreCase("bold_italic")) {
-                tv.getTextView().setTypeface(null, Typeface.BOLD_ITALIC);
-            }
-        }
-
-    }
-
-    public static void scaleIv(DisplayMetrics metrics, List<Scale_Image_View> lstIv) {
-        //LA CLASE DISPLAYMETRICS NOS PERMITIRÁ COGER LOS PARÁMETROS FÍSICOS DE MÓVILES Y EMULADORES
-        //COGEMOS SU ANCHO Y ALTO ABSOLUTO Y LO TRANSFORMAMOS EN REAL
-        float width = metrics.widthPixels / metrics.density; // ancho absoluto en pixels
-        for (Scale_Image_View iV : lstIv) {
-            if ((width <= (1200 / metrics.density)) && (width > (750 / metrics.density))) {
-                //DEFINIMOS ANCHO DEL IV
-                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtBig() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getWidhtBig() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    iV.getiV().getLayoutParams().width = iV.getWidhtBig();
-                }
-                //DEFINIMOS ALTURA DEL IV
-                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightBig() == 0) {
-                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightBig() == 0) {
-                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    iV.getiV().getLayoutParams().height = iV.getHeightBig();
-                }
-
-            } else if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
-                //DEFINIMOS ANCHO DEL IV
-                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtMiddle() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getWidhtMiddle() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    iV.getiV().getLayoutParams().width = iV.getWidhtMiddle();
-                }
-                //DEFINIMOS ALTURA DEL IV
-
-                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightMiddle() == 0) {
-                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightMiddle() == 0) {
-                    iV.getiV().getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    iV.getiV().getLayoutParams().height = iV.getHeightMiddle();
-                }
-            } else if (width <= (550 / metrics.density)) {
-                //DEFINIMOS ANCHO DEL IV
-                if (iV.getWidhtString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getWidhtLittle() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getWidhtString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getWidhtLittle() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    iV.getiV().getLayoutParams().width = iV.getWidhtLittle();
-                }
-                //DEFINIMOS ALTURA DEL IV
-                if (iV.getHeightString().trim().equalsIgnoreCase("MATCH_PARENT") && iV.getHeightLittle() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                } else if (iV.getHeightString().trim().equalsIgnoreCase("WRAP_CONTENT") && iV.getHeightLittle() == 0) {
-                    iV.getiV().getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                } else {
-                    iV.getiV().getLayoutParams().height = iV.getHeightLittle();
-                }
-            }
-        }
-    }
-
-    public static void newScaleIv(DisplayMetrics metrics, List<ImageView> lstIv) {
+    public static<T extends View> void scaleViews(DisplayMetrics metrics, List<T> lstIv) {
         float width = metrics.widthPixels / metrics.density;
-        float height = metrics.heightPixels / metrics.density;
         double parseoWidth = width / widthEmulator;
-        double parseoHeight = height / heightEmulator;
-        for (ImageView iv : lstIv) {
+
+        for (T iv : lstIv) {
+            if (iv instanceof TextView){
+                TextView obj =(TextView) iv;
+                obj.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (obj.getTextSize() * parseoWidth));
+                if (obj.getLayoutParams().width >= 0) {
+                    obj.getLayoutParams().width = Integer.valueOf((int) Math.round(obj.getLayoutParams().width * parseoWidth));
+                }
+            }else if(iv instanceof Button){
+                Button obj =(Button) iv;
+                obj.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) (obj.getTextSize() * parseoWidth));
+            }
             if (iv.getLayoutParams().width >= 0) {
                 iv.getLayoutParams().width = Integer.valueOf((int) Math.round(iv.getLayoutParams().width * parseoWidth));
-            }
-            if (iv.getLayoutParams().height >= 0) {
-                iv.getLayoutParams().height = Integer.valueOf((int) Math.round(iv.getLayoutParams().height * parseoHeight));
-            }
-        }
-    }
-
-    public static void newScaleTv(DisplayMetrics metrics, List<TextView> lstTv) {
-        float width = metrics.widthPixels/ metrics.density;
-        float parseoWidth = (float) (width /widthEmulator);
-        for (TextView tv : lstTv) {
-            //IMPORTANTÍSIMO especificar que el tamaño lo estamos metiendo en píxeles y no en dp
-           tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,tv.getTextSize() * parseoWidth);
-            if (tv.getLayoutParams().width >= 0) {
-                tv.getLayoutParams().width = Integer.valueOf((int) Math.round(tv.getLayoutParams().width * parseoWidth));
             }
         }
     }

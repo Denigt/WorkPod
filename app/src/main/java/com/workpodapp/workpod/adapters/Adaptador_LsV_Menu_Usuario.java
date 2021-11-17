@@ -10,19 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.workpodapp.workpod.basic.Method;
-import com.workpodapp.workpod.data.Cupon;
 import com.workpodapp.workpod.otherclass.LsV_Menu_Usuario;
 import com.workpodapp.workpod.R;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Adaptador_LsV_Menu_Usuario extends BaseAdapter {
     Context context;
-    ArrayList<LsV_Menu_Usuario>aLstMenuUsuario=new ArrayList<>();
+    ArrayList<LsV_Menu_Usuario> aLstMenuUsuario = new ArrayList<>();
 
     //XML
     private TextView tVIcono;
@@ -30,11 +26,6 @@ public class Adaptador_LsV_Menu_Usuario extends BaseAdapter {
 
     //ESCALADO
     DisplayMetrics metrics;
-    float width;
-
-    //COLECCIONES
-    List<Scale_Image_View> lstIv;
-    List<Scale_TextView> lstTv;
 
     public Adaptador_LsV_Menu_Usuario() {
     }
@@ -42,7 +33,7 @@ public class Adaptador_LsV_Menu_Usuario extends BaseAdapter {
     public Adaptador_LsV_Menu_Usuario(Context context, ArrayList<LsV_Menu_Usuario> aLstMenuUsuario, DisplayMetrics metrics) {
         this.context = context;
         this.aLstMenuUsuario = aLstMenuUsuario;
-        this.metrics=metrics;
+        this.metrics = metrics;
     }
 
     @Override
@@ -62,16 +53,15 @@ public class Adaptador_LsV_Menu_Usuario extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
-        LayoutInflater inflater= LayoutInflater.from(context);
-        view=inflater.inflate(R.layout.item_lsv_menu_usuario,null);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        view = inflater.inflate(R.layout.item_lsv_menu_usuario, null);
 
-        tVIcono=(TextView)view.findViewById(R.id.iTV);
-        iVIcono=(ImageView)view.findViewById(R.id.iIV);
+        tVIcono = (TextView) view.findViewById(R.id.iTV);
+        iVIcono = (ImageView) view.findViewById(R.id.iIV);
         tVIcono.setText(aLstMenuUsuario.get(i).getTexto());
         iVIcono.setImageResource(aLstMenuUsuario.get(i).getIcono());
 
         //ESCALAMOS ELEMENTOS
-        width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
         return view;
@@ -94,17 +84,15 @@ public class Adaptador_LsV_Menu_Usuario extends BaseAdapter {
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstIv = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstIv.add(new Scale_Image_View(iVIcono, 50, 50, 80, 80, 120, 120, "", ""));
-        lstTv.add(new Scale_TextView(tVIcono, "match_parent", "normal", 20, 24, 27));
+        lstView.add((T) iVIcono);
+        lstView.add((T) tVIcono);
 
-        Method.scaleIv(metrics, lstIv);
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
 
 
     }

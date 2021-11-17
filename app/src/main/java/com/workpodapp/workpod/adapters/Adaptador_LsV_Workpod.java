@@ -19,7 +19,6 @@ import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,9 +37,6 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
     TextView txtUso;
     TextView txtLimpieza;
     private int idWorkpodUsuario;
-
-    //COLECCIONES
-    private List<Scale_TextView> lstTv;
 
     //CONSTRUCTOR POR DEFECTO
     public Adaptador_LsV_Workpod() {
@@ -171,17 +167,17 @@ public class Adaptador_LsV_Workpod extends BaseAdapter {
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
+        List<T>lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(txtEstado, "match_parent", "bold", 18, 18, 18));
-        lstTv.add(new Scale_TextView(txtLimpieza, "wrap_content", "bold", 15, 15, 16));
-        lstTv.add(new Scale_TextView(txtUso, "wrap_content", "bold", 15, 15, 16));
-        lstTv.add(new Scale_TextView(txtNombre, "match_parent", "bold", 35, 35, 40));
-        lstTv.add(new Scale_TextView(txtNumPersonas, "", "normal", 15, 15, 15));
-        Method.scaleTv(metrics, lstTv);
+        lstView.add((T)txtEstado);
+        lstView.add((T)txtLimpieza);
+        lstView.add((T)txtUso);
+        lstView.add((T)txtNombre);
+        lstView.add((T)txtNumPersonas);
+        Method.scaleViews(metrics, lstView);
     }
 
 }

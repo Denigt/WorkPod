@@ -16,9 +16,6 @@ import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_Validar_Usuario;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +32,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnUsuarioValidado;
 
     //ESCALADO
-    DisplayMetrics metrics;
-    float width;
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
-    List<Scale_Image_View> lstIv;
+    DisplayMetrics metrics;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,34 +51,35 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
-    }
-
-
-    private void escalarElementos(DisplayMetrics metrics) {
-        //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
-        this.lstIv = new ArrayList<>();
-
-        //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnStartOver, "wrap_content", "bold", 15, 15, 18));
-        lstBtn.add(new Scale_Buttons(btnUsuarioValidado, "wrap_content", "bold", 14, 15, 18));
-        lstBtn.add(new Scale_Buttons(btnVerifyResendEmail, "wrap_content", "bold", 15, 15, 18));
-        lstTv.add(new Scale_TextView(tV_Verify_Titulo, "match_parent", "bold", 20, 25, 30));
-        lstTv.add(new Scale_TextView(tV_Verify_Body, "match_parent", "", 16, 16, 23));
-        lstIv.add(new Scale_Image_View(iV_Btn_Aceptar, 180, 80, 270, 120, 350, 250, "", ""));
-        lstIv.add(new Scale_Image_View(iV_Mail, 750, 150, 420, 220, 620, 420, "", ""));
-
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
-        Method.scaleIv(metrics, lstIv);
 
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
         btnVerifyResendEmail.setOnClickListener(this);
         btnUsuarioValidado.setOnClickListener(this);
         btnStartOver.setOnClickListener(this);
+    }
+
+
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
+        //INICIALIZAMOS COLECCIONES
+        List<T> lstView = new ArrayList<>();
+
+        //LLENAMOS COLECCIONES
+        lstView.add((T) btnStartOver);
+        lstView.add((T) btnUsuarioValidado);
+        lstView.add((T) btnVerifyResendEmail);
+        lstView.add((T) tV_Verify_Titulo);
+        lstView.add((T) tV_Verify_Body);
+        lstView.add((T) iV_Btn_Aceptar);
+        lstView.add((T) iV_Mail);
+
+        Method.scaleViews(metrics, lstView);
+        escaladoParticular( metrics);
+    }
+
+    private void escaladoParticular(DisplayMetrics metrics) {
+        float height = metrics.heightPixels / metrics.density;
+        iV_Mail.getLayoutParams().height = Integer.valueOf((int) Math.round(iV_Mail.getLayoutParams().height * (height / Method.heightEmulator)));
     }
 
     @Override
@@ -107,21 +100,21 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private void verifyUser() {
         //NECESITAMOS VOLVER A VOLCAR EL USUARIO PARA QUE SE ACTUALICE QUE HA VALIDADO SU EMAIL
         Database<Usuario> consulta = new Database<>(Database.SELECTID, new Usuario(InfoApp.USER.getEmail(), InfoApp.USER.getPassword()));
-        consulta.postRun(()->{
-            InfoApp.USER=consulta.getDato();
+        consulta.postRun(() -> {
+            InfoApp.USER = consulta.getDato();
         });
-        consulta.postRunOnUI(this,()->{
-            if(!InfoApp.USER.getVerificar().equalsIgnoreCase("true")){
+        consulta.postRunOnUI(this, () -> {
+            if (!InfoApp.USER.getVerificar().equalsIgnoreCase("true")) {
                 Fragment_Dialog_Validar_Usuario fragment_Dialog_Validar_Usuario = new Fragment_Dialog_Validar_Usuario();
                 fragment_Dialog_Validar_Usuario.show(this.getSupportFragmentManager(), "DialogValidarUsuario");
-            }else{
+            } else {
                 Intent activity = new Intent(getApplicationContext(), WorkpodActivity.class);
                 finishAffinity();
                 startActivity(activity);
                 finish();
             }
         });
-       consulta.start();
+        consulta.start();
     }
 
     /**

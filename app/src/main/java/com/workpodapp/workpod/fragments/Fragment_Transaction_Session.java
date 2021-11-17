@@ -29,7 +29,6 @@ import com.workpodapp.workpod.basic.Shared;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Ubicacion;
 import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.scale.Scale_TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZonedDateTime;
@@ -81,9 +80,9 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private String[] alfabeto;
     private String[] matrizSignos;
     private List<Ubicacion> lstUbicacion = new ArrayList<>();
-    private List<Workpod>lstWorkpods=new ArrayList<>();
-    private boolean refrescardB=false;
-    public static boolean desactivarBtnReservar=false;
+    private List<Workpod> lstWorkpods = new ArrayList<>();
+    private boolean refrescardB = false;
+    public static boolean desactivarBtnReservar = false;
 
     // VARIABLES NECESARIAS PARA LA GEOLOCALIZACION
     private boolean havePermission = false;
@@ -97,9 +96,6 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      */
     private Shared<LatLng> posicion = new Shared<>();
     private boolean killHilos = false;
-
-    //COLECCIONES
-    List<Scale_TextView> lstTv;
 
     //CONSTRUCTOR
     public Fragment_Transaction_Session(Sesion sesion) {
@@ -151,10 +147,10 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         tVDialogOffers = (TextView) view.findViewById(R.id.TVDialogOffers);
         tVDialogPrice = (TextView) view.findViewById(R.id.TVDialogPrice);
         tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
-        tVTotalPagado=view.findViewById(R.id.TVTotalPagado);
+        tVTotalPagado = view.findViewById(R.id.TVTotalPagado);
         iVDialogUbication = (ImageView) view.findViewById(R.id.IVDialogUbication);
 
-        InfoFragment.actual=InfoFragment.TRANSACTION_SESSION;
+        InfoFragment.actual = InfoFragment.TRANSACTION_SESSION;
 
         // Iniciar el hilo para solicitar la ubicacion
         locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -204,25 +200,25 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private void onClickIVDialogUbication() {
         try {
             //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
-            desactivarBtnReservar=true;
+            desactivarBtnReservar = true;
             //REFRESCAMOS LOS WORKPODS
             Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
             dbUbicacion.postRun(() -> {
-                if (!dbUbicacion.getError().get()){
+                if (!dbUbicacion.getError().get()) {
                     lstUbicacion.removeAll(lstUbicacion);
                     lstUbicacion.addAll(dbUbicacion.getLstSelect());
                     //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
-                    refrescardB=true;
+                    refrescardB = true;
                 }
 
             });
             dbUbicacion.start();
             //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
-            while(!refrescardB){
+            while (!refrescardB) {
                 Thread.sleep(10);
             }
 
-            refrescardB=false;
+            refrescardB = false;
 
             //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
             if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
@@ -233,10 +229,10 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
             else {
                 //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
-                for (int i=0;i<lstUbicacion.size();i++) {
+                for (int i = 0; i < lstUbicacion.size(); i++) {
                     //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
                     if (lstUbicacion.get(i).getWorkpods().size() > 1) {
-                        lstWorkpods=lstUbicacion.get(i).getWorkpods();
+                        lstWorkpods = lstUbicacion.get(i).getWorkpods();
                         for (int j = 0; j < lstWorkpods.size(); j++) {
                             if (workpod.getId() == lstWorkpods.get(j).getId()) {
                                 workpod = lstWorkpods.get(j);
@@ -263,7 +259,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         } catch (NullPointerException e) {
             //CONTROLAMOS QUE SI USER.GETRESERVA() APUNTA A NULO, EL USUARIO PUEDA ABRIR EL WORKPOD QUE QUIERA CONSULTAR
             //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
-            desactivarBtnReservar=true;
+            desactivarBtnReservar = true;
             //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
             for (int i = 0; i < lstUbicacion.size(); i++) {
                 //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
@@ -293,6 +289,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             e.printStackTrace();
         }
     }
+
     /**
      * Método para calcular la diferencia entre 2 fechas.
      * La clase ZoneDateTime no posee el método getTime() el cual permite calcular los milisegundos entre dos fechas,
@@ -342,14 +339,14 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         //SI HAY OFERTAS
         if (!ofertas.equals(SIN_OFERTAS)) {
             precioFinal = precio - (precio * (Double.parseDouble(ofertas)) / 100);
-            tVDialogOffers.setText("Descuento de: "+ofertas + "€");
+            tVDialogOffers.setText("Descuento de: " + ofertas + "€");
             tVDialogPrice.setText(precio.toString() + "€");
-            tVTotalPagado.setText("Ha pagado un total de "+(precio-Double.parseDouble(ofertas))+"€");
+            tVTotalPagado.setText("Ha pagado un total de " + (precio - Double.parseDouble(ofertas)) + "€");
         } else {
             //SI NO HAY OFERTAS
             tVDialogPrice.setText(precio.toString() + "€");
             tVDialogOffers.setText(SIN_OFERTAS);
-            tVTotalPagado.setText("Ha pagado un total de "+(precio)+"€");
+            tVTotalPagado.setText("Ha pagado un total de " + (precio) + "€");
         }
     }
 
@@ -414,21 +411,21 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVDialogUbication, "match_parent", "bold", 20, 20, 20));
-        lstTv.add(new Scale_TextView(tVDialogDateHour, "match_parent", "bold", 20, 20, 20));
-        lstTv.add(new Scale_TextView(tVDialogSessionTime, "match_parent", "bold", 20, 20, 20));
-        lstTv.add(new Scale_TextView(tVDialogOffers, "match_parent", "bold", 20, 20, 20));
-        lstTv.add(new Scale_TextView(tVDialogPrice, "match_parent", "bold", 20, 20, 20));
+        lstView.add((T) tVDialogUbication);
+        lstView.add((T) tVDialogDateHour);
+        lstView.add((T) tVDialogSessionTime);
+        lstView.add((T) tVDialogOffers);
+        lstView.add((T) tVDialogPrice);
 
-        Method.scaleTv(metrics, lstTv);
+        Method.scaleViews(metrics, lstView);
     }
 
     // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION
@@ -464,7 +461,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
         @Override
         public void onProviderDisabled(@NonNull String provider) {
-            try{
+            try {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -472,7 +469,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                         Toast.makeText(getContext(), "Habilite el GPS", Toast.LENGTH_LONG).show();
                     }
                 });
-            }catch(NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }

@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Fragment_Dialog_Validar_Usuario  extends DialogFragment implements View.OnClickListener {
+public class Fragment_Dialog_Validar_Usuario extends DialogFragment implements View.OnClickListener {
 
     //XML
     private Button btnResendEmail;
@@ -77,10 +76,10 @@ public class Fragment_Dialog_Validar_Usuario  extends DialogFragment implements 
         builder.setView(view);
 
         //INSTANCIAMOS ELEMENTOS DEL XML
-        btnResendEmail=view.findViewById(R.id.BtnResendEmail);
-        iV_Btn_Cancelar=view.findViewById(R.id.IV_Btn_Cancelar);
-        tV_No_Validado_Usuario=view.findViewById(R.id.TV_No_Validado_Usuario);
-        tV_Instrucciones_Enviar_Email=view.findViewById(R.id.TV_Instrucciones_Enviar_Email);
+        btnResendEmail = view.findViewById(R.id.BtnResendEmail);
+        iV_Btn_Cancelar = view.findViewById(R.id.IV_Btn_Cancelar);
+        tV_No_Validado_Usuario = view.findViewById(R.id.TV_No_Validado_Usuario);
+        tV_Instrucciones_Enviar_Email = view.findViewById(R.id.TV_Instrucciones_Enviar_Email);
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
         btnResendEmail.setOnClickListener(this);
         iV_Btn_Cancelar.setOnClickListener(this);
@@ -104,7 +103,7 @@ public class Fragment_Dialog_Validar_Usuario  extends DialogFragment implements 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view=inflater.inflate(R.layout.fragment_dialog_validar_usuario, container, false);
+        View view = inflater.inflate(R.layout.fragment_dialog_validar_usuario, container, false);
         //Ubicación del layout en la interfaz gráfica
         Window window = getDialog().getWindow();
         window.setGravity(Gravity.CENTER);
@@ -114,29 +113,25 @@ public class Fragment_Dialog_Validar_Usuario  extends DialogFragment implements 
         return view;
     }
 
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
-        this.lstIv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnResendEmail, "wrap_content", "bold", 18, 18, 18));
-        lstTv.add(new Scale_TextView(tV_No_Validado_Usuario ,"match_parent", "bold", 30, 30, 30));
-        lstTv.add(new Scale_TextView(tV_Instrucciones_Enviar_Email, "match_parent", "", 20, 20, 20));
-        lstIv.add(new Scale_Image_View(iV_Btn_Cancelar, 0, 0, 0, 0, 0, 0, "wrap_content", "wrap_content"));
+        lstView.add((T) btnResendEmail);
+        lstView.add((T) tV_No_Validado_Usuario);
+        lstView.add((T) tV_Instrucciones_Enviar_Email);
+        lstView.add((T) iV_Btn_Cancelar);
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
-        Method.scaleIv(metrics, lstIv);
+        Method.scaleViews(metrics, lstView);
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.BtnResendEmail){
+        if (v.getId() == R.id.BtnResendEmail) {
             resendEmail();
-        }else if(v.getId()==R.id.IV_Btn_Cancelar){
-           dismiss();
+        } else if (v.getId() == R.id.IV_Btn_Cancelar) {
+            dismiss();
         }
     }
 
@@ -148,8 +143,8 @@ public class Fragment_Dialog_Validar_Usuario  extends DialogFragment implements 
         Database<Usuario> verificacion = new Database<>(Database.VERIFICACION, InfoApp.USER);
         verificacion.start();
         //ECO DE CORREO ENVIADO
-        Toast.makeText(getActivity(),"Correo verificación vuelto a enviar",Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Correo verificación vuelto a enviar", Toast.LENGTH_LONG).show();
         //cerrar el dialog
-          dismiss();
+        dismiss();
     }
 }

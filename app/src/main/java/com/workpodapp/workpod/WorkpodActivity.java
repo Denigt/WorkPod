@@ -152,6 +152,8 @@ public class WorkpodActivity extends FragmentActivity {
             consultaSesion.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }catch(NullPointerException e){
+            e.printStackTrace();
         }
     }
 

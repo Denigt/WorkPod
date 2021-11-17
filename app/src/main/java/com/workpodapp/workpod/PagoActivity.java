@@ -3,16 +3,12 @@ package com.workpodapp.workpod;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
 import com.workpodapp.workpod.basic.Database;
@@ -23,8 +19,6 @@ import com.workpodapp.workpod.data.Reserva;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.fragments.Fragment_sesion;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -38,13 +32,15 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtPrecio;
     private TextView txtTotal;
     private TextView txtDescuento;
+    private TextView txtTVFinal;
+    private TextView txtTVDesglose;
+    private TextView txtTVTotal;
+    private TextView txtTVDescuento;
     private Button btnPagar;
     private Button btnVolver;
     private ListView lsvCupones;
 
     // VARIABLES PARA ESCALADO
-    private List<Scale_Buttons>lstBtn;
-    private List<Scale_TextView>lstTv;
     DisplayMetrics metrics;
     float width;
 
@@ -60,19 +56,19 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         this.reserva.set(InfoApp.USER.getReserva());
 
         Database<Cupon> consulta = new Database<Cupon>(Database.SELECTUSER, new Cupon());
-        consulta.postRun(()->{
+        consulta.postRun(() -> {
             if (consulta.getError().code > -1) {
                 lstCupones.addAll(consulta.getLstSelect());
             }
         });
         consulta.postRunOnUI(this, () -> {
-            if (consulta.getError().code > -1 && lsvCupones != null){
+            if (consulta.getError().code > -1 && lsvCupones != null) {
                 adDescuentos = new Adaptador_Lsv_Descuentos(this, getSupportFragmentManager(), lstCupones, true, metrics);
 
                 adDescuentos.setOnBtnClick(() -> {
                     Cupon cupon = adDescuentos.getCupon();
 
-                    double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+                    double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada()) / 60.) * sesion.getWorkpod().getPrecio(), 2);
                     sesion.setPrecio(importe);
                     if (cupon == null)
                         sesion.setDescuento(0);
@@ -97,15 +93,20 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         // CALCULAR DATOS A MOSTRAR EN LA PANTALLA
         reserva.setEstado("FINALIZADA");
         sesion.setSalida(ZonedDateTime.now());
-        double precio = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+        double precio = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada()) / 60.) * sesion.getWorkpod().getPrecio(), 2);
         sesion.setPrecio(precio);
-        sesion.setTiempo(Method.subsDate(sesion.getSalida(), sesion.getEntrada())/3600.);
+        sesion.setTiempo(Method.subsDate(sesion.getSalida(), sesion.getEntrada()) / 3600.);
         int[] tiempo = new int[3];
-        tiempo [0] = (int)sesion.getTiempo(); // HORAS
-        tiempo [1] = (int)((sesion.getTiempo() - tiempo[0]) * 60); // MINUTOS
-        tiempo [2] = (int)((sesion.getTiempo() - (tiempo[0] + (tiempo[1]/60.)))*3600); // SEGUNDOS
+        tiempo[0] = (int) sesion.getTiempo(); // HORAS
+        tiempo[1] = (int) ((sesion.getTiempo() - tiempo[0]) * 60); // MINUTOS
+        tiempo[2] = (int) ((sesion.getTiempo() - (tiempo[0] + (tiempo[1] / 60.))) * 3600); // SEGUNDOS
 
         // INSTANCIAMOS ELEMENTOS DEL XML
+        txtTVDescuento=findViewById(R.id.TVDescuento);
+        txtTVDesglose=findViewById(R.id.TVDesglose);
+        txtTVFinal=findViewById(R.id.TVFinal);
+        txtTVTotal=findViewById(R.id.TVTotal);
+
         txtCabina = findViewById(R.id.TVCabina);
         txtCabina.setText(sesion.getWorkpod().getNombre());
 
@@ -132,17 +133,15 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         btnPagar.setOnClickListener(this);
 
         // ESCALAMOS ELEMENTOS
-        metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        width = metrics.widthPixels / metrics.density;
-        escalarElementos(metrics);
+        escalarElementos();
+
         //SI LO PONES ANTES, METRICS APUNTA A NULO
         adDescuentos = new Adaptador_Lsv_Descuentos(this, getSupportFragmentManager(), lstCupones, true, metrics);
 
         adDescuentos.setOnBtnClick(() -> {
             Cupon cupon = adDescuentos.getCupon();
 
-            double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada())/60.) * sesion.getWorkpod().getPrecio(), 2);
+            double importe = Method.round((Method.subsDate(sesion.getSalida(), sesion.getEntrada()) / 60.) * sesion.getWorkpod().getPrecio(), 2);
             sesion.setPrecio(importe);
             sesion.setDescuento(sesion.calculaDescuento(cupon.getCampana(), sesion.getWorkpod()));
 
@@ -166,12 +165,12 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
      * Al darle al btn Si, nos vamos a la parte del cuestionario.
      */
     private void onClickBtnPagar() {
-        try{
+        try {
             //PARAMOS EL HILO
             Fragment_sesion.cerrarWorkpod = true;
 
             Database<Reserva> updateReserva = new Database<>(Database.UPDATE, reserva);
-            updateReserva.postRun( () -> {
+            updateReserva.postRun(() -> {
                 if (updateReserva.getError().code > -1) {
                     // SI NO HA HABIDO ERRORES ACTUALIZAR LA RESERVA EN LA APP
                     InfoApp.USER.getReserva().set(reserva);
@@ -184,9 +183,9 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                     Database<Sesion> updateSesion = new Database<>(Database.UPDATE, sesion);
                     Database<Cupon> updateCupon = new Database<>(Database.UPDATE, adDescuentos.getCupon());
                     updateSesion.postRunOnUI(updateReserva.getActivity(), () -> {
-                        if (updateSesion.getError().code > -1){
+                        if (updateSesion.getError().code > -1) {
                             InfoApp.SESION = sesion;
-                            WorkpodActivity.boolSession=false;
+                            WorkpodActivity.boolSession = false;
 
                             Intent activity = new Intent(updateSesion.getActivity(), ValoracionWorkpod.class);
                             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -199,13 +198,14 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
             updateReserva.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     //MÉTODOS
+
     /**
      * Cerramos el fragment dialog al pulsar el btn No.
      */
@@ -228,14 +228,25 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos() {
+        metrics = new DisplayMetrics();
+        //INICIALIZAMOS EL OBJETO DISPLAYMETRICS CON LOS PARÁMETROS DE NUESTRO DISPOSITIVO
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
-
+        List<T> lstViews = new ArrayList<>();
+        lstViews.add((T) txtCabina);
+        lstViews.add((T) txtDescuento);
+        lstViews.add((T) txtPrecio);
+        lstViews.add((T) txtTiempo);
+        lstViews.add((T) txtTotal);
+        lstViews.add((T) btnPagar);
+        lstViews.add((T) btnVolver);
+        lstViews.add((T) txtTVTotal);
+        lstViews.add((T) txtTVFinal);
+        lstViews.add((T) txtTVDesglose);
+        lstViews.add((T) txtTVDescuento);
         //LLENAMOS COLECCIONES
+        Method.scaleViews(metrics, lstViews);
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
     }
 }

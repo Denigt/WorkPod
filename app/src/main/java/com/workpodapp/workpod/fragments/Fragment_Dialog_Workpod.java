@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.workpodapp.workpod.R;
-import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
@@ -415,47 +414,41 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
      *
      * @param metrics
      */
-    private void escalarElementos(DisplayMetrics metrics) {
+    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        this.lstBtn = new ArrayList<>();
-        this.lstTv = new ArrayList<>();
-        this.lstIv = new ArrayList<>();
+        List<T> lstView = new ArrayList<>();
+
 
         //LLENAMOS COLECCIONES
-        lstBtn.add(new Scale_Buttons(btnReservarWorkpod, "wrap_content", "normal", 24, 24, 24));
-        lstBtn.add(new Scale_Buttons(btnAbrirAhora, "", "normal", 18, 18, 20));
+        lstView.add((T) btnReservarWorkpod);
+        lstView.add((T) btnAbrirAhora);
 
-        lstTv.add(new Scale_TextView(tVNombreWorkpod, "wrap_content", "bold", 40, 40, 55));
-        lstTv.add(new Scale_TextView(tVPrecio, "wrap_content", "bold", 18, 18, 22));
-        lstTv.add(new Scale_TextView(tVDireccion, "wrap_content", "normal", 20, 20, 20));
-        lstTv.add(new Scale_TextView(tVDescripcionWorkpod, "wrap_content", "normal", 15, 15, 15));
-        lstTv.add(new Scale_TextView(tVIlumincion, "wrap_content", "bold", 15, 16, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpieza, "wrap_content", "bold", 15, 15, 17));
-        lstTv.add(new Scale_TextView(tVUltUsoDato, "wrap_content", "normal", 15, 15, 17));
-        lstTv.add(new Scale_TextView(tVUltLimpiezaDato, "100", "normal", 15, 15, 17));
-        lstTv.add(new Scale_TextView(tVUltUso, "wrap_content", "bold", 15, 15, 17));
-        lstTv.add(new Scale_TextView(tVComoLlegar, "wrap_content", "bold", 15, 15, 18));
-        lstTv.add(new Scale_TextView(tVCapacidad, "n", "bold", 20, 25, 25, 75, 50,
-                110, 65, 150, 100));
+        lstView.add((T) tVNombreWorkpod);
+        lstView.add((T) tVPrecio);
+        lstView.add((T) tVDireccion);
+        lstView.add((T) tVDescripcionWorkpod);
+        lstView.add((T) tVIlumincion);
+        lstView.add((T) tVUltLimpieza);
+        lstView.add((T) tVUltUsoDato);
+        lstView.add((T) tVUltLimpiezaDato);
+        lstView.add((T) tVUltUso);
+        lstView.add((T) tVComoLlegar);
+        lstView.add((T) tVCapacidad);
 
-        lstIv.add(new Scale_Image_View(iVFlechas_Informacion_Desripcion, 40, 42, 70, 72, 88, 90, "", ""));
-        lstIv.add(new Scale_Image_View(iVFlechas_Descripcion_Informacion, 40, 42, 70, 72, 88, 90, "", ""));
-        lstIv.add(new Scale_Image_View(iVUltLimpieza, 45, 45, 60, 60, 85, 85, "", ""));
-        lstIv.add(new Scale_Image_View(iVUltUso, 45, 45, 60, 60, 85, 85, "", ""));
-        lstIv.add(new Scale_Image_View(iVIluminacion, 45, 45, 60, 60, 85, 85, "", ""));
-        lstIv.add(new Scale_Image_View(iVIluminacion, 45, 45, 60, 60, 85, 85, "", ""));
-        lstIv.add(new Scale_Image_View(iV_Icon_Capacidad, 70, 70, 100, 0, 150, 0, "", "match_parent"));
+        lstView.add((T) iVFlechas_Informacion_Desripcion);
+        lstView.add((T) iVFlechas_Descripcion_Informacion);
+        lstView.add((T) iVUltLimpieza);
+        lstView.add((T) iVUltUso);
+        lstView.add((T) iVIluminacion);
+        lstView.add((T) iV_Icon_Capacidad);
 
 
-        Method.scaleBtns(metrics, lstBtn);
-        Method.scaleTv(metrics, lstTv);
-        Method.scaleIv(metrics, lstIv);
+        Method.scaleViews(metrics, lstView);
+        //escaladoParticular(metrics, 0);
 
-        escaladoParticular(metrics, 0);
-
-        if (width <= 320) {
+     /*   if (width <= 320) {
             lLInfoWorkpod.getLayoutParams().width = 390;
-        }
+        }*/
     }
 
     /**
@@ -923,7 +916,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                 for (Sesion session : consultaSesion.getLstSelect()) {
                     /*if (sesion==null || session.getEntrada().compareTo(sesion.getEntrada()) > 0) POR SI DESORDENAN LA BD
                     si alguien coge los datos, los exporta y lo guarda en otra bd ahi si q es susceptible de q se desordene*/
-                        sesion = session;
+                    sesion = session;
                 }
                 InfoApp.SESION = sesion;
             });

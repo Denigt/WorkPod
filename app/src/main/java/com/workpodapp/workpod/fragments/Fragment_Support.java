@@ -6,9 +6,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.StrictMode;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,8 +125,6 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
     }
 
 
-
-
     /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
@@ -143,28 +138,35 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private void escalarElementos() {
+    private <T extends View> void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        List<ImageView> lstIV = new ArrayList<>();
-        lstIV.add(iVCall);
-        lstIV.add(iVFAQ);
-        lstIV.add(iVMail);
-        lstIV.add(iVTyC);
+        List<T> lstViews = new ArrayList<>();
+        lstViews.add((T) iVCall);
+        lstViews.add((T) tVCall);
+        lstViews.add((T) iVFAQ);
+        lstViews.add((T) iVMail);
+        lstViews.add((T) iVTyC);
 
-        List<TextView> lstTV = new ArrayList<>();
-        lstTV.add(tVCall);
-        lstTV.add(tVFAQ);
-        lstTV.add(tVMail);
-        lstTV.add(tVTituloConsultas);
-        lstTV.add(tVTituloContactos);
-        lstTV.add(tVTyC);
+        lstViews.add((T) tVFAQ);
+        lstViews.add((T) tVMail);
+        lstViews.add((T) tVTituloConsultas);
+        lstViews.add((T) tVTituloContactos);
+        lstViews.add((T) tVTyC);
 
-        Method.scaleTv(metrics, lstTv);
-        Method.newScaleIv(metrics,lstIV);
-        Method.newScaleTv(metrics,lstTV);
+        Method.scaleViews(metrics, lstViews);
+        escaladoParticular(metrics);
+    }
+
+    private void escaladoParticular(DisplayMetrics metrics) {
+        float height = metrics.heightPixels / metrics.density;
+        iVCall.getLayoutParams().height = Integer.valueOf((int) Math.round(iVCall.getLayoutParams().height * (height / Method.heightEmulator)));
+        iVFAQ.getLayoutParams().height = Integer.valueOf((int) Math.round(iVFAQ.getLayoutParams().height * (height / Method.heightEmulator)));
+        iVMail.getLayoutParams().height = Integer.valueOf((int) Math.round(iVMail.getLayoutParams().height * (height / Method.heightEmulator)));
+        iVTyC.getLayoutParams().height = Integer.valueOf((int) Math.round( iVTyC.getLayoutParams().height * (height / Method.heightEmulator)));
+
     }
 
     @Override
@@ -177,7 +179,7 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.LLTyC) {
             onClickLLTyC();
         } else if (v.getId() == R.id.LLFAQ) {
-            float width =metrics.widthPixels;
+            float width = metrics.widthPixels;
 
             Toast.makeText(getActivity(), String.valueOf(width), Toast.LENGTH_LONG).show();
         } else if (v.getId() == R.id.LLMail) {

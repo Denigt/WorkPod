@@ -35,10 +35,11 @@
             android:textColor="@color/white"/>
     </LinearLayout>
     <TextView
+        android:id="@+id/TVDesarrolladores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
-        android:text="Workpod 2021 Juan Vicente Sánchez, Raúl Parra Ruiz"
+        android:text="Workpod 2021 Juan Vicente Sánchez Reyes, Raúl Parra Ruiz"
         android:textColor="@color/white"/>
 
 </LinearLayout>
