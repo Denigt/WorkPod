@@ -182,7 +182,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         mMap.setOnMapClickListener(this);
         // Iniciar el hilo para solicitar la ubicacion
         try {
-            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
+            locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, new UbicacionListener());
         } catch (SecurityException e) {
         }
 

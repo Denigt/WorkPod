@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.10.1+Raúl] -2021-11-14
+### Fixed
+ - El mapa se carga inicialmente sin necesidad de que el usuario se desplace
+
 ##[3.10.0+Raúl] -2021-11-14
 ### Added
  - Activity para añadir direcciones de facturación
