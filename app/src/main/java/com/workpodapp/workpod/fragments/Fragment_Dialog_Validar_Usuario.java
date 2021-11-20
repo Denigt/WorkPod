@@ -43,11 +43,6 @@ public class Fragment_Dialog_Validar_Usuario extends DialogFragment implements V
     private TextView tV_Instrucciones_Enviar_Email;
     //ESCALADO
     DisplayMetrics metrics;
-    float width;
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
-    List<Scale_Image_View> lstIv;
 
     public Fragment_Dialog_Validar_Usuario() {
         // Required empty public constructor
@@ -86,7 +81,6 @@ public class Fragment_Dialog_Validar_Usuario extends DialogFragment implements V
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
         return builder.create();
@@ -113,15 +107,15 @@ public class Fragment_Dialog_Validar_Usuario extends DialogFragment implements V
         return view;
     }
 
-    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
+    private void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        List<T> lstView = new ArrayList<>();
+        List<View> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstView.add((T) btnResendEmail);
-        lstView.add((T) tV_No_Validado_Usuario);
-        lstView.add((T) tV_Instrucciones_Enviar_Email);
-        lstView.add((T) iV_Btn_Cancelar);
+        lstView.add(btnResendEmail);
+        lstView.add(tV_No_Validado_Usuario);
+        lstView.add(tV_Instrucciones_Enviar_Email);
+        lstView.add(iV_Btn_Cancelar);
 
         Method.scaleViews(metrics, lstView);
     }

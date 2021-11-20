@@ -1,8 +1,13 @@
 package com.workpodapp.workpod.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
@@ -24,7 +29,9 @@ import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Campana;
 import com.workpodapp.workpod.data.Cupon;
+import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
 import com.workpodapp.workpod.scale.Scale_Buttons;
@@ -33,6 +40,8 @@ import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
@@ -104,6 +113,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -149,7 +159,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
 
-        volcarCupones(view);
+        conectarseBDSesion(getActivity(), view);
 
         //PONEMOS EL ICONO DEL NV EN MENU USUARIO
         WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
@@ -162,6 +172,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void volcarCupones(View view) {
         usuario = InfoApp.USER;
         Database<Cupon> dbCupon = new Database<>(Database.SELECTUSER, new Cupon());
@@ -171,6 +182,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
                     lstCupones.add(cupon);
                 }
             }
+            //Ordenamos los cupones para que los caducados salgan al final
+            lstCupones.sort((c1, c2) -> c1.getCampana().getFinCanjeo().compareTo(c2.getCampana().getFinCanjeo()));
+            Collections.reverse(lstCupones);
         });
         dbCupon.postRunOnUI(getActivity(), () -> {
             contruyendoLsV(view);
@@ -278,7 +292,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             Toast.makeText(getActivity(), "Ingrese el código de un cupón para guardarlo", Toast.LENGTH_LONG).show();
         } else if (eTCanjearCodigos.getText().toString().trim().equals(InfoApp.USER.getCodamigo())) {
             Toast.makeText(getActivity(), "No puedes meter tu código amigo", Toast.LENGTH_LONG).show();
-
+            eTCanjearCodigos.setText("");
         } else {
             //INICIALIZAMOS LA VARIABLE CUPÓN
             cupon = new Cupon();
@@ -289,12 +303,10 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             //REALIZAMOS EL INSERT
             Database<Cupon> insert = new Database<>(Database.INSERT, cupon);
             insert.postRun(() -> {
-                //LIMPIAMOS EL ET
-                eTCanjearCodigos.setText("");
-
             });
             insert.postRunOnUI(getActivity(), () -> {
-
+                //LIMPIAMOS EL ET
+                eTCanjearCodigos.setText("");
                 if (insert.getError().code > -1) {
                     //REFRESCAMOS EL FRAGMENT SIN QUE SE REPITA
                     Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
@@ -329,6 +341,24 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     //MÉTODOS
 
     /**
+     * Este método servirá para que si no estás conectado a internet, no se realice la conexión
+     * con la BD, Si no estás conectado a internet, te salta el Toast, si lo estás,se realiza la conexión
+     *
+     * @param context contexto de la app
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void conectarseBDSesion(Context context, View view) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
+        if (networkInfo == null || (networkInfo.isConnected() == false)) {
+            Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
+        } else {
+            volcarCupones(view);
+        }
+    }
+
+    /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
      * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
@@ -346,9 +376,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private <T extends View> void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
         List<T> lstView = new ArrayList<>();
-        lstTv=new ArrayList<>();
-        lstBtn=new ArrayList<>();
-        lstIv=new ArrayList<>();
+        lstTv = new ArrayList<>();
+        lstBtn = new ArrayList<>();
+        lstIv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
         lstView.add((T) btnCancelarDescuento);
@@ -366,10 +396,12 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         lstView.add((T) tV_MGM_Minutos_Titulo);
         lstView.add((T) tV_MGM);
 
-        lstView.add((T)iV_Btn_Volver);
-        lstView.add((T)iV_Btn_Siguiente);
-        lstView.add((T)iV_Give_Five);
-        lstView.add((T)eTCanjearCodigos);
+        lstView.add((T) iV_Btn_Volver);
+        lstView.add((T) iV_Btn_Siguiente);
+        lstView.add((T) iV_Give_Five);
+        lstView.add((T) eTCanjearCodigos);
+        lstView.add((T) lLMGM);
+        lstView.add((T) lLDatosMGM);
 
         Method.scaleViews(metrics, lstView);
 
@@ -377,6 +409,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     }
 
     private void escaladoParticular(DisplayMetrics metrics, List<Scale_Buttons> lstBtn) {
+        float height = metrics.heightPixels / metrics.density;
         if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
             btnShareFriendCodeDescuento.setTextSize(17);
             btnShareMoreFriendCode.setTextSize(16);
@@ -397,7 +430,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             btnShareFriendCodeDescuento.getLayoutParams().height = 50;
         }
         if (iV_Give_Five.getLayoutParams().height >= 0) {
-            float height = metrics.heightPixels / metrics.density;
+
             iV_Give_Five.getLayoutParams().height = Integer.valueOf((int) Math.round(iV_Give_Five.getLayoutParams().height * (height / Method.heightEmulator)));
         }
     }

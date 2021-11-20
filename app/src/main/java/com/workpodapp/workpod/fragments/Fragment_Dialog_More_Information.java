@@ -1,5 +1,6 @@
 package com.workpodapp.workpod.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.workpodapp.workpod.R;
@@ -30,6 +32,9 @@ import java.util.List;
 public class Fragment_Dialog_More_Information extends DialogFragment implements View.OnClickListener {
 
     //XML
+    private LinearLayout lLMoreInfromation;
+    private LinearLayout lLMoreInformationHeader;
+    private LinearLayout lLRelleno;
     private ImageView iVSalirDialogMoreInformation;
     private TextView tV_Titulo_Cupon;
     private TextView tV_Descripcion_Campana;
@@ -38,6 +43,8 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
     private TextView tV_Titulo_Minutos_Minimos;
     private TextView tV_Fecha_Validez;
     private TextView tV_Minutos_Minimos;
+    private TextView tVRelleno;
+    private TextView tVCaducado;
 
     //ESCALADO
     DisplayMetrics metrics;
@@ -85,6 +92,7 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         return createDialog();
     }
 
+    @SuppressLint("ResourceAsColor")
     private Dialog createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //ESPECIFICAMOS DONDE VAMOS A CREAR (INFLAR) EL DIALOGRESULT
@@ -93,6 +101,10 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         builder.setView(view);
 
         //INSTANCIAMOS ELEMENTOS DEL XML
+        lLMoreInformationHeader = view.findViewById(R.id.LLMoreInformationHeader);
+        lLMoreInfromation = view.findViewById(R.id.LLMoreInformation);
+        lLRelleno = view.findViewById(R.id.LLRelleno);
+        tVRelleno = view.findViewById(R.id.TVRelleno);
         tV_Condiciones_Uso = view.findViewById(R.id.TV_Condiciones_Uso);
         tV_Descripcion_Campana = view.findViewById(R.id.TV_Descripcion_Campana);
         tV_Fecha_Validez = view.findViewById(R.id.TV_Fecha_Validez);
@@ -100,16 +112,24 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         tV_Titulo_Cupon = view.findViewById(R.id.TV_Titulo_Cupon);
         tV_Titulo_Minutos_Minimos = view.findViewById(R.id.TV_Titulo_Minutos_Minimos);
         tV_Titulo_Fecha_Validez = view.findViewById(R.id.TV_Titulo_Fecha_Validez);
+        tVCaducado = view.findViewById(R.id.TV_Caducado);
         iVSalirDialogMoreInformation = view.findViewById(R.id.IVSalirDialogMoreInformation);
         //  tV_Minutos_Minimos.setText("Minutos mínimos para canjear este cupón: " + Html.fromHtml("<font color='#FF58B1E3'>14</font>"));
 
         //INICIALIZAMOS ELEMENTOS XML
         tV_Minutos_Minimos.setText(Integer.toString(cupon.getCampana().getConsumoMin()) + " minutos");
         tV_Titulo_Cupon.setText(cupon.getCampana().getNombre());
-        if (!cupon.getCampana().getFinCanjeo().equals(ZonedDateTime.of(2000, 01, 01, 0, 0, 0, 0, ZonedDateTime.now().getZone()))) {
-            tV_Fecha_Validez.setText(Integer.toString(cupon.getCampana().getFinCanjeo().getDayOfMonth()) + "/" +
-                    Integer.toString(cupon.getCampana().getFinCanjeo().getMonth().getValue()) + "/" +
-                    Integer.toString(cupon.getCampana().getFinCanjeo().getYear()));
+        if (!cupon.getCampana().getFinCanjeo().equals(ZonedDateTime.of(2100, 01, 01, 0, 0, 0, 0, ZonedDateTime.now().getZone()))) {
+            if (cupon.getCampana().getFinCanjeo().getMonth().getValue() < 10) {
+                tV_Fecha_Validez.setText(Integer.toString(cupon.getCampana().getFinCanjeo().getDayOfMonth()) + "/0" +
+                        Integer.toString(cupon.getCampana().getFinCanjeo().getMonth().getValue()) + "/" +
+                        Integer.toString(cupon.getCampana().getFinCanjeo().getYear()));
+            } else {
+                tV_Fecha_Validez.setText(Integer.toString(cupon.getCampana().getFinCanjeo().getDayOfMonth()) + "/" +
+                        Integer.toString(cupon.getCampana().getFinCanjeo().getMonth().getValue()) + "/" +
+                        Integer.toString(cupon.getCampana().getFinCanjeo().getYear()));
+            }
+
         } else {
             tV_Titulo_Fecha_Validez.setVisibility(View.GONE);
             tV_Fecha_Validez.setText("No tiene fecha límite");
@@ -119,6 +139,14 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         //LISTENERS
         iVSalirDialogMoreInformation.setOnClickListener(this);
 
+        //CUPON CADUCADO
+        if (cupon.getCampana().getFinCanjeo().compareTo(ZonedDateTime.now()) < 0 && cupon.getCampana().getFinCanjeo().getYear() < 2100) {
+            lLMoreInfromation.setBackground(getActivity().getDrawable(R.drawable.rounded_back_layout_more_information_expired_cupon));
+            lLMoreInformationHeader.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_less_light_red));
+            lLRelleno.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_less_light_red));
+            tVCaducado.setVisibility(View.VISIBLE);
+            tVCaducado.setTextColor(Color.parseColor("#F44336"));
+        }
         //ESCALAMOS ELEMENTOS
         metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -164,6 +192,8 @@ public class Fragment_Dialog_More_Information extends DialogFragment implements 
         lstView.add((T) tV_Fecha_Validez);
         lstView.add((T) tV_Titulo_Minutos_Minimos);
         lstView.add((T) tV_Minutos_Minimos);
+        lstView.add((T) tVCaducado);
+        lstView.add((T) tVRelleno);
 
         Method.scaleViews(metrics, lstView);
 

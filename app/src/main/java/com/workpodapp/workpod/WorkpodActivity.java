@@ -1,10 +1,16 @@
 package com.workpodapp.workpod;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
@@ -19,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workpodapp.workpod.fragments.Fragment_Support;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -50,6 +57,7 @@ public class WorkpodActivity extends FragmentActivity {
         fragment_transaction_history = new Fragment_Transaction_History();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +75,7 @@ public class WorkpodActivity extends FragmentActivity {
         });
 
         //REFRESCAMOS LA SESIÓN
-        dBSession();
+        conectarseBDSesion(this);
         //ACCEDER A LA APP
         accederApp();
     }
@@ -132,6 +140,23 @@ public class WorkpodActivity extends FragmentActivity {
             InfoFragment.actual = InfoFragment.MAPA;
 
             //  ValoracionWorkpod.boolReservaFinalizada=false;
+        }
+    }
+    /**
+     * Este método servirá para que si no estás conectado a internet, no se realice la conexión
+     * con la BD, Si no estás conectado a internet, te salta el Toast, si lo estás,se realiza la conexión
+     *
+     * @param context contexto de la app
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void conectarseBDSesion(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
+        if (networkInfo == null || (networkInfo.isConnected() == false)) {
+            Toast.makeText(this, "No estás conectado a internet", Toast.LENGTH_LONG).show();
+        } else {
+            dBSession();
         }
     }
 

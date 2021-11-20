@@ -358,13 +358,16 @@
 
     <ListView
         android:id="@+id/Lsv_codigo_descuento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="15dp"
-        android:scrollbars="vertical"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 
 </LinearLayout>

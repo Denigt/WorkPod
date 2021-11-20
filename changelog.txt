@@ -1,6 +1,15 @@
 # Changelog 
 
-##[3.10.1+Raúl] -2021-11-14
+##[3.11.0+Juan Vicente] -2021-11-20
+###Changed
+ - Escalado
+ - ultUso en el Fragment_Workpod
+###Added
+ - Tratamiento de los cupones caducados
+###Fixed
+ - Tratar la app cuando no hay internet (error 404)
+
+##[3.10.1+Raúl] -2021-11-19
 ### Fixed
  - El mapa se carga inicialmente sin necesidad de que el usuario se desplace
 
