@@ -1,5 +1,13 @@
 # Changelog 
 
+##[3.11.2+Juan Vicente] -2021-11-20
+###Fixed
+ - pequena correccion clase Workpod
+
+##[3.11.1+Juan Vicente] -2021-11-20
+###Fixed
+ - Fragment_Dialog_Workpod, Fragment_Transaction_Sesion, Fragment_Canjear_Codigos, Fragment_Maps
+
 ##[3.11.0+Juan Vicente] -2021-11-20
 ###Changed
  - Escalado
@@ -441,6 +449,10 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.11.1]: https://github.com/Denigt/WorkPod/commit/15d604c4462608f7e209b5bddd989f6fc5dcb03e
+[3.11.0]: https://github.com/Denigt/WorkPod/commit/30a24e86bac0e99a1496bfdacb96a992c82277dd
+[3.10.1]: https://github.com/Denigt/WorkPod/commit/dfb46521748833d0ebe79e10b6f83c4bc98984b2
+[3.10.0]: https://github.com/Denigt/WorkPod/commit/d0994a40abb21b78ca1144a2fa3665ca1206a5d2
 [3.9.14]: https://github.com/Denigt/WorkPod/commit/fd989415b14070b1580e10ab020a083b8ce25f41
 [3.9.13]: https://github.com/Denigt/WorkPod/commit/809de6ae7056ad6fa72a4d1b8e44607f37577e16
 [3.9.12]: https://github.com/Denigt/WorkPod/commit/64f814774f4b8479076de86aab964f231be64336
