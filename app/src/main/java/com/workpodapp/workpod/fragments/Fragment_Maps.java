@@ -359,29 +359,34 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * del NV al mapa
      */
     private void mostrarReserva() {
-        if(miReserva){
-            if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()){
-                miReserva=false;
-                Workpod workpod = null;
-                Ubicacion ubicacion = null;
-                for (Ubicacion u : lstUbicacion){
-                    for (Workpod w : u.getWorkpods()){
-                        if (w.getId() == InfoApp.USER.getReserva().getWorkpod()){
-                            workpod = w;
-                            ubicacion = u;
-                            break;
+        try{
+            if(miReserva){
+                if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()){
+                    miReserva=false;
+                    Workpod workpod = null;
+                    Ubicacion ubicacion = null;
+                    for (Ubicacion u : lstUbicacion){
+                        for (Workpod w : u.getWorkpods()){
+                            if (w.getId() == InfoApp.USER.getReserva().getWorkpod()){
+                                workpod = w;
+                                ubicacion = u;
+                                break;
+                            }
                         }
+                        if (workpod != null) break;
                     }
-                    if (workpod != null) break;
+                    if (workpod != null) {
+                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, this);
+                        fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
+                    }
+                }else {
+                    FLMiReserva.setVisibility(View.GONE);
                 }
-                if (workpod != null) {
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, this);
-                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
-                }
-            }else {
-                FLMiReserva.setVisibility(View.GONE);
             }
+        }catch(NullPointerException e){
+            e.printStackTrace();
         }
+
     }
 
 //=== NO TOCAR NADA A PARTIR DE ESTA LINEA ==============================================================

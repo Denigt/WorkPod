@@ -43,6 +43,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
     //CONSTANTES
     private static final String SIN_OFERTAS = "Sin ofertas";
+    private static final int PARSEO_EURO_CENTIMOS = 100;
 
     //XML
     private TextView tVDialogUbication;
@@ -57,7 +58,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private String ubication;
     private ZonedDateTime fechaEntrada;
     private ZonedDateTime fechaSalida;
-    private String ofertas;
+    private Double ofertas;
     private Double precio;
     private Double precioFinal;
     Workpod workpod;
@@ -102,7 +103,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         this.ubication = sesion.getDireccion().toLongString();
         this.fechaEntrada = sesion.getEntrada();
         this.fechaSalida = sesion.getSalida();
-        this.ofertas = String.valueOf(sesion.getDescuento());
+        this.ofertas = sesion.getDescuento();
         this.precio = sesion.getPrecio();
         this.workpod = sesion.getWorkpod();
 
@@ -335,18 +336,21 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      * @param ofertas     el porcentaje de descuento de la oferta
      * @param precioFinal es el precio de los minutos que ha estado el usuario usando el workpod aplicándole el descuento
      */
-    private void calcularPrecio(Double precioFinal, Double precio, int hour, int min, String ofertas) {
+    private void calcularPrecio(Double precioFinal, Double precio, int hour, int min, double ofertas) {
         //SI HAY OFERTAS
-        if (!ofertas.equals(SIN_OFERTAS)) {
-            precioFinal = precio - (precio * (Double.parseDouble(ofertas)) / 100);
-            tVDialogOffers.setText("Descuento de: " + ofertas + "€");
-            tVDialogPrice.setText(precio.toString() + "€");
-            tVTotalPagado.setText("Ha pagado un total de " + (precio - Double.parseDouble(ofertas)) + "€");
+        if (ofertas>0) {
+            tVDialogOffers.setText("Descuento de: " + String.format("%.2f",(ofertas)) + "€");
+            tVDialogPrice.setText(String.format("%.2f", (precio)) + "€");
+            tVTotalPagado.setText("Ha pagado un total de " + String.format("%.2f", (precio - ofertas)) + "€");
         } else {
             //SI NO HAY OFERTAS
-            tVDialogPrice.setText(precio.toString() + "€");
+            tVDialogPrice.setText(String.format("%.2f", (precio)) + "€");
             tVDialogOffers.setText(SIN_OFERTAS);
-            tVTotalPagado.setText("Ha pagado un total de " + (precio) + "€");
+            tVTotalPagado.setText("Ha pagado un total de " + String.format("%.2f", (precio)) + "€");
+        }
+
+        if (precio < 1) {
+            tVTotalPagado.setText("Ha pagado un total de " + String.valueOf(Math.round(precio * PARSEO_EURO_CENTIMOS)) + " céntimos");
         }
     }
 

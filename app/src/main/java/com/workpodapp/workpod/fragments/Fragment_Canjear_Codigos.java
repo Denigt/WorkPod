@@ -311,7 +311,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
                     //REFRESCAMOS EL FRAGMENT SIN QUE SE REPITA
                     Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
-                } else if (insert.getError().code > -2) {
+                } else if (insert.getError().code > -10) {
                     Toast.makeText(getActivity(), insert.getError().message, Toast.LENGTH_LONG).show();
                 } else if (insert.getError().code < -10) {
                     Toast.makeText(getActivity(), "Ya has ingresado ese cupón", Toast.LENGTH_LONG).show();

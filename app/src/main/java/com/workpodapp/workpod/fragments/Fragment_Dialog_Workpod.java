@@ -370,10 +370,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         try {
             //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
             if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())
-                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")) {
+                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA") && !InfoApp.USER.getReserva().isCancelada()) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
-                btnReservarWorkpod.setTextSize(10);
+                // btnReservarWorkpod.setTextSize(10);
                 lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
                 //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
                 lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
@@ -629,29 +629,34 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         reserva.setEstado("CANCELADA");
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
-            if (update.getError().code > -1) {
-                //PARAMOS CRONOMETRO Y LO INICIALIZAMOS DE NUEVO A 20 MIN
-                finish = true;
-                inicializarCrono();
-                //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
-                lLEstadoWorkpod.getLayoutParams().width = 0;
-                btnReservarWorkpod.setText("Reservar");
-                escaladoParticular(metrics, 0);
-                //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
-                btnAbrirAhora.setVisibility(View.GONE);
-                lLAbrirAhora.setVisibility(View.GONE);
-                btnCancelarReserva.setVisibility(View.GONE);
+            try {
+                if (update.getError().code > -1) {
+                    //PARAMOS CRONOMETRO Y LO INICIALIZAMOS DE NUEVO A 20 MIN
+                    finish = true;
+                    inicializarCrono();
+                    //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                    lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
+                    lLEstadoWorkpod.getLayoutParams().width = 0;
+                    btnReservarWorkpod.setText("Reservar");
+                    escaladoParticular(metrics, 0);
+                    //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
+                    btnAbrirAhora.setVisibility(View.GONE);
+                    lLAbrirAhora.setVisibility(View.GONE);
+                    btnCancelarReserva.setVisibility(View.GONE);
 
-                // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                for (Workpod item : ubicacion.getWorkpods())
-                    if (item.getId() == workpod.getId())
-                        item.setReserva(reserva);
-                // ESTABLECER LA RESERVA DEL USUARIO
-                InfoApp.USER.setReserva(reserva);
+                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                    for (Workpod item : ubicacion.getWorkpods())
+                        if (item.getId() == workpod.getId())
+                            item.setReserva(reserva);
+                    // ESTABLECER LA RESERVA DEL USUARIO
+                    InfoApp.USER.setReserva(reserva);
 
-            } else
-                Toast.makeText(getContext(), update.getError().message, Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getContext(), update.getError().message, Toast.LENGTH_SHORT).show();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
         });
         update.start();
     }
@@ -766,7 +771,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             public void run() {
                 try {
                     escaladoParticular(metrics, 0);
+
                     Thread.sleep(TIEMPO_EMPIECE_CRONO);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
