@@ -106,7 +106,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     Fragment_Dialog_Cluster fragmentCluster = null;
 
     //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT, SE MUESTRE EL DIALOG_WORKPOD
-    public static boolean miReserva=false;
+    public static boolean miReserva = false;
 
     //CONSTRUCTOR POR DEFECTO
     public Fragment_Maps() {
@@ -150,8 +150,8 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         btnCentrar = view.findViewById(R.id.btnCentrar);
         etxtBusqueda = view.findViewById(R.id.etxtBusqueda);
         lsvBusqueda = view.findViewById(R.id.lsvBusqueda);
-        btnMiReserva =view.findViewById(R.id.btnMiReserva);
-        FLMiReserva =view.findViewById(R.id.FLMiReserva);
+        btnMiReserva = view.findViewById(R.id.btnMiReserva);
+        FLMiReserva = view.findViewById(R.id.FLMiReserva);
 
         // Adaptador para la lsvBusqueda y el etxtBusqueda
         adpBusqueda = new Adaptador_Lsv_Search(getContext(), R.layout.item_lsv_search);
@@ -165,7 +165,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         etxtBusqueda.setOnQueryTextListener(new MapSearchListener(etxtBusqueda, lsvBusqueda));
 
         //PARA EVITAR QUE TRAS FINALIZAR UNA SESIÓN VUELVAS 2 VECES AL MAPA
-        InfoFragment.actual=InfoFragment.MAPA;
+        InfoFragment.actual = InfoFragment.MAPA;
         return view;
     }
 
@@ -225,7 +225,6 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
     }
 
 
-
     // LISTENERS
     @Override
     public void onClick(View v) {
@@ -260,6 +259,11 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
             try {
                 // Ubicacion a la que referencia el marcador (desde ella se pueden ver la lista de workpods del marcador)
                 Ubicacion ubicacion = (Ubicacion) marker.getTag();
+                for (Ubicacion aux : lstUbicacion)
+                    if (aux.getId() == ubicacion.getId()) {
+                        ubicacion = aux;
+                        break;
+                    }
                 //CONTROLAMOS SI HAY UN SOLO WORKPOD O UN CONJUNTO DE ELLOS
                 if (ubicacion.getWorkpods().size() > 1) {
                     //ABRIMOS EL DIALOGO EMERGENTE
@@ -310,14 +314,14 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
     }
 
-    private void btnMiReservaOnClick(View v){
-        if (v.getId() == btnMiReserva.getId()){
-            if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()){
+    private void btnMiReservaOnClick(View v) {
+        if (v.getId() == btnMiReserva.getId()) {
+            if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()) {
                 Workpod workpod = null;
                 Ubicacion ubicacion = null;
-                for (Ubicacion u : lstUbicacion){
-                    for (Workpod w : u.getWorkpods()){
-                        if (w.getId() == InfoApp.USER.getReserva().getWorkpod()){
+                for (Ubicacion u : lstUbicacion) {
+                    for (Workpod w : u.getWorkpods()) {
+                        if (w.getId() == InfoApp.USER.getReserva().getWorkpod()) {
                             workpod = w;
                             ubicacion = u;
                             break;
@@ -329,7 +333,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                     Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, this);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
                 }
-            }else {
+            } else {
                 FLMiReserva.setVisibility(View.GONE);
                 Toast.makeText(requireContext(), "Tu reserva a caducado", Toast.LENGTH_SHORT).show();
             }
@@ -345,11 +349,16 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
         /*getActivity().finish();
         startActivity(getActivity().getIntent());
         getActivity().overridePendingTransition(0, 0);*/
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 26) {
-            ft.setReorderingAllowed(false);
+        try {
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            if (Build.VERSION.SDK_INT >= 26) {
+                ft.setReorderingAllowed(false);
+            }
+            ft.detach(this).attach(this).commit();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-        ft.detach(this).attach(this).commit();
+
     }
 
     /**
@@ -359,15 +368,15 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
      * del NV al mapa
      */
     private void mostrarReserva() {
-        try{
-            if(miReserva){
-                if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()){
-                    miReserva=false;
+        try {
+            if (miReserva) {
+                if (InfoApp.USER != null && InfoApp.USER.getReserva() != null && !InfoApp.USER.getReserva().isCancelada()) {
+                    miReserva = false;
                     Workpod workpod = null;
                     Ubicacion ubicacion = null;
-                    for (Ubicacion u : lstUbicacion){
-                        for (Workpod w : u.getWorkpods()){
-                            if (w.getId() == InfoApp.USER.getReserva().getWorkpod()){
+                    for (Ubicacion u : lstUbicacion) {
+                        for (Workpod w : u.getWorkpods()) {
+                            if (w.getId() == InfoApp.USER.getReserva().getWorkpod()) {
                                 workpod = w;
                                 ubicacion = u;
                                 break;
@@ -379,11 +388,11 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                         Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, ubicacion, posicion, this);
                         fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORKPOD EN ESTA UBICACIÓN");
                     }
-                }else {
+                } else {
                     FLMiReserva.setVisibility(View.GONE);
                 }
             }
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -428,7 +437,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
 
         @Override
         public void onProviderDisabled(@NonNull String provider) {
-            try{
+            try {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -440,7 +449,7 @@ public class Fragment_Maps extends DialogFragment implements OnMapReadyCallback,
                         Toast.makeText(getContext(), "Habilite el GPS", Toast.LENGTH_LONG).show();
                     }
                 });
-            }catch(NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }

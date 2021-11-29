@@ -222,7 +222,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             refrescardB = false;
 
             //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
-            if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
+            if (InfoApp.USER.getReserva()!=null && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
                     && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
                 Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
@@ -237,6 +237,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                         for (int j = 0; j < lstWorkpods.size(); j++) {
                             if (workpod.getId() == lstWorkpods.get(j).getId()) {
                                 workpod = lstWorkpods.get(j);
+                                workpod.setReserva(lstWorkpods.get(j).getReserva());
                                 Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                                 fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
 
@@ -247,7 +248,8 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                     }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD
                     else {
                         if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
-                            workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
+                        //    workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
+                            workpod = lstUbicacion.get(i).getWorkpods().get(0);
                             Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                             fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                             //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
@@ -260,7 +262,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         } catch (NullPointerException e) {
             //CONTROLAMOS QUE SI USER.GETRESERVA() APUNTA A NULO, EL USUARIO PUEDA ABRIR EL WORKPOD QUE QUIERA CONSULTAR
             //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
-            desactivarBtnReservar = true;
+         /*   desactivarBtnReservar = true;
             //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
             for (int i = 0; i < lstUbicacion.size(); i++) {
                 //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
@@ -285,7 +287,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                         break;
                     }
                 }
-            }
+            }*/
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

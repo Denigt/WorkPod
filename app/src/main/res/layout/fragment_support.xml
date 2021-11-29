@@ -76,7 +76,7 @@
                         android:layout_width="170dp"
                         android:layout_height="150dp"
                         android:padding="10dp"
-                        android:src="@drawable/tyc" />
+                        android:src="@drawable/faq" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -106,7 +106,7 @@
                         android:layout_width="170dp"
                         android:layout_height="150dp"
                         android:padding="10dp"
-                        android:src="@drawable/faq" />
+                        android:src="@drawable/tyc" />
                 </LinearLayout>
 
 

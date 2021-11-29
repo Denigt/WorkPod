@@ -24,4 +24,6 @@ public class InfoFragment {
 
     public static int anterior = -1;
     public static int actual = -1;
+
+    public static boolean noInternetConnection=false;
 }

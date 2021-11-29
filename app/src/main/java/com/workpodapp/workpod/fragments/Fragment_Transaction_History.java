@@ -2,6 +2,7 @@ package com.workpodapp.workpod.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -24,6 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.workpodapp.workpod.LoginActivity;
+import com.workpodapp.workpod.NoInternetConnectionActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Spinner;
@@ -150,7 +153,8 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
         if (networkInfo == null || (networkInfo.isConnected() == false)) {
-            Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
+            Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+            startActivity(activity);
         } else {
 //CONTROLAMOS QUE SI YA SE HA VOLCADO LA LISTA, NO SE VUELVA A VOLCAR
             if (lstSesiones.size() < 1) {

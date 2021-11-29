@@ -204,7 +204,7 @@ public class Workpod implements DataDb, Comparable<Workpod>{
                 if (workpodJSON.has("ultLimpieza") && !workpodJSON.isNull("ultLimpieza"))
                     workpod.setLimpieza(Method.stringToDate(workpodJSON.getString("ultLimpieza"), ZoneId.systemDefault()));
                 if (workpodJSON.has("ultUso") && !workpodJSON.isNull("ultUso"))
-                    workpod.setUltimoUso(workpodJSON.getString("ultUso"),ZoneId.of("UCT"));
+                   workpod.setUltimoUso(workpodJSON.getString("ultUso"), ZoneId.of("UCT"));
                 if (workpodJSON.has("ubicacion") && !workpodJSON.isNull("ubicacion"))
                     workpod.setUbicacion(workpodJSON.getInt("ubicacion"));
                 if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))
@@ -247,7 +247,7 @@ public class Workpod implements DataDb, Comparable<Workpod>{
             if (workpodJSON.has("ultLimpieza") && !workpodJSON.isNull("ultLimpieza"))
                 workpod.setLimpieza(Method.stringToDate(workpodJSON.getString("ultLimpieza"), ZoneId.systemDefault()));
             if (workpodJSON.has("ultUso") && !workpodJSON.isNull("ultUso"))
-                workpod.setUltimoUso(workpodJSON.getString("ultUso"),ZoneId.of("UCT"));
+                workpod.setUltimoUso(workpodJSON.getString("ultUso"), ZoneId.of("UCT"));
             if (workpodJSON.has("ubicacion") && !workpodJSON.isNull("ubicacion"))
                 workpod.setUbicacion(workpodJSON.getInt("ubicacion"));
             if (workpodJSON.has("lat") && workpodJSON.has("lon") && !workpodJSON.isNull("lat") && !workpodJSON.isNull("lon"))

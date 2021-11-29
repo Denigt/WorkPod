@@ -588,22 +588,24 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             insert.postRunOnUI(requireActivity(), () -> {
                 if (insert.getError().code > -1) {
                     try {
-                        //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                        btnReservarWorkpod.setText("Reservado");
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
-                        btnAbrirAhora.setVisibility(View.VISIBLE);
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
-                        lLAbrirAhora.setVisibility(View.VISIBLE);
-                        //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
-                        lLEstadoWorkpod.getLayoutParams().width = 0;
-                        visibleBtnCancelar = false;
-                        //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORKPOD
-                        escaladoParticular(metrics, 0);
-                        //EMPIEZA EL CRONOMETRO
-                        arrancarCronometro();
+                        if (getActivity() != null) {
+                            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                            btnReservarWorkpod.setText("Reservado");
+                            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+                            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
+                            btnAbrirAhora.setVisibility(View.VISIBLE);
+                            lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
+                            lLAbrirAhora.setVisibility(View.VISIBLE);
+                            //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
+                            lLEstadoWorkpod.getLayoutParams().width = 0;
+                            visibleBtnCancelar = false;
+                            //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORKPOD
+                            escaladoParticular(metrics, 0);
+                            //EMPIEZA EL CRONOMETRO
+                            arrancarCronometro();
+                        }
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                         for (Workpod item : ubicacion.getWorkpods())
                             if (item.getId() == workpod.getId())
@@ -635,15 +637,16 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                     finish = true;
                     inicializarCrono();
                     //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                    lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
-                    lLEstadoWorkpod.getLayoutParams().width = 0;
-                    btnReservarWorkpod.setText("Reservar");
-                    escaladoParticular(metrics, 0);
-                    //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
-                    btnAbrirAhora.setVisibility(View.GONE);
-                    lLAbrirAhora.setVisibility(View.GONE);
-                    btnCancelarReserva.setVisibility(View.GONE);
-
+                    if (getActivity() != null) {
+                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
+                        lLEstadoWorkpod.getLayoutParams().width = 0;
+                        btnReservarWorkpod.setText("Reservar");
+                        escaladoParticular(metrics, 0);
+                        //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
+                        btnAbrirAhora.setVisibility(View.GONE);
+                        lLAbrirAhora.setVisibility(View.GONE);
+                        btnCancelarReserva.setVisibility(View.GONE);
+                    }
                     // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                     for (Workpod item : ubicacion.getWorkpods())
                         if (item.getId() == workpod.getId())
@@ -815,17 +818,17 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                             //CALCULAMOS LA DISTANCIA ENTRE AMBAS POSICIONES
                                             float distance = posicionUsuario.distanceTo(posicionWorkpod);
                                             //HACEMOS ECO DE LA POSICIÓN EN EL BTN
-                                            if (distance > 100000) {
+                                          /*  if (distance > 100000) {
                                                 btnAbrirAhora.setText("Lejos");
                                             } else if (distance > 1000) {
                                                 btnAbrirAhora.setText(String.format("%.2f", (distance / 1000)) + "km");
-                                            } else if (distance < 1000 && distance > 50) {
+                                            } else if (distance < 1000 && distance > 150) {
                                                 btnAbrirAhora.setText((String.format("%.2f", (distance)) + "m"));
-                                            } else if (distance < 50) {
+                                            } else if (distance < 150) {*/
                                                 btnAbrirAhora.setText("¡Abrir Ahora!");
                                                 //CAMBIAMOS VALOR BOOLEANO QUE CONTROLA IR AL FRAGMENT SESION FINALIZADA
                                                 abrirAhora = true;
-                                            }
+                                            //}
                                             cambiarDistancia = false;
                                         } else {
                                             btnAbrirAhora.setText("Lejos");

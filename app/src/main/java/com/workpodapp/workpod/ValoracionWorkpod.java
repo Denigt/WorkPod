@@ -177,6 +177,7 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
                 //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
                 activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(activity);
+                finish();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -220,6 +221,7 @@ public class ValoracionWorkpod extends AppCompatActivity implements View.OnClick
             //EVITA QUE SE DUPLIQUE EL ACTIVITY AL QUE SE VUELVE
             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(activity);
+            finish();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.workpodapp.workpod.NoInternetConnectionActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
@@ -159,8 +160,6 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
 
-        conectarseBDSesion(getActivity(), view);
-
         //PONEMOS EL ICONO DEL NV EN MENU USUARIO
         WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
@@ -168,7 +167,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         tV_MGM.setText("MGM: " + InfoApp.USER.getCodamigo());
 
         escalarElementos(metrics);
-
+        conectarseBDSesion(getActivity(), view);
         return view;
     }
 
@@ -342,7 +341,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
     /**
      * Este método servirá para que si no estás conectado a internet, no se realice la conexión
-     * con la BD, Si no estás conectado a internet, te salta el Toast, si lo estás,se realiza la conexión
+     * con la BD, Si no estás conectado a internet, te lleva al activity para tratar el error 404
+     * Importante, para vaciar la pila y que al volver hacia atrás no haya nada, finalizamos WorkpodActivity asi q este metodo se carga el último
+     * para q nada apunte a null
      *
      * @param context contexto de la app
      */
@@ -352,7 +353,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
         if (networkInfo == null || (networkInfo.isConnected() == false)) {
-            Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
+            Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+            startActivity(activity);
+            // getActivity().finish(); si haces esto, InfoApp.USER apunta a null
         } else {
             volcarCupones(view);
         }
@@ -373,35 +376,35 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
      *
      * @param metrics
      */
-    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
+    private void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        List<T> lstView = new ArrayList<>();
+        List<View> lstView = new ArrayList<>();
         lstTv = new ArrayList<>();
         lstBtn = new ArrayList<>();
         lstIv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstView.add((T) btnCancelarDescuento);
-        lstView.add((T) btnGuardarDescuento);
-        lstView.add((T) btnShareFriendCodeDescuento);
-        lstView.add((T) btnShareMoreFriendCode);
+        lstView.add(btnCancelarDescuento);
+        lstView.add(btnGuardarDescuento);
+        lstView.add(btnShareFriendCodeDescuento);
+        lstView.add(btnShareMoreFriendCode);
 
-        lstView.add((T) tV_Titulo_Canjea_Codigos);
-        lstView.add((T) tV_Descuentos);
-        lstView.add((T) tV_No_Descuentos);
-        lstView.add((T) tV_MGM_Minutos_Estandar);
-        lstView.add((T) tV_MGM_Amigos);
-        lstView.add((T) tV_MGM_Amigos_Titulo);
-        lstView.add((T) tV_MGM_Minutos);
-        lstView.add((T) tV_MGM_Minutos_Titulo);
-        lstView.add((T) tV_MGM);
+        lstView.add(tV_Titulo_Canjea_Codigos);
+        lstView.add(tV_Descuentos);
+        lstView.add(tV_No_Descuentos);
+        lstView.add(tV_MGM_Minutos_Estandar);
+        lstView.add(tV_MGM_Amigos);
+        lstView.add(tV_MGM_Amigos_Titulo);
+        lstView.add(tV_MGM_Minutos);
+        lstView.add(tV_MGM_Minutos_Titulo);
+        lstView.add(tV_MGM);
 
-        lstView.add((T) iV_Btn_Volver);
-        lstView.add((T) iV_Btn_Siguiente);
-        lstView.add((T) iV_Give_Five);
-        lstView.add((T) eTCanjearCodigos);
-        lstView.add((T) lLMGM);
-        lstView.add((T) lLDatosMGM);
+        lstView.add(iV_Btn_Volver);
+        lstView.add(iV_Btn_Siguiente);
+        lstView.add(iV_Give_Five);
+        lstView.add(eTCanjearCodigos);
+        lstView.add(lLMGM);
+        lstView.add(lLDatosMGM);
 
         Method.scaleViews(metrics, lstView);
 

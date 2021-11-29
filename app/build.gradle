@@ -71,4 +71,8 @@ dependencies {
     // LECTOR Y CREADOR DE QR CON QRGEN
     implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
+    //PAYPAL
+    implementation 'com.paypal.checkout:android-sdk:0.2.0'
+    //Necesaria por este error: Expected Android API level 21+ but was 30
+    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 }

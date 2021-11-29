@@ -16,6 +16,7 @@ import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Workpod;
+import com.workpodapp.workpod.fragments.Fragment_Canjear_Codigos;
 import com.workpodapp.workpod.fragments.Fragment_Maps;
 import com.workpodapp.workpod.fragments.Fragment_Menu_Usuario;
 import com.workpodapp.workpod.fragments.Fragment_Transaction_History;
@@ -87,29 +88,54 @@ public class WorkpodActivity extends FragmentActivity {
      */
     private void accederApp() {
         try {
-            Log.i("INFO", InfoApp.USER.getReserva().getEstado());
+
             if (InfoApp.SESION != null) {
                 fragment_sesion = new Fragment_sesion(InfoApp.SESION);
             }
-            if (InfoApp.USER.getReserva() != null) {
-                if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
-                    Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
-                    this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
-                } else if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (ValoracionWorkpod.boolReservaFinalizada)) {
-                    InfoApp.USER.getReserva().setEstado("FINALIZADA");
-                    InfoApp.RESERVA.setEstado("FINALIZADA");
-                    //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
-                    Fragment_Maps.miReserva = true;
-                    //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
+            if (InfoFragment.noInternetConnection) {
+                if (InfoFragment.actual == InfoFragment.TRANSACCIONES) {
+                    InfoFragment.noInternetConnection = false;
+                    volverAlFragmentTransactionHistory();
+
+                } else if (InfoFragment.actual == InfoFragment.DESCUENTOS) {
+                    InfoFragment.noInternetConnection = false;
+                    InfoFragment.anterior = InfoFragment.actual;
+                    InfoFragment.actual = InfoFragment.DESCUENTOS;
+
+                    Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
                     FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
                     fTransaction = fragmentManager.beginTransaction();
-                    fTransaction.add(R.id.LLFragment, fragment_maps).commit();
-                    boolSession = false;
-                    InfoFragment.actual = InfoFragment.MAPA;
-                    ValoracionWorkpod.boolReservaFinalizada = false;
+                    fTransaction.replace(R.id.LLFragment, fragment_canjear_codigos).commit();
+                }
+            } else {
+                Log.i("INFO", InfoApp.USER.getReserva().getEstado());
+                if (InfoApp.USER.getReserva() != null) {
+                    if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (!ValoracionWorkpod.boolReservaFinalizada)) {
+                        Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
+                        this.getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
+                    } else if (InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("En Uso") && (ValoracionWorkpod.boolReservaFinalizada)) {
+                        InfoApp.USER.getReserva().setEstado("FINALIZADA");
+                        InfoApp.RESERVA.setEstado("FINALIZADA");
+                        //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
+                        Fragment_Maps.miReserva = true;
+                        //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
+                        FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+                        fTransaction = fragmentManager.beginTransaction();
+                        fTransaction.add(R.id.LLFragment, fragment_maps).commit();
+                        boolSession = false;
+                        InfoFragment.actual = InfoFragment.MAPA;
+                        ValoracionWorkpod.boolReservaFinalizada = false;
+                    } else {
+                        //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
+                        Fragment_Maps.miReserva = true;
+                        //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
+                        FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+                        fTransaction = fragmentManager.beginTransaction();
+                        fTransaction.add(R.id.LLFragment, fragment_maps).commit();
+                        boolSession = false;
+                        ValoracionWorkpod.boolReservaFinalizada = false;
+                    }
                 } else {
-                    //BOOLEANO QUE CONTROLA QUE CUANDO EL USUARIO TIENE UNA RESERVA Y ACCEDE AL FRAGMENT MAPS, SE MUESTRE EL DIALOG_WORKPOD
-                    Fragment_Maps.miReserva = true;
                     //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
                     FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
                     fTransaction = fragmentManager.beginTransaction();
@@ -117,31 +143,26 @@ public class WorkpodActivity extends FragmentActivity {
                     boolSession = false;
                     ValoracionWorkpod.boolReservaFinalizada = false;
                 }
-            } else {
-                //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO TIENE RESERVA
-                FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
-                fTransaction = fragmentManager.beginTransaction();
-                fTransaction.add(R.id.LLFragment, fragment_maps).commit();
-                boolSession = false;
-                ValoracionWorkpod.boolReservaFinalizada = false;
             }
+
         } catch (NullPointerException e) {
             //SI USER APUNTA A NULL ES QUE EL USUARIO NO SE HA LOGGEADO
             if (InfoApp.USER == null) {
                 //OCULTAMOS LAS PARTES DEL NV A LA QUE NO PUEDE ACCEDER EL USUARIO NO REGISTRADO
                 btnNV.getMenu().clear();
                 btnNV.inflateMenu(R.menu.bottom_nav_menu_usuario_no_registrado);
+            } else {
+                //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO SE HA LOGGEADO
+                FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+                fTransaction = fragmentManager.beginTransaction();
+                fTransaction.add(R.id.LLFragment, fragment_maps).commit();
+                boolSession = false;
+                InfoFragment.actual = InfoFragment.MAPA;
             }
-            //ESTABLECEMOS ESTE FRAGMENT POR DEFECTO CUADO ACCEDEMOS AL WORKPOD SI EL USUARIO NO SE HA LOGGEADO
-            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
-            fTransaction = fragmentManager.beginTransaction();
-            fTransaction.add(R.id.LLFragment, fragment_maps).commit();
-            boolSession = false;
-            InfoFragment.actual = InfoFragment.MAPA;
-
             //  ValoracionWorkpod.boolReservaFinalizada=false;
         }
     }
+
     /**
      * Este método servirá para que si no estás conectado a internet, no se realice la conexión
      * con la BD, Si no estás conectado a internet, te salta el Toast, si lo estás,se realiza la conexión
@@ -177,7 +198,7 @@ public class WorkpodActivity extends FragmentActivity {
             consultaSesion.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -304,11 +325,11 @@ public class WorkpodActivity extends FragmentActivity {
 
         if (InfoFragment.actual == InfoFragment.MENU || InfoFragment.actual == InfoFragment.VALORACION_WORKPOD && !boolSession) {
             volverAlFragmentMaps();
-        }  else if (InfoFragment.actual == InfoFragment.FIN_SESION) {
+        } else if (InfoFragment.actual == InfoFragment.FIN_SESION) {
             valoracionWorkpod();
         } else if (InfoFragment.actual == InfoFragment.TRANSACTION_SESSION) {
             volverAlFragmentTransactionHistory();
-        } else if (InfoFragment.actual == InfoFragment.MAPA || InfoFragment.actual==InfoFragment.SESSION ) {
+        } else if (InfoFragment.actual == InfoFragment.MAPA || InfoFragment.actual == InfoFragment.SESSION) {
             //SUSTITUYO ONBACKPRESSED POR FINISH PARA QUE PASE LO QUE PASE, AL LLEGAR AQUÍ, SALGAMOS DE LA APP
             finish();
         } else {

@@ -138,23 +138,23 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private <T extends View> void escalarElementos() {
+    private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
         this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        List<T> lstViews = new ArrayList<>();
-        lstViews.add((T) iVCall);
-        lstViews.add((T) tVCall);
-        lstViews.add((T) iVFAQ);
-        lstViews.add((T) iVMail);
-        lstViews.add((T) iVTyC);
+        List<View> lstViews = new ArrayList<>();
+        lstViews.add(iVCall);
+        lstViews.add(tVCall);
+        lstViews.add(iVFAQ);
+        lstViews.add(iVMail);
+        lstViews.add(iVTyC);
 
-        lstViews.add((T) tVFAQ);
-        lstViews.add((T) tVMail);
-        lstViews.add((T) tVTituloConsultas);
-        lstViews.add((T) tVTituloContactos);
-        lstViews.add((T) tVTyC);
+        lstViews.add(tVFAQ);
+        lstViews.add(tVMail);
+        lstViews.add(tVTituloConsultas);
+        lstViews.add(tVTituloContactos);
+        lstViews.add(tVTyC);
 
         Method.scaleViews(metrics, lstViews);
         escaladoParticular(metrics);
@@ -165,7 +165,7 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
         iVCall.getLayoutParams().height = Integer.valueOf((int) Math.round(iVCall.getLayoutParams().height * (height / Method.heightEmulator)));
         iVFAQ.getLayoutParams().height = Integer.valueOf((int) Math.round(iVFAQ.getLayoutParams().height * (height / Method.heightEmulator)));
         iVMail.getLayoutParams().height = Integer.valueOf((int) Math.round(iVMail.getLayoutParams().height * (height / Method.heightEmulator)));
-        iVTyC.getLayoutParams().height = Integer.valueOf((int) Math.round( iVTyC.getLayoutParams().height * (height / Method.heightEmulator)));
+        iVTyC.getLayoutParams().height = Integer.valueOf((int) Math.round(iVTyC.getLayoutParams().height * (height / Method.heightEmulator)));
 
     }
 
