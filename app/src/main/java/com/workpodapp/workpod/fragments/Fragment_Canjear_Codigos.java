@@ -35,9 +35,6 @@ import com.workpodapp.workpod.data.Cupon;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -87,9 +84,6 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     DisplayMetrics metrics;
     float width;
     //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
-    List<Scale_Image_View> lstIv;
     List<Cupon> lstCupones = new ArrayList<>();
     List<Cupon> lstAmigos = new ArrayList<>();
 
@@ -379,9 +373,6 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     private void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
         List<View> lstView = new ArrayList<>();
-        lstTv = new ArrayList<>();
-        lstBtn = new ArrayList<>();
-        lstIv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
         lstView.add(btnCancelarDescuento);
@@ -408,10 +399,10 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
 
         Method.scaleViews(metrics, lstView);
 
-        escaladoParticular(metrics, lstBtn);
+        escaladoParticular(metrics);
     }
 
-    private void escaladoParticular(DisplayMetrics metrics, List<Scale_Buttons> lstBtn) {
+    private void escaladoParticular(DisplayMetrics metrics ) {
         float height = metrics.heightPixels / metrics.density;
         if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
             btnShareFriendCodeDescuento.setTextSize(17);

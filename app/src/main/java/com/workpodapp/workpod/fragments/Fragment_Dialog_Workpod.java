@@ -42,9 +42,6 @@ import com.workpodapp.workpod.data.Reserva;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Ubicacion;
 import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZonedDateTime;
@@ -103,11 +100,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private String direccion;
     private String descripcion;
     int idWorkpodUsuario;
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
-    List<Scale_Image_View> lstIv;
 
     //VARIABLES
     private int centesimas;
@@ -288,7 +280,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
-        //desactivarBtnReservar();
+        InfoFragment.DIALOGO_DESPLEGADO=true;
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -356,6 +348,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         //HABILITO EL BTN RESERVAR POR SI EL USUARIO HA ACCEDIDO DESDE EL HISTÓRICO
         btnReservarWorkpod.setEnabled(true);
         Fragment_Transaction_Session.desactivarBtnReservar = false;
+        InfoFragment.DIALOGO_DESPLEGADO=false;
         super.onDismiss(dialog);
     }
 

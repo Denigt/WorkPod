@@ -20,7 +20,6 @@ import com.workpodapp.workpod.WebActivity;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +52,6 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
 
     //ESCALADO
     DisplayMetrics metrics = new DisplayMetrics();
-
-    //COLECCIONES;
-    List<Scale_TextView> lstTv;
 
     public Fragment_Support() {
         // Required empty public constructor
@@ -113,8 +109,8 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
             WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(true);
             InfoFragment.actual = InfoFragment.MENU;
         } else {
-            //PONEMOS EL ICONO DEL NV EN MENU USUARIO
-            WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
+            //PONEMOS EL ICONO DEL NV EN SUPPORT
+            WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_support).setChecked(true);
 
             //Como al soporte se puede acceder desde la sesión, hay que volver a asignar el InfroFragment.actual a soporte
             //para volver al menú al darle atrás
@@ -139,8 +135,6 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
     private void escalarElementos() {
-        //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
         List<View> lstViews = new ArrayList<>();
@@ -171,6 +165,7 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
+
         super.onDestroy();
     }
 

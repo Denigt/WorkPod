@@ -3,12 +3,11 @@ package com.workpodapp.workpod.fragments;
 public class InfoFragment {
     // CODIGO DE LOS FRAGMENTS DEL MENU DE USUARIO
     public static final int PERFIL = 0;
-    public static final int PAGO = 1;
-    public static final int DESCUENTOS = 2;
-    public static final int SOPORTE = 3;
-    public static final int TRANSACCIONES = 4;
-    public static final int COMO_FUNCIONA=5;
-    public static final int CERRAR = 6;
+    public static final int DESCUENTOS = 1;
+    public static final int SOPORTE = 2;
+    public static final int TRANSACCIONES = 3;
+    public static final int COMO_FUNCIONA=4;
+    public static final int CERRAR = 5;
 
     // CODIGO DE FRAGMENTS CONTEXTUALES (PANTALLAS PRINCIPALES)
     public static final int SESSION=9;
@@ -21,6 +20,9 @@ public class InfoFragment {
 
     // CODIGO DE FRAGMENTS CONTEXTUALES (PANTALLA)
     public static final int PERFIL_MODIFICAR = 101;
+
+    //CODIGO DE FRAGMENTS EMERGENTES
+    public static boolean DIALOGO_DESPLEGADO=false;
 
     public static int anterior = -1;
     public static int actual = -1;

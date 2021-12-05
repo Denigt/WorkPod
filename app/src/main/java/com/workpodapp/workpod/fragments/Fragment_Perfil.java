@@ -25,8 +25,6 @@ import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_dirfacturacion;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +58,6 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
     private FrameLayout lytShowFacturacion;
     private ExpandableListView elsvFacturacion;
     private boolean inicio;
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
 
     // VARIABLES QUE MANEJAN EL ESTADO DEL FRAGMENT
     private boolean showInfo = false;

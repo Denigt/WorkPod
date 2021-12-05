@@ -1,186 +1,288 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:orientation="vertical"
-    tools:context=".fragments.Fragment_Transaction_Session">
+    tools:context=".pruebas">
+
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/TVDialogIDSesion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:text="Sesión de Workpod "
-                android:textColor="@color/Texto"
-                android:textSize="30dp"
-                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/IVPreviusSession"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/row_previus_session" />
+
+                <TextView
+                    android:id="@+id/TVFechaSession"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="17/10/2021"
+                    android:textColor="@color/blue"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/IVNextSession"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/row_next_session" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
                 <LinearLayout
+                    android:id="@+id/LLPrecioSession"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="5"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_back_button_light_blue"
+                    android:orientation="vertical"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:id="@+id/TVSessionPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="34,50€"
+                        android:textColor="#014563"
+                        android:textSize="50dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/TVDesgloseSession"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:text="Desglose"
+                        android:textColor="#014563"
+                        android:textSize="22dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp">
+
+                        <TextView
+                            android:id="@+id/TVTotalSession"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Total"
+                            android:textColor="#014563"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/TVPrecioTotalSession"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="end"
+                            android:text="50,00€"
+                            android:textColor="#014563"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp">
+
+                        <TextView
+                            android:id="@+id/TVDescuentoSession"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Descuento"
+                            android:textColor="#014563"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/TVImporteDescuentoSession"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="end"
+                            android:text="15,50€"
+                            android:textColor="#014563"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LLFechaSesion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp"
+                    android:background="@drawable/rounded_back_button_more_light_blue"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/IVDialogUbication"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginRight="15dp"
-                            android:src="@drawable/fill_icon_ubication" />
+                            android:id="@+id/IVTimeSession"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/empty_icon_clock" />
 
                         <TextView
-                            android:id="@+id/TVDialogUbication"
+                            android:id="@+id/TVTimeSession"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="c/ Don Rodriguez Díaz de Vivar, 27"
-                            android:textColor="@color/Texto"
-                            android:textSize="20dp"
+                            android:text="3:15:23"
+                            android:textColor="@color/darkblue"
+                            android:textSize="30dp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/LLFechaEntrada"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/IVDialogDateHour"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginRight="15dp"
-                            android:src="@drawable/fill_icon_dialog_calendar" />
+                        android:layout_marginHorizontal="30dp"
+                        android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/TVDialogDateHour"
-                            android:layout_width="match_parent"
+                            android:id="@+id/TVFechaEntrada"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="Fecha: 21-07-21,\nHora Entrada: 9:05\nHora Salida: 14:08"
-                            android:textColor="@color/Texto"
+                            android:layout_weight="1"
+                            android:text="Fecha de entrada:"
+                            android:textColor="#014563"
                             android:textSize="20dp"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/TVFechaEntradaDato"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:gravity="end"
+                            android:text="17:10"
+                            android:textColor="#014563"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/LLFechaSalida"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/IVDialogSessionTime"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginRight="15dp"
-                            android:src="@drawable/fill_icon_dialog_time_session" />
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/TVDialogSessionTime"
-                            android:layout_width="match_parent"
+                            android:id="@+id/TVFechaSalida"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="5h 3min"
-                            android:textColor="@color/Texto"
+                            android:layout_weight="1"
+                            android:text="Fecha de salida:"
+                            android:textColor="#014563"
                             android:textSize="20dp"
                             android:textStyle="bold" />
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/IVDialogPrice"
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
-                            android:layout_marginRight="8dp"
-                            android:src="@drawable/fill_icon_dialog_price" />
-
                         <TextView
-                            android:id="@+id/TVDialogPrice"
-                            android:layout_width="match_parent"
+                            android:id="@+id/TVFechaSalidaDato"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="Total pagado: 12,80"
-                            android:textColor="@color/Texto"
+                            android:layout_weight="0.5"
+                            android:gravity="end"
+                            android:text="19:34"
+                            android:textColor="#014563"
                             android:textSize="20dp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
-                    <LinearLayout
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/LLMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/mapSession"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/IVDialogOffers"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginRight="15dp"
-                            android:src="@drawable/fill_icon_dialog_offers" />
-
-                        <TextView
-                            android:id="@+id/TVDialogOffers"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="Descuento del 40%"
-                            android:textColor="@color/Texto"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
+                        android:layout_height="200dp" />
 
                     <TextView
-                        android:id="@+id/TVTotalPagado"
-                        android:gravity="center"
+                        android:id="@+id/TVMapa"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="20dp">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="Ha pagado un total de: 12,80"
-                        android:textColor="@color/darkblue"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/TVDireccionSesion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="10dp"
+                            android:text="C/Álamo,35, Torrejón de Ardoz, Madrid, España"
+                            android:textColor="@color/blue"
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </HorizontalScrollView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+
 </LinearLayout>

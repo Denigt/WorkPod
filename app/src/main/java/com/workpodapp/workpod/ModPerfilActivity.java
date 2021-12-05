@@ -18,8 +18,6 @@ import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Usuario;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.io.File;
 import java.time.ZonedDateTime;
@@ -45,10 +43,6 @@ public class ModPerfilActivity extends AppCompatActivity implements View.OnClick
     private TextView tVActModPerfilEmail;
     private ImageButton btnGuardar;
     private ImageButton btnCancelar;
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

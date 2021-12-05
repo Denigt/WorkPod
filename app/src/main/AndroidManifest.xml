@@ -17,7 +17,7 @@
         android:roundIcon="@drawable/logo_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkPod">
-        <activity android:name=".paypalActivity"></activity>
+        <activity android:name=".paypalActivity" />
         <activity android:name=".NoInternetConnectionActivity" />
 
         <meta-data

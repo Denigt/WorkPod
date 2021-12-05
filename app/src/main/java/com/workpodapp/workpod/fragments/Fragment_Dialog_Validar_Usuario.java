@@ -26,9 +26,6 @@ import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Usuario;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;

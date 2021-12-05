@@ -137,6 +137,8 @@ public class Fragment_sesion extends Fragment implements View.OnClickListener {
         tVWifi = view.findViewById(R.id.TVWifi);
         tVSesionDireccionTitulo = view.findViewById(R.id.TVSesionDireccionTitulo);
 
+        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
+
         //ARRANCAMOS EL HILO QUE HARÁ DE CONTADOR
         arrancarCrono();
 

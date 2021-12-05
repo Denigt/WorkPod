@@ -20,8 +20,6 @@ import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Cupon;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_More_Information;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

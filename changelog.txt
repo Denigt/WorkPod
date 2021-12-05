@@ -1,5 +1,12 @@
 # Changelog 
 
+##[3.12.1+Juan Vicente] -2021-12-05
+###Changed
+ - Diseno Fragment_Transaction_Session
+ -Controlar que no se abra un dialogo emergente mas de una vez
+###Deleted
+ -paquete scale
+
 ##[3.12.0+Juan Vicente] -2021-11-29
 ###Added
  - PayPal

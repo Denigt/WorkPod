@@ -5,11 +5,17 @@ package com.workpodapp.workpod.fragments;
 import androidx.annotation.NonNull;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
@@ -17,9 +23,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.basic.Database;
@@ -39,20 +54,35 @@ import java.util.List;
 import java.util.Random;
 
 //PARA CREAR UN DIALOGRESULT DEBEMOS HEREDAR DE LA CLASE DIALOGFRAGMENT
-public class Fragment_Transaction_Session extends Fragment implements View.OnClickListener {
+public class Fragment_Transaction_Session extends Fragment implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
     //CONSTANTES
     private static final String SIN_OFERTAS = "Sin ofertas";
     private static final int PARSEO_EURO_CENTIMOS = 100;
 
     //XML
-    private TextView tVDialogUbication;
-    private TextView tVDialogDateHour;
-    private TextView tVDialogOffers;
-    private TextView tVDialogSessionTime;
-    private TextView tVDialogPrice;
-    private TextView tVTotalPagado;
-    private ImageView iVDialogUbication;
+    private LinearLayout lLFechaSesion;
+    private LinearLayout lLFechaEntrada;
+    private LinearLayout lLFechaSalida;
+
+    private TextView tVFechaSesion;
+    private TextView tVSessionPrice;
+    private TextView tVDesgloseSession;
+    private TextView tVTotalSession;
+    private TextView tVPrecioTotalSession;
+    private TextView tVDescuentoSession;
+    private TextView tVImporteDescuentoSession;
+    private TextView tVTimeSession;
+    private TextView tVFechaEntrada;
+    private TextView tVFechaEntradaDato;
+    private TextView tVFechaSalida;
+    private TextView tVFechaSalidaDato;
+    private TextView tVDireccionSesion;
+    private TextView tVMapa;
+
+    private ImageView iVTimeSession;
+    private ImageView iVPreviusSession;
+    private ImageView iVNextSession;
 
     //VARIABLES CON LAS QUE COGEREMOS LOS DATOS DEL CONSTRUCTOR
     private String ubication;
@@ -85,6 +115,10 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private boolean refrescardB = false;
     public static boolean desactivarBtnReservar = false;
 
+    private boolean horas = false;
+    private List<Sesion> lstSesiones;
+    private Sesion sesionActual;
+
     // VARIABLES NECESARIAS PARA LA GEOLOCALIZACION
     private boolean havePermission = false;
     /**
@@ -96,16 +130,40 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      * Cuidado al leerlo, puede ser null
      */
     private Shared<LatLng> posicion = new Shared<>();
+    private Shared<LatLng> posicionWorkpod = new Shared<>();
     private boolean killHilos = false;
 
+    // VARIABLES PARA LA GESTION DEL MAPA Y LA LOCALIZACION
+    /**
+     * Rango en el que el boton de centrar tiene el efecto de acercar el mapa
+     */
+    private final double errorMedida = 0.01;
+    /**
+     * Zoom por defecto en el mapa
+     */
+    private final int defaultZoom = 12;
+    /**
+     * El mapa
+     */
+    private GoogleMap mMap;
+
+    // TAMANO DE LOS ICONOS Y MARCADORES DE MAPA
+    private int TAM_ICON = 100;
+    private int TAM_MARKERS = 110;
+
+    private boolean esperaCargarMapa;
+
     //CONSTRUCTOR
-    public Fragment_Transaction_Session(Sesion sesion) {
+    public Fragment_Transaction_Session(Sesion sesion, List<Sesion> lstSesiones) {
         this.ubication = sesion.getDireccion().toLongString();
         this.fechaEntrada = sesion.getEntrada();
         this.fechaSalida = sesion.getSalida();
         this.ofertas = sesion.getDescuento();
         this.precio = sesion.getPrecio();
         this.workpod = sesion.getWorkpod();
+        this.lstSesiones = lstSesiones;
+        this.sesionActual = sesion;
+        this.esperaCargarMapa=false;
 
         //INICIALIZAMOS EL RESTO DE ELEMENTOS
         precioFinal = 0.0;
@@ -142,14 +200,32 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         View view = inflater.inflate(R.layout.fragment_transaction_session, container, false);
         //PARA QUE FUNCIONEN LOS ELEMENTOS DEL XML (BTN, IV...) EN UN DIALOG, LAS INSTANCIAS HAN DE ESTAR
         // EN EL MÉTODO onCreateDialog
-        // iVSalirDialogSession = (ImageView) view.findViewById(R.id.IVSalirDialogSession);
-        tVDialogUbication = (TextView) view.findViewById(R.id.TVDialogUbication);
-        tVDialogDateHour = (TextView) view.findViewById(R.id.TVDialogDateHour);
-        tVDialogOffers = (TextView) view.findViewById(R.id.TVDialogOffers);
-        tVDialogPrice = (TextView) view.findViewById(R.id.TVDialogPrice);
-        tVDialogSessionTime = (TextView) view.findViewById(R.id.TVDialogSessionTime);
-        tVTotalPagado = view.findViewById(R.id.TVTotalPagado);
-        iVDialogUbication = (ImageView) view.findViewById(R.id.IVDialogUbication);
+
+        lLFechaEntrada = view.findViewById(R.id.LLFechaEntrada);
+        lLFechaSalida = view.findViewById(R.id.LLFechaSalida);
+        lLFechaSesion = view.findViewById(R.id.LLFechaSesion);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.mapSession);
+        mapFragment.getMapAsync(this);
+
+        tVFechaSesion = view.findViewById(R.id.TVFechaSession);
+        tVSessionPrice = view.findViewById(R.id.TVSessionPrice);
+        tVDesgloseSession = view.findViewById(R.id.TVDesgloseSession);
+        tVTotalSession = view.findViewById(R.id.TVTotalSession);
+        tVPrecioTotalSession = view.findViewById(R.id.TVPrecioTotalSession);
+        tVDescuentoSession = view.findViewById(R.id.TVDescuentoSession);
+        tVImporteDescuentoSession = view.findViewById(R.id.TVImporteDescuentoSession);
+        tVTimeSession = view.findViewById(R.id.TVTimeSession);
+        tVFechaEntrada = view.findViewById(R.id.TVFechaEntrada);
+        tVFechaEntradaDato = view.findViewById(R.id.TVFechaEntradaDato);
+        tVFechaSalida = view.findViewById(R.id.TVFechaSalida);
+        tVFechaSalidaDato = view.findViewById(R.id.TVFechaSalidaDato);
+        tVDireccionSesion = view.findViewById(R.id.TVDireccionSesion);
+        tVMapa = view.findViewById(R.id.TVMapa);
+
+        iVPreviusSession = view.findViewById(R.id.IVPreviusSession);
+        iVNextSession = view.findViewById(R.id.IVNextSession);
+        iVTimeSession = view.findViewById(R.id.IVTimeSession);
 
         InfoFragment.actual = InfoFragment.TRANSACTION_SESSION;
 
@@ -160,10 +236,10 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         } catch (SecurityException e) {
         }
         //AÑADIMOS AL XML LOS DATOS DE LA SESIÓN DE WORPOD DEL USUARIO
-        tVDialogUbication.setText(ubication);
-        tVDialogDateHour.setText("Fecha: " + fechaEntrada.format(DateTimeFormatter.ofPattern("dd-MM-yy")) + "\nEntrada:" + fechaEntrada.format(DateTimeFormatter.ofPattern("HH:mm "))
-                + "\nSalida: " + fechaSalida.format(DateTimeFormatter.ofPattern("HH:mm")));//HH 0 a 24 h con hh de 0 a 12h
-
+        tVDireccionSesion.setText(ubication);
+        tVFechaSesion.setText(fechaEntrada.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        tVFechaEntradaDato.setText(fechaEntrada.format(DateTimeFormatter.ofPattern("HH:mm")));
+        tVFechaSalidaDato.setText(fechaSalida.format(DateTimeFormatter.ofPattern("HH:mm")));
         //MÉTODO PARA CALCULAR LAS 2 FECHAS Y AGREGARLAS AL TV DEL XML
         calcularTiempoSesion(fecha1, fecha2, hour, min, seg);
 
@@ -174,8 +250,11 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         crearIDSesion(nAleatorio, letra, signo, letraAleatoria1, letraAleatoria2, signoAleatorio1, signoAleatorio2);
 
         //ESTABLECEMOS EVENTOS PARA LOS CONTROLES
-        iVDialogUbication.setOnClickListener(this);
-
+        iVTimeSession.setOnClickListener(this);
+        iVPreviusSession.setOnClickListener(this);
+        iVNextSession.setOnClickListener(this);
+        lLFechaSesion.setOnClickListener(this);
+        tVMapa.setOnClickListener(this);
         //ESCALAMOS ELEMENTOS
         escalarElementos();
 
@@ -185,9 +264,46 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.IVDialogUbication) {
-            onClickIVDialogUbication();
+        if (v.getId() == R.id.TVMapa && esperaCargarMapa) {
+            onClickLLMap();
+        } else if (v.getId() == R.id.LLFechaSesion || v.getId() == R.id.IVTimeSession) {
+            onClickIVTimeSession();
+        } else if (v.getId() == R.id.IVNextSession) {
+            onClickNextSession();
+        } else if (v.getId() == R.id.IVPreviusSession) {
+            onClickPreviusSession();
         }
+    }
+
+    private void onClickPreviusSession() {
+        for (Sesion sesiones : lstSesiones) {
+            if (sesionActual.equals(sesiones) && !sesiones.equals(lstSesiones.get(lstSesiones.size() - 1))) {
+                Fragment_Transaction_Session fragment_transaction_session = new Fragment_Transaction_Session(lstSesiones.get(lstSesiones.indexOf(sesiones) + 1), lstSesiones);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_transaction_session).commit();
+            }
+        }
+    }
+
+    private void onClickNextSession() {
+        for (Sesion sesiones : lstSesiones) {
+            if (sesionActual.equals(sesiones) && !sesiones.equals(lstSesiones.get(0))) {
+                Fragment_Transaction_Session fragment_transaction_session = new Fragment_Transaction_Session(lstSesiones.get(lstSesiones.indexOf(sesiones) - 1), lstSesiones);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_transaction_session).commit();
+            }
+        }
+    }
+
+    private void onClickIVTimeSession() {
+        if (horas) {
+            horas = false;
+            lLFechaSalida.setVisibility(View.GONE);
+            lLFechaEntrada.setVisibility(View.GONE);
+        } else {
+            horas = true;
+            lLFechaSalida.setVisibility(View.VISIBLE);
+            lLFechaEntrada.setVisibility(View.VISIBLE);
+        }
+
     }
 
 
@@ -198,7 +314,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      * Si el usuario accede a un workpod con el que no está realizando una sesión en este momento, le llevará al Fragment_Dialog_Workpod
      * donde podrá ver el estado del workpod e interactuar con él.
      */
-    private void onClickIVDialogUbication() {
+    private void onClickLLMap() {
         try {
             //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
             desactivarBtnReservar = true;
@@ -222,72 +338,22 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             refrescardB = false;
 
             //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
-            if (InfoApp.USER.getReserva()!=null && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
+            if (InfoApp.USER.getReserva() != null && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
                     && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
                 Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
                 WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
             }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
             else {
-                //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
-                for (int i = 0; i < lstUbicacion.size(); i++) {
-                    //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
-                    if (lstUbicacion.get(i).getWorkpods().size() > 1) {
-                        lstWorkpods = lstUbicacion.get(i).getWorkpods();
-                        for (int j = 0; j < lstWorkpods.size(); j++) {
-                            if (workpod.getId() == lstWorkpods.get(j).getId()) {
-                                workpod = lstWorkpods.get(j);
-                                workpod.setReserva(lstWorkpods.get(j).getReserva());
-                                Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
-                                fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-
-                                //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
-                                break;
-                            }
-                        }
-                    }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD
-                    else {
-                        if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
-                        //    workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
-                            workpod = lstUbicacion.get(i).getWorkpods().get(0);
-                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
-                            fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-                            //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
-
-                            break;
-                        }
-                    }
+                //CONTROLAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SOLO SE ABRA UNA VEZ
+                if(!InfoFragment.DIALOGO_DESPLEGADO){
+                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
+                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                 }
+
             }
         } catch (NullPointerException e) {
-            //CONTROLAMOS QUE SI USER.GETRESERVA() APUNTA A NULO, EL USUARIO PUEDA ABRIR EL WORKPOD QUE QUIERA CONSULTAR
-            //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
-         /*   desactivarBtnReservar = true;
-            //RECORREMOS LOS WORKPODS QUE HAY EN CADA UBICACIÓN (NO SE PUEDE HACER CON FOREACH)
-            for (int i = 0; i < lstUbicacion.size(); i++) {
-                //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
-                if (lstUbicacion.get(i).getWorkpods().size() > 1) {
-                    lstWorkpods = lstUbicacion.get(i).getWorkpods();
-                    for (int j = 0; j < lstWorkpods.size(); j++) {
-                        if (workpod.getId() == lstWorkpods.get(j).getId()) {
-                            workpod = lstWorkpods.get(j);
-                            Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
-                            fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-                            //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
-                            break;
-                        }
-                    }
-                }//SI EN UNA UBICACIÓN SOLO HAY UN WORKPOD
-                else {
-                    if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
-                        workpod = lstUbicacion.get(i).getWorkpods().get(0);
-                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
-                        fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
-                        //EVITAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SE ABRA VARIAS VECES
-                        break;
-                    }
-                }
-            }*/
+           e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -319,11 +385,11 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         //AGREGAMOS EL TIEMPO DE SESIÓN DE TRABAJO EN UN WORKPOD DEL USUARIO
         //ESTÉTICA DEL TIEMPO DE SESIÓN
         if (hour == 0 && min != 0) {
-            tVDialogSessionTime.setText(min + "min " + seg + "seg");
+            tVTimeSession.setText(min + "min " + seg + "seg");
         } else if (hour == 0 && min == 0) {
-            tVDialogSessionTime.setText(seg + "seg");
+            tVTimeSession.setText(seg + "seg");
         } else {
-            tVDialogSessionTime.setText(hour + "h:" + min + "min");
+            tVTimeSession.setText(hour + "h:" + min + "min");
         }
 
     }
@@ -340,19 +406,20 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      */
     private void calcularPrecio(Double precioFinal, Double precio, int hour, int min, double ofertas) {
         //SI HAY OFERTAS
-        if (ofertas>0) {
-            tVDialogOffers.setText("Descuento de: " + String.format("%.2f",(ofertas)) + "€");
-            tVDialogPrice.setText(String.format("%.2f", (precio)) + "€");
-            tVTotalPagado.setText("Ha pagado un total de " + String.format("%.2f", (precio - ofertas)) + "€");
+        if (ofertas > 0) {
+            tVImporteDescuentoSession.setText(String.format("%.2f", (ofertas)) + "€");
+            tVPrecioTotalSession.setText(String.format("%.2f", (precio)) + "€");
+            tVSessionPrice.setText(String.format("%.2f", (precio - ofertas)) + "€");
         } else {
             //SI NO HAY OFERTAS
-            tVDialogPrice.setText(String.format("%.2f", (precio)) + "€");
-            tVDialogOffers.setText(SIN_OFERTAS);
-            tVTotalPagado.setText("Ha pagado un total de " + String.format("%.2f", (precio)) + "€");
+            tVPrecioTotalSession.setText(String.format("%.2f", (precio)) + "€");
+            tVImporteDescuentoSession.setText(SIN_OFERTAS);
+            tVSessionPrice.setText(String.format("%.2f", (precio)) + "€");
         }
 
         if (precio < 1) {
-            tVTotalPagado.setText("Ha pagado un total de " + String.valueOf(Math.round(precio * PARSEO_EURO_CENTIMOS)) + " céntimos");
+            tVPrecioTotalSession.setText(String.valueOf(Math.round(precio * PARSEO_EURO_CENTIMOS)) + " cent");
+            tVSessionPrice.setText(String.valueOf(Math.round(precio * PARSEO_EURO_CENTIMOS)) + " cent");
         }
     }
 
@@ -417,21 +484,173 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
      */
-    private <T extends View> void escalarElementos() {
+    private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        List<T> lstView = new ArrayList<>();
+        List<View> lstView = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //LLENAMOS COLECCIONES
-        lstView.add((T) tVDialogUbication);
-        lstView.add((T) tVDialogDateHour);
-        lstView.add((T) tVDialogSessionTime);
-        lstView.add((T) tVDialogOffers);
-        lstView.add((T) tVDialogPrice);
+        lstView.add(tVFechaSesion);
+        lstView.add(tVSessionPrice);
+        lstView.add(tVDesgloseSession);
+        lstView.add(tVTotalSession);
+        lstView.add(tVPrecioTotalSession);
+        lstView.add(tVDescuentoSession);
+        lstView.add(tVImporteDescuentoSession);
+        lstView.add(tVTimeSession);
+        lstView.add(tVFechaEntrada);
+        lstView.add(tVFechaEntradaDato);
+        lstView.add(tVFechaSalida);
+        lstView.add(tVFechaSalidaDato);
+        lstView.add(tVDireccionSesion);
+
+        lstView.add(iVNextSession);
+        lstView.add(iVPreviusSession);
+        lstView.add(iVTimeSession);
 
         Method.scaleViews(metrics, lstView);
+        escaladoParticular(metrics);
+
+    }
+
+    private void escaladoParticular(DisplayMetrics metrics) {
+        float height = metrics.heightPixels / metrics.density;
+        iVTimeSession.getLayoutParams().height = Integer.valueOf((int) Math.round(iVTimeSession.getLayoutParams().height * (height / Method.heightEmulator)));
+        iVNextSession.getLayoutParams().height = Integer.valueOf((int) Math.round(iVNextSession.getLayoutParams().height * (height / Method.heightEmulator)));
+        iVPreviusSession.getLayoutParams().height = Integer.valueOf((int) Math.round(iVPreviusSession.getLayoutParams().height * (height / Method.heightEmulator)));
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
+        locationService = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        //REFRESCAMOS LOS WORKPODS
+        Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
+        dbUbicacion.postRun(() -> {
+            if (!dbUbicacion.getError().get()) {
+                lstUbicacion.removeAll(lstUbicacion);
+                lstUbicacion.addAll(dbUbicacion.getLstSelect());
+                //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
+                refrescardB = true;
+            }
+
+        });
+        dbUbicacion.postRunOnUI(getActivity(), () -> {
+            try {
+                locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
+                if (lstUbicacion.size() > 0) {
+                    /*for (Ubicacion ubicacion : lstUbicacion) {
+                        if(sesionActual.getWorkpod().getUbicacion().equals(ubicacion.getId())){
+                            for (Workpod workpod : ubicacion.getWorkpods()) {
+                                if (sesionActual.getWorkpod().equals(workpod)) {
+                                    posicionWorkpod.resource = new LatLng(ubicacion.getLat(), ubicacion.getLon());
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicionWorkpod.resource, defaultZoom));
+                                }
+                            }
+                        }
+
+
+                    }*/
+                    for (int i = 0; i < lstUbicacion.size(); i++) {
+                        //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
+                        if (lstUbicacion.get(i).getWorkpods().size() > 1) {
+                            lstWorkpods = lstUbicacion.get(i).getWorkpods();
+                            for (int j = 0; j < lstWorkpods.size(); j++) {
+                                if (workpod.getId() == lstWorkpods.get(j).getId()) {
+                                    workpod = lstWorkpods.get(j);
+                                    workpod.setReserva(lstWorkpods.get(j).getReserva());
+                                    posicionWorkpod.resource = new LatLng(lstUbicacion.get(i).getLat(), lstUbicacion.get(i).getLon());
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicionWorkpod.resource, defaultZoom));
+                                    esperaCargarMapa=true;
+                                }
+                            }
+                        } else {
+                            if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
+                                //    workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
+                                workpod = lstUbicacion.get(i).getWorkpods().get(0);
+                                posicionWorkpod.resource = new LatLng(lstUbicacion.get(i).getLat(), lstUbicacion.get(i).getLon());
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicionWorkpod.resource, defaultZoom));
+                                esperaCargarMapa=true;
+                            }
+                        }
+                    }
+                }
+
+            } catch (SecurityException e) {
+            }
+            dibujaWorkpods();
+        });
+        dbUbicacion.start();
+
+    }
+
+    /**
+     * Dibuja el marcador del workpod en el mapa
+     */
+    private void dibujaWorkpods() {
+        try {
+            Marker markPosicion;
+
+            LatLng posicion = new LatLng(sesionActual.getWorkpod().getUbicacion().getLat(), sesionActual.getWorkpod().getUbicacion().getLon());
+            markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).zIndex(1));
+            markPosicion.setTag(sesionActual.getWorkpod().getUbicacion());
+            for (Ubicacion ubicacion:lstUbicacion) {
+                boolean allReservados = ubicacion.allResevados();
+                markPosicion.setIcon(VectortoBitmap(requireContext(), allReservados ? R.drawable.markers_cluster_red : R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf("W"), 60, allReservados ? R.color.red : R.color.blue));
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Transforma un vectorAsset en un bitmapDrawable y escribe texto centrado sobre el
+     *
+     * @param context   Contexto de la app
+     * @param drawable  Imagen vectorial
+     * @param width     Ancho de la imagen en px
+     * @param height    Alto de la imagen en px
+     * @param text      Texto a escribir
+     * @param textTam   Tamano del texto
+     * @param textColor Color del texto (id en los Resources de la app)
+     * @return Bitmap a partir del vectorAsset
+     */
+    private static BitmapDescriptor VectortoBitmap(Context context, int drawable, int width, int height, String text, int textTam, int textColor) {
+        // Declarar pincel para hacer el texto
+        Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+        Paint pen = new Paint();
+        pen.setTextSize(textTam);
+        pen.setTextAlign(Paint.Align.CENTER);
+        pen.setTypeface(font);
+        pen.setColor(context.getResources().getColor(textColor));
+
+        // Obtener el Drawable
+        Drawable vectorImg = ContextCompat.getDrawable(context, drawable);
+        // Establecer tamanos
+        vectorImg.setBounds(0, 0, width, height);
+        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Dibujar en el bitmat
+        Canvas canvas = new Canvas(bm);
+        vectorImg.draw(canvas);
+        canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() / 2) + (textTam / 4), pen);
+        return BitmapDescriptorFactory.fromBitmap(bm);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
     }
 
     // CLASE QUE FUNCIONARA COMO EL LISTENER DE LA UBICACION

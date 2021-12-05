@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.basic.Method;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +37,6 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
     private ImageView iVLlamar;
     private TextView tVFgmDialogCallTlfn;
 
-    //COLECCIONES
-    List<Scale_TextView> lstTv;
 
     //PERMISOS
     private static final int PERMISO_LLAMADA = 50;
@@ -144,14 +141,13 @@ public class Fragment_Dialog_Call extends DialogFragment implements View.OnClick
      */
     private void escalarElementos() {
         //INICIALIZAMOS COLECCIONES
-        this.lstTv=new ArrayList<>();
+        List<View>lstViews=new ArrayList<>();
+        lstViews.add(tVFgmDialogCallTlfn);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        //LLENAMOS COLECCIONES
-        lstTv.add(new Scale_TextView(tVFgmDialogCallTlfn,"wrap_content","bold",35,35,35));
+        Method.scaleViews(metrics,lstViews);
 
-        //Method.scaleTv(metrics, lstTv);
     }
 }

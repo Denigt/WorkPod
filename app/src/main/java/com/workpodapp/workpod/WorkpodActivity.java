@@ -255,6 +255,16 @@ public class WorkpodActivity extends FragmentActivity {
             //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
             fTransaction.replace(R.id.LLFragment, support);
             fTransaction.commit();
+        }else if (menuitem.getItemId() == R.id.inv_folder) {
+            InfoFragment.actual=InfoFragment.TRANSACCIONES;
+            FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
+            //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
+            fTransaction = fragmentManager.beginTransaction();
+            //CREAMOS UN OBJETO DEL FRAGMENTO
+            Fragment_Transaction_History transactionHistory = new Fragment_Transaction_History();
+            //INCROPORO EN EL LINEAR LAYOUT EL FRAGMENT INICIAL
+            fTransaction.replace(R.id.LLFragment, transactionHistory);
+            fTransaction.commit();
         }
     }
 
@@ -309,6 +319,8 @@ public class WorkpodActivity extends FragmentActivity {
     }
 
     private void volverAlMenu() {
+        //PONEMOS EL ICONO DEL NV EN Menu
+        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
         FragmentManager fragmentManager = WorkpodActivity.this.getSupportFragmentManager();
         //GESTIONO EL INICIO DE UNA TRANSACCIÓN PARA CARGAR EL FRAGMENTO, CADA TRANSACCIÓN ES UN CAMBIO
         fTransaction = fragmentManager.beginTransaction();

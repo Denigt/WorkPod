@@ -19,8 +19,6 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.workpodapp.workpod.basic.Method;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +34,6 @@ public class InitActivity extends AppCompatActivity implements View.OnClickListe
     private TextSwitcher txtSwitcher;
     private TextView tvTituloInitActivity;
     private ArrayList<ImageButton> btnSwither = new ArrayList<ImageButton>();
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView>lstTv;
 
     // RECURSOS DEL LOS SWITCHER
     private final int[] images = {R.drawable.img1_init_activity, R.drawable.img2_init_activity, R.drawable.img3_init_activity};

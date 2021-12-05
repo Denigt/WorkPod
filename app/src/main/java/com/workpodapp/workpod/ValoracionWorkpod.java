@@ -23,7 +23,7 @@ import com.workpodapp.workpod.testUsuario.Informacion_Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValoracionWorkpod extends AppCompatActivity implements View.OnClickListener {
+public class ValoracionWorkpod extends AppCompatActivity implements View.OnClickListener {   
     //XML
     private ImageView iVStar1, iVStar2, iVStar3, iVStar4, iVStar5;
     private Button btnNoParticiparTest, btnParticiparTest;

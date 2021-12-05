@@ -5,7 +5,16 @@
         android:id="@+id/inv_location"
         android:icon="@drawable/empty_icon_mapa"
         android:title="" />
+    <item
+        android:id="@+id/inv_support"
+        android:icon="@drawable/empty_icon_support"
+        android:iconTint="@color/Fondos"
+        android:title="" />
 
+    <item
+        android:id="@+id/inv_folder"
+        android:icon="@drawable/empty_icon_cartera"
+        android:title="" />
     <item
         android:id="@+id/inv_menu_user"
         android:icon="@drawable/empty_icon_user_21"
