@@ -42,9 +42,6 @@ import com.workpodapp.workpod.data.Reserva;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Ubicacion;
 import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.time.ZonedDateTime;
@@ -103,11 +100,6 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
     private String direccion;
     private String descripcion;
     int idWorkpodUsuario;
-
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
-    List<Scale_Image_View> lstIv;
 
     //VARIABLES
     private int centesimas;
@@ -288,7 +280,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         width = metrics.widthPixels / metrics.density;
         escalarElementos(metrics);
 
-        //desactivarBtnReservar();
+        InfoFragment.DIALOGO_DESPLEGADO=true;
 
         //RETORNAMOS EL OBJETO BUILDER CON EL MÉTODO CREATE
         return builder.create();
@@ -356,6 +348,7 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         //HABILITO EL BTN RESERVAR POR SI EL USUARIO HA ACCEDIDO DESDE EL HISTÓRICO
         btnReservarWorkpod.setEnabled(true);
         Fragment_Transaction_Session.desactivarBtnReservar = false;
+        InfoFragment.DIALOGO_DESPLEGADO=false;
         super.onDismiss(dialog);
     }
 
@@ -370,10 +363,10 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         try {
             //SI LA RESERVA NO ES NULA Y EL ID DE ESTE WORKPOD COINICIDE CON EL DEL WORKPOD RESERVADO POR EL USUARIO
             if ((workpod.getReserva() != null) && (workpod.getReserva().getId() == InfoApp.USER.getReserva().getId())
-                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA")) {
+                    && workpod.getReserva().getEstado().equalsIgnoreCase("RESERVADA") && !InfoApp.USER.getReserva().isCancelada()) {
                 //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
                 btnReservarWorkpod.setText("Reservado");
-                btnReservarWorkpod.setTextSize(10);
+                // btnReservarWorkpod.setTextSize(10);
                 lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
                 //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y DE CANCELAR RESERVA
                 lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
@@ -588,22 +581,24 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             insert.postRunOnUI(requireActivity(), () -> {
                 if (insert.getError().code > -1) {
                     try {
-                        //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                        btnReservarWorkpod.setText("Reservado");
-                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
-                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
-                        lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                        //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
-                        btnAbrirAhora.setVisibility(View.VISIBLE);
-                        lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
-                        lLAbrirAhora.setVisibility(View.VISIBLE);
-                        //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
-                        lLEstadoWorkpod.getLayoutParams().width = 0;
-                        visibleBtnCancelar = false;
-                        //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORKPOD
-                        escaladoParticular(metrics, 0);
-                        //EMPIEZA EL CRONOMETRO
-                        arrancarCronometro();
+                        if (getActivity() != null) {
+                            //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                            btnReservarWorkpod.setText("Reservado");
+                            lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button_green));
+                            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA
+                            lLEstadoWorkpod.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                            //HACEMOS VISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
+                            btnAbrirAhora.setVisibility(View.VISIBLE);
+                            lLAbrirAhora.setBackground(getActivity().getDrawable(R.drawable.rounded_border_button));
+                            lLAbrirAhora.setVisibility(View.VISIBLE);
+                            //FIJAMOS EL ANCHO DE LOS LAYOUTS DE AMBOS BTNS
+                            lLEstadoWorkpod.getLayoutParams().width = 0;
+                            visibleBtnCancelar = false;
+                            //CAMBIAMOS EL TAMAÑO DE LA FUENTE DEL BTN RESERVAR WORKPOD
+                            escaladoParticular(metrics, 0);
+                            //EMPIEZA EL CRONOMETRO
+                            arrancarCronometro();
+                        }
                         // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
                         for (Workpod item : ubicacion.getWorkpods())
                             if (item.getId() == workpod.getId())
@@ -629,29 +624,35 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
         reserva.setEstado("CANCELADA");
         Database<Reserva> update = new Database<>(Database.UPDATE, reserva);
         update.postRunOnUI(requireActivity(), () -> {
-            if (update.getError().code > -1) {
-                //PARAMOS CRONOMETRO Y LO INICIALIZAMOS DE NUEVO A 20 MIN
-                finish = true;
-                inicializarCrono();
-                //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
-                lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
-                lLEstadoWorkpod.getLayoutParams().width = 0;
-                btnReservarWorkpod.setText("Reservar");
-                escaladoParticular(metrics, 0);
-                //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
-                btnAbrirAhora.setVisibility(View.GONE);
-                lLAbrirAhora.setVisibility(View.GONE);
-                btnCancelarReserva.setVisibility(View.GONE);
+            try {
+                if (update.getError().code > -1) {
+                    //PARAMOS CRONOMETRO Y LO INICIALIZAMOS DE NUEVO A 20 MIN
+                    finish = true;
+                    inicializarCrono();
+                    //CAMBIAMOS TEXTO Y COLOR DEL LAYOUT DEL BTN AL PULSARLO
+                    if (getActivity() != null) {
+                        lLEstadoWorkpod.setBackground(getActivity().getDrawable(R.drawable.rounded_back_button));
+                        lLEstadoWorkpod.getLayoutParams().width = 0;
+                        btnReservarWorkpod.setText("Reservar");
+                        escaladoParticular(metrics, 0);
+                        //HACEMOS INVISIBLE EL BTN DE ABRIR AHORA Y EL BOTON DE CANCELAR RESERVA
+                        btnAbrirAhora.setVisibility(View.GONE);
+                        lLAbrirAhora.setVisibility(View.GONE);
+                        btnCancelarReserva.setVisibility(View.GONE);
+                    }
+                    // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
+                    for (Workpod item : ubicacion.getWorkpods())
+                        if (item.getId() == workpod.getId())
+                            item.setReserva(reserva);
+                    // ESTABLECER LA RESERVA DEL USUARIO
+                    InfoApp.USER.setReserva(reserva);
 
-                // CAMBIAR EL WORKPOD EN LA LISTA DE WORKPODS
-                for (Workpod item : ubicacion.getWorkpods())
-                    if (item.getId() == workpod.getId())
-                        item.setReserva(reserva);
-                // ESTABLECER LA RESERVA DEL USUARIO
-                InfoApp.USER.setReserva(reserva);
+                } else
+                    Toast.makeText(getContext(), update.getError().message, Toast.LENGTH_SHORT).show();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
 
-            } else
-                Toast.makeText(getContext(), update.getError().message, Toast.LENGTH_SHORT).show();
         });
         update.start();
     }
@@ -766,7 +767,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
             public void run() {
                 try {
                     escaladoParticular(metrics, 0);
+
                     Thread.sleep(TIEMPO_EMPIECE_CRONO);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -812,9 +815,9 @@ public class Fragment_Dialog_Workpod extends DialogFragment implements View.OnCl
                                                 btnAbrirAhora.setText("Lejos");
                                             } else if (distance > 1000) {
                                                 btnAbrirAhora.setText(String.format("%.2f", (distance / 1000)) + "km");
-                                            } else if (distance < 1000 && distance > 50) {
+                                            } else if (distance < 1000 && distance > 150) {
                                                 btnAbrirAhora.setText((String.format("%.2f", (distance)) + "m"));
-                                            } else if (distance < 50) {
+                                            } else if (distance < 150) {
                                                 btnAbrirAhora.setText("¡Abrir Ahora!");
                                                 //CAMBIAMOS VALOR BOOLEANO QUE CONTROLA IR AL FRAGMENT SESION FINALIZADA
                                                 abrirAhora = true;

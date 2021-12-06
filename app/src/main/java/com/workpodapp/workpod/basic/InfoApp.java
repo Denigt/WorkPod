@@ -35,6 +35,7 @@ public abstract class InfoApp {
     public static final String LOGFILE = "log.cfg";
 
     public static String INSTALLATION;
+    public static double PRECIO_FINAL_SESION=0.0;
 
     public static ArrayList<String> TOPICS;
     static {

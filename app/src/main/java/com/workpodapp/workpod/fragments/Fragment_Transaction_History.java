@@ -2,6 +2,7 @@ package com.workpodapp.workpod.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -24,6 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.workpodapp.workpod.LoginActivity;
+import com.workpodapp.workpod.NoInternetConnectionActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Spinner;
@@ -32,7 +35,6 @@ import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.otherclass.Spinner_Years_Transaction_History;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +58,6 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
     List<Spinner_Years_Transaction_History> lstSpinner = new ArrayList<>();
 
     //COLECCIONES
-    List<Scale_TextView> lstTv;
     List<Sesion> lstSesiones = new ArrayList<>();//LAS SESIONES DE WORKPOD
 
     //ELSV Y SUS ELEMENTOS
@@ -118,6 +119,8 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         lLSeleccioneAnio = view.findViewById(R.id.LLSeleccioneAnio);
         iVLocationInTransactionHistory = view.findViewById(R.id.IVLocationInTransactionHistory);
 
+
+
         //CONEXIÓN CON LA BD, VOLCADO DE LAS SESIONES EN LSTSESIONES
         conectarseBDSesion(view, getActivity());
 
@@ -129,8 +132,8 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
 
         // ESTABLECER EVENTOS PARA LOS CONTROLES
         iVLocationInTransactionHistory.setOnClickListener(this);
-        //PONEMOS EL ICONO DEL NV EN MENU USUARIO
-        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
+        //PONEMOS EL ICONO DEL NV EN FOLDER
+        WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_folder).setChecked(true);
         return view;
     }
 
@@ -150,7 +153,8 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
         if (networkInfo == null || (networkInfo.isConnected() == false)) {
-            Toast.makeText(getActivity(), "No estás conectado a internet", Toast.LENGTH_LONG).show();
+            Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+            startActivity(activity);
         } else {
 //CONTROLAMOS QUE SI YA SE HA VOLCADO LA LISTA, NO SE VUELVA A VOLCAR
             if (lstSesiones.size() < 1) {
@@ -166,6 +170,9 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                     });
                     dbSesion.postRunOnUI(getActivity(), () -> {
                         if (lstSesiones.size() != 0) {
+                            lstSesiones.sort(Comparator.comparing(Sesion::getEntrada));
+                            //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
+                            Collections.reverse(lstSesiones);
                             //HACEMOS QUE APAREZCA LOS ELEMENTOS DE CUANDO EL USUARIO YA HA REALIZADO ALGUNA SESIÓN
                             tVfgmTransHistMisSesiones.setVisibility(View.VISIBLE);
                             lLSeleccioneAnio.setVisibility(View.VISIBLE);
@@ -183,6 +190,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                             iVLocationInTransactionHistory.setVisibility(View.VISIBLE);
                             lLSinSesiones.setVisibility(View.VISIBLE);
                         }
+
                     });
                     dbSesion.start();
                 } catch (NullPointerException e) {
@@ -220,9 +228,9 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void montandoSpinner(View view, List<Sesion> lstTransaction, int i, List<String> lstYears, List<Spinner_Years_Transaction_History> lstSpinner) {
         //ORDENAMOS LA LIST POR FECHA DE ENERO A DICIEMBRE Y DEL 1 AL 31 (30 O 28)
-        lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
+        /*lstTransaction.sort(Comparator.comparing(Sesion::getEntrada));
         //LE DAMOS LA VUELTA A LA LIST PARA QUE SALGAN PRIMERO LAS SESIONES MÁS RECIENTES
-        Collections.reverse(lstTransaction);
+        Collections.reverse(lstTransaction);*/
         //RECORREMOS LAS SESIONES
         for (Sesion transaction : lstTransaction) {
             //SI LA LISTA DE AÑOS NO CONTIENE UN AÑO EN EL QUE SE HA REALIZADO UNA SESIÓN, QUE LO AÑADA A LA LISTA
@@ -254,7 +262,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                             construyendoELsV(transaction.getEntrada().getYear());
                             //INICIALIZAMOS EL ADAPATADOR DEL ELSV
                             //He Cambiado view.getContext por getActivity().getApplicationContext() para q nunca apunte a null
-                            adapter_eLsV = new Adapter_ELsV(getActivity().getApplicationContext(), monthList, itemList);
+                            adapter_eLsV = new Adapter_ELsV(getActivity().getApplicationContext(), monthList, itemList,lstSesiones);
                             //LE PASAMOS EL ADAPTADOR AL ELSV
                             eLsV.setAdapter(adapter_eLsV);
                         }
@@ -380,6 +388,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         private Context context;
         private List<String> monthList;
         private HashMap<String, List<Sesion>> items_ELsV;
+        private List<Sesion>lstAllSesiones;
 
         //VARIABLES PARA EL CÁLCULO DEL TIEMPO DE SESIÓN DEL USUARIO EN WORKPOD
         private int hour;
@@ -387,10 +396,11 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         private int seg;
 
         //CONSTRUCTOR CON TODOS LOS PARÁMETROS
-        public Adapter_ELsV(Context context, List<String> chapterList, HashMap<String, List<Sesion>> items_ELsV) {
+        public Adapter_ELsV(Context context, List<String> chapterList, HashMap<String, List<Sesion>> items_ELsV,List<Sesion>lstAllSesiones) {
             this.context = context;
             this.monthList = chapterList;
             this.items_ELsV = items_ELsV;
+            this.lstAllSesiones=lstAllSesiones;
         }
 
         //TAMAÑO DE LOS TÍTULOS
@@ -500,7 +510,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                 public void onClick(View v) {
                     //CREAMOS UN OBJETO DEL FRAGMENT QUE HACE DE DIALOGO EMERGENTE Y EN SU CONSTRUCTOR A TRAVÉS DEL OBJETO LSV LE PASAMOS LOS
                     //VALORES DE LA SESIÓN SELECCIONADA
-                    Fragment_Transaction_Session fragmentDialogTransactionSession = new Fragment_Transaction_Session(sesion);
+                    Fragment_Transaction_Session fragmentDialogTransactionSession = new Fragment_Transaction_Session(sesion,lstAllSesiones);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.LLFragment, fragmentDialogTransactionSession).addToBackStack(null).commit();
                     //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE

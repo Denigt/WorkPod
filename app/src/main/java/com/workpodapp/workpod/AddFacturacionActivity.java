@@ -19,8 +19,6 @@ import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Facturacion;
 import com.workpodapp.workpod.data.Usuario;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.io.File;
 import java.time.ZonedDateTime;
@@ -43,9 +41,6 @@ public class AddFacturacionActivity extends AppCompatActivity implements View.On
     private ImageButton btnGuardar;
     private ImageButton btnCancelar;
 
-    //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,9 +146,6 @@ public class AddFacturacionActivity extends AppCompatActivity implements View.On
      *
      */
     private void escalarElementos() {
-
-        //INICIALIZAMOS COLECCIONES
-        this.lstTv = new ArrayList<>();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);

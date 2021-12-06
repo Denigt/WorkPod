@@ -1,8 +1,13 @@
 package com.workpodapp.workpod.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
@@ -18,21 +23,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.workpodapp.workpod.NoInternetConnectionActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_Descuentos;
 import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Campana;
 import com.workpodapp.workpod.data.Cupon;
+import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Usuario;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_Image_View;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
@@ -77,9 +84,6 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     DisplayMetrics metrics;
     float width;
     //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
-    List<Scale_Image_View> lstIv;
     List<Cupon> lstCupones = new ArrayList<>();
     List<Cupon> lstAmigos = new ArrayList<>();
 
@@ -104,6 +108,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -149,8 +154,6 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels / metrics.density;
 
-        volcarCupones(view);
-
         //PONEMOS EL ICONO DEL NV EN MENU USUARIO
         WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_menu_user).setChecked(true);
 
@@ -158,10 +161,11 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
         tV_MGM.setText("MGM: " + InfoApp.USER.getCodamigo());
 
         escalarElementos(metrics);
-
+        conectarseBDSesion(getActivity(), view);
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void volcarCupones(View view) {
         usuario = InfoApp.USER;
         Database<Cupon> dbCupon = new Database<>(Database.SELECTUSER, new Cupon());
@@ -171,6 +175,9 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
                     lstCupones.add(cupon);
                 }
             }
+            //Ordenamos los cupones para que los caducados salgan al final
+            lstCupones.sort((c1, c2) -> c1.getCampana().getFinCanjeo().compareTo(c2.getCampana().getFinCanjeo()));
+            Collections.reverse(lstCupones);
         });
         dbCupon.postRunOnUI(getActivity(), () -> {
             contruyendoLsV(view);
@@ -278,7 +285,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             Toast.makeText(getActivity(), "Ingrese el código de un cupón para guardarlo", Toast.LENGTH_LONG).show();
         } else if (eTCanjearCodigos.getText().toString().trim().equals(InfoApp.USER.getCodamigo())) {
             Toast.makeText(getActivity(), "No puedes meter tu código amigo", Toast.LENGTH_LONG).show();
-
+            eTCanjearCodigos.setText("");
         } else {
             //INICIALIZAMOS LA VARIABLE CUPÓN
             cupon = new Cupon();
@@ -289,17 +296,15 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             //REALIZAMOS EL INSERT
             Database<Cupon> insert = new Database<>(Database.INSERT, cupon);
             insert.postRun(() -> {
-                //LIMPIAMOS EL ET
-                eTCanjearCodigos.setText("");
-
             });
             insert.postRunOnUI(getActivity(), () -> {
-
+                //LIMPIAMOS EL ET
+                eTCanjearCodigos.setText("");
                 if (insert.getError().code > -1) {
                     //REFRESCAMOS EL FRAGMENT SIN QUE SE REPITA
                     Fragment_Canjear_Codigos fragment_canjear_codigos = new Fragment_Canjear_Codigos();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragment_canjear_codigos).commit();
-                } else if (insert.getError().code > -2) {
+                } else if (insert.getError().code > -10) {
                     Toast.makeText(getActivity(), insert.getError().message, Toast.LENGTH_LONG).show();
                 } else if (insert.getError().code < -10) {
                     Toast.makeText(getActivity(), "Ya has ingresado ese cupón", Toast.LENGTH_LONG).show();
@@ -329,6 +334,28 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
     //MÉTODOS
 
     /**
+     * Este método servirá para que si no estás conectado a internet, no se realice la conexión
+     * con la BD, Si no estás conectado a internet, te lleva al activity para tratar el error 404
+     * Importante, para vaciar la pila y que al volver hacia atrás no haya nada, finalizamos WorkpodActivity asi q este metodo se carga el último
+     * para q nada apunte a null
+     *
+     * @param context contexto de la app
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void conectarseBDSesion(Context context, View view) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        //SI EL NETWORKINFO ES NULL O SI ISCONNECTED DEVUELVE FALSE ES QUE NO HAY INTERNET
+        if (networkInfo == null || (networkInfo.isConnected() == false)) {
+            Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+            startActivity(activity);
+            // getActivity().finish(); si haces esto, InfoApp.USER apunta a null
+        } else {
+            volcarCupones(view);
+        }
+    }
+
+    /**
      * Este método sirve de ante sala para el método de la clase Methods donde escalamos los elementos del xml.
      * En este método inicializamos las colecciones donde guardamos los elementos del xml que vamos a escalar y
      * donde especificamos el width que queremos (match_parent, wrap_content o ""(si no ponemos nada significa que
@@ -343,40 +370,40 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
      *
      * @param metrics
      */
-    private <T extends View> void escalarElementos(DisplayMetrics metrics) {
+    private void escalarElementos(DisplayMetrics metrics) {
         //INICIALIZAMOS COLECCIONES
-        List<T> lstView = new ArrayList<>();
-        lstTv=new ArrayList<>();
-        lstBtn=new ArrayList<>();
-        lstIv=new ArrayList<>();
+        List<View> lstView = new ArrayList<>();
 
         //LLENAMOS COLECCIONES
-        lstView.add((T) btnCancelarDescuento);
-        lstView.add((T) btnGuardarDescuento);
-        lstView.add((T) btnShareFriendCodeDescuento);
-        lstView.add((T) btnShareMoreFriendCode);
+        lstView.add(btnCancelarDescuento);
+        lstView.add(btnGuardarDescuento);
+        lstView.add(btnShareFriendCodeDescuento);
+        lstView.add(btnShareMoreFriendCode);
 
-        lstView.add((T) tV_Titulo_Canjea_Codigos);
-        lstView.add((T) tV_Descuentos);
-        lstView.add((T) tV_No_Descuentos);
-        lstView.add((T) tV_MGM_Minutos_Estandar);
-        lstView.add((T) tV_MGM_Amigos);
-        lstView.add((T) tV_MGM_Amigos_Titulo);
-        lstView.add((T) tV_MGM_Minutos);
-        lstView.add((T) tV_MGM_Minutos_Titulo);
-        lstView.add((T) tV_MGM);
+        lstView.add(tV_Titulo_Canjea_Codigos);
+        lstView.add(tV_Descuentos);
+        lstView.add(tV_No_Descuentos);
+        lstView.add(tV_MGM_Minutos_Estandar);
+        lstView.add(tV_MGM_Amigos);
+        lstView.add(tV_MGM_Amigos_Titulo);
+        lstView.add(tV_MGM_Minutos);
+        lstView.add(tV_MGM_Minutos_Titulo);
+        lstView.add(tV_MGM);
 
-        lstView.add((T)iV_Btn_Volver);
-        lstView.add((T)iV_Btn_Siguiente);
-        lstView.add((T)iV_Give_Five);
-        lstView.add((T)eTCanjearCodigos);
+        lstView.add(iV_Btn_Volver);
+        lstView.add(iV_Btn_Siguiente);
+        lstView.add(iV_Give_Five);
+        lstView.add(eTCanjearCodigos);
+        lstView.add(lLMGM);
+        lstView.add(lLDatosMGM);
 
         Method.scaleViews(metrics, lstView);
 
-        escaladoParticular(metrics, lstBtn);
+        escaladoParticular(metrics);
     }
 
-    private void escaladoParticular(DisplayMetrics metrics, List<Scale_Buttons> lstBtn) {
+    private void escaladoParticular(DisplayMetrics metrics ) {
+        float height = metrics.heightPixels / metrics.density;
         if ((width <= (750 / metrics.density)) && (width > (550 / metrics.density))) {
             btnShareFriendCodeDescuento.setTextSize(17);
             btnShareMoreFriendCode.setTextSize(16);
@@ -397,7 +424,7 @@ public class Fragment_Canjear_Codigos extends Fragment implements AdapterView.On
             btnShareFriendCodeDescuento.getLayoutParams().height = 50;
         }
         if (iV_Give_Five.getLayoutParams().height >= 0) {
-            float height = metrics.heightPixels / metrics.density;
+
             iV_Give_Five.getLayoutParams().height = Integer.valueOf((int) Math.round(iV_Give_Five.getLayoutParams().height * (height / Method.heightEmulator)));
         }
     }

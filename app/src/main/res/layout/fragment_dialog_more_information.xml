@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LLMoreInformation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_border_square"
@@ -8,6 +9,7 @@
     tools:context=".fragments.Fragment_Dialog_More_Information">
 
     <LinearLayout
+        android:id="@+id/LLMoreInformationHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_back_button"
@@ -23,16 +25,17 @@
             android:src="@drawable/fill_icon_salir" />
 
         <LinearLayout
+            android:id="@+id/LLRelleno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/blue">
 
             <TextView
+                android:id="@+id/TVRelleno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text=""
-                android:textColor="@color/blue"
                 android:textSize="6dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -100,6 +103,17 @@
                 android:textColor="@color/blue"
                 android:textSize="18dp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TV_Caducado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="(caducado)"
+                android:textColor="@color/darkblue"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
         </LinearLayout>
 
 

@@ -24,9 +24,7 @@ import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Reserva;
 import com.workpodapp.workpod.data.Sesion;
 import com.workpodapp.workpod.data.Ubicacion;
-import com.workpodapp.workpod.data.Workpod;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
+import com.workpodapp.workpod.data.Workpod;;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -46,9 +44,6 @@ public class Fragment_Dialog_Cerrar_Workpod extends DialogFragment implements Vi
     private long tiempoSesion;
     private double tiempo;
 
-    //VARIABLES PARA ESCALADO
-    private List<Scale_Buttons> lstBtn;
-    private List<Scale_TextView> lstTv;
     DisplayMetrics metrics;
     float width;
 

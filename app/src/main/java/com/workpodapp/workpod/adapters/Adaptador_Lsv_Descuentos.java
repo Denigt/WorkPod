@@ -2,6 +2,7 @@ package com.workpodapp.workpod.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,10 @@ import com.workpodapp.workpod.basic.Method;
 import com.workpodapp.workpod.data.Cupon;
 import com.workpodapp.workpod.fragments.Fragment_Dialog_More_Information;
 import com.workpodapp.workpod.otherclass.LsV_Descuentos;
-import com.workpodapp.workpod.scale.Scale_Buttons;
-import com.workpodapp.workpod.scale.Scale_TextView;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class Adaptador_Lsv_Descuentos extends BaseAdapter {
@@ -38,6 +38,7 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     TextView tVminGratis;
     Button ibtnCanjear;
     LinearLayout llBtnCanjear;
+    LinearLayout lLCupon;
 
     Cupon cupon;
 
@@ -48,9 +49,8 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
     DisplayMetrics metrics;
     float width;
     //COLECCIONES
-    List<Scale_Buttons> lstBtn;
-    List<Scale_TextView> lstTv;
     List<Cupon> lstCupones;
+    List<Cupon> lstCuponesNoCaducados;
 
     public Adaptador_Lsv_Descuentos(Context context, List<LsV_Descuentos> lstDescuentos, DisplayMetrics metrics) {
     }
@@ -99,7 +99,19 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         this.metrics = metrics;
         this.manager = supportFragmentManager;
         this.lstCupones = lstCupones;
+        this.lstCuponesNoCaducados = new ArrayList<>();
         this.pago = pago;
+        if (pago) {
+            for (Cupon cupon : lstCupones) {
+                if (cupon.getCampana().getFinCanjeo().compareTo(ZonedDateTime.now()) > 0 ||
+                        cupon.getCampana().getFinCanjeo().getYear() < 2001) {
+                    // lstCupones.remove(cupon); (ConcurrentModificationException)
+                    lstCuponesNoCaducados.add(cupon);
+                }
+            }
+            this.lstCupones.clear();
+            this.lstCupones = lstCuponesNoCaducados;
+        }
     }
 
     @Override
@@ -123,12 +135,23 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.item_lsv_descuentos, null);
         lLDescuento = view.findViewById(R.id.iLLDescuento);
+        lLCupon = view.findViewById(R.id.LLCupon);
         tVnombreDescuento = view.findViewById(R.id.iTV_Nombre_Descuento);
         tVminGratis = view.findViewById(R.id.iTV_Min_Descuento);
         ibtnCanjear = view.findViewById(R.id.iBtnCanjear);
         llBtnCanjear = view.findViewById(R.id.llBntCanjear);
         tVnombreDescuento.setText(lstCupones.get(i).getCampana().getNombre());
         tVminGratis.setText(lstCupones.get(i).getCampana().getDescuento() + " minutos gratis");
+
+        //Cupon caducado rojo, cupon que aún se puede canjear, azul
+        if (lstCupones.get(i).getCampana().getFinCanjeo().compareTo(ZonedDateTime.now()) < 0 && lstCupones.get(i).getCampana().getFinCanjeo().getYear() < 2100) {
+            //lLDescuento.setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
+            tVminGratis.setText("Caducado");
+            tVminGratis.setTextColor(Color.WHITE);
+            tVnombreDescuento.setTextColor(Color.WHITE);
+            lLCupon.setBackground(context.getDrawable(R.drawable.rounded_back_button_light_red));
+            ((LinearLayout) ibtnCanjear.getParent()).setBackground(context.getDrawable(R.drawable.rounded_back_button_red));
+        }
 
         if (!pago) {
             ibtnCanjear.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +166,9 @@ public class Adaptador_Lsv_Descuentos extends BaseAdapter {
                 }
             });
         } else {
+            //Ocultar cupones caducados
+
+
             ibtnCanjear.setText("Canjear");
             ibtnCanjear.setTag(lstCupones.get(i));
 

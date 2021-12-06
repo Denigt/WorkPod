@@ -40,6 +40,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnVolver;
     private ListView lsvCupones;
 
+
     // VARIABLES PARA ESCALADO
     DisplayMetrics metrics;
     float width;
@@ -102,10 +103,10 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         tiempo[2] = (int) ((sesion.getTiempo() - (tiempo[0] + (tiempo[1] / 60.))) * 3600); // SEGUNDOS
 
         // INSTANCIAMOS ELEMENTOS DEL XML
-        txtTVDescuento=findViewById(R.id.TVDescuento);
-        txtTVDesglose=findViewById(R.id.TVDesglose);
-        txtTVFinal=findViewById(R.id.TVFinal);
-        txtTVTotal=findViewById(R.id.TVTotal);
+        txtTVDescuento = findViewById(R.id.TVDescuento);
+        txtTVDesglose = findViewById(R.id.TVDesglose);
+        txtTVFinal = findViewById(R.id.TVFinal);
+        txtTVTotal = findViewById(R.id.TVTotal);
 
         txtCabina = findViewById(R.id.TVCabina);
         txtCabina.setText(sesion.getWorkpod().getNombre());
@@ -187,8 +188,15 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                             InfoApp.SESION = sesion;
                             WorkpodActivity.boolSession = false;
 
-                            Intent activity = new Intent(updateSesion.getActivity(), ValoracionWorkpod.class);
+                           /* Intent activity = new Intent(updateSesion.getActivity(), ValoracionWorkpod.class);
                             activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(activity);*/
+
+                            //Le pasamos al activity de PayPal lo q va a pagar el usuario
+                            InfoApp.PRECIO_FINAL_SESION = this.sesion.calculaPrecio();
+                            Intent activity = new Intent(getApplicationContext(), paypalActivity.class);
+                            // activity.putExtra("PrecioSesion",String.valueOf(this.sesion.getPrecio()));
+                            finishAffinity();
                             startActivity(activity);
                         }
                     });
@@ -225,26 +233,24 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
      * DisplayMetrics con los parámetros reales de nuestro móvil, es por ello que lo inicializamos en este método.
      * <p>
      * En resumen, en este método inicializamos el metrics y las colecciones y se lo pasamos al método de la clase Methods
-     *
-     * @param metrics
      */
-    private <T extends View> void escalarElementos() {
+    private void escalarElementos() {
         metrics = new DisplayMetrics();
         //INICIALIZAMOS EL OBJETO DISPLAYMETRICS CON LOS PARÁMETROS DE NUESTRO DISPOSITIVO
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         //INICIALIZAMOS COLECCIONES
-        List<T> lstViews = new ArrayList<>();
-        lstViews.add((T) txtCabina);
-        lstViews.add((T) txtDescuento);
-        lstViews.add((T) txtPrecio);
-        lstViews.add((T) txtTiempo);
-        lstViews.add((T) txtTotal);
-        lstViews.add((T) btnPagar);
-        lstViews.add((T) btnVolver);
-        lstViews.add((T) txtTVTotal);
-        lstViews.add((T) txtTVFinal);
-        lstViews.add((T) txtTVDesglose);
-        lstViews.add((T) txtTVDescuento);
+        List<View> lstViews = new ArrayList<>();
+        lstViews.add(txtCabina);
+        lstViews.add(txtDescuento);
+        lstViews.add(txtPrecio);
+        lstViews.add(txtTiempo);
+        lstViews.add(txtTotal);
+        lstViews.add(btnPagar);
+        lstViews.add(btnVolver);
+        lstViews.add(txtTVTotal);
+        lstViews.add(txtTVFinal);
+        lstViews.add(txtTVDesglose);
+        lstViews.add(txtTVDescuento);
         //LLENAMOS COLECCIONES
         Method.scaleViews(metrics, lstViews);
 

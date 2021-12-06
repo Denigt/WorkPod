@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
+    tools:context=".paypalActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/TVPayPalTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¡¡Ya solo te queda\n un paso!!"
+                        android:textColor="@color/blue"
+                        android:textSize="30dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/IVPayPal"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/ic_paypal" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/bordes_redondeados_item_lsv_descuentos"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TVInstrucciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="18dp"
+                    android:justificationMode="inter_word"
+                    android:text="Pulsa en el botón de Paypal para finalizar tu sesión, abonando su importe. Recuerda cerrar la cabina"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <com.paypal.checkout.paymentbutton.PayPalButton
+                android:id="@+id/payPalButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                app:paypal_color="blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/bordes_redondeados_item_lsv_descuentos"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TVMasInstrucciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="18dp"
+                    android:justificationMode="inter_word"
+                    android:text="Si no tienes cuenta de PayPal, podrás creartela gratuitamente al pulsar en el botón de Paypal"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/TVSugerencias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:justificationMode="inter_word"
+                android:text="Para cualquier duda, consulta la documentación o llámanos por teléfono"
+                android:textAlignment="center"
+                android:textColor="@color/darkblue"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/LLPayPalFAQ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/bordes_redondeados_support"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/TVPayPalFAQ"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@color/light_blue"
+                            android:gravity="center"
+                            android:text="Preguntas\n Frecuentes"
+                            android:textAlignment="center"
+                            android:textColor="@color/darkblue"
+                            android:textSize="19dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/IVPayPalFAQ"
+                            android:layout_width="150dp"
+                            android:layout_height="130dp"
+                            android:padding="10dp"
+                            android:src="@drawable/faq" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LLPayPalCall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bordes_redondeados_support"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/TVPayPalCall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@color/light_blue"
+                            android:gravity="center"
+                            android:text="Llámanos por\n Teléfono"
+                            android:textAlignment="center"
+                            android:textColor="@color/darkblue"
+                            android:textSize="19dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/IVPayPalCall"
+                            android:layout_width="150dp"
+                            android:layout_height="130dp"
+                            android:padding="10dp"
+                            android:src="@drawable/llamar" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/TVTyCs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
+                    android:text="Acceder a los Términos y Condiciones"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkblue"
+                    android:textSize="18dp"
+                    android:textStyle="bold|italic" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

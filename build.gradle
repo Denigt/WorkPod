@@ -18,6 +18,17 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        // This private repository is required to resolve the Cardinal SDK transitive dependency.
+        maven {
+            url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                // Be sure to add these non-sensitive credentials in order to retrieve dependencies from
+                // the private repository.
+                username paypalUsername
+                password paypalPassword
+            }
+        }
         maven {  url "https://maven.java.net/content/groups/public/" }
         maven { url "https://jitpack.io" }
     }
