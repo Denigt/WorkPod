@@ -187,7 +187,7 @@ public class Fragment_Support extends Fragment implements View.OnClickListener {
     }
 
     private void onCLickLLCall() {
-        String dial = "tel:618950208";//PONER OBLIGATORIAMENTE tel
+        String dial = "tel:+34618950208";//PONER OBLIGATORIAMENTE tel
         startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(dial)));//ESTO SERÁ LA LLAMADA
         /*Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
         fragmentDialogCall.show(getActivity().getSupportFragmentManager(), "DialogToCall");*/
