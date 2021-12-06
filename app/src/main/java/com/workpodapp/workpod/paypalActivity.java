@@ -3,6 +3,7 @@ package com.workpodapp.workpod;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -66,6 +67,8 @@ public class paypalActivity extends AppCompatActivity implements View.OnClickLis
         //this.precio=getIntent().getExtras().getString("PrecioSesion");
         this.precio = String.valueOf(InfoApp.PRECIO_FINAL_SESION);
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,7 +218,12 @@ public class paypalActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void onClickLLPayPalCall() {
-        Fragment_Dialog_Call fragmentDialogCall = new Fragment_Dialog_Call();
-        fragmentDialogCall.show(getSupportFragmentManager(), "DialogToCall");
+        String dial = "tel:+34618950208";//PONER OBLIGATORIAMENTE tel
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(dial)));//ESTO SERÁ LA LLAMADA
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

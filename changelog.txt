@@ -1,4 +1,12 @@
 # Changelog 
+ 
+##[3.12.3+Juan Vicente] -2021-12-05
+###fixed
+ - Desactivacion del setOnBackPressed de paypalActivity
+
+##[3.12.2+Raul] -2021-12-05
+###Changed
+ - Apertura app de contactos
 
 ##[3.12.1+Juan Vicente] -2021-12-05
 ###Changed
@@ -461,6 +469,10 @@
 ### Added
  - Añadida funcionalidad al histórico cuando el usuario no tiene sesiones
 
+[3.12.2]: https://github.com/Denigt/WorkPod/commit/d3adac405532ec49adf6dac6c67c912cc72c0cb8
+[3.12.1]: https://github.com/Denigt/WorkPod/commit/d6bc882efed1bf2a5a21e330af3b3888242728fd
+[3.12.0]: https://github.com/Denigt/WorkPod/commit/a2000bf864fedecfc1b38a109057d37284767c69
+[3.11.2]: https://github.com/Denigt/WorkPod/commit/a2000bf864fedecfc1b38a109057d37284767c69
 [3.11.1]: https://github.com/Denigt/WorkPod/commit/15d604c4462608f7e209b5bddd989f6fc5dcb03e
 [3.11.0]: https://github.com/Denigt/WorkPod/commit/30a24e86bac0e99a1496bfdacb96a992c82277dd
 [3.10.1]: https://github.com/Denigt/WorkPod/commit/dfb46521748833d0ebe79e10b6f83c4bc98984b2
