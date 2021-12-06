@@ -264,7 +264,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.TVMapa && esperaCargarMapa) {
+        if (v.getId() == R.id.TVMapa && esperaCargarMapa && !InfoFragment.DIALOGO_DESPLEGADO) {
             onClickLLMap();
         } else if (v.getId() == R.id.LLFechaSesion || v.getId() == R.id.IVTimeSession) {
             onClickIVTimeSession();
@@ -347,6 +347,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
             else {
                 //CONTROLAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SOLO SE ABRA UNA VEZ
                 if(!InfoFragment.DIALOGO_DESPLEGADO){
+                    InfoFragment.DIALOGO_DESPLEGADO=true;
                     Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
                     fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                 }
