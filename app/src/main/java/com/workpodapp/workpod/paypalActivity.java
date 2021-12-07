@@ -138,7 +138,7 @@ public class paypalActivity extends AppCompatActivity implements View.OnClickLis
                                 String resultado = String.valueOf(result);
                                 if (resultado.contains("Success")) {
                                     pagado = true;
-                                    Intent activity = new Intent(getApplication(), ValoracionWorkpod.class);
+                                    Intent activity = new Intent(getApplication(), PagoCorrectoActivity.class);
                                     activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     finishAffinity();
                                     startActivity(activity);

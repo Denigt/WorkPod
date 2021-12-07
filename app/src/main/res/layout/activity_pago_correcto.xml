@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_blue"
+    android:orientation="vertical"
+    tools:context=".PagoCorrectoActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TVPagoCorrectoTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Pago realizado correctamente"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/IVTickVerde"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/tick_verde" />
+
+            <TextView
+                android:id="@+id/TVSeleccionar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="Selecciona a dónde quieres ir ahora"
+                android:textAlignment="center"
+                android:textColor="@color/darkblue"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/LLEncuesta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/rounded_back_button_light_blue"
+                android:orientation="vertical"
+                android:paddingVertical="10dp">
+
+                <Button
+                    android:id="@+id/BtnEncuesta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:backgroundTint="#FF58B1E3"
+                    android:text="Realizar encuesta"
+                    android:textAllCaps="false"
+                    android:textColor="@color/darkblue"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLVolverMapa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="15dp"
+                android:background="@drawable/rounded_back_button_light_blue"
+                android:orientation="vertical"
+                android:paddingVertical="10dp">
+
+                <Button
+                    android:id="@+id/BtnVolverMapa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:backgroundTint="#FF58B1E3"
+                    android:text="Volver al mapa"
+                    android:textAllCaps="false"
+                    android:textColor="@color/darkblue"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLVolverInicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/rounded_back_button_light_blue"
+                android:orientation="vertical"
+                android:paddingVertical="10dp">
+
+                <Button
+                    android:id="@+id/BtnVolverInicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:backgroundTint="#FF58B1E3"
+                    android:text="Volver al inicio"
+                    android:textAllCaps="false"
+                    android:textColor="@color/darkblue"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

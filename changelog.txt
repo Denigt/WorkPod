@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.12.5+Juan Vicente] -2021-12-05
+###Added
+ -PagoCorrectoActivity
+
 ##[3.12.4+Juan Vicente] -2021-12-05
 ###fixed
  -Optimizacion del control de que solo se abra un dialogo emergente en Fragment_Transaction_Session
