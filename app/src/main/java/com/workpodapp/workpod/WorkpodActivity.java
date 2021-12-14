@@ -93,7 +93,7 @@ public class WorkpodActivity extends FragmentActivity {
                 fragment_sesion = new Fragment_sesion(InfoApp.SESION);
             }
             if (InfoFragment.noInternetConnection) {
-                if (InfoFragment.actual == InfoFragment.TRANSACCIONES) {
+                if (InfoFragment.actual == InfoFragment.TRANSACCIONES || InfoFragment.actual==InfoFragment.TRANSACTION_SESSION) {
                     InfoFragment.noInternetConnection = false;
                     volverAlFragmentTransactionHistory();
 

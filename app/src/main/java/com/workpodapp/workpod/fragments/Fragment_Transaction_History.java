@@ -120,7 +120,6 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         iVLocationInTransactionHistory = view.findViewById(R.id.IVLocationInTransactionHistory);
 
 
-
         //CONEXIÓN CON LA BD, VOLCADO DE LAS SESIONES EN LSTSESIONES
         conectarseBDSesion(view, getActivity());
 
@@ -262,7 +261,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
                             construyendoELsV(transaction.getEntrada().getYear());
                             //INICIALIZAMOS EL ADAPATADOR DEL ELSV
                             //He Cambiado view.getContext por getActivity().getApplicationContext() para q nunca apunte a null
-                            adapter_eLsV = new Adapter_ELsV(getActivity().getApplicationContext(), monthList, itemList,lstSesiones);
+                            adapter_eLsV = new Adapter_ELsV(getActivity().getApplicationContext(), monthList, itemList, lstSesiones);
                             //LE PASAMOS EL ADAPTADOR AL ELSV
                             eLsV.setAdapter(adapter_eLsV);
                         }
@@ -388,7 +387,7 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         private Context context;
         private List<String> monthList;
         private HashMap<String, List<Sesion>> items_ELsV;
-        private List<Sesion>lstAllSesiones;
+        private List<Sesion> lstAllSesiones;
 
         //VARIABLES PARA EL CÁLCULO DEL TIEMPO DE SESIÓN DEL USUARIO EN WORKPOD
         private int hour;
@@ -396,11 +395,11 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
         private int seg;
 
         //CONSTRUCTOR CON TODOS LOS PARÁMETROS
-        public Adapter_ELsV(Context context, List<String> chapterList, HashMap<String, List<Sesion>> items_ELsV,List<Sesion>lstAllSesiones) {
+        public Adapter_ELsV(Context context, List<String> chapterList, HashMap<String, List<Sesion>> items_ELsV, List<Sesion> lstAllSesiones) {
             this.context = context;
             this.monthList = chapterList;
             this.items_ELsV = items_ELsV;
-            this.lstAllSesiones=lstAllSesiones;
+            this.lstAllSesiones = lstAllSesiones;
         }
 
         //TAMAÑO DE LOS TÍTULOS
@@ -508,13 +507,19 @@ public class Fragment_Transaction_History extends Fragment implements View.OnCli
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //CREAMOS UN OBJETO DEL FRAGMENT QUE HACE DE DIALOGO EMERGENTE Y EN SU CONSTRUCTOR A TRAVÉS DEL OBJETO LSV LE PASAMOS LOS
-                    //VALORES DE LA SESIÓN SELECCIONADA
-                    Fragment_Transaction_Session fragmentDialogTransactionSession = new Fragment_Transaction_Session(sesion,lstAllSesiones);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.LLFragment, fragmentDialogTransactionSession).addToBackStack(null).commit();
-                    //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE
-
+                    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                    if (networkInfo == null || (networkInfo.isConnected() == false)) {
+                        Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+                        startActivity(activity);
+                    }else{
+                        //CREAMOS UN OBJETO DEL FRAGMENT QUE HACE DE DIALOGO EMERGENTE Y EN SU CONSTRUCTOR A TRAVÉS DEL OBJETO LSV LE PASAMOS LOS
+                        //VALORES DE LA SESIÓN SELECCIONADA
+                        Fragment_Transaction_Session fragmentDialogTransactionSession = new Fragment_Transaction_Session(sesion, lstAllSesiones);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.LLFragment, fragmentDialogTransactionSession).addToBackStack(null).commit();
+                        //POENEMOS EL BOOLEANO QUE CONTROLA QUE UNA VEZ IDO AL FRAGMENT DE LA SESIÓN SE VUELVA AL HISTÓRICO A TRUE
+                    }
                 }
             });
 

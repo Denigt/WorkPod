@@ -1,5 +1,9 @@
 # Changelog 
 
+##[3.12.6+Juan Vicente] -2021-12-14
+###Changed
+ -control de acceso a internet en Fragment_Transaction_Session
+
 ##[3.12.5+Juan Vicente] -2021-12-05
 ###Added
  -PagoCorrectoActivity

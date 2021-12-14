@@ -5,6 +5,7 @@ package com.workpodapp.workpod.fragments;
 import androidx.annotation.NonNull;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -13,6 +14,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -35,6 +38,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.workpodapp.workpod.NoInternetConnectionActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.basic.Database;
@@ -153,6 +157,9 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
     private boolean esperaCargarMapa;
 
+    ConnectivityManager connectivityManager;
+    NetworkInfo networkInfo;
+
     //CONSTRUCTOR
     public Fragment_Transaction_Session(Sesion sesion, List<Sesion> lstSesiones) {
         this.ubication = sesion.getDireccion().toLongString();
@@ -163,7 +170,7 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
         this.workpod = sesion.getWorkpod();
         this.lstSesiones = lstSesiones;
         this.sesionActual = sesion;
-        this.esperaCargarMapa=false;
+        this.esperaCargarMapa = false;
 
         //INICIALIZAMOS EL RESTO DE ELEMENTOS
         precioFinal = 0.0;
@@ -316,45 +323,53 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
      */
     private void onClickLLMap() {
         try {
-            //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
-            desactivarBtnReservar = true;
-            //REFRESCAMOS LOS WORKPODS
-            Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
-            dbUbicacion.postRun(() -> {
-                if (!dbUbicacion.getError().get()) {
-                    lstUbicacion.removeAll(lstUbicacion);
-                    lstUbicacion.addAll(dbUbicacion.getLstSelect());
-                    //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
-                    refrescardB = true;
+            connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo == null || (networkInfo.isConnected() == false)) {
+                Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+                startActivity(activity);
+            }else{
+                //LE INDICAMOS QUE DESACTIVE EL BTN DE RESERVAR
+                desactivarBtnReservar = true;
+                //REFRESCAMOS LOS WORKPODS
+                Database<Ubicacion> dbUbicacion = new Database<>(Database.SELECTALL, new Ubicacion());
+                dbUbicacion.postRun(() -> {
+                    if (!dbUbicacion.getError().get()) {
+                        lstUbicacion.removeAll(lstUbicacion);
+                        lstUbicacion.addAll(dbUbicacion.getLstSelect());
+                        //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
+                        refrescardB = true;
+                    }
+
+                });
+                dbUbicacion.start();
+                //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
+                while (!refrescardB) {
+                    Thread.sleep(10);
                 }
 
-            });
-            dbUbicacion.start();
-            //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
-            while (!refrescardB) {
-                Thread.sleep(10);
-            }
+                refrescardB = false;
 
-            refrescardB = false;
+                //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
+                if (InfoApp.USER.getReserva() != null && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
+                        && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
+                    Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
+                    WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
+                }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
+                else {
+                    //CONTROLAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SOLO SE ABRA UNA VEZ
+                    if (!InfoFragment.DIALOGO_DESPLEGADO) {
+                        InfoFragment.DIALOGO_DESPLEGADO = true;
+                        Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
+                        fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
+                    }
 
-            //SI EL USUARIO ACCEDE AL WORKPOD EN EL QUE ESTÁ REALIZANDO LA SESIÓN
-            if (InfoApp.USER.getReserva() != null && InfoApp.USER.getReserva().getEstado().equalsIgnoreCase("en uso") && InfoApp.SESION != null
-                    && InfoApp.USER.getReserva().getWorkpod() == workpod.getId()) {
-                Fragment_sesion fragmentSesion = new Fragment_sesion(InfoApp.SESION);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.LLFragment, fragmentSesion).commit();
-                WorkpodActivity.btnNV.getMenu().findItem(R.id.inv_location).setChecked(true);
-            }// SI EL USUARIO ACCEDE A UN WORKPOD EN EL QUE NO ESTÁ REALIZANDO LA SESIÓN
-            else {
-                //CONTROLAMOS QUE EL FRAGMENT_DIALOG_WORKPOD SOLO SE ABRA UNA VEZ
-                if(!InfoFragment.DIALOGO_DESPLEGADO){
-                    InfoFragment.DIALOGO_DESPLEGADO=true;
-                    Fragment_Dialog_Workpod fragmentDialogWorkpod = new Fragment_Dialog_Workpod(workpod, workpod.getUbicacion(), posicion);
-                    fragmentDialogWorkpod.show(getActivity().getSupportFragmentManager(), "UN SOLO WORPOD EN ESA UBICACIÓN");
                 }
-
             }
+
         } catch (NullPointerException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -537,13 +552,18 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
                 lstUbicacion.addAll(dbUbicacion.getLstSelect());
                 //CONTROLAMOS QUE NO SE ABRA EL FRAGMENT_DIALOG_WORKPOD HASTA QUE EL HILO POSTRUN HAYA MUERTO
                 refrescardB = true;
+
             }
+
 
         });
         dbUbicacion.postRunOnUI(getActivity(), () -> {
             try {
-                locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
-                if (lstUbicacion.size() > 0) {
+                connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                networkInfo = connectivityManager.getActiveNetworkInfo();
+                if (!dbUbicacion.getError().get()) {
+                    locationService.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, new UbicacionListener());
+                    if (lstUbicacion.size() > 0) {
                     /*for (Ubicacion ubicacion : lstUbicacion) {
                         if(sesionActual.getWorkpod().getUbicacion().equals(ubicacion.getId())){
                             for (Workpod workpod : ubicacion.getWorkpods()) {
@@ -556,34 +576,46 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
 
 
                     }*/
-                    for (int i = 0; i < lstUbicacion.size(); i++) {
-                        //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
-                        if (lstUbicacion.get(i).getWorkpods().size() > 1) {
-                            lstWorkpods = lstUbicacion.get(i).getWorkpods();
-                            for (int j = 0; j < lstWorkpods.size(); j++) {
-                                if (workpod.getId() == lstWorkpods.get(j).getId()) {
-                                    workpod = lstWorkpods.get(j);
-                                    workpod.setReserva(lstWorkpods.get(j).getReserva());
+                        for (int i = 0; i < lstUbicacion.size(); i++) {
+                            //SI EN UNA UBICACIÓN HAY MÁS DE UNA CABINA
+                            if (lstUbicacion.get(i).getWorkpods().size() > 1) {
+                                lstWorkpods = lstUbicacion.get(i).getWorkpods();
+                                for (int j = 0; j < lstWorkpods.size(); j++) {
+                                    if (workpod.getId() == lstWorkpods.get(j).getId()) {
+                                        workpod = lstWorkpods.get(j);
+                                        workpod.setReserva(lstWorkpods.get(j).getReserva());
+                                        posicionWorkpod.resource = new LatLng(lstUbicacion.get(i).getLat(), lstUbicacion.get(i).getLon());
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicionWorkpod.resource, defaultZoom));
+                                        esperaCargarMapa = true;
+                                    }
+                                }
+                            } else {
+                                if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
+                                    //    workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
+                                    workpod = lstUbicacion.get(i).getWorkpods().get(0);
                                     posicionWorkpod.resource = new LatLng(lstUbicacion.get(i).getLat(), lstUbicacion.get(i).getLon());
                                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicionWorkpod.resource, defaultZoom));
-                                    esperaCargarMapa=true;
+                                    esperaCargarMapa = true;
                                 }
-                            }
-                        } else {
-                            if (workpod.getId() == lstUbicacion.get(i).getWorkpods().get(0).getId()) {
-                                //    workpod.getReserva().setEstado(lstUbicacion.get(i).getWorkpods().get(0).getReserva().getEstado());
-                                workpod = lstUbicacion.get(i).getWorkpods().get(0);
-                                posicionWorkpod.resource = new LatLng(lstUbicacion.get(i).getLat(), lstUbicacion.get(i).getLon());
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicionWorkpod.resource, defaultZoom));
-                                esperaCargarMapa=true;
                             }
                         }
                     }
+                    if (networkInfo == null || (networkInfo.isConnected() == false)) {
+                        Toast.makeText(getContext(), "No hay conexión JA JA", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        dibujaWorkpods();
+                    }
+
+                } else if (dbUbicacion.getError().code == -404) {
+                    Intent activity = new Intent(getActivity().getApplicationContext(), NoInternetConnectionActivity.class);
+                    startActivity(activity);
                 }
 
             } catch (SecurityException e) {
+                e.printStackTrace();
             }
-            dibujaWorkpods();
+
         });
         dbUbicacion.start();
 
@@ -595,11 +627,10 @@ public class Fragment_Transaction_Session extends Fragment implements View.OnCli
     private void dibujaWorkpods() {
         try {
             Marker markPosicion;
-
             LatLng posicion = new LatLng(sesionActual.getWorkpod().getUbicacion().getLat(), sesionActual.getWorkpod().getUbicacion().getLon());
             markPosicion = mMap.addMarker(new MarkerOptions().position(posicion).zIndex(1));
             markPosicion.setTag(sesionActual.getWorkpod().getUbicacion());
-            for (Ubicacion ubicacion:lstUbicacion) {
+            for (Ubicacion ubicacion : lstUbicacion) {
                 boolean allReservados = ubicacion.allResevados();
                 markPosicion.setIcon(VectortoBitmap(requireContext(), allReservados ? R.drawable.markers_cluster_red : R.drawable.markers_cluster, TAM_MARKERS, TAM_MARKERS, String.valueOf("W"), 60, allReservados ? R.color.red : R.color.blue));
 
