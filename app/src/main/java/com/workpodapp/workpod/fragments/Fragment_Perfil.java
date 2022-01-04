@@ -221,6 +221,7 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             lytShowInfo.setBackground(getResources().getDrawable(R.drawable.subrayado));
             lytShowFacturacion.setBackground(null);
             btnPassword.setText("Modificar contraseña");
+            inicio = false;
             /*}else {
                 lytPrivate.setVisibility(View.GONE);
                 btnShowInfo.setText("Mostrar información personal");

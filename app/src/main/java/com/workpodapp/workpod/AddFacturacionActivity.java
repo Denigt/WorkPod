@@ -77,7 +77,7 @@ public class AddFacturacionActivity extends AppCompatActivity implements View.On
         if (v.getId() == btnCancelar.getId()) {
             finish();
         } else if (InfoApp.USER != null && v.getId() == btnGuardar.getId()) {
-            Facturacion dirFacturacion = new Facturacion();
+            Facturacion dirFacturacion = new Facturacion(InfoApp.USER);
 
             if (!txtPais.getText().toString().equals(""))
                 dirFacturacion.getFacturacion().setPais(txtPais.getText().toString());
@@ -89,7 +89,7 @@ public class AddFacturacionActivity extends AppCompatActivity implements View.On
                 dirFacturacion.getFacturacion().setCiudad(txtCiudad.getText().toString());
 
             if (!txtDireccion.getText().toString().equals(""))
-                dirFacturacion.getFacturacion().setCiudad(txtDireccion.getText().toString());
+                dirFacturacion.getFacturacion().setDireccion(txtDireccion.getText().toString());
 
             if (!txtCP.getText().toString().equals(""))
                 dirFacturacion.getFacturacion().setCodPostal(Integer.parseInt(txtCP.getText().toString()));
@@ -104,7 +104,7 @@ public class AddFacturacionActivity extends AppCompatActivity implements View.On
                 dirFacturacion.getPostal().setCiudad(txtCiudadPos.getText().toString());
 
             if (!txtDireccionPos.getText().toString().equals(""))
-                dirFacturacion.getPostal().setCiudad(txtDireccionPos.getText().toString());
+                dirFacturacion.getPostal().setDireccion(txtDireccionPos.getText().toString());
 
             if (!txtCPPos.getText().toString().equals(""))
                 dirFacturacion.getPostal().setCodPostal(Integer.parseInt(txtCPPos.getText().toString()));

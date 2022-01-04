@@ -86,6 +86,26 @@ public class Direccion {
     }
 
     /**
+     * Crea un JSON a partir de una direccion. el JSON tiene los campos direccion, ciudad, provincia, pais y codPostal
+     * @param dir Direccion a partir de la que crear el JSON
+     * @return JSON
+     */
+    public static JSONObject toJSON(Direccion dir) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("direccion", dir.direccion);
+            json.put("ciudad", dir.ciudad);
+            json.put("provincia", dir.provincia);
+            json.put("pais", dir.pais);
+            json.put("codPostal", dir.codPostal);
+        }catch (JSONException e){
+            Log.e("ERROR DIRECCION_JSON", e.getMessage());
+        }
+
+        return json;
+    }
+
+    /**
      * Crea una instancia de la clase Direccion
      * @param direccion da valor al campo direccion
      * @param ciudad da valor al campo ciudad

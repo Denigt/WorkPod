@@ -2,9 +2,12 @@ package com.workpodapp.workpod.data;
 
 import android.util.Log;
 
+import com.workpodapp.workpod.basic.Method;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,12 @@ public class Facturacion implements DataDb{
     private Usuario usuario;
 
     public Facturacion(){
+        facturacion = Direccion.getInstance();
+        postal = Direccion.getInstance();
+    }
+
+    public Facturacion(Usuario user){
+        this.usuario = user;
         facturacion = Direccion.getInstance();
         postal = Direccion.getInstance();
     }
@@ -76,8 +85,13 @@ public class Facturacion implements DataDb{
     public JSONObject dataAJSON() {
         JSONObject json = new JSONObject();
         try {
+            json.put("nombre", this.usuario.getNombreCompleto());
+            json.put("dni", this.usuario.getDni());
+            json.put("usuario", this.usuario.getId());
+            json.put("postal", Direccion.toJSON(this.postal));
+            json.put("facturacion", Direccion.toJSON(this.facturacion));
         }catch(Exception e){
-
+            Log.e("ERROR FACTURACION_JSON", e.getMessage());
         }
 
         return json;

@@ -110,6 +110,10 @@ public class Usuario implements DataDb{
         return nombre;
     }
 
+    public String getNombreCompleto() {
+        return String.format("%s %s", nombre, apellidos);
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
