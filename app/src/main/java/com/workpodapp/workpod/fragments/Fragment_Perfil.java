@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,8 +24,10 @@ import com.workpodapp.workpod.ModPerfilActivity;
 import com.workpodapp.workpod.R;
 import com.workpodapp.workpod.WorkpodActivity;
 import com.workpodapp.workpod.adapters.Adaptador_Lsv_dirfacturacion;
+import com.workpodapp.workpod.basic.Database;
 import com.workpodapp.workpod.basic.InfoApp;
 import com.workpodapp.workpod.basic.Method;
+import com.workpodapp.workpod.data.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,6 +247,12 @@ public class Fragment_Perfil extends Fragment implements View.OnClickListener {
             if (lytFacturacion.getVisibility() == View.VISIBLE) {
                 Intent activity = new Intent(getContext(), AddFacturacionActivity.class);
                 startActivity(activity);
+            }else if (lytPrivate.getVisibility() == View.VISIBLE) {
+                Database<Usuario> reset = new Database<>(Database.RESET, new Usuario(InfoApp.USER.getEmail(), ""));
+                reset.postRunOnUI(getActivity(), ()->{
+                    Toast.makeText(reset.getActivity().getApplicationContext(), "Se ha enviado un correo para modificar la contraseña", Toast.LENGTH_LONG).show();
+                });
+                reset.start();
             }
         }
     }
