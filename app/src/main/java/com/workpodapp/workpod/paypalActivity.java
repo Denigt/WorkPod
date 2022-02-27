@@ -42,7 +42,7 @@ import java.util.List;
 
 public class paypalActivity extends AppCompatActivity implements View.OnClickListener {
     //PAYPAL
-    public static final String PAYPAL_CLIENT_ID = "ASa6o8cPU2CMHqXpOSz0YGP8J89btftABuXRNG6JxhBSfBP2iqlV3RJrd_JJJPT9Kq7rdU-qj_n93LzS";
+    public static final String PAYPAL_CLIENT_ID = "ATbSXz_VdsdhwHUsSr978QHyJh2maIWuAi2oPGu_VZCGPapYTqet3H4HN8Mo8w6SBuV6EAlBoywddzXQ";
     private String precio;
     PayPalButton payPalButton;
 
